@@ -1,20 +1,20 @@
 name : bucket-back CICD
 on:
-	push:
-		branches: [ "main" ]
-	pull_request:
-		brancahes: [ "main" ]
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 env:
   PROJECT_NAME: bucket-back
   BUCKET_NAME: team-02-bucket
   CODE_DEPLOY_APP_NAME: team-02-codeDeployApplication
   DEPLOYMENT_GROUP_NAME: team-02-bucketBack
-
+  
 jobs:
-	deploy:
-		runs-on : ubuntu-latest
-		steps:
+  deploy:
+    runs-on : ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
       
       - name: Set up JDK 17
