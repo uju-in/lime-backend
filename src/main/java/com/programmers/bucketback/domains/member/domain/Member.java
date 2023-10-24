@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.member.domain;
 
+import com.programmers.bucketback.domains.common.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,8 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,33 +19,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "members")
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "firstname")
-	private String firstname;
-
-	@Column(name = "lastname")
-	private String lastname;
-
+	@NotNull
 	@Column(name = "email")
 	private String email;
 
+	@NotNull
 	@Column(name = "password")
 	private String password;
 
-	@Enumerated(EnumType.STRING)
-	private Role role;
+	@NotNull
+	@Column(name = "nickname")
+	private String nickname;
 
-	@Builder
-	private Member(String firstname, String lastname, String email, String password, Role role) {
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.email = email;
-		this.password = password;
-		this.role = role;
-	}
+	@NotNull
+	@Column(name = "introduction")
+	private String introduction;
+
+	@NotNull
+	@Column(name = "level_point")
+	private Integer levelPoint;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role")
+	private Role role;
 }
