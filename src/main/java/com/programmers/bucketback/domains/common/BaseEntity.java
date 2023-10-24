@@ -1,4 +1,4 @@
-정package com.programmers.bucketback.domains.common;
+package com.programmers.bucketback.domains.common;
 
 import java.time.LocalDateTime;
 
