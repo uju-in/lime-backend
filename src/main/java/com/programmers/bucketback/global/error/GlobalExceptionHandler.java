@@ -1,5 +1,6 @@
 package com.programmers.bucketback.global.error;
 
+import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -36,5 +37,12 @@ public class GlobalExceptionHandler {
 		log.error("BusinessException", e);
 		ErrorResponse response = ErrorResponse.from(e.getErrorCode());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(EntityNotFoundException.class)
+	protected ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
+		log.error("EntityNotFoundException", e);
+		ErrorResponse response = ErrorResponse.from(e.getErrorCode());
+		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
 }
