@@ -8,7 +8,8 @@ import com.programmers.bucketback.domains.member.domain.MemberSecurity;
 import com.programmers.bucketback.domains.member.domain.Role;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 import com.programmers.bucketback.global.config.security.jwt.JwtService;
-import jakarta.persistence.EntityNotFoundException;
+import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
+import com.programmers.bucketback.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,7 +42,7 @@ public class MemberService {
 		 authenticationManager.authenticate(authenticationToken);
 
 	 	Member member = memberRepository.findByEmail(request.email())
-	 		.orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+	 		.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
 	 	String jwtToken = jwtService.generateToken(new MemberSecurity(member));
 
