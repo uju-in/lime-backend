@@ -3,6 +3,7 @@ package com.programmers.bucketback.global.error;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +31,13 @@ public class GlobalExceptionHandler {
 		BindingResult bindingResult = e.getBindingResult();
 		ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_REQUEST, bindingResult);
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(BadCredentialsException.class)
+	protected ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
+		log.error("BadCredentialsException", e);
+		ErrorResponse response = ErrorResponse.from(ErrorCode.MEMBER_LOGIN_FAIL);
+		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}
 
 	@ExceptionHandler(BusinessException.class)
