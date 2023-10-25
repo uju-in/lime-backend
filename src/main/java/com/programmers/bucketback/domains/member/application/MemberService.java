@@ -1,18 +1,19 @@
 package com.programmers.bucketback.domains.member.application;
 
+import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
+import com.programmers.bucketback.domains.member.application.dto.request.LoginMemberServiceRequest;
+import com.programmers.bucketback.domains.member.application.dto.request.SignupMemberServiceRequest;
+import com.programmers.bucketback.domains.member.domain.Member;
+import com.programmers.bucketback.domains.member.domain.MemberSecurity;
+import com.programmers.bucketback.domains.member.domain.Role;
+import com.programmers.bucketback.domains.member.repository.MemberRepository;
+import com.programmers.bucketback.global.config.security.jwt.JwtService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.programmers.bucketback.domains.member.application.dto.request.SignupMemberServiceRequest;
-import com.programmers.bucketback.domains.member.domain.MemberSecurity;
-import com.programmers.bucketback.domains.member.domain.Role;
-import com.programmers.bucketback.domains.member.repository.MemberRepository;
-import com.programmers.bucketback.domains.member.domain.Member;
-import com.programmers.bucketback.global.config.security.jwt.JwtService;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -34,16 +35,16 @@ public class MemberService {
 		memberRepository.save(member);
 	}
 
-	// public MemberResponse authenticate(MemberRequest request) {
-	// 	authenticationManager.authenticate(
-	// 		new UsernamePasswordAuthenticationToken(
-	// 			request.email(),
-	// 			request.password()
-	// 		)
-	// 	);
-	// 	Member member = memberRepository.findByEmail(request.email())
-	// 		.orElseThrow();
-	// 	String jwtToken = jwtService.generateToken(new MemberSecurity(member));
-	// 	return new MemberResponse(jwtToken);
-	// }
+	 public MemberLoginResponse login(LoginMemberServiceRequest request) {
+		 UsernamePasswordAuthenticationToken authenticationToken =
+				 new UsernamePasswordAuthenticationToken(request.email(), request.password());
+		 authenticationManager.authenticate(authenticationToken);
+
+	 	Member member = memberRepository.findByEmail(request.email())
+	 		.orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+	 	String jwtToken = jwtService.generateToken(new MemberSecurity(member));
+
+	 	return new MemberLoginResponse(member.getNickname(), jwtToken);
+	 }
 }

@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.member.api;
 
+import com.programmers.bucketback.domains.member.api.dto.request.MemberLoginRequest;
+import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,5 +26,12 @@ public class MemberController {
 		memberService.signup(request.toSignupMemberServiceRequest());
 
 		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody final MemberLoginRequest request) {
+		MemberLoginResponse response = memberService.login(request.toLoginMemberServiceRequest());
+
+		return ResponseEntity.ok(response);
 	}
 }
