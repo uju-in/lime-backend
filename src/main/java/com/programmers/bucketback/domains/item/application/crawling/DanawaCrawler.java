@@ -4,7 +4,7 @@ import org.jsoup.nodes.Document;
 
 public class DanawaCrawler implements WebCrawler {
 
-    private String url;
+    private final String url;
 
     public DanawaCrawler(final String url) {
         this.url = url;

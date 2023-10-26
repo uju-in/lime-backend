@@ -14,12 +14,15 @@ public enum WebSite {
     private String market;
     private Function<String,WebCrawler> marketFactory;
 
-    WebSite(String market, Function<String,WebCrawler> marketFactory) {
+    WebSite(
+            final String market,
+            final Function<String, WebCrawler> marketFactory
+    ) {
         this.market = market;
         this.marketFactory = marketFactory;
     }
 
-    public static WebCrawler selectCrawler(String url) {
+    public static WebCrawler selectCrawler(final String url) {
         for (WebSite site : values()) {
             if (url.contains(site.market)) {
 

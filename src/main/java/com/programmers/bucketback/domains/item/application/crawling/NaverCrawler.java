@@ -4,7 +4,7 @@ import org.jsoup.nodes.Document;
 
 public class NaverCrawler implements WebCrawler{
 
-    private String url;
+    private final String url;
 
     public NaverCrawler(String url) {
         this.url = url;

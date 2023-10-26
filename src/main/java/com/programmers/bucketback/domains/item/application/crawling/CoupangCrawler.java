@@ -4,7 +4,7 @@ import org.jsoup.nodes.Document;
 
 public class CoupangCrawler implements WebCrawler{
 
-    private String url;
+    private final String url;
 
     public CoupangCrawler(final String url) {
         this.url = url;

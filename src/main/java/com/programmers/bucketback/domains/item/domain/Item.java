@@ -53,20 +53,4 @@ public class Item extends BaseEntity {
 	@Column(name = "image")
 	private String image;
 
-	@Builder
-	public Item(Hobby hobby,
-							String name,
-							String brand,
-							Integer price,
-							String url,
-							String image
-							){
-		this.hobby = hobby;
-		this.name = name;
-		this.brand = brand;
-		this.price = price;
-		this.url = url;
-		this.image = image;
-	}
-
 }
