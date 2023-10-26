@@ -1,8 +1,13 @@
 package com.programmers.bucketback.domains.member.application;
 
-import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.programmers.bucketback.domains.member.application.dto.request.LoginMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.request.SignupMemberServiceRequest;
+import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.domain.MemberSecurity;
 import com.programmers.bucketback.domains.member.domain.Role;
@@ -10,11 +15,8 @@ import com.programmers.bucketback.domains.member.repository.MemberRepository;
 import com.programmers.bucketback.global.config.security.jwt.JwtService;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class MemberService {
 		memberRepository.save(member);
 	}
 
-	 public MemberLoginResponse login(LoginMemberServiceRequest request) {
+	 public LoginMemberServiceResponse login(LoginMemberServiceRequest request) {
 		 UsernamePasswordAuthenticationToken authenticationToken =
 				 new UsernamePasswordAuthenticationToken(request.email(), request.password());
 		 authenticationManager.authenticate(authenticationToken);
@@ -46,6 +48,6 @@ public class MemberService {
 
 	 	String jwtToken = jwtService.generateToken(new MemberSecurity(member));
 
-	 	return new MemberLoginResponse(member.getNickname(), jwtToken);
+	 	return new LoginMemberServiceResponse(member.getNickname(), jwtToken);
 	 }
 }
