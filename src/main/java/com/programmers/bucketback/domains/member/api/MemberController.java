@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.member.api.dto.request.MemberSignupRequest;
 import com.programmers.bucketback.domains.member.application.MemberService;
+import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,8 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody final MemberLoginRequest request) {
-		MemberLoginResponse response = memberService.login(request.toLoginMemberServiceRequest());
+		LoginMemberServiceResponse response = memberService.login(request.toLoginMemberServiceRequest());
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(response.toMemberLoginResponse());
 	}
 }
