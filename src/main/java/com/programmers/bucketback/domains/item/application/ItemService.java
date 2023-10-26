@@ -20,7 +20,7 @@ public class ItemService {
 //        System.out.println(itemInfo.toString());
 //    }
 //        else {
-//        System.out.println("error");
+//        System.out.println("error"); //예외처리 고민해야함
 //    }
 
 }

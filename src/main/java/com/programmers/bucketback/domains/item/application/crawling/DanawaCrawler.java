@@ -24,7 +24,12 @@ public class DanawaCrawler implements WebCrawler {
         String imgUrl = "https:" + document.getElementById("baseImage")
                 .attr("src");
 
-        return new ItemInfo(itemName, price, imgUrl, url);
+        return new ItemInfo(
+            itemName,
+            price,
+            imgUrl,
+            url
+        );
     }
 
 }

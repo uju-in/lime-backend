@@ -8,6 +8,9 @@ import java.io.IOException;
 
 public interface WebCrawler {
 
+    /**
+     * 예외처리 방식 결정하기
+     */
     default Document connectWithHeaders(final String url) {
         try {
             Connection connection = Jsoup.connect(url);
@@ -23,8 +26,10 @@ public interface WebCrawler {
             return connection.get();
         } catch (IOException e) {
             e.printStackTrace();
+
             return null;
         }
+
     }
 
     ItemInfo extractInfoFromUrl(final String url);

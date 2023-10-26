@@ -26,6 +26,11 @@ public class CoupangCrawler implements WebCrawler{
                 .first()
                 .attr("src");
 
-        return new ItemInfo(itemName, price, imgUrl, url);
+        return new ItemInfo(
+            itemName,
+            price,
+            imgUrl,
+            url
+        );
     }
 }

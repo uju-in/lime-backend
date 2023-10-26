@@ -29,7 +29,6 @@ public enum WebSite {
                 return site.marketFactory.apply(url);
             }
         }
-
         throw new EntityNotFoundException(ErrorCode.ITEM_MARKET_NOT_FOUND); // 정해진 웹사이트에 해당하는 정보가 아닌경우
     }
 }
