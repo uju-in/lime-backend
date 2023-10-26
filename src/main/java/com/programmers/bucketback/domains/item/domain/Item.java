@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -51,4 +52,21 @@ public class Item extends BaseEntity {
 	@NotNull
 	@Column(name = "image")
 	private String image;
+
+	@Builder
+	public Item(Hobby hobby,
+							String name,
+							String brand,
+							Integer price,
+							String url,
+							String image
+							){
+		this.hobby = hobby;
+		this.name = name;
+		this.brand = brand;
+		this.price = price;
+		this.url = url;
+		this.image = image;
+	}
+
 }
