@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -51,4 +52,5 @@ public class Item extends BaseEntity {
 	@NotNull
 	@Column(name = "image")
 	private String image;
+
 }
