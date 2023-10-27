@@ -40,18 +40,18 @@ public class MemberService {
 		memberRepository.save(member);
 	}
 
-	 public LoginMemberServiceResponse login(LoginMemberServiceRequest request) {
-		 Member member = memberRepository.findByEmail(request.email())
-			 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+	public LoginMemberServiceResponse login(final LoginMemberServiceRequest request) {
+		Member member = memberRepository.findByEmail(request.email())
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-		 UsernamePasswordAuthenticationToken authenticationToken =
-				 new UsernamePasswordAuthenticationToken(member.getId(), request.password());
-		 authenticationManager.authenticate(authenticationToken);
+		UsernamePasswordAuthenticationToken authenticationToken =
+			new UsernamePasswordAuthenticationToken(member.getId(), request.password());
+		authenticationManager.authenticate(authenticationToken);
 
-	 	String jwtToken = jwtService.generateToken(new MemberSecurity(member));
+		String jwtToken = jwtService.generateToken(new MemberSecurity(member));
 
-	 	return new LoginMemberServiceResponse(member.getNickname(), jwtToken);
-	 }
+		return new LoginMemberServiceResponse(member.getNickname(), jwtToken);
+	}
 
 	@Transactional
 	public void deleteMember() {
