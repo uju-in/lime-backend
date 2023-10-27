@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record ItemCreateServiceRequest(
+public record CreateItemServiceRequest(
 	@NotNull
 	Hobby hobby,
 
@@ -24,11 +24,11 @@ public record ItemCreateServiceRequest(
 	String url
 ) {
 
-	public static ItemCreateServiceRequest of(
-		final ItemEnrollServiceRequest request,
+	public static CreateItemServiceRequest of(
+		final EnrollItemServiceRequest request,
 		final ItemInfo itemInfo
 	) {
-		return ItemCreateServiceRequest.builder().
+		return CreateItemServiceRequest.builder().
 			hobby(request.hobby()).
 			imageUrl(itemInfo.imageUrl()).
 			url(itemInfo.url()).

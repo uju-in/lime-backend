@@ -4,7 +4,7 @@ import com.programmers.bucketback.domains.common.Hobby;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ItemEnrollServiceRequest(
+public record EnrollItemServiceRequest(
 	@NotNull
 	Hobby hobby,
 

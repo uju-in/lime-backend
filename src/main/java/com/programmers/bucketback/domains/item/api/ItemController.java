@@ -21,7 +21,7 @@ public class ItemController {
 
 	@PostMapping("/enroll")
 	public ResponseEntity<Void> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
-		enrollItemService.enrollItem(request.toEnrollServiceRequest());
+		enrollItemService.enrollItem(request.toEnrollItemServiceRequest());
 
 		return ResponseEntity.ok().build();
 	}
