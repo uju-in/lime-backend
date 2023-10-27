@@ -15,6 +15,7 @@ public class BucketReader {
 
 	private final BucketRepository bucketRepository;
 
+	/** 버킷 정보 조회 */
 	public Bucket read(Long bucketId){
 		return bucketRepository.findById(bucketId)
 			.orElseThrow(() -> {

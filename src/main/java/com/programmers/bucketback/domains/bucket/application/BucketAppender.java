@@ -23,6 +23,7 @@ public class BucketAppender {
 	private final BucketRepository bucketRepository;
 	private final ItemRepository itemRepository;
 
+	/** 버킷 생성 */
 	@Transactional
 	public void append(final BucketContent content) {
 		List<BucketItem> bucketItems = createBucketItems(content.itemIds());

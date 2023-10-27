@@ -12,6 +12,7 @@ public class BucketRemover {
 
 	private final BucketRepository bucketRepository;
 
+	/** 버킷 삭제 */
 	public void remove(Long bucketId) {
 		bucketRepository.deleteById(bucketId);
 	}

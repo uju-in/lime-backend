@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-
+@Tag(name = "buckets", description = "버킷 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -24,7 +24,7 @@ public class BucketController {
 
 	private final BucketService bucketService;
 
-
+	@Operation(summary = "버킷 생성", description = "FundingCreateRequestDTO 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/buckets")
 	public ResponseEntity createBucket(@RequestBody @Valid final BucketCreateRequest request){
 		bucketService.createBucket(request.toContent()); //memberId값 필요함
@@ -32,7 +32,7 @@ public class BucketController {
 		return ResponseEntity.ok().build();
 	}
 
-
+	@Operation(summary = "버킷 수정", description = "BucketId, BucketUpdateRequest 을 이용하여 버킷을 수정힙니다.")
 	@PutMapping("/buckets/{bucketId}")
 	public ResponseEntity updateBucket(
 		@PathVariable(required = true) Long bucketId,
@@ -43,6 +43,7 @@ public class BucketController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "버킷 삭제", description = "BucketId을 이용하여 버킷을 삭제힙니다.")
 	@DeleteMapping("/buckets/{bucketId}")
 	public ResponseEntity deleteBucket(@PathVariable(required = true) Long bucketId){
 		bucketService.deleteBucket(bucketId);
