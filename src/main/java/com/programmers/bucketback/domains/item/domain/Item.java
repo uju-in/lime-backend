@@ -38,10 +38,6 @@ public class Item extends BaseEntity {
 	private String name;
 
 	@NotNull
-	@Column(name = "brand")
-	private String brand;
-
-	@NotNull
 	@Column(name = "price")
 	private Integer price;
 
@@ -53,4 +49,18 @@ public class Item extends BaseEntity {
 	@Column(name = "image")
 	private String image;
 
+	@Builder
+	public Item(
+		@NotNull final Hobby hobby,
+		@NotNull final String name,
+		@NotNull final Integer price,
+		@NotNull final String url,
+		@NotNull final String image
+	) {
+		this.hobby = hobby;
+		this.name = name;
+		this.price = price;
+		this.url = url;
+		this.image = image;
+	}
 }
