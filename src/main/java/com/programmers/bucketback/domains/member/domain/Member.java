@@ -51,6 +51,11 @@ public class Member extends BaseEntity {
 	@Column(name = "role")
 	private Role role;
 
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private MemberStatus status;
+
 	@Builder
 	private Member(
 		@NotNull final String email,
@@ -63,5 +68,10 @@ public class Member extends BaseEntity {
 		this.nickname = nickname;
 		this.levelPoint = 0;
 		this.role = role;
+		this.status = MemberStatus.ACTIVE;
+	}
+
+	public void delete() {
+		this.status = MemberStatus.DELETED;
 	}
 }

@@ -4,7 +4,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.member.application.dto.request.LoginMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.request.SignupMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
@@ -50,4 +52,14 @@ public class MemberService {
 
 	 	return new LoginMemberServiceResponse(member.getNickname(), jwtToken);
 	 }
+
+	@Transactional
+	public void deleteMember() {
+		Long memberId = MemberUtils.getCurrentMemberId();
+
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+		member.delete();
+	}
 }
