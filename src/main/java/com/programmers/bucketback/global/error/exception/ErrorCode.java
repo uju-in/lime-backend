@@ -15,7 +15,8 @@ public enum ErrorCode {
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
 	MEMBER_NOT_FOUND("MEMBER_002", "회원을 찾을 수 없습니다."),
-	MEMBER_ANONYMOUS("MEMBER_003", "익명의 사용자 입니다.")
+	MEMBER_ANONYMOUS("MEMBER_003", "익명의 사용자 입니다."),
+	MEMBER_DELETED("MEMBER_003", "탈퇴한 회원 입니다."),
 	;
 
 	private final String code;

@@ -12,9 +12,11 @@ import com.programmers.bucketback.domains.member.application.dto.request.SignupM
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.domain.MemberSecurity;
+import com.programmers.bucketback.domains.member.domain.MemberStatus;
 import com.programmers.bucketback.domains.member.domain.Role;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 import com.programmers.bucketback.global.config.security.jwt.JwtService;
+import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -43,6 +45,10 @@ public class MemberService {
 	public LoginMemberServiceResponse login(final LoginMemberServiceRequest request) {
 		Member member = memberRepository.findByEmail(request.email())
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+		if (member.getStatus() == MemberStatus.DELETED) {
+			throw new BusinessException(ErrorCode.MEMBER_DELETED);
+		}
 
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(member.getId(), request.password());
