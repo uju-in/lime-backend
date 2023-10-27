@@ -7,6 +7,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class BucketService {
+
+	private final BucketAppender bucketAppender;
+
+	//멤버id 정보 추가받아야함
+	public void createBucket(
+		BucketContent content
+	) {
+		bucketAppender.append(content);
+	}
 }
