@@ -10,8 +10,8 @@ import jakarta.validation.ConstraintValidatorContext;
 public class EnumValidator implements ConstraintValidator<Enum, java.lang.Enum> {
 	@Override
 	public boolean isValid(
-		java.lang.Enum value,
-		ConstraintValidatorContext context
+		final java.lang.Enum value,
+		final ConstraintValidatorContext context
 	) {
 		if (value == null)
 			return false;
