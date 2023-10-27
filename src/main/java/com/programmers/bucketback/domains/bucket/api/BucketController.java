@@ -1,12 +1,12 @@
 package com.programmers.bucketback.domains.bucket.api;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
 import com.programmers.bucketback.domains.bucket.application.BucketService;
 
 import jakarta.validation.Valid;

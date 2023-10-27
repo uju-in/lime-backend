@@ -30,11 +30,9 @@ public class BucketAppender {
 		Bucket bucket = Bucket.builder()
 			// .memberId(memberId) // memberId값 필요함
 			.hobby(content.hobby())
-			.bucketItems(bucketItems)
 			.name(content.name())
 			.budget(content.budget())
 			.build();
-
 		bucketItems.forEach(bucket::addBucketItem);
 
 		bucketRepository.save(bucket);
@@ -51,6 +49,7 @@ public class BucketAppender {
 
 					return bucketItem;
 				}
-			).collect(Collectors.toList());
+			).distinct()
+			.collect(Collectors.toList());
 	}
 }

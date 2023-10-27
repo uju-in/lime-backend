@@ -55,13 +55,11 @@ public class Bucket extends BaseEntity {
 	public Bucket(
 		final Hobby hobby,
 		final Long memberId,
-		final List<BucketItem> bucketItems,
 		final String name,
 		final Integer budget
 	){
 		this.hobby = hobby;
 		this.memberId = memberId;
-		this.bucketItems = bucketItems;
 		this.bucketInfo = new BucketInfo(name, budget);
 	}
 
