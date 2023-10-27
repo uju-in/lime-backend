@@ -22,8 +22,8 @@ public class BucketInfo {
 
 	@Builder
 	public BucketInfo(
-		String name,
-		Integer budget
+		final String name,
+		final Integer budget
 	){
 		this.name = name;
 		this.budget = budget;

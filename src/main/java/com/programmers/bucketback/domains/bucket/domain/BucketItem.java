@@ -41,12 +41,12 @@ public class BucketItem {
 
 	@Builder
 	public BucketItem(
-		Item item
+		final Item item
 	){
 		this.item = item;
 	}
 
-	public void changeBucket(Bucket bucket) {
+	public void changeBucket(final Bucket bucket) {
 		this.bucket = bucket;
 	}
 }

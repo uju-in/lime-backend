@@ -13,7 +13,7 @@ public class BucketService {
 
 	//멤버id 정보 추가받아야함
 	public void createBucket(
-		BucketContent content
+		final BucketContent content
 	) {
 		bucketAppender.append(content);
 	}
