@@ -21,6 +21,7 @@ public class BucketModifier {
 	private final BucketReader bucketReader;
 	private final BucketAppender bucketAppender;
 
+	/** 버킷 수정 */
 	@Transactional
 	public void modify(
 		final Long bucketId,
