@@ -26,7 +26,7 @@ public class MemberSecurity implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return member.getEmail();
+		return String.valueOf(member.getId());
 	}
 
 	@Override

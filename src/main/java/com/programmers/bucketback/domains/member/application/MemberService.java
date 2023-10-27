@@ -39,12 +39,12 @@ public class MemberService {
 	}
 
 	 public LoginMemberServiceResponse login(LoginMemberServiceRequest request) {
-		 UsernamePasswordAuthenticationToken authenticationToken =
-				 new UsernamePasswordAuthenticationToken(request.email(), request.password());
-		 authenticationManager.authenticate(authenticationToken);
+		 Member member = memberRepository.findByEmail(request.email())
+			 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-	 	Member member = memberRepository.findByEmail(request.email())
-	 		.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+		 UsernamePasswordAuthenticationToken authenticationToken =
+				 new UsernamePasswordAuthenticationToken(member.getId(), request.password());
+		 authenticationManager.authenticate(authenticationToken);
 
 	 	String jwtToken = jwtService.generateToken(new MemberSecurity(member));
 
