@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,6 @@ public class BucketInfo {
 	@Column(name = "budget")
 	private Integer budget;
 
-	@Builder
 	public BucketInfo(
 		final String name,
 		final Integer budget
@@ -28,6 +26,5 @@ public class BucketInfo {
 		this.name = name;
 		this.budget = budget;
 	}
-
 
 }

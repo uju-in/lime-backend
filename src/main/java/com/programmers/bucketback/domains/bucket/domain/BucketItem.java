@@ -13,12 +13,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Entity
 @Getter
 @Table(name = "bucket_items")
@@ -39,10 +36,7 @@ public class BucketItem {
 	@JoinColumn(name = "bucket_id")
 	private Bucket bucket;
 
-	@Builder
-	public BucketItem(
-		final Item item
-	){
+	public BucketItem(final Item item){
 		this.item = item;
 	}
 

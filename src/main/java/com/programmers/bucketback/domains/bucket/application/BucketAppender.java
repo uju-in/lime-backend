@@ -47,10 +47,7 @@ public class BucketAppender {
 				{
 					Item item = itemRepository.findById(id)
 						.orElseThrow(() -> new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR)); //병곤 예외 있으면 변경예정
-
-					BucketItem bucketItem = BucketItem.builder()
-						.item(item)
-						.build();
+					BucketItem bucketItem = new BucketItem(item);
 
 					return bucketItem;
 				}
