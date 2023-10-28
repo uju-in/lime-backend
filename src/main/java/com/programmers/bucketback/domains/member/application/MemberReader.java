@@ -17,7 +17,7 @@ public class MemberReader {
 
 	public Member read(final String email) {
 		return memberRepository.findByLoginInfoEmail(email)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_LOGIN_FAIL));
 	}
 
 	public Member read(final Long memberId) {

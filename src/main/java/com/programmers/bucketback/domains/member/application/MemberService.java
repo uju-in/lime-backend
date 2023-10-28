@@ -30,7 +30,7 @@ public class MemberService {
 		final Member member = memberReader.read(loginInfo.getEmail());
 
 		if (member.isDeleted()) {
-			throw new BusinessException(ErrorCode.MEMBER_LOGIN_FAIL);
+			throw new BusinessException(ErrorCode.MEMBER_DELETED);
 		}
 
 		securityManager.authenticate(member.getId(), loginInfo.getPassword());
