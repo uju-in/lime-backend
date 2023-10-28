@@ -4,7 +4,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.member.application.dto.request.LoginMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.request.SignupMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
@@ -13,6 +15,7 @@ import com.programmers.bucketback.domains.member.domain.MemberSecurity;
 import com.programmers.bucketback.domains.member.domain.Role;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 import com.programmers.bucketback.global.config.security.jwt.JwtService;
+import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -28,7 +31,7 @@ public class MemberService {
 	private final AuthenticationManager authenticationManager;
 
 	public void signup(final SignupMemberServiceRequest request) {
-		Member member = Member.builder()
+		final Member member = Member.builder()
 			.email(request.email())
 			.password(passwordEncoder.encode(request.password()))
 			.nickname(request.nickname())
@@ -38,16 +41,30 @@ public class MemberService {
 		memberRepository.save(member);
 	}
 
-	 public LoginMemberServiceResponse login(LoginMemberServiceRequest request) {
-		 UsernamePasswordAuthenticationToken authenticationToken =
-				 new UsernamePasswordAuthenticationToken(request.email(), request.password());
-		 authenticationManager.authenticate(authenticationToken);
+	public LoginMemberServiceResponse login(final LoginMemberServiceRequest request) {
+		final Member member = memberRepository.findByEmail(request.email())
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-	 	Member member = memberRepository.findByEmail(request.email())
-	 		.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+		if (member.isDeleted()) {
+			throw new BusinessException(ErrorCode.MEMBER_DELETED);
+		}
 
-	 	String jwtToken = jwtService.generateToken(new MemberSecurity(member));
+		final UsernamePasswordAuthenticationToken authenticationToken =
+			new UsernamePasswordAuthenticationToken(member.getId(), request.password());
+		authenticationManager.authenticate(authenticationToken);
 
-	 	return new LoginMemberServiceResponse(member.getNickname(), jwtToken);
-	 }
+		final String jwtToken = jwtService.generateToken(new MemberSecurity(member));
+
+		return new LoginMemberServiceResponse(member.getNickname(), jwtToken);
+	}
+
+	@Transactional
+	public void deleteMember() {
+		final Long memberId = MemberUtils.getCurrentMemberId();
+
+		final Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+		member.delete();
+	}
 }
