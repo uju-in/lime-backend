@@ -23,7 +23,7 @@ public class EnrollItemService {
 		WebCrawler webCrawler = WebSite.selectCrawler(request.itemUrl());
 		ItemInfo itemInfo = webCrawler.extractInfoFromUrl(request.itemUrl());
 
-		CreateItemServiceRequest createItemServiceRequest = CreateItemServiceRequest.of(request, itemInfo);
+		CreateItemServiceRequest createItemServiceRequest = CreateItemServiceRequest.of(request.hobby(), itemInfo);
 		createItemService.createItem(createItemServiceRequest);
 	}
 }

@@ -25,11 +25,11 @@ public record CreateItemServiceRequest(
 ) {
 
 	public static CreateItemServiceRequest of(
-		final EnrollItemServiceRequest request,
+		final Hobby hobby,
 		final ItemInfo itemInfo
 	) {
 		return CreateItemServiceRequest.builder().
-			hobby(request.hobby()).
+			hobby(hobby).
 			imageUrl(itemInfo.imageUrl()).
 			url(itemInfo.url()).
 			price(itemInfo.price()).
