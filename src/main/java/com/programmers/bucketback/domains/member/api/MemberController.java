@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.member.api.dto.request.MemberLoginRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberSignupRequest;
+import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdatePasswordRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdateProfileRequest;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
 import com.programmers.bucketback.domains.member.application.MemberService;
@@ -49,6 +50,13 @@ public class MemberController {
 	@PutMapping("/profile")
 	public ResponseEntity<Void> updateProfile(@Valid @RequestBody final MemberUpdateProfileRequest request) {
 		memberService.updateProfile(request.toUpdateProfileMemberServiceRequest());
+
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/password")
+	public ResponseEntity<Void> updatePassword(@Valid @RequestBody final MemberUpdatePasswordRequest request) {
+		memberService.updatePassword(request.password());
 
 		return ResponseEntity.ok().build();
 	}
