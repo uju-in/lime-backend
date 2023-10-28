@@ -13,14 +13,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AddItemService {
+public class AddMemberItemService {
 
 	private final MemberItemRepository memberItemRepository;
 
 	private final ItemReader itemReader;
 
 	@Transactional
-	public void addItem(final List<Long> itemIds, final Long memberId) {
+	public void addMemberItems(final List<Long> itemIds, final Long memberId) {
 		List<Item> items = getItems(itemIds);
 		List<MemberItem> memberItems = getMemberItems(memberId, items);
 		memberItemRepository.saveAll(memberItems);

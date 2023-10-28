@@ -4,11 +4,11 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
 
-public record AddItemServiceRequest(
+public record AddMemberItemServiceRequest(
 	@NotNull
 	List<Long> itemIds
 ) {
-	public AddItemServiceRequest(@NotNull final List<Long> itemIds) {
+	public AddMemberItemServiceRequest(@NotNull final List<Long> itemIds) {
 		this.itemIds = itemIds;
 	}
 }

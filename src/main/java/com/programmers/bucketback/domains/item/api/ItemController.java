@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.domains.item.api.dto.request.ItemAddRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
+import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
 import com.programmers.bucketback.domains.item.application.EnrollItemService;
 import com.programmers.bucketback.domains.item.application.ItemService;
 
@@ -31,8 +31,8 @@ public class ItemController {
 	}
 
 	@PostMapping("/myItem")
-	public ResponseEntity<Void> addItems(@Valid @RequestBody final ItemAddRequest request) {
-		itemService.addItem(request.toAddItemServiceRequest());
+	public ResponseEntity<Void> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
+		itemService.addItem(request.toAddMemberItemServiceRequest());
 
 		return ResponseEntity.ok().build();
 	}

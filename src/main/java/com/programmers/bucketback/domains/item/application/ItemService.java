@@ -3,7 +3,7 @@ package com.programmers.bucketback.domains.item.application;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
-import com.programmers.bucketback.domains.item.application.dto.AddItemServiceRequest;
+import com.programmers.bucketback.domains.item.application.dto.AddMemberItemServiceRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -11,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ItemService {
 
-	private final AddItemService addItemService;
+	private final AddMemberItemService addMemberItemService;
 
-	public void addItem(AddItemServiceRequest addItemServiceRequest) {
+	public void addItem(AddMemberItemServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		addItemService.addItem(addItemServiceRequest.itemIds(), memberId);
+		addMemberItemService.addMemberItems(request.itemIds(), memberId);
 	}
 }
