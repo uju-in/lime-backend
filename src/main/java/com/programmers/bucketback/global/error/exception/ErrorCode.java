@@ -19,8 +19,8 @@ public enum ErrorCode {
 	MEMBER_DELETED("MEMBER_003", "탈퇴한 회원 입니다."),
 
 	// Item
-	ITEM_MARKET_NOT_FOUND("ITEM_001", "요청 url에 해당하는 상품을 찾을 수 없습니다.")
-	;
+	ITEM_MARKET_NOT_FOUND("ITEM_001", "요청 url에 해당하는 상품을 찾을 수 없습니다."),
+	ITEM_NOT_FOUND("ITEM_002", "해당하는 아이템은 찾을 수 없습니다.");
 
 	private final String code;
 	private final String message;
