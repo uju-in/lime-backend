@@ -74,4 +74,8 @@ public class Member extends BaseEntity {
 	public void delete() {
 		this.status = MemberStatus.DELETED;
 	}
+
+	public boolean isDeleted() {
+		return this.getStatus() == MemberStatus.DELETED;
+	}
 }

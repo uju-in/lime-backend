@@ -12,7 +12,6 @@ import com.programmers.bucketback.domains.member.application.dto.request.SignupM
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.domain.MemberSecurity;
-import com.programmers.bucketback.domains.member.domain.MemberStatus;
 import com.programmers.bucketback.domains.member.domain.Role;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 import com.programmers.bucketback.global.config.security.jwt.JwtService;
@@ -46,7 +45,7 @@ public class MemberService {
 		final Member member = memberRepository.findByEmail(request.email())
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-		if (member.getStatus() == MemberStatus.DELETED) {
+		if (member.isDeleted()) {
 			throw new BusinessException(ErrorCode.MEMBER_DELETED);
 		}
 
