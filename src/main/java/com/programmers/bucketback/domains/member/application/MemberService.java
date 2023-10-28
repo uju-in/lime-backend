@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.member.application.dto.request.UpdateProfileMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
@@ -49,5 +50,13 @@ public class MemberService {
 		final Member member = memberReader.read(memberId);
 
 		member.delete();
+	}
+
+	@Transactional
+	public void updateProfile(final UpdateProfileMemberServiceRequest request) {
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Member member = memberReader.read(memberId);
+
+		member.updateProfile(request.nickname(), request.introduction());
 	}
 }

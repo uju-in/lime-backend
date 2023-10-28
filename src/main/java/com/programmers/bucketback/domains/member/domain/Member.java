@@ -77,4 +77,12 @@ public class Member extends BaseEntity {
 	public boolean isDeleted() {
 		return this.getStatus() == MemberStatus.DELETED;
 	}
+
+	public void updateProfile(
+		final String nickname,
+		final String introduction
+	) {
+		this.nickname = nickname;
+		this.introduction = introduction;
+	}
 }

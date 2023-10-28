@@ -3,12 +3,14 @@ package com.programmers.bucketback.domains.member.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.member.api.dto.request.MemberLoginRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberSignupRequest;
+import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdateProfileRequest;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
 import com.programmers.bucketback.domains.member.application.MemberService;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
@@ -40,6 +42,13 @@ public class MemberController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<Void> deleteMember() {
 		memberService.deleteMember();
+
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/profile")
+	public ResponseEntity<Void> updateProfile(@Valid @RequestBody final MemberUpdateProfileRequest request) {
+		memberService.updateProfile(request.toUpdateProfileMemberServiceRequest());
 
 		return ResponseEntity.ok().build();
 	}
