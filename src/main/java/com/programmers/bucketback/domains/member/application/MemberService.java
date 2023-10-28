@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
-import com.programmers.bucketback.domains.member.application.dto.request.LoginMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.request.SignupMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
+import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -26,14 +26,14 @@ public class MemberService {
 		memberAppender.append(request.email(), request.password(), request.nickname());
 	}
 
-	public LoginMemberServiceResponse login(final LoginMemberServiceRequest request) {
-		final Member member = memberReader.read(request.email());
+	public LoginMemberServiceResponse login(final LoginInfo loginInfo) {
+		final Member member = memberReader.read(loginInfo.getEmail());
 
 		if (member.isDeleted()) {
 			throw new BusinessException(ErrorCode.MEMBER_LOGIN_FAIL);
 		}
 
-		securityManager.authenticate(member.getId(), request.password());
+		securityManager.authenticate(member.getId(), loginInfo.getPassword());
 
 		final String jwtToken = securityManager.generateToken(member);
 
