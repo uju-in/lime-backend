@@ -32,7 +32,7 @@ public class MemberService {
 	private final AuthenticationManager authenticationManager;
 
 	public void signup(final SignupMemberServiceRequest request) {
-		Member member = Member.builder()
+		final Member member = Member.builder()
 			.email(request.email())
 			.password(passwordEncoder.encode(request.password()))
 			.nickname(request.nickname())
@@ -43,27 +43,27 @@ public class MemberService {
 	}
 
 	public LoginMemberServiceResponse login(final LoginMemberServiceRequest request) {
-		Member member = memberRepository.findByEmail(request.email())
+		final Member member = memberRepository.findByEmail(request.email())
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
 		if (member.getStatus() == MemberStatus.DELETED) {
 			throw new BusinessException(ErrorCode.MEMBER_DELETED);
 		}
 
-		UsernamePasswordAuthenticationToken authenticationToken =
+		final UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(member.getId(), request.password());
 		authenticationManager.authenticate(authenticationToken);
 
-		String jwtToken = jwtService.generateToken(new MemberSecurity(member));
+		final String jwtToken = jwtService.generateToken(new MemberSecurity(member));
 
 		return new LoginMemberServiceResponse(member.getNickname(), jwtToken);
 	}
 
 	@Transactional
 	public void deleteMember() {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
 
-		Member member = memberRepository.findById(memberId)
+		final Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
 		member.delete();

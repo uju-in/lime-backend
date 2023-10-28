@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SecurityUtils {
 
-	private static SimpleGrantedAuthority anonymousMember = new SimpleGrantedAuthority("ROLE_ANONYMOUS");
+	private static final SimpleGrantedAuthority anonymousMember = new SimpleGrantedAuthority("ROLE_ANONYMOUS");
 
 	public static Long getCurrentMemberId() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
