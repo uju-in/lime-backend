@@ -1,8 +1,15 @@
 package com.programmers.bucketback.domains.item.api;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
+import com.programmers.bucketback.domains.item.application.EnrollItemService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -10,4 +17,12 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/items")
 public class ItemController {
 
+	private final EnrollItemService enrollItemService;
+
+	@PostMapping("/enroll")
+	public ResponseEntity<Void> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
+		enrollItemService.enrollItem(request.toEnrollItemServiceRequest());
+
+		return ResponseEntity.ok().build();
+	}
 }

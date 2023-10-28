@@ -1,21 +1,12 @@
 package com.programmers.bucketback.domains.item.application.crawling;
 
-public class ItemInfo {
+import lombok.Builder;
 
-    private String itemName;
-    private Integer price;
-    private String imageUrl;
-    private String url;
-
-    public ItemInfo(
-            final String itemName,
-            final Integer price,
-            final String imageUrl,
-            final String url
-    ){
-        this.itemName = itemName;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.url = url;
-    }
+@Builder
+public record ItemInfo(
+	String itemName,
+	Integer price,
+	String imageUrl,
+	String url
+) {
 }
