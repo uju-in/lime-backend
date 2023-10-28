@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.member.application;
 
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
@@ -20,7 +21,9 @@ public class MemberReader {
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_LOGIN_FAIL));
 	}
 
-	public Member read(final Long memberId) {
+	public Member read() {
+		final Long memberId = MemberUtils.getCurrentMemberId();
+
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 	}
