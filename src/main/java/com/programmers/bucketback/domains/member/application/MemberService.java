@@ -40,7 +40,7 @@ public class MemberService {
 
 		final String jwtToken = securityManager.generateToken(member);
 
-		return new LoginMemberServiceResponse(member.getId(), jwtToken);
+		return new LoginMemberServiceResponse(member.getId(), member.getNickname(), jwtToken);
 	}
 
 	@Transactional

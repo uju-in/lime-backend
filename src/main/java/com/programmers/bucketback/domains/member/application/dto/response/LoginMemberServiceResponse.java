@@ -4,9 +4,10 @@ import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginRes
 
 public record LoginMemberServiceResponse(
 	Long memberId,
+	String nickname,
 	String jwtToken
 ) {
 	public MemberLoginResponse toMemberLoginResponse() {
-		return new MemberLoginResponse(memberId, jwtToken);
+		return new MemberLoginResponse(memberId, nickname, jwtToken);
 	}
 }
