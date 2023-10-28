@@ -56,4 +56,11 @@ public class MemberService {
 
 		member.updateProfile(request.nickname(), request.introduction());
 	}
+
+	@Transactional
+	public void updatePassword(final String password) {
+		final Member member = memberReader.read();
+
+		member.updatePassword(password);
+	}
 }
