@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
-import com.programmers.bucketback.domains.member.application.dto.request.SignupMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
@@ -22,8 +21,11 @@ public class MemberService {
 	private final MemberReader memberReader;
 
 	@Transactional
-	public void signup(final SignupMemberServiceRequest request) {
-		memberAppender.append(request.email(), request.password(), request.nickname());
+	public void signup(
+		final LoginInfo loginInfo,
+		final String nickname
+	) {
+		memberAppender.append(loginInfo, nickname);
 	}
 
 	public LoginMemberServiceResponse login(final LoginInfo loginInfo) {

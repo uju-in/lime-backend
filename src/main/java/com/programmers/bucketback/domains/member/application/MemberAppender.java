@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.member.application;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.domain.Role;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
@@ -17,13 +18,12 @@ public class MemberAppender {
 	private final MemberRepository memberRepository;
 
 	public void append(
-		final String email,
-		final String password,
+		final LoginInfo loginInfo,
 		final String nickname
 	) {
 		final Member member = Member.builder()
-			.email(email)
-			.password(passwordEncoder.encode(password))
+			.email(loginInfo.getEmail())
+			.password(passwordEncoder.encode(loginInfo.getPassword()))
 			.nickname(nickname)
 			.role(Role.USER)
 			.build();
