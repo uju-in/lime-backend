@@ -20,13 +20,19 @@ public class AddMemberItemService {
 	private final ItemReader itemReader;
 
 	@Transactional
-	public void addMemberItems(final List<Long> itemIds, final Long memberId) {
+	public void addMemberItems(
+		final List<Long> itemIds,
+		final Long memberId
+	) {
 		List<Item> items = getItems(itemIds);
 		List<MemberItem> memberItems = getMemberItems(memberId, items);
 		memberItemRepository.saveAll(memberItems);
 	}
 
-	private List<MemberItem> getMemberItems(final Long memberId, final List<Item> items) {
+	private List<MemberItem> getMemberItems(
+		final Long memberId,
+		final List<Item> items
+	) {
 		return items.stream()
 			.map(item ->
 				new MemberItem(
