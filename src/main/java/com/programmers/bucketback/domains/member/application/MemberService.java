@@ -67,7 +67,7 @@ public class MemberService {
 		member.updatePassword(password);
 	}
 
-	public boolean checkNickname(String nickname) {
+	public boolean checkNickname(final String nickname) {
 		return memberChecker.checkNickname(nickname);
 	}
 }
