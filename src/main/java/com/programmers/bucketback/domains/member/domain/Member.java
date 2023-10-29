@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.member.domain;
 import com.programmers.bucketback.domains.common.BaseEntity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,13 +28,8 @@ public class Member extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
-	@Column(name = "email")
-	private String email;
-
-	@NotNull
-	@Column(name = "password")
-	private String password;
+	@Embedded
+	private LoginInfo loginInfo;
 
 	@NotNull
 	@Column(name = "nickname")
@@ -63,12 +59,15 @@ public class Member extends BaseEntity {
 		@NotNull final String nickname,
 		@NotNull final Role role
 	) {
-		this.email = email;
-		this.password = password;
+		this.loginInfo = new LoginInfo(email, password);
 		this.nickname = nickname;
 		this.levelPoint = 0;
 		this.role = role;
 		this.status = MemberStatus.ACTIVE;
+	}
+
+	public String getPassword() {
+		return loginInfo.getPassword();
 	}
 
 	public void delete() {
@@ -77,5 +76,17 @@ public class Member extends BaseEntity {
 
 	public boolean isDeleted() {
 		return this.getStatus() == MemberStatus.DELETED;
+	}
+
+	public void updateProfile(
+		final String nickname,
+		final String introduction
+	) {
+		this.nickname = nickname;
+		this.introduction = introduction;
+	}
+
+	public void updatePassword(String password) {
+		this.loginInfo.updatePassword(password);
 	}
 }

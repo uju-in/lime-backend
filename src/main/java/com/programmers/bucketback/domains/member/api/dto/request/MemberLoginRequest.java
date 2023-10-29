@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.member.api.dto.request;
 
-import com.programmers.bucketback.domains.member.application.dto.request.LoginMemberServiceRequest;
+import com.programmers.bucketback.domains.member.domain.LoginInfo;
+
 import jakarta.validation.constraints.NotNull;
 
 public record MemberLoginRequest(
@@ -10,7 +11,7 @@ public record MemberLoginRequest(
         @NotNull
         String password
 ) {
-    public LoginMemberServiceRequest toLoginMemberServiceRequest() {
-        return new LoginMemberServiceRequest(email, password);
+    public LoginInfo toLoginInfo() {
+        return new LoginInfo(email, password);
     }
 }
