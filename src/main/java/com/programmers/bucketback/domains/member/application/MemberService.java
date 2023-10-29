@@ -19,6 +19,7 @@ public class MemberService {
 	private final SecurityManager securityManager;
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
+	private final MemberRemover memberRemover;
 	private final MemberUpdater memberUpdater;
 	private final MemberChecker memberChecker;
 
@@ -46,9 +47,7 @@ public class MemberService {
 
 	@Transactional
 	public void deleteMember() {
-		final Member member = memberReader.read();
-
-		member.delete();
+		memberRemover.remove();
 	}
 
 	@Transactional
