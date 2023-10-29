@@ -19,6 +19,7 @@ public class MemberService {
 	private final SecurityManager securityManager;
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
+	private final MemberUpdater memberUpdater;
 	private final MemberChecker memberChecker;
 
 	@Transactional
@@ -55,16 +56,12 @@ public class MemberService {
 		final String nickname,
 		final String introduction
 	) {
-		final Member member = memberReader.read();
-
-		member.updateProfile(nickname, introduction);
+		memberUpdater.update(nickname, introduction);
 	}
 
 	@Transactional
 	public void updatePassword(final String password) {
-		final Member member = memberReader.read();
-
-		member.updatePassword(password);
+		memberUpdater.update(password);
 	}
 
 	public boolean checkNickname(final String nickname) {
