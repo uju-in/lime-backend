@@ -17,7 +17,7 @@ public class ItemReader {
 
 	private final ItemRepository itemRepository;
 
-	public Item read(Long itemId) {
+	public Item read(final Long itemId) {
 		return itemRepository.findById(itemId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.ITEM_NOT_FOUND));
 	}

@@ -13,7 +13,7 @@ public class ItemService {
 
 	private final AddMemberItemService addMemberItemService;
 
-	public void addItem(AddMemberItemServiceRequest request) {
+	public void addItem(final AddMemberItemServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 		addMemberItemService.addMemberItems(request.itemIds(), memberId);
 	}
