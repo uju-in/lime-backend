@@ -2,11 +2,11 @@ package com.programmers.bucketback.domains.member.application.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
-public record LoginMemberServiceRequest(
-        @NotNull
-        String email,
+public record UpdateProfileMemberServiceRequest(
+	@NotNull
+	String nickname,
 
-        @NotNull
-        String password
+	@NotNull
+	String introduction
 ) {
 }
