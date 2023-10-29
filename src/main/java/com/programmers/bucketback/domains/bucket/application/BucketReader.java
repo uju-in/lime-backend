@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class BucketReader {
 	public Bucket read(Long bucketId){
 		return bucketRepository.findById(bucketId)
 			.orElseThrow(() -> {
-			throw new BusinessException(ErrorCode.BUCKET_NOT_FOUND);
+			throw new EntityNotFoundException(ErrorCode.BUCKET_NOT_FOUND);
 			});
 	}
 }

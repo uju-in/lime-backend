@@ -68,14 +68,15 @@ public class Bucket extends BaseEntity {
 		bucketItem.changeBucket(this);
 	}
 
+
 	public void modifyBucket(
 		final Hobby hobby,
-		final List<BucketItem> bucketItems,
+		final Long memberId,
 		final String name,
 		final Integer budget
 	) {
 		this.hobby = hobby;
-		this.bucketItems = bucketItems;
+		this.memberId= memberId;
 		this.bucketInfo = new BucketInfo(name,budget);
 	}
 }

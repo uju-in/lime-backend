@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
+import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
 import com.programmers.bucketback.domains.bucket.application.BucketService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,17 +29,16 @@ public class BucketController {
 
 	@Operation(summary = "버킷 생성", description = "FundingCreateRequestDTO 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/buckets")
-	public ResponseEntity createBucket(@RequestBody @Valid final BucketCreateRequest request){
+	public ResponseEntity<Void> createBucket(@RequestBody @Valid final BucketCreateRequest request){
 		bucketService.createBucket(request.toContent()); //memberId값 필요함
 
 		return ResponseEntity.ok().build();
 	}
 
-
 	@Operation(summary = "버킷 수정", description = "BucketId, BucketUpdateRequest 을 이용하여 버킷을 수정힙니다.")
 	@PutMapping("/buckets/{bucketId}")
-	public ResponseEntity updateBucket(
-		@PathVariable(required = true) Long bucketId,
+	public ResponseEntity<Void> modifyBucket(
+		@PathVariable(required = true) final Long bucketId,
 		@RequestBody @Valid final BucketUpdateRequest request
 	){
 		bucketService.modifyBucket(bucketId, request.toContent());
@@ -48,7 +48,7 @@ public class BucketController {
 
 	@Operation(summary = "버킷 삭제", description = "BucketId을 이용하여 버킷을 삭제힙니다.")
 	@DeleteMapping("/buckets/{bucketId}")
-	public ResponseEntity deleteBucket(@PathVariable(required = true) Long bucketId){
+	public ResponseEntity<Void> deleteBucket(@PathVariable(required = true) final Long bucketId){
 		bucketService.deleteBucket(bucketId);
 
 		return ResponseEntity.ok().build();

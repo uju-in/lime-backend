@@ -30,11 +30,14 @@ public class BucketModifier {
 		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.itemIds());
 		Bucket bucket = bucketReader.read(bucketId);
 
-		bucket.modifyBucket(
-			content.hobby(),
-			bucketItems,
-			content.name(),
-			content.budget()
-		);
+		//memberId 반영후 수정 예
+		// bucket.modifyBucket(
+		// 	content.hobby(),
+		// 	content.name(),
+		// 	content.budget()
+		// );
+
+		bucketItems.forEach(bucket::addBucketItem);
+
 	}
 }

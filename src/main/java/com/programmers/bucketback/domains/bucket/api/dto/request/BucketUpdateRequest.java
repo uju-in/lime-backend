@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.bucket.api;
+package com.programmers.bucketback.domains.bucket.api.dto.request;
 
 import java.util.List;
 
