@@ -8,7 +8,7 @@ import com.programmers.bucketback.domains.common.Hobby;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
-public record BucketCreateRequest(
+public record BucketUpdateRequest(
 
 	@Schema(description = "취미", example = "농구")
 	@NotNull(message = "취미를 입력하세요") // enumvalidater로 추가 예정

@@ -23,6 +23,7 @@ public class BucketAppender {
 	private final BucketRepository bucketRepository;
 	private final ItemRepository itemRepository;
 
+	/** 버킷 생성 */
 	@Transactional
 	public void append(final BucketContent content) {
 		List<BucketItem> bucketItems = createBucketItems(content.itemIds());
@@ -38,7 +39,7 @@ public class BucketAppender {
 		bucketRepository.save(bucket);
 	}
 
-	private List<BucketItem> createBucketItems(final List<Long> itemIds){
+	public List<BucketItem> createBucketItems(final List<Long> itemIds){
 		//itemReader와 같이 병곤이가 사용하는 로직이 있으면 대체 예정
 		return itemIds.stream()
 			.map(id ->
