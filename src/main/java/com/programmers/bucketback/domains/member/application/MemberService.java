@@ -20,6 +20,7 @@ public class MemberService {
 	private final SecurityManager securityManager;
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
+	private final MemberChecker memberChecker;
 
 	@Transactional
 	public void signup(
@@ -62,5 +63,9 @@ public class MemberService {
 		final Member member = memberReader.read();
 
 		member.updatePassword(password);
+	}
+
+	public boolean checkNickname(String nickname) {
+		return memberChecker.checkNickname(nickname);
 	}
 }

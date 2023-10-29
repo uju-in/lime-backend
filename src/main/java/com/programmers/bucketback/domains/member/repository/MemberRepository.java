@@ -8,4 +8,6 @@ import com.programmers.bucketback.domains.member.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	Optional<Member> findByLoginInfoEmail(String email);
+
+	boolean existsByNickname(String nickname);
 }

@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.bucketback.domains.member.api.dto.request.MemberCheckNicknameRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberLoginRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberSignupRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdatePasswordRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdateProfileRequest;
+import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckNicknameResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
 import com.programmers.bucketback.domains.member.application.MemberService;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
@@ -59,5 +61,15 @@ public class MemberController {
 		memberService.updatePassword(request.password());
 
 		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/check/nickname")
+	public ResponseEntity<MemberCheckNicknameResponse> checkNickname(
+		@Valid @RequestBody final MemberCheckNicknameRequest request
+	) {
+		final boolean success = memberService.checkNickname(request.nickname());
+		final MemberCheckNicknameResponse response = new MemberCheckNicknameResponse(success);
+
+		return ResponseEntity.ok(response);
 	}
 }
