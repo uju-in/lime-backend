@@ -62,6 +62,6 @@ public class MemberService {
 	}
 
 	public boolean checkNickname(final String nickname) {
-		return memberChecker.checkNickname(nickname);
+		return memberChecker.checkNicknameDuplication(nickname);
 	}
 }

@@ -67,8 +67,8 @@ public class MemberController {
 	public ResponseEntity<MemberCheckNicknameResponse> checkNickname(
 		@Valid @RequestBody final MemberCheckNicknameRequest request
 	) {
-		final boolean success = memberService.checkNickname(request.nickname());
-		final MemberCheckNicknameResponse response = new MemberCheckNicknameResponse(success);
+		final boolean isDuplicated = memberService.checkNickname(request.nickname());
+		final MemberCheckNicknameResponse response = new MemberCheckNicknameResponse(isDuplicated);
 
 		return ResponseEntity.ok(response);
 	}

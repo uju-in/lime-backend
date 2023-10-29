@@ -12,7 +12,7 @@ public class MemberChecker {
 
 	private final MemberRepository memberRepository;
 
-	public boolean checkNickname(final String nickname) {
-		return !memberRepository.existsByNickname(nickname);
+	public boolean checkNicknameDuplication(final String nickname) {
+		return memberRepository.existsByNickname(nickname);
 	}
 }
