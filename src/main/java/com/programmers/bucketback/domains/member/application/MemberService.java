@@ -3,7 +3,6 @@ package com.programmers.bucketback.domains.member.application;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.member.application.dto.request.UpdateProfileMemberServiceRequest;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
@@ -52,10 +51,13 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void updateProfile(final UpdateProfileMemberServiceRequest request) {
+	public void updateProfile(
+		final String nickname,
+		final String introduction
+	) {
 		final Member member = memberReader.read();
 
-		member.updateProfile(request.nickname(), request.introduction());
+		member.updateProfile(nickname, introduction);
 	}
 
 	@Transactional

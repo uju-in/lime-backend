@@ -51,7 +51,7 @@ public class MemberController {
 
 	@PutMapping("/profile")
 	public ResponseEntity<Void> updateProfile(@Valid @RequestBody final MemberUpdateProfileRequest request) {
-		memberService.updateProfile(request.toUpdateProfileMemberServiceRequest());
+		memberService.updateProfile(request.nickname(), request.introduction());
 
 		return ResponseEntity.ok().build();
 	}
