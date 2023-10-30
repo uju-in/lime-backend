@@ -24,7 +24,6 @@ public class BucketService {
 		final BucketContent content
 	) {
 		bucketModifier.modify(bucketId, content);
-
 	}
 
 	/** 버킷 삭제 */
