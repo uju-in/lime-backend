@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
+import com.programmers.bucketback.domains.common.MemberUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,12 +34,12 @@ public class BucketModifier {
 		bucket.removeBucketItems();
 		bucketRemover.removeBucketItems(bucket.getId());
 
-		// memberId 반영후 수정 예
-		// bucket.modifyBucket(
-		// 	content.hobby(),
-		// 	content.name(),
-		// 	content.budget()
-		// );
+		bucket.modifyBucket(
+			content.hobby(),
+			MemberUtils.getCurrentMemberId(),
+			content.name(),
+			content.budget()
+		);
 		bucketItems.forEach(bucket::addBucketItem);
 
 		bucketRepository.save(bucket);
