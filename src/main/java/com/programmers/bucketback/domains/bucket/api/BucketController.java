@@ -1,20 +1,19 @@
 package com.programmers.bucketback.domains.bucket.api;
 
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketResponse;
 import com.programmers.bucketback.domains.bucket.application.BucketService;
-import com.programmers.bucketback.domains.bucket.domain.Bucket;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -57,9 +56,11 @@ public class BucketController {
 	}
 
 	@Operation(summary = "버킷 상세 조회", description = "BucketId을 이용하여 버킷을 조회힙니다.")
-	@DeleteMapping("/buckets/{bucketId}")
-	public ResponseEntity<GetBucketResponse> getBucket(@PathVariable(required = true) final Long bucketId){
-
+	@DeleteMapping("/{nickName}/buckets/{bucketId}")
+	public ResponseEntity<GetBucketResponse> getBucket(
+		@RequestParam(required = true) final String nickName,
+		@PathVariable(required = true) final Long bucketId
+	){
 		return ResponseEntity.ok(bucketService.getBucket(bucketId));
 	}
 }

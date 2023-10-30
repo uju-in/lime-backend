@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.bucket.application.BucketContent;
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.global.annotation.Enum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,8 @@ public record BucketCreateRequest(
 
 	@Schema(description = "취미", example = "농구")
 	@NotNull(message = "취미를 입력하세요") // enumvalidater로 추가 예정
-	String hobby,
+	@Enum
+	Hobby hobby,
 
 	@Schema(description = "버킷 이름", example = "유러피안 농구")
 	@NotNull(message = "버킷 이름을 입력하세요")
@@ -28,7 +30,7 @@ public record BucketCreateRequest(
 
 	public BucketContent toContent() {
 		return BucketContent.builder()
-			.hobby(Hobby.valueOf(hobby))
+			.hobby(hobby)
 			.name(bucketName)
 			.budget(bucketBudget)
 			.itemIds(itemIds)
