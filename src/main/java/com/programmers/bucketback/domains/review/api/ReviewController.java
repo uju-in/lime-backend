@@ -23,7 +23,7 @@ public class ReviewController {
 	@PostMapping()
 	public ResponseEntity<Void> createReview(
 		@PathVariable Long itemId,
-		@Valid @RequestBody ReviewCreateRequest request
+		@Valid @RequestBody final ReviewCreateRequest request
 	) {
 		reviewService.createReview(itemId, request.toReviewContent());
 
