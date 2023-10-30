@@ -17,7 +17,6 @@ public class BucketService {
 	private final BucketReader bucketReader;
 
 	/** 버킷 생성 */
-	//멤버id 정보 추가받아야함
 	public void createBucket(final BucketContent content) {
 		bucketAppender.append(content);
 	}
@@ -35,9 +34,7 @@ public class BucketService {
 		bucketRemover.remove(bucketId);
 	}
 
-	/**
-	 * 버킷 상세 조회
-	 */
+	/** 버킷 상세 조회 */
 	public GetBucketResponse getBucket(final Long bucketId) {
 		Bucket bucket = bucketReader.read(bucketId);
 
