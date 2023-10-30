@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.review.application;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.review.domain.Review;
 import com.programmers.bucketback.domains.review.repository.ReviewRepository;
@@ -9,7 +9,7 @@ import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ReviewReader {
 

@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.review.application;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.item.application.ItemReader;
@@ -11,7 +11,7 @@ import com.programmers.bucketback.domains.review.repository.ReviewRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ReviewAppender {
 
@@ -33,13 +33,13 @@ public class ReviewAppender {
 
 	private Review getReview(
 		final Long memberId,
-		final ReviewContent request,
+		final ReviewContent reviewContent,
 		final Item item
 	) {
 		return Review.builder()
 			.item(item)
-			.rating(request.rating())
-			.content(request.content())
+			.rating(reviewContent.rating())
+			.content(reviewContent.content())
 			.memberId(memberId)
 			.build();
 	}
