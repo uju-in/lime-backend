@@ -68,7 +68,6 @@ public class Bucket extends BaseEntity {
 		bucketItem.changeBucket(this);
 	}
 
-
 	public void modifyBucket(
 		final Hobby hobby,
 		final Long memberId,
@@ -78,5 +77,9 @@ public class Bucket extends BaseEntity {
 		this.hobby = hobby;
 		this.memberId= memberId;
 		this.bucketInfo = new BucketInfo(name,budget);
+	}
+
+	public void removeBucketItems(){
+		this.bucketItems.clear();
 	}
 }
