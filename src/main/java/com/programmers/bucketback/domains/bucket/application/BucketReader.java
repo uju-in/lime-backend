@@ -1,11 +1,14 @@
 package com.programmers.bucketback.domains.bucket.application;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketsByCursorResponse;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
@@ -22,6 +25,7 @@ public class BucketReader {
 
 	private final BucketRepository bucketRepository;
 
+
 	/** 버킷 정보 조회 */
 	@Transactional
 	public Bucket read(final Long bucketId){
@@ -31,41 +35,50 @@ public class BucketReader {
 			});
 	}
 
-	/** 버킷 정보 커서 페이징 조회 */
+	/**
+	 * 버킷 정보 커서 페이징 조회
+	 *
+	 * @return
+	 */
 	@Transactional
-	public void readByCursor(
-		final String nickname,
+	public GetBucketsByCursorResponse readByCursor(
+		final Long memberId,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 
-		PageRequest pageRequest = PageRequest.of(
-			0,
-			parameters.size()
-		);
+		// cursorid나 size가 null인 경우도 고려해서 추가해주기
+		PageRequest pageRequest = PageRequest.of(0, parameters.size());
 
-		// 커서 페이징 로직 추가하기
 		List<BucketSummary> bucketSummaries = bucketRepository.findAllByCursor(
+			memberId,
+			hobby,
 			parameters.cursorId(),
 			pageRequest
 		);
 
-		//가공해온 결과를 바탕으로 응답 값을 만들어내야함.
-		// result.get,
-
 		List<String> cursorIds = bucketSummaries.stream()
-			.map(bucketSummary -> {
-				generateCursor(bucketSummary);
-			})
+			.map(bucketSummary -> generateCursorId(bucketSummary))
 			.toList();
 
 		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
 
-		//실제 응답 데이터 형식을 어떻게 정의하면 좋을지 그 내용을 맞추는 부분
+		List<BucketCursorSummary> bucketCursorSummaries = IntStream.range(0, bucketSummaries.size())
+			.mapToObj(i -> {
+				String cursorId = cursorIds.get(i);
+				BucketSummary bucketSummary = bucketSummaries.get(i);
+
+				return BucketCursorSummary.of(cursorId, bucketSummary);
+			}).toList();
+
+		return new GetBucketsByCursorResponse(nextCursorId,bucketCursorSummaries);
 	}
 
-	// bucketId (생성시간도 필요 없을듯)
-	// private String generateCursorId(BucketSummary bucketSummary){
-	// 	String.format("%012d",bucketSummary.) // bucketId
-	// }
+	private String generateCursorId(BucketSummary bucketSummary){
+		return bucketSummary.createdAt().toString()
+			.replace("T","")
+			.replace("-","")
+			.replace(":","")
+			+String.format("%08d",bucketSummary.bucketId());
+	}
 }
