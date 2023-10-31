@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.review.domain;
 
-import com.programmers.bucketback.domains.item.domain.Item;
+import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -28,9 +27,8 @@ public class Review {
 	private Long id;
 
 	@NotNull
-	@ManyToOne
 	@JoinColumn(name = "items_id")
-	private Item item;
+	private Long itemId;
 
 	@NotNull
 	@Column(name = "members_id")
@@ -45,14 +43,27 @@ public class Review {
 
 	@Builder
 	public Review(
-		@NotNull final Item item,
+		@NotNull final Long itemId,
 		@NotNull final Long memberId,
 		@NotNull final String content,
 		@NotNull final Integer rating
 	) {
-		this.item = item;
+		this.itemId = itemId;
 		this.memberId = memberId;
 		this.content = content;
 		this.rating = rating;
+	}
+
+	public void changeReviewContent(ReviewContent reviewContent) {
+		this.content = reviewContent.content();
+		this.rating = reviewContent.rating();
+	}
+
+	public boolean containsItem(Long itemId) {
+		return this.itemId.equals(itemId);
+	}
+
+	public boolean isOwner(Long memberId) {
+		return this.memberId.equals(memberId);
 	}
 }
