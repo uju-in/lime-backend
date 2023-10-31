@@ -3,7 +3,11 @@ package com.programmers.bucketback.domains.bucket.application;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketResponse;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketItemContent;
+import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
+import com.programmers.bucketback.domains.common.Hobby;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,4 +44,14 @@ public class BucketService {
 
 		return new GetBucketResponse(BucketContent.from(bucket), BucketItemContent.from(bucket));
 	}
+
+	/** 버킷 커서 조회 */
+	public void getBucketsByCursor(
+		final String nickname,
+		final Hobby hobby,
+		final CursorPageParameters parameters
+	){
+		bucketReader.readByCursor(nickname,hobby,parameters);
+	}
+
 }
