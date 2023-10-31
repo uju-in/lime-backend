@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 public class ReviewService {
 
 	private final ReviewAppender reviewAppender;
+	private final ReviewModifier reviewModifier;
+	private final ReviewValidator reviewValidator;
 
 	public void createReview(
 		final Long itemId,
@@ -19,5 +21,16 @@ public class ReviewService {
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 		reviewAppender.append(itemId, memberId, reviewContent);
+	}
+
+	public void updateReview(
+		final Long itemId,
+		final Long reviewId,
+		final ReviewContent reviewContent
+	) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+		reviewValidator.validItemReview(itemId, reviewId);
+		reviewValidator.validOwner(reviewId, memberId);
+		reviewModifier.modify(reviewId, reviewContent);
 	}
 }
