@@ -54,16 +54,16 @@ public class Review {
 		this.rating = rating;
 	}
 
-	public void changeReviewContent(ReviewContent reviewContent) {
+	public void changeReviewContent(final ReviewContent reviewContent) {
 		this.content = reviewContent.content();
 		this.rating = reviewContent.rating();
 	}
 
-	public boolean containsItem(Long itemId) {
+	public boolean containsItem(final Long itemId) {
 		return this.itemId.equals(itemId);
 	}
 
-	public boolean isOwner(Long memberId) {
+	public boolean isOwner(final Long memberId) {
 		return this.memberId.equals(memberId);
 	}
 }
