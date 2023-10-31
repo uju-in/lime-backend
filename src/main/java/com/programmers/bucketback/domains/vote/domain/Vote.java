@@ -6,19 +6,15 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.domains.item.domain.Item;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -43,14 +39,12 @@ public class Vote extends BaseEntity {
 	private Long memberId;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "option1_item_id")
-	private Item option1Item;
+	@Column(name = "option1_item_id")
+	private Long option1ItemId;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "option2_item_id")
-	private Item option2Item;
+	@Column(name = "option2_item_id")
+	private Long option2ItemId;
 
 	@NotNull
 	@Column(name = "hobby")
@@ -75,14 +69,14 @@ public class Vote extends BaseEntity {
 	@Builder
 	private Vote(
 		@NotNull final Long memberId,
-		@NotNull final Item option1Item,
-		@NotNull final Item option2Item,
+		@NotNull final Long option1ItemId,
+		@NotNull final Long option2ItemId,
 		@NotNull final Hobby hobby,
 		@NotNull final String content
 	) {
 		this.memberId = memberId;
-		this.option1Item = option1Item;
-		this.option2Item = option2Item;
+		this.option1ItemId = option1ItemId;
+		this.option2ItemId = option2ItemId;
 		this.hobby = hobby;
 		this.content = content;
 		this.startTime = LocalDateTime.now();
