@@ -83,11 +83,11 @@ public class Vote extends BaseEntity {
 		this.endTime = startTime.plusDays(1);
 	}
 
-	public boolean containsItem(Long itemId) {
+	public boolean containsItem(final Long itemId) {
 		return option1ItemId.equals(itemId) || option2ItemId.equals(itemId);
 	}
 
-	public void addVoter(Voter voter) {
+	public void addVoter(final Voter voter) {
 		this.voters.add(voter);
 	}
 }
