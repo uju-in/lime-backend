@@ -17,6 +17,7 @@ public class VoteService {
 	private final VoteAppender voteAppender;
 	private final VoteReader voteReader;
 	private final VoteManager voteManager;
+	private final VoteRemover voteRemover;
 
 	public Long createVote(final CreateVoteServiceRequest request) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
@@ -38,5 +39,16 @@ public class VoteService {
 		}
 
 		voteManager.vote(vote, memberId, itemId);
+	}
+
+	public void deleteVote(final Long voteId) {
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Vote vote = voteReader.read(voteId);
+
+		if (!vote.isOwner(memberId)) {
+			throw new BusinessException(ErrorCode.VOTE_NOT_OWNER);
+		}
+
+		voteRemover.remove(vote);
 	}
 }
