@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.repository.VoteReposiory;
-import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,6 @@ public class VoteReader {
 	@Transactional(readOnly = true)
 	public Vote read(final Long voteId) {
 		return voteReposiory.findById(voteId)
-			.orElseThrow(() -> new BusinessException(ErrorCode.VOTE_NOT_FOUND));
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.VOTE_NOT_FOUND));
 	}
 }

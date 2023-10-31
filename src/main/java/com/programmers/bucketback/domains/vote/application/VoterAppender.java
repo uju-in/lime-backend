@@ -16,6 +16,7 @@ public class VoterAppender {
 
 	public Voter append(Vote vote, Long memberId, Long itemId) {
 		Voter voter = new Voter(vote, memberId, itemId);
+
 		return voterRepository.save(voter);
 	}
 }
