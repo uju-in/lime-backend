@@ -39,4 +39,14 @@ public class Voter extends BaseEntity {
 	@NotNull
 	@Column(name = "item_id")
 	private Long itemId;
+
+	public Voter(
+		@NotNull final Vote vote,
+		@NotNull final Long memberId,
+		@NotNull final Long itemId
+	) {
+		this.vote = vote;
+		this.memberId = memberId;
+		this.itemId = itemId;
+	}
 }

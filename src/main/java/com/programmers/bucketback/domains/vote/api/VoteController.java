@@ -1,12 +1,14 @@
 package com.programmers.bucketback.domains.vote.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest;
+import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
 
@@ -26,5 +28,15 @@ public class VoteController {
 		VoteCreateResponse response = new VoteCreateResponse(voteId);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/{voteId}/participation")
+	public ResponseEntity<Void> participateVote(
+		@PathVariable final Long voteId,
+		@Valid @RequestBody final VoteParticipateRequest request
+	) {
+		voteService.participateVote(voteId, request.itemId());
+
+		return ResponseEntity.ok().build();
 	}
 }
