@@ -14,17 +14,17 @@ public record BucketContent(
 	@Enum
 	Hobby hobby,
 
-	String name,
-	Integer budget,
-	List<Long> itemIds,
+	String bucketName,
+	Integer bucketBudget,
+	List<Long> bucketItemIds,
 	Long memberId,
 	Long bucketId
 ) {
 	public static BucketContent from(final Bucket bucket){
 		return BucketContent.builder()
 			.hobby(bucket.getHobby())
-			.name(bucket.getBucketInfo().getName())
-			.budget(bucket.getBucketInfo().getBudget())
+			.bucketName(bucket.getBucketInfo().getName())
+			.bucketBudget(bucket.getBucketInfo().getBudget())
 			.bucketId(bucket.getId())
 			.memberId(bucket.getMemberId())
 			.build();
