@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.bucket.api.dto.request;
 
 import java.util.List;
 
-import com.programmers.bucketback.domains.bucket.application.BucketContent;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.common.Hobby;
 
 import io.swagger.v3.oas.annotations.media.Schema;
