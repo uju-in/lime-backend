@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.bucket.application;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketResponse;
@@ -9,6 +11,7 @@ import com.programmers.bucketback.domains.bucket.application.vo.BucketItemConten
 import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ public class BucketService {
 	private final BucketRemover bucketRemover;
 	private final BucketReader bucketReader;
 	private final MemberReader memberReader;
+	private final ItemReader itemReader;
 
 	/** 버킷 생성 */
 	public void createBucket(final BucketContent content) {
@@ -42,10 +46,16 @@ public class BucketService {
 	}
 
 	/** 버킷 상세 조회 */
+	//refactor 버킷 상세 조회 로직을 생각해서 적용
 	public GetBucketResponse getBucket(final Long bucketId) {
 		Bucket bucket = bucketReader.read(bucketId);
 
-		return new GetBucketResponse(BucketContent.from(bucket), BucketItemContent.from(bucket));
+		List<BucketItemContent> bucketItemContents = bucket.getBucketItems().stream()
+			.map(bucketItem -> itemReader.read(bucketItem.getItem().getId()))
+			.map(item -> BucketItemContent.from(item))
+			.toList();
+
+		return new GetBucketResponse(BucketContent.from(bucket), bucketItemContents);
 	}
 
 	/**

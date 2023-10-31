@@ -1,16 +1,23 @@
 package com.programmers.bucketback.domains.bucket.application.vo;
 
-import java.util.List;
+import com.programmers.bucketback.domains.item.domain.Item;
 
-import com.programmers.bucketback.domains.bucket.domain.Bucket;
-import com.programmers.bucketback.domains.bucket.domain.BucketItem;
+import lombok.Builder;
 
+@Builder
 public record BucketItemContent(
 	/** refactor : itemContent와 같은 아이템 정보가 담긴 객체로 반환한다. */
-	List<BucketItem> bucketItems,
-	int bucketIemCounts
+	Long itemId,
+	String itemName,
+	Integer itemPrice,
+	String itemImgUrl
 ) {
-	public static BucketItemContent from(final Bucket bucket){
-		return new BucketItemContent(bucket.getBucketItems(), bucket.getBucketItems().size());
+	public static BucketItemContent from(final Item item){
+		return BucketItemContent.builder()
+			.itemId(item.getId())
+			.itemName(item.getName())
+			.itemPrice(item.getPrice())
+			.itemImgUrl(item.getImage())
+			.build();
 	}
 }
