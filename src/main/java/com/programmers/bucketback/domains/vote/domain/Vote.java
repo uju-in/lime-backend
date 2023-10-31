@@ -88,6 +88,8 @@ public class Vote extends BaseEntity {
 	}
 
 	public void addVoter(final Voter voter) {
-		this.voters.add(voter);
+		if (!this.voters.contains(voter)) {
+			this.voters.add(voter);
+		}
 	}
 }
