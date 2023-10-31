@@ -4,7 +4,7 @@ import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParame
 
 public record BucketGetByCursorRequest(
 	//null 가능
-	Long cursorId,
+	String cursorId,
 
 	int size
 

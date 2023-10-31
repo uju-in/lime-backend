@@ -15,6 +15,7 @@ import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateReq
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketGetByCursorRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketsByCursorResponse;
 import com.programmers.bucketback.domains.bucket.application.BucketService;
 import com.programmers.bucketback.domains.common.Hobby;
 
@@ -59,9 +60,9 @@ public class BucketController {
 	}
 
 	@Operation(summary = "버킷 상세 조회", description = "BucketId을 이용하여 버킷을 조회힙니다.")
-	@GetMapping("/{nickname}/buckets/{bucketId}")
+	@GetMapping("/buckets/{bucketId}")
 	public ResponseEntity<GetBucketResponse> getBucket(
-		@RequestParam(required = true) final String nickname,
+		// @PathVariable(required = true) final String nickname,
 		@PathVariable(required = true) final Long bucketId
 	){
 		return ResponseEntity.ok(bucketService.getBucket(bucketId));
@@ -69,13 +70,17 @@ public class BucketController {
 
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
 	@GetMapping("/{nickname}/buckets/{hobby}")
-	public ResponseEntity<GetBucketResponse> getBucket(
+	public ResponseEntity<GetBucketsByCursorResponse> getBucket(
 		@RequestParam(required = true) final String nickname,
 		@RequestParam(required = true) final String hobby,
 		@RequestBody @Valid BucketGetByCursorRequest request
 	){
-		bucketService.getBucketsByCursor(nickname, Hobby.valueOf(hobby), request.toParameters());
+		GetBucketsByCursorResponse response = bucketService.getBucketsByCursor(
+			nickname,
+			Hobby.valueOf(hobby),
+			request.toParameters()
+		);
 
-		return ResponseEntity.ok();
+		return ResponseEntity.ok(response);
 	}
 }
