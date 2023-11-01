@@ -16,15 +16,31 @@ public final class SecurityUtils {
 	private static final SimpleGrantedAuthority anonymousMember = new SimpleGrantedAuthority("ROLE_ANONYMOUS");
 
 	public static Long getCurrentMemberId() {
+		Authentication authentication = getAuthentication();
+
+		if (!authentication.isAuthenticated() || isAnonymousMember(authentication)) {
+			throw new BusinessException(ErrorCode.MEMBER_ANONYMOUS);
+		}
+
+		return Long.valueOf(authentication.getName());
+	}
+
+	public static boolean isLoggedIn() {
+		Authentication authentication = getAuthentication();
+
+		return !isAnonymousMember(authentication);
+	}
+
+	private static Authentication getAuthentication() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
 			throw new BusinessException(ErrorCode.SECURITY_CONTEXT_NOT_FOUND);
 		}
 
-		if (!authentication.isAuthenticated() || authentication.getAuthorities().contains(anonymousMember)) {
-			throw new BusinessException(ErrorCode.MEMBER_ANONYMOUS);
-		}
+		return authentication;
+	}
 
-		return Long.valueOf(authentication.getName());
+	private static boolean isAnonymousMember(final Authentication authentication) {
+		return authentication.getAuthorities().contains(anonymousMember);
 	}
 }
