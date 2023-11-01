@@ -1,25 +1,17 @@
 package com.programmers.bucketback.global.config;
 
-import static java.util.stream.Collectors.*;
-
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.method.HandlerMethod;
+import org.springframework.http.HttpHeaders;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.media.Content;
-import io.swagger.v3.oas.models.media.MediaType;
-import io.swagger.v3.oas.models.responses.ApiResponse;
-import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +24,26 @@ public class SwaggerConfiguration {
 	public OpenAPI openAPI(ServletContext servletContext) {
 		String contextPath = servletContext.getContextPath();
 		Server server = new Server().url(contextPath);
-		return new OpenAPI().servers(List.of(server)).info(swaggerInfo());
+
+		// Security 스키마 설정
+		SecurityScheme bearerAuth = new SecurityScheme()
+			.type(SecurityScheme.Type.HTTP)
+			.scheme("bearer")
+			.bearerFormat("Authorization")
+			.in(SecurityScheme.In.HEADER)
+			.name(HttpHeaders.AUTHORIZATION);
+
+		// Security 요청 설정
+		SecurityRequirement addSecurityItem = new SecurityRequirement();
+		addSecurityItem.addList("Authorization");
+
+		return new OpenAPI()
+			// Security 인증 컴포넌트 설정
+			.components(new Components().addSecuritySchemes("Authorization", bearerAuth))
+			// API 마다 Security 인증 컴포넌트 설정
+			.addSecurityItem(addSecurityItem)
+			.servers(List.of(server))
+			.info(swaggerInfo());
 	}
 
 	private Info swaggerInfo() {
@@ -46,6 +57,8 @@ public class SwaggerConfiguration {
 			.description("버킷백 서버의 API 문서 입니다.")
 			.license(license);
 	}
+
+
 
 	// @Bean
 	// public OperationCustomizer customize() {
