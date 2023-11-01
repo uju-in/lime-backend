@@ -24,7 +24,7 @@ public class ItemService {
 		addMemberItemService.addMemberItems(request.itemIds(), memberId);
 	}
 
-	public GetItemServiceResponse getItemDetails(Long itemId) {
+	public GetItemServiceResponse getItemDetails(final Long itemId) {
 		boolean itemIsMine = false;
 
 		Item item = itemReader.read(itemId);
@@ -34,6 +34,7 @@ public class ItemService {
 		}
 
 		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
+		
 		return GetItemServiceResponse.builder()
 			.itemId(item.getId())
 			.itemIsMine(itemIsMine)

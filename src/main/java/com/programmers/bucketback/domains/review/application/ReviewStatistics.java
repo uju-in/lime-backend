@@ -12,7 +12,7 @@ public class ReviewStatistics {
 
 	private final ReviewRepository reviewRepository;
 	
-	public double getReviewAvgByItemId(Long itemId) {
+	public double getReviewAvgByItemId(final Long itemId) {
 		return reviewRepository.getAvgRatingByReviewId(itemId);
 	}
 }
