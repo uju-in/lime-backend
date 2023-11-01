@@ -92,4 +92,8 @@ public class Vote extends BaseEntity {
 			this.voters.add(voter);
 		}
 	}
+
+	public boolean isOwner(final Long memberId) {
+		return this.memberId.equals(memberId);
+	}
 }

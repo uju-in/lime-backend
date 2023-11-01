@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.vote.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,13 @@ public class VoteController {
 		@Valid @RequestBody final VoteParticipateRequest request
 	) {
 		voteService.participateVote(voteId, request.itemId());
+
+		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("{voteId}")
+	public ResponseEntity<Void> deleteVote(@PathVariable final Long voteId) {
+		voteService.deleteVote(voteId);
 
 		return ResponseEntity.ok().build();
 	}
