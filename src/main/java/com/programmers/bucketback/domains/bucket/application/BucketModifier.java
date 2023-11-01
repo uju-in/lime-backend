@@ -30,8 +30,8 @@ public class BucketModifier {
 	) {
 		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.bucketItemIds());
 
-		//기존 버킷아이템 내용 삭제
-		Bucket bucket = bucketReader.read(bucketId);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		Bucket bucket = bucketReader.read(bucketId,memberId);
 		bucket.removeBucketItems();
 		bucketRemover.removeBucketItems(bucket.getId());
 

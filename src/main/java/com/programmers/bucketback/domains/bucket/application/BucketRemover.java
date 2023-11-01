@@ -9,8 +9,7 @@ import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketItemRepository;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
-import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.global.error.exception.ErrorCode;
+import com.programmers.bucketback.domains.common.MemberUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,12 +19,12 @@ public class BucketRemover {
 
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
-
+	private final BucketReader bucketReader;
 	/** 버킷 삭제 */
 	@Transactional
 	public void remove(final Long bucketId) {
-		Bucket bucket = bucketRepository.findById(bucketId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.BUCKET_NOT_FOUND));
+		Long memberId = MemberUtils.getCurrentMemberId();
+		Bucket bucket = bucketReader.read(bucketId, memberId);
 
 		bucketRepository.delete(bucket);
 	}
@@ -35,8 +34,7 @@ public class BucketRemover {
 	 * */
 	@Transactional
 	public void removeBucketItems(final Long bucketId){
-		List<BucketItem> bucketItems = bucketItemRepository.findByBucketId(bucketId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.BUCKET_ITEM_NOT_FOUND));
+		List<BucketItem> bucketItems = bucketReader.bucketItemRead(bucketId);
 
 		bucketItems.forEach(bucketItem -> bucketItemRepository.delete(bucketItem));
 	}
