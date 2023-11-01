@@ -5,9 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
 import com.programmers.bucketback.domains.review.domain.Review;
-import com.programmers.bucketback.domains.review.repository.ReviewRepository;
-import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,17 +12,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewModifier {
 
-	private final ReviewRepository reviewRepository;
+	private final ReviewReader reviewReader;
 
 	@Transactional
 	public void modify(
 		final Long reviewId,
 		final ReviewContent reviewContent
 	) {
-		final Review review = reviewRepository.findById(reviewId).orElseThrow(
-			() -> new EntityNotFoundException(ErrorCode.REVIEW_NOT_FOUND)
-		);
-
+		final Review review = reviewReader.read(reviewId);
 		review.changeReviewContent(reviewContent);
 	}
 }

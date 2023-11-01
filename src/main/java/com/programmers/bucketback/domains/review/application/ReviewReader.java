@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.review.application;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.review.domain.Review;
 import com.programmers.bucketback.domains.review.repository.ReviewRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReviewReader {
 
 	private final ReviewRepository reviewRepository;
