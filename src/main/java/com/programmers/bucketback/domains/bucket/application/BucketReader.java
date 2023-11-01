@@ -3,7 +3,6 @@ package com.programmers.bucketback.domains.bucket.application;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +11,8 @@ import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSumm
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
+import com.programmers.bucketback.domains.bucket.domain.BucketItem;
+import com.programmers.bucketback.domains.bucket.repository.BucketItemRepository;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
@@ -24,10 +25,10 @@ import lombok.RequiredArgsConstructor;
 public class BucketReader {
 
 	private final BucketRepository bucketRepository;
-
+	private final BucketItemRepository bucketItemRepository;
 
 	/** 버킷 정보 조회 */
-	@Transactional
+	@Transactional(readOnly = true)
 	public Bucket read(final Long bucketId){
 		return bucketRepository.findById(bucketId)
 			.orElseThrow(() -> {
@@ -35,26 +36,37 @@ public class BucketReader {
 			});
 	}
 
-	/**
-	 * 버킷 정보 커서 페이징 조회
-	 *
-	 * @return
-	 */
-	@Transactional
+	@Transactional(readOnly = true)
+	public Bucket read(
+		final Long bucketId,
+		final Long memberId
+	){
+		return bucketRepository.findByIdAndMemberId(bucketId,memberId)
+			.orElseThrow(() -> {
+				throw new EntityNotFoundException(ErrorCode.BUCKET_NOT_FOUND);
+			});
+	}
+
+	@Transactional(readOnly = true)
+	public List<BucketItem> bucketItemRead(
+		final Long bucketId
+	) {
+		return bucketItemRepository.findByBucketId(bucketId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.BUCKET_ITEM_NOT_FOUND));
+	}
+
+	/** 버킷 정보 커서 페이징 조회 */
+	@Transactional(readOnly = true)
 	public GetBucketsByCursorResponse readByCursor(
 		final Long memberId,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
-
-		// cursorid나 size가 null인 경우도 고려해서 추가해주기
-		PageRequest pageRequest = PageRequest.of(0, parameters.size());
-
 		List<BucketSummary> bucketSummaries = bucketRepository.findAllByCursor(
 			memberId,
 			hobby,
 			parameters.cursorId(),
-			pageRequest
+			parameters.size()
 		);
 
 		List<String> cursorIds = bucketSummaries.stream()
@@ -63,6 +75,13 @@ public class BucketReader {
 
 		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
 
+		List<BucketCursorSummary> bucketCursorSummaries = getBucketCursorSummaries(bucketSummaries, cursorIds);
+
+		return new GetBucketsByCursorResponse(nextCursorId,bucketCursorSummaries);
+	}
+
+	private List<BucketCursorSummary> getBucketCursorSummaries(List<BucketSummary> bucketSummaries,
+		List<String> cursorIds) {
 		List<BucketCursorSummary> bucketCursorSummaries = IntStream.range(0, bucketSummaries.size())
 			.mapToObj(i -> {
 				String cursorId = cursorIds.get(i);
@@ -70,15 +89,15 @@ public class BucketReader {
 
 				return BucketCursorSummary.of(cursorId, bucketSummary);
 			}).toList();
-
-		return new GetBucketsByCursorResponse(nextCursorId,bucketCursorSummaries);
+		return bucketCursorSummaries;
 	}
 
 	private String generateCursorId(BucketSummary bucketSummary){
-		return bucketSummary.createdAt().toString()
+		return bucketSummary.getCreatedAt().toString()
 			.replace("T","")
 			.replace("-","")
 			.replace(":","")
-			+String.format("%08d",bucketSummary.bucketId());
+			.replace(".","")
+			+String.format("%08d",bucketSummary.getBucketId());
 	}
 }

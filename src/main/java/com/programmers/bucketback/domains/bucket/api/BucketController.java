@@ -60,24 +60,24 @@ public class BucketController {
 	}
 
 	@Operation(summary = "버킷 상세 조회", description = "BucketId을 이용하여 버킷을 조회힙니다.")
-	@GetMapping("/buckets/{bucketId}")
+	@GetMapping("/{nickname}/buckets/{bucketId}")
 	public ResponseEntity<GetBucketResponse> getBucket(
-		// @PathVariable(required = true) final String nickname,
+		@PathVariable(required = true) final String nickname,
 		@PathVariable(required = true) final Long bucketId
 	){
 		return ResponseEntity.ok(bucketService.getBucket(bucketId));
 	}
 
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
-	@GetMapping("/{nickname}/buckets")
+	@GetMapping("/{nickname}/bucketlist")
 	public ResponseEntity<GetBucketsByCursorResponse> getBucket(
+		@RequestBody @Valid final BucketGetByCursorRequest request,
 		@PathVariable(required = true) final String nickname,
-		@RequestParam(required = true) final String hobby,
-		@RequestBody @Valid BucketGetByCursorRequest request
+		@RequestParam(required = true) final String hobby
 	){
 		GetBucketsByCursorResponse response = bucketService.getBucketsByCursor(
 			nickname,
-			Hobby.valueOf(hobby),
+			Hobby.valueOf(hobby.toUpperCase()),
 			request.toParameters()
 		);
 
