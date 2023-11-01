@@ -10,6 +10,6 @@ public record ItemGetResponse(
 	Integer itemPrice,
 	String itemUrl,
 	Double itemAvgRate,
-	boolean itemIsMine
+	boolean isMemberItem
 ) {
 }

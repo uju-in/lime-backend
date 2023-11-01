@@ -25,19 +25,19 @@ public class ItemService {
 	}
 
 	public GetItemServiceResponse getItemDetails(final Long itemId) {
-		boolean itemIsMine = false;
+		boolean isMemberItem = false;
 
 		Item item = itemReader.read(itemId);
 		if (MemberUtils.isLoggedIn()) {
 			Long memberId = MemberUtils.getCurrentMemberId();
-			itemIsMine = memberItemChecker.existMemberItemByMemberId(memberId, item);
+			isMemberItem = memberItemChecker.existMemberItemByMemberId(memberId, item);
 		}
 
 		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
-		
+
 		return GetItemServiceResponse.builder()
 			.itemId(item.getId())
-			.itemIsMine(itemIsMine)
+			.isMemberItem(isMemberItem)
 			.itemUrl(item.getUrl())
 			.itemAvgRate(itemAvgRating)
 			.itemPrice(item.getPrice())
