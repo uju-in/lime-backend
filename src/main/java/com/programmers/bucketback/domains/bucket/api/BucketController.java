@@ -71,7 +71,7 @@ public class BucketController {
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
 	@GetMapping("/{nickname}/buckets/{hobby}")
 	public ResponseEntity<GetBucketsByCursorResponse> getBucket(
-		@RequestParam(required = true) final String nickname,
+		@PathVariable(required = true) final String nickname,
 		@RequestParam(required = true) final String hobby,
 		@RequestBody @Valid BucketGetByCursorRequest request
 	){

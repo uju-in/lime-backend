@@ -28,7 +28,7 @@ public class BucketModifier {
 		final Long bucketId,
 		final BucketContent content
 	) {
-		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.itemIds());
+		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.bucketItemIds());
 
 		//기존 버킷아이템 내용 삭제
 		Bucket bucket = bucketReader.read(bucketId);
@@ -38,8 +38,8 @@ public class BucketModifier {
 		bucket.modifyBucket(
 			content.hobby(),
 			MemberUtils.getCurrentMemberId(),
-			content.name(),
-			content.budget()
+			content.bucketName(),
+			content.bucketBudget()
 		);
 		bucketItems.forEach(bucket::addBucketItem);
 
