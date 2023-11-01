@@ -15,10 +15,7 @@ public class InventoryReader {
 
 	private final InventoryRepository inventoryRepository;
 
-	public boolean isCreated(
-		final Hobby hobby,
-		final Long memberId
-	) {
-		return inventoryRepository.existsByHobbyAndMemberId(hobby, memberId);
+	public boolean isCreated(Hobby hobby, Long memberId) {
+		return inventoryRepository.existsByHobbyAndMemberId(hobby,memberId);
 	}
 }

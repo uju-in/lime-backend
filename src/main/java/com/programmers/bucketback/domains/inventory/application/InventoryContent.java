@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.common.Hobby;
 
+import lombok.Builder;
+
+@Builder
 public record InventoryContent(
 	Hobby hobby,
 	List<Long> itemIds

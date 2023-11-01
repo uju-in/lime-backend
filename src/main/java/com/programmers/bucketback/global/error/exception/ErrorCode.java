@@ -27,24 +27,17 @@ public enum ErrorCode {
 	REVIEW_NOT_EQUAL_ITEM("REVIEW_002", "리뷰 아이디와 아이템 아이디가 일치하지 않습니다."),
 	REVIEW_NOT_MINE("REVIEW_003", "리뷰 작성자와 로그인한 회원아이디가 일치하지 않습니다."),
 
+	//Bucket
+	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
+
 	// Vote
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),
 	VOTE_NOT_CONTAIN_ITEM("VOTE_002", "투표에 포함된 아이템이 아닙니다."),
 	VOTE_NOT_OWNER("VOTE_003", "투표의 작성자가 아닙니다."),
-	VOTE_NOT_VOTER("VOTE_004", "투표의 투표자가 아닙니다."),
-	
-	//Bucket
-	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
-	BUCKET_ITEM_NOT_FOUND("BUCKET_002", "버킷아이템을 찾을 수 없습니다."),
 
-	// MemberItem
-	MEMBER_ITEM_NOT_FOUND("MEMBER_ITEM_001", "나의 아이템을 찾을 수 없습니다."),
-	MEMBER_NOT_MINE("MEMBER_ITEM_002", "아이템 담기에 없는 아이템 입니다."),
 	//Inventory
 	INVENTORY_NOT_FOUND("INVENTORY_001", "인벤토리를 찾을 수 없습니다."),
-	INVENTORY_ALREADY_EXIST("INVENTORY_002", "이미 생성된인벤토리가 잇습니다.")
-	;
-
+	INVENTORY_ALREADY_EXIST("INVENTORY_002", "이미 생성된인벤토리가 잇습니다.");
 
 	private final String code;
 	private final String message;

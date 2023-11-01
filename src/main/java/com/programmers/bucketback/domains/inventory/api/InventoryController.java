@@ -20,12 +20,14 @@ public class InventoryController {
 
 	private final InventoryService inventoryService;
 
-	@Operation(summary = "인벤토리 생성", description = "InventoryCreateRequestDTO 을 이용하여 인벤토리를 생성힙니다.")
+	@Operation(summary = "인벤토리 생성", description = "InventoryCreateRequestDTO 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/inventories")
-	public ResponseEntity<Void> createInventory(@RequestBody @Valid final InventoryCreateRequest request){
+	public ResponseEntity<Void> createBucket(@RequestBody @Valid final InventoryCreateRequest request){
 		inventoryService.createInventory(request.toContent());
 
 		return ResponseEntity.ok().build();
 	}
+
+
 
 }
