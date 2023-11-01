@@ -23,15 +23,15 @@ public record BucketUpdateRequest(
 
 	@Schema(description = "여러 아이템 id")
 	@NotNull(message = "아이템 id를 입력하세요")
-	List<Long> itemIds
+	List<Long> bucketItemIds
 ) {
 
 	public BucketContent toContent() {
 		return BucketContent.builder()
 			.hobby(Hobby.valueOf(hobby))
-			.name(bucketName)
-			.budget(bucketBudget)
-			.itemIds(itemIds)
+			.bucketName(bucketName)
+			.bucketBudget(bucketBudget)
+			.bucketItemIds(bucketItemIds)
 			.build();
 	}
 }

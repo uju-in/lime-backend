@@ -26,13 +26,13 @@ public class BucketAppender {
 	/** 버킷 생성 */
 	@Transactional
 	public void append(final BucketContent content) {
-		List<BucketItem> bucketItems = createBucketItems(content.itemIds());
+		List<BucketItem> bucketItems = createBucketItems(content.bucketItemIds());
 
 		Bucket bucket = Bucket.builder()
 			.memberId(MemberUtils.getCurrentMemberId())
 			.hobby(content.hobby())
-			.name(content.name())
-			.budget(content.budget())
+			.name(content.bucketName())
+			.budget(content.bucketBudget())
 			.build();
 		bucketItems.forEach(bucket::addBucketItem);
 
