@@ -12,12 +12,12 @@ public record GetItemServiceResponse(
 	Integer itemPrice,
 	String itemUrl,
 	Double itemAvgRate,
-	boolean itemIsMine
+	boolean isMemberItem
 ) {
 	public ItemGetResponse toItemGetResponse() {
 		return ItemGetResponse.builder()
 			.itemId(itemId)
-			.itemIsMine(itemIsMine)
+			.isMemberItem(isMemberItem)
 			.itemUrl(itemUrl)
 			.itemAvgRate(itemAvgRate)
 			.itemPrice(itemPrice)
