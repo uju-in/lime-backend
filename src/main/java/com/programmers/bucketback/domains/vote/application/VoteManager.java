@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.domain.Voter;
+import com.programmers.bucketback.domains.vote.repository.VoterRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VoteManager {
 
-	private final VoterAppender voterAppender;
+	private final VoterRepository voterRepository;
 
 	@Transactional
 	public void vote(
@@ -20,7 +21,12 @@ public class VoteManager {
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = voterAppender.append(vote, memberId, itemId);
+		final Voter voter = voterRepository.findByVoteAndMemberId(vote, memberId)
+			.orElseGet(() -> new Voter(vote, memberId, itemId));
+
+		voterRepository.save(voter);
+
+		voter.changeItem(itemId);
 		vote.addVoter(voter);
 	}
 }

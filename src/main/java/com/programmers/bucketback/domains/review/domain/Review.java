@@ -1,10 +1,9 @@
-package com.programmers.bucketback.domains.vote.domain;
+package com.programmers.bucketback.domains.review.domain;
 
-import com.programmers.bucketback.domains.common.BaseEntity;
+import com.programmers.bucketback.domains.item.domain.Item;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,14 +12,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "voters")
-public class Voter extends BaseEntity {
+@Table(name = "reviews")
+public class Review {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,29 +28,31 @@ public class Voter extends BaseEntity {
 	private Long id;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "vote_id")
-	private Vote vote;
+	@ManyToOne
+	@JoinColumn(name = "items_id")
+	private Item item;
 
 	@NotNull
-	@Column(name = "member_id")
+	@Column(name = "members_id")
 	private Long memberId;
 
+	@Column(name = "content")
+	private String content;
+
 	@NotNull
-	@Column(name = "item_id")
-	private Long itemId;
+	@Column(name = "rating")
+	private Integer rating;
 
-	public Voter(
-		@NotNull final Vote vote,
+	@Builder
+	public Review(
+		@NotNull final Item item,
 		@NotNull final Long memberId,
-		@NotNull final Long itemId
+		@NotNull final String content,
+		@NotNull final Integer rating
 	) {
-		this.vote = vote;
+		this.item = item;
 		this.memberId = memberId;
-		this.itemId = itemId;
-	}
-
-	public void changeItem(final Long itemId) {
-		this.itemId = itemId;
+		this.content = content;
+		this.rating = rating;
 	}
 }
