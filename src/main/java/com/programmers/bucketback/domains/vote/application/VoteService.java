@@ -3,10 +3,10 @@ package com.programmers.bucketback.domains.vote.application;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
-import com.programmers.bucketback.domains.item.application.ItemReader;
-import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
 import com.programmers.bucketback.domains.vote.domain.Vote;
+import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,15 +15,40 @@ import lombok.RequiredArgsConstructor;
 public class VoteService {
 
 	private final VoteAppender voteAppender;
-	private final ItemReader itemReader;
+	private final VoteReader voteReader;
+	private final VoteManager voteManager;
+	private final VoteRemover voteRemover;
 
 	public Long createVote(final CreateVoteServiceRequest request) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
-		final Item optionItem1 = itemReader.read(request.option1ItemId());
-		final Item optionItem2 = itemReader.read(request.option2ItemId());
 
-		final Vote vote = voteAppender.append(memberId, optionItem1, optionItem2, request.hobby(), request.content());
+		final Vote vote = voteAppender.append(memberId, request);
 
 		return vote.getId();
+	}
+
+	public void participateVote(
+		final Long voteId,
+		final Long itemId
+	) {
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Vote vote = voteReader.read(voteId);
+
+		if (!vote.containsItem(itemId)) {
+			throw new BusinessException(ErrorCode.VOTE_NOT_CONTAIN_ITEM);
+		}
+
+		voteManager.vote(vote, memberId, itemId);
+	}
+
+	public void deleteVote(final Long voteId) {
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Vote vote = voteReader.read(voteId);
+
+		if (!vote.isOwner(memberId)) {
+			throw new BusinessException(ErrorCode.VOTE_NOT_OWNER);
+		}
+
+		voteRemover.remove(vote);
 	}
 }
