@@ -1,8 +1,13 @@
 package com.programmers.bucketback.domains.inventory.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.common.Hobby;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -35,4 +41,21 @@ public class Inventory extends BaseEntity {
 	@Column(name = "hobby")
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
+	private List<InventoryItem> inventoryItems = new ArrayList<>();
+
+	public Inventory(
+		@NotNull final Long memberId,
+		@NotNull final Hobby hobby
+	){
+		this.memberId = memberId;
+		this.hobby = hobby;
+	}
+
+	public void addInventoryItem(final InventoryItem inventoryItem) {
+		inventoryItems.add(inventoryItem);
+		inventoryItem.changeInventory(this);
+	}
 }
