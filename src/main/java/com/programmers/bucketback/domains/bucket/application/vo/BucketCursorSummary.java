@@ -2,8 +2,6 @@ package com.programmers.bucketback.domains.bucket.application.vo;
 
 import java.util.List;
 
-import com.programmers.bucketback.domains.bucket.repository.BucketItemImage;
-
 import lombok.Builder;
 
 @Builder
@@ -12,7 +10,7 @@ public record BucketCursorSummary(
 	Long bucketId,
 	String bucketName,
 	Integer bucketBudget,
-	List<BucketItemImage> bucketItemImages
+	List<ItemImage> itemImages
 ) {
 	public static BucketCursorSummary of(
 		String cursorId,
@@ -20,10 +18,10 @@ public record BucketCursorSummary(
 	) {
 		return BucketCursorSummary.builder()
 			.cursorId(cursorId)
-			.bucketId(bucketSummary.bucketId())
-			.bucketName(bucketSummary.bucketName())
-			.bucketBudget(bucketSummary.bucketBudget())
-			.bucketItemImages(bucketSummary.bucketImages())
+			.bucketId(bucketSummary.getBucketId())
+			.bucketName(bucketSummary.getBucketName())
+			.bucketBudget(bucketSummary.getBucketBudget())
+			.itemImages(bucketSummary.getItemImages())
 			.build();
 	}
 }

@@ -3,14 +3,17 @@ package com.programmers.bucketback.domains.bucket.application.vo;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.programmers.bucketback.domains.bucket.repository.BucketItemImage;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public record BucketSummary(
-	Long bucketId,
-	String bucketName,
-	Integer bucketBudget,
-	LocalDateTime createdAt,
-	List<BucketItemImage> bucketImages
-){
-
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class BucketSummary{
+	private Long bucketId;
+	private String bucketName;
+	private Integer bucketBudget;
+	private LocalDateTime createdAt;
+	private List<ItemImage> itemImages;
 }
