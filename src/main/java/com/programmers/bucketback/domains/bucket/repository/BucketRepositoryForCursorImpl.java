@@ -8,9 +8,8 @@ import static com.querydsl.core.group.GroupBy.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
-
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.ItemImage;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
@@ -34,10 +33,10 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 		Long memberId,
 		Hobby hobby,
 		String cursorId,
-		Pageable pageable
+		int pageSize
 	) {
 		return jpaQueryFactory.selectFrom(bucket)
-			.join(bucketItem).on(bucket.id.eq(bucketItem.id))
+			.join(bucketItem).on(bucket.id.eq(bucketItem.bucket.id))
 			.join(item).on(bucketItem.item.id.eq(item.id))
 			.where(
 					cursorIdCondition(cursorId),
@@ -45,14 +44,13 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 					bucket.memberId.eq(memberId),
 					bucket.hobby.eq(hobby)
 			)
-			.distinct()
-			.limit(pageable.getPageSize())
+			// .limit(pageSize)
 			.orderBy(decrease())
 			.transform(
 				groupBy(bucket.id).list(
 					Projections.constructor(BucketSummary.class,
 						bucket.id, bucket.bucketInfo.name, bucket.bucketInfo.budget, bucket.createdAt,
-						list(Projections.constructor(BucketItemImage.class, item.id, item.url)
+						list(Projections.constructor(ItemImage.class, item.id, item.url)
 					))
 				)
 			);
@@ -76,7 +74,6 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 			"DATE_FORMAT({0}, {1})",
 			bucket.createdAt
 			,ConstantImpl.create("%Y%m%d%H%i%s")
-
 		);
 
 		return stringTemplate.concat(StringExpressions.lpad(
