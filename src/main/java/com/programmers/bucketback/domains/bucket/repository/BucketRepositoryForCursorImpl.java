@@ -5,7 +5,6 @@ import static com.programmers.bucketback.domains.bucket.domain.QBucketItem.*;
 import static com.programmers.bucketback.domains.item.domain.QItem.*;
 import static com.querydsl.core.group.GroupBy.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
@@ -35,33 +34,38 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 		String cursorId,
 		int pageSize
 	) {
-		return jpaQueryFactory.selectFrom(bucket)
-			.join(bucketItem).on(bucket.id.eq(bucketItem.bucket.id))
-			.join(item).on(bucketItem.item.id.eq(item.id))
+		List<Long> bucketIds = jpaQueryFactory
+			.select(bucket.id)
+			.from(bucket)
 			.where(
-					cursorIdCondition(cursorId),
-					isDeclined(),
-					bucket.memberId.eq(memberId),
-					bucket.hobby.eq(hobby)
+				cursorIdCondition(cursorId),
+				bucket.memberId.eq(memberId),
+				bucket.hobby.eq(hobby)
 			)
-			// .limit(pageSize)
 			.orderBy(decrease())
-			.transform(
-				groupBy(bucket.id).list(
-					Projections.constructor(BucketSummary.class,
-						bucket.id, bucket.bucketInfo.name, bucket.bucketInfo.budget, bucket.createdAt,
-						list(Projections.constructor(ItemImage.class, item.id, item.url)
-					))
+			.limit(pageSize)
+			.fetch();
+
+		return jpaQueryFactory
+			.selectFrom(bucketItem)
+			.join(item).on(bucketItem.item.id.eq(item.id))
+			.where(bucketItem.bucket.id.in(bucketIds))
+			.orderBy(decrease())
+			.transform(groupBy(bucket.id).list(
+				Projections.constructor(BucketSummary.class,
+					bucket.id,
+					bucket.bucketInfo.name,
+					bucket.bucketInfo.budget,
+					bucket.createdAt,
+					list(Projections.constructor(ItemImage.class,
+						item.id, item.url)
+					)
 				)
-			);
+			));
 	}
 
 	private OrderSpecifier decrease() {
 		return new OrderSpecifier(Order.DESC, bucket.createdAt);
-	}
-
-	private BooleanExpression isDeclined() {
-		return bucket.createdAt.lt(LocalDateTime.now());
 	}
 
 	private BooleanExpression cursorIdCondition(String cursorId) {
