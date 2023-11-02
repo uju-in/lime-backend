@@ -4,7 +4,6 @@ import static com.programmers.bucketback.domains.bucket.domain.QBucket.*;
 import static com.programmers.bucketback.domains.bucket.domain.QBucketItem.*;
 import static com.programmers.bucketback.domains.item.domain.QItem.*;
 import static com.querydsl.core.group.GroupBy.*;
-
 import java.util.List;
 
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;

@@ -61,6 +61,7 @@ public class BucketReader {
 		final CursorPageParameters parameters
 	) {
 		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
+
 		List<BucketSummary> bucketSummaries = bucketRepository.findAllByCursor(
 			memberId,
 			hobby,
@@ -71,6 +72,7 @@ public class BucketReader {
 		List<String> cursorIds = bucketSummaries.stream()
 			.map(bucketSummary -> generateCursorId(bucketSummary))
 			.toList();
+
 		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
 
 		List<BucketCursorSummary> bucketCursorSummaries = getBucketCursorSummaries(bucketSummaries, cursorIds);
