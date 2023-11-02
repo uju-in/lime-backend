@@ -35,7 +35,7 @@ public class BucketController {
 	@Operation(summary = "버킷 생성", description = "FundingCreateRequestDTO 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/buckets")
 	public ResponseEntity<Void> createBucket(@RequestBody @Valid final BucketCreateRequest request){
-		bucketService.createBucket(request.toContent()); //memberId값 필요함
+		bucketService.createBucket(request.toContent());
 
 		return ResponseEntity.ok().build();
 	}
@@ -71,9 +71,9 @@ public class BucketController {
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
 	@GetMapping("/{nickname}/bucketlist")
 	public ResponseEntity<GetBucketsByCursorResponse> getBucket(
-		@RequestBody @Valid final BucketGetByCursorRequest request,
 		@PathVariable(required = true) final String nickname,
-		@RequestParam(required = true) final String hobby
+		@RequestParam(required = true) final String hobby,
+		@RequestBody @Valid final BucketGetByCursorRequest request
 	){
 		GetBucketsByCursorResponse response = bucketService.getBucketsByCursor(
 			nickname,

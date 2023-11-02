@@ -22,32 +22,31 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BucketReader {
 
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
 
 	/** 버킷 정보 조회 */
-	@Transactional(readOnly = true)
-	public Bucket read(final Long bucketId){
+	public Bucket read(final Long bucketId) {
 		return bucketRepository.findById(bucketId)
-			.orElseThrow(() -> {
-			throw new EntityNotFoundException(ErrorCode.BUCKET_NOT_FOUND);
-			});
-	}
-
-	@Transactional(readOnly = true)
-	public Bucket read(
-		final Long bucketId,
-		final Long memberId
-	){
-		return bucketRepository.findByIdAndMemberId(bucketId,memberId)
 			.orElseThrow(() -> {
 				throw new EntityNotFoundException(ErrorCode.BUCKET_NOT_FOUND);
 			});
 	}
 
-	@Transactional(readOnly = true)
+	public Bucket read(
+		final Long bucketId,
+		final Long memberId
+	) {
+		return bucketRepository.findByIdAndMemberId(bucketId, memberId)
+			.orElseThrow(() -> {
+				throw new EntityNotFoundException(ErrorCode.BUCKET_NOT_FOUND);
+			});
+	}
+
+	/** 버킷 아이템 정보 조회 */
 	public List<BucketItem> bucketItemRead(
 		final Long bucketId
 	) {
@@ -56,28 +55,27 @@ public class BucketReader {
 	}
 
 	/** 버킷 정보 커서 페이징 조회 */
-	@Transactional(readOnly = true)
 	public GetBucketsByCursorResponse readByCursor(
 		final Long memberId,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
+		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
 		List<BucketSummary> bucketSummaries = bucketRepository.findAllByCursor(
 			memberId,
 			hobby,
 			parameters.cursorId(),
-			parameters.size()
+			pageSize
 		);
 
 		List<String> cursorIds = bucketSummaries.stream()
 			.map(bucketSummary -> generateCursorId(bucketSummary))
 			.toList();
-
 		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
 
 		List<BucketCursorSummary> bucketCursorSummaries = getBucketCursorSummaries(bucketSummaries, cursorIds);
 
-		return new GetBucketsByCursorResponse(nextCursorId,bucketCursorSummaries);
+		return new GetBucketsByCursorResponse(nextCursorId, bucketCursorSummaries);
 	}
 
 	private List<BucketCursorSummary> getBucketCursorSummaries(List<BucketSummary> bucketSummaries,
@@ -92,12 +90,12 @@ public class BucketReader {
 		return bucketCursorSummaries;
 	}
 
-	private String generateCursorId(BucketSummary bucketSummary){
+	private String generateCursorId(BucketSummary bucketSummary) {
 		return bucketSummary.getCreatedAt().toString()
-			.replace("T","")
-			.replace("-","")
-			.replace(":","")
-			.replace(".","")
-			+String.format("%08d",bucketSummary.getBucketId());
+			.replace("T", "")
+			.replace("-", "")
+			.replace(":", "")
+			.replace(".", "")
+			+ String.format("%08d", bucketSummary.getBucketId());
 	}
 }

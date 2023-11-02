@@ -11,6 +11,7 @@ import com.programmers.bucketback.domains.bucket.application.vo.BucketItemConten
 import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 
@@ -37,7 +38,10 @@ public class BucketService {
 		final Long bucketId,
 		final BucketContent content
 	) {
-		bucketModifier.modify(bucketId, content);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		Bucket bucket = bucketReader.read(bucketId, memberId);
+
+		bucketModifier.modify(bucket, content);
 	}
 
 	/** 버킷 삭제 */
@@ -46,7 +50,6 @@ public class BucketService {
 	}
 
 	/** 버킷 상세 조회 */
-	//refactor 버킷 상세 조회 로직을 생각해서 적용
 	public GetBucketResponse getBucket(final Long bucketId) {
 		Bucket bucket = bucketReader.read(bucketId);
 
@@ -58,19 +61,15 @@ public class BucketService {
 		return new GetBucketResponse(BucketContent.from(bucket), bucketItemContents);
 	}
 
-	/**
-	 * 버킷 커서 조회
-	 *
-	 * @return
-	 */
+	/** 버킷 커서 조회 */
 	public GetBucketsByCursorResponse getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters
-	){
+	) {
 		Long memberId = memberReader.readByNickname(nickname).getId();
 
-		return bucketReader.readByCursor(memberId,hobby,parameters);
+		return bucketReader.readByCursor(memberId, hobby, parameters);
 	}
 
 }

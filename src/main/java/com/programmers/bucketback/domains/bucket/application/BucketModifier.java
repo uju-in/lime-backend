@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BucketModifier {
 
-	private final BucketReader bucketReader;
 	private final BucketAppender bucketAppender;
 	private final BucketRemover bucketRemover;
 	private final BucketRepository bucketRepository;
@@ -25,16 +24,13 @@ public class BucketModifier {
 	/** 버킷 수정 */
 	@Transactional
 	public void modify(
-		final Long bucketId,
+		final Bucket bucket,
 		final BucketContent content
 	) {
-		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.bucketItemIds());
-
-		Long memberId = MemberUtils.getCurrentMemberId();
-		Bucket bucket = bucketReader.read(bucketId,memberId);
 		bucket.removeBucketItems();
 		bucketRemover.removeBucketItems(bucket.getId());
 
+		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.bucketItemIds());
 		bucket.modifyBucket(
 			content.hobby(),
 			MemberUtils.getCurrentMemberId(),

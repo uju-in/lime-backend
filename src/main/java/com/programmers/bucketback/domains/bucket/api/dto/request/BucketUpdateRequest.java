@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 public record BucketUpdateRequest(
 
 	@Schema(description = "취미", example = "농구")
-	@NotNull(message = "취미를 입력하세요") // enumvalidater로 추가 예정
+	@NotNull(message = "취미를 입력하세요")
 	Hobby hobby,
 
 	@Schema(description = "버킷 이름", example = "유러피안 농구")
