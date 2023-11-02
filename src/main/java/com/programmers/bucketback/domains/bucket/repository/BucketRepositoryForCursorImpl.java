@@ -28,10 +28,10 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 
 	@Override
 	public List<BucketSummary> findAllByCursor(
-		Long memberId,
-		Hobby hobby,
-		String cursorId,
-		int pageSize
+		final Long memberId,
+		final Hobby hobby,
+		final String cursorId,
+		final int pageSize
 	) {
 		List<Long> bucketIds = jpaQueryFactory
 			.select(bucket.id)
@@ -67,7 +67,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 		return new OrderSpecifier(Order.DESC, bucket.createdAt);
 	}
 
-	private BooleanExpression cursorIdCondition(String cursorId) {
+	private BooleanExpression cursorIdCondition(final String cursorId) {
 		if (cursorId == null) {
 
 			return null;

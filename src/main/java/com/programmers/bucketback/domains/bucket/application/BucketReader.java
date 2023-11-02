@@ -80,8 +80,10 @@ public class BucketReader {
 		return new GetBucketsByCursorResponse(nextCursorId, bucketCursorSummaries);
 	}
 
-	private List<BucketCursorSummary> getBucketCursorSummaries(List<BucketSummary> bucketSummaries,
-		List<String> cursorIds) {
+	private List<BucketCursorSummary> getBucketCursorSummaries(
+		final List<BucketSummary> bucketSummaries,
+		final List<String> cursorIds
+	) {
 		List<BucketCursorSummary> bucketCursorSummaries = IntStream.range(0, bucketSummaries.size())
 			.mapToObj(i -> {
 				String cursorId = cursorIds.get(i);
@@ -92,7 +94,7 @@ public class BucketReader {
 		return bucketCursorSummaries;
 	}
 
-	private String generateCursorId(BucketSummary bucketSummary) {
+	private String generateCursorId(final BucketSummary bucketSummary) {
 		return bucketSummary.getCreatedAt().toString()
 			.replace("T", "")
 			.replace("-", "")
