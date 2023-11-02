@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.domains.inventory.application.vo.InventoryContent;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
@@ -26,21 +27,21 @@ public class InventoryAppender {
 	public void append(
 		final Long memberId,
 		final InventoryContent content
-	){
-		List<InventoryItem> inventoryItems = createInventoryItem(content.itemIds());
-		Inventory inventory = new Inventory(memberId, content.hobby());
+	) {
+		final List<InventoryItem> inventoryItems = createInventoryItem(content.itemIds());
+		final Inventory inventory = new Inventory(memberId, content.hobby());
 		inventoryItems.forEach(inventory::addInventoryItem);
 
 		inventoryRepository.save(inventory);
 	}
 
-	public List<InventoryItem> createInventoryItem(final List<Long> itemIds){
+	public List<InventoryItem> createInventoryItem(final List<Long> itemIds) {
 		return itemIds.stream()
 			.map(id -> {
-					Item item = itemReader.read(id);
-					InventoryItem inventoryItem = new InventoryItem(item);
+				final Item item = itemReader.read(id);
+				final InventoryItem inventoryItem = new InventoryItem(item);
 
-					return inventoryItem;
+				return inventoryItem;
 			}).distinct()
 			.collect(Collectors.toList());
 	}

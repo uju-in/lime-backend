@@ -3,7 +3,7 @@ package com.programmers.bucketback.domains.inventory.api.dto.request;
 import java.util.List;
 
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.domains.inventory.application.InventoryContent;
+import com.programmers.bucketback.domains.inventory.application.vo.InventoryContent;
 import com.programmers.bucketback.global.annotation.Enum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
