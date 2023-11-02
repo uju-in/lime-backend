@@ -6,10 +6,10 @@ import java.util.stream.IntStream;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketsByCursorResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
-import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketItemRepository;
@@ -55,7 +55,7 @@ public class BucketReader {
 	}
 
 	/** 버킷 정보 커서 페이징 조회 */
-	public GetBucketsByCursorResponse readByCursor(
+	public BucketGetByCursorResponse readByCursor(
 		final Long memberId,
 		final Hobby hobby,
 		final CursorPageParameters parameters
@@ -77,7 +77,7 @@ public class BucketReader {
 
 		List<BucketCursorSummary> bucketCursorSummaries = getBucketCursorSummaries(bucketSummaries, cursorIds);
 
-		return new GetBucketsByCursorResponse(nextCursorId, bucketCursorSummaries);
+		return new BucketGetByCursorResponse(nextCursorId, bucketCursorSummaries);
 	}
 
 	private List<BucketCursorSummary> getBucketCursorSummaries(

@@ -69,20 +69,18 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 
 	private BooleanExpression cursorIdCondition(final String cursorId) {
 		if (cursorId == null) {
-
 			return null;
 		}
 
-		StringTemplate stringTemplate = Expressions.stringTemplate(
+		StringTemplate dateCursor = Expressions.stringTemplate(
 			"DATE_FORMAT({0}, {1})",
-			bucket.createdAt
-			,ConstantImpl.create("%Y%m%d%H%i%s")
+			bucket.createdAt,
+			ConstantImpl.create("%Y%m%d%H%i%s")
 		);
 
-		return stringTemplate.concat(StringExpressions.lpad(
-				bucket.id.stringValue(), 8,
-				'0'
-			))
+		return dateCursor.concat(StringExpressions.lpad(
+				bucket.id.stringValue(), 8, '0'
+				))
 			.lt(cursorId);
 	}
 

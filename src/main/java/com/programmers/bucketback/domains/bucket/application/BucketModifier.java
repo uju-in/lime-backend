@@ -9,7 +9,6 @@ import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
-import com.programmers.bucketback.domains.common.MemberUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +32,6 @@ public class BucketModifier {
 		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.bucketItemIds());
 		bucket.modifyBucket(
 			content.hobby(),
-			MemberUtils.getCurrentMemberId(),
 			content.bucketName(),
 			content.bucketBudget()
 		);

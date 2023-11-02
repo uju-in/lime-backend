@@ -10,6 +10,6 @@ public interface BucketRepositoryForCursor {
 		Long memberId,
 		Hobby hobby,
 		String cursorId,
-		int pageable
+		int pageSize
 	);
 }

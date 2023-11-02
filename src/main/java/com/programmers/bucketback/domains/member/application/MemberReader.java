@@ -28,7 +28,7 @@ public class MemberReader {
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 	}
 
-	public Member readByNickname(String nickname) {
+	public Member readByNickname(final String nickname) {
 		return memberRepository.findByNickname(nickname)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 	}

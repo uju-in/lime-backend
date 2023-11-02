@@ -13,8 +13,8 @@ public record BucketCursorSummary(
 	List<ItemImage> itemImages
 ) {
 	public static BucketCursorSummary of(
-		String cursorId,
-		BucketSummary bucketSummary
+		final String cursorId,
+		final BucketSummary bucketSummary
 	) {
 		return BucketCursorSummary.builder()
 			.cursorId(cursorId)

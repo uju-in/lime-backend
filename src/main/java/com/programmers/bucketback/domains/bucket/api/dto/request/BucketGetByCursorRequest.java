@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.bucket.api.dto.request;
 
-import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

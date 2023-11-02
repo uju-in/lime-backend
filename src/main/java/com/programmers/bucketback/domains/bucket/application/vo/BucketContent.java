@@ -4,16 +4,13 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.global.annotation.Enum;
 
 import lombok.Builder;
 
 @Builder
 public record BucketContent(
 
-	@Enum
 	Hobby hobby,
-
 	String bucketName,
 	Integer bucketBudget,
 	List<Long> bucketItemIds,

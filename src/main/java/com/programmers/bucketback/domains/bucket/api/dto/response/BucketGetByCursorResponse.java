@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 
-public record GetBucketsByCursorResponse(
+public record BucketGetByCursorResponse(
 	String nextCursorId,
 	List<BucketCursorSummary> bucketCursorSummaries
 ) {

@@ -33,7 +33,6 @@ public class BucketRemover {
 	/** 버킷 아이템 삭제
 	 * refactor : orphanRemoval = true 설정에 대해서 알아보고 리팩토링 잡아보기
 	 */
-	@Transactional
 	public void removeBucketItems(final Long bucketId){
 		List<BucketItem> bucketItems = bucketReader.bucketItemRead(bucketId);
 

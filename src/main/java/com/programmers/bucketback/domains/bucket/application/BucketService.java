@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketResponse;
-import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketsByCursorResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketItemContent;
-import com.programmers.bucketback.domains.bucket.application.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
@@ -50,7 +50,7 @@ public class BucketService {
 	}
 
 	/** 버킷 상세 조회 */
-	public GetBucketResponse getBucket(final Long bucketId) {
+	public BucketGetResponse getBucket(final Long bucketId) {
 		Bucket bucket = bucketReader.read(bucketId);
 
 		List<BucketItemContent> bucketItemContents = bucket.getBucketItems().stream()
@@ -58,11 +58,11 @@ public class BucketService {
 			.map(item -> BucketItemContent.from(item))
 			.toList();
 
-		return new GetBucketResponse(BucketContent.from(bucket), bucketItemContents);
+		return new BucketGetResponse(BucketContent.from(bucket), bucketItemContents);
 	}
 
 	/** 버킷 커서 조회 */
-	public GetBucketsByCursorResponse getBucketsByCursor(
+	public BucketGetByCursorResponse getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters

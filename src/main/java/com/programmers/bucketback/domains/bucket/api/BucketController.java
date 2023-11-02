@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketGetByCursorRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
-import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketResponse;
-import com.programmers.bucketback.domains.bucket.api.dto.response.GetBucketsByCursorResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
 import com.programmers.bucketback.domains.bucket.application.BucketService;
 import com.programmers.bucketback.domains.common.Hobby;
 
@@ -61,7 +61,7 @@ public class BucketController {
 
 	@Operation(summary = "버킷 상세 조회", description = "BucketId을 이용하여 버킷을 조회힙니다.")
 	@GetMapping("/{nickname}/buckets/{bucketId}")
-	public ResponseEntity<GetBucketResponse> getBucket(
+	public ResponseEntity<BucketGetResponse> getBucket(
 		@PathVariable(required = true) final String nickname,
 		@PathVariable(required = true) final Long bucketId
 	){
@@ -70,12 +70,12 @@ public class BucketController {
 
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
 	@GetMapping("/{nickname}/bucketlist")
-	public ResponseEntity<GetBucketsByCursorResponse> getBucket(
-		@RequestBody @Valid final BucketGetByCursorRequest request,
+	public ResponseEntity<BucketGetByCursorResponse> getBucket(
 		@PathVariable(required = true) final String nickname,
-		@RequestParam(required = true) final String hobby
+		@RequestParam(required = true) final String hobby,
+		@RequestBody @Valid final BucketGetByCursorRequest request
 	){
-		GetBucketsByCursorResponse response = bucketService.getBucketsByCursor(
+		BucketGetByCursorResponse response = bucketService.getBucketsByCursor(
 			nickname,
 			Hobby.valueOf(hobby.toUpperCase()),
 			request.toParameters()

@@ -5,7 +5,7 @@ import java.util.List;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketItemContent;
 
-public record GetBucketResponse(
+public record BucketGetResponse(
 	BucketContent bucketContent,
 	List<BucketItemContent> bucketItemContents
 ) {
