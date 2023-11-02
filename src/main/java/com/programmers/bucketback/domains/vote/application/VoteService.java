@@ -76,7 +76,7 @@ public class VoteService {
 			.option2Item(OptionItem.from(item2))
 			.content(vote.getContent())
 			.createAt(vote.getCreatedAt())
-			.isVoting(isVoting(vote))
+			.isVoting(isVoting(vote.getEndTime()))
 			.option1Votes(option1Votes)
 			.option2Votes(option2Votes)
 			.participants(option1Votes + option2Votes)
@@ -84,8 +84,9 @@ public class VoteService {
 			.build();
 	}
 
-	private static boolean isVoting(final Vote vote) {
-		return LocalDateTime.now().isAfter(vote.getEndTime());
+	private static boolean isVoting(final LocalDateTime endTime) {
+		return LocalDateTime.now()
+			.isAfter(endTime);
 	}
 
 	private Long getSelectedItemId(final Vote vote) {
