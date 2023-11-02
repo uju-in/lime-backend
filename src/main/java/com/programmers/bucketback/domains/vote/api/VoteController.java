@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.vote.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateResponse;
+import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
+import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +49,13 @@ public class VoteController {
 		voteService.deleteVote(voteId);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("{voteId}")
+	public ResponseEntity<VoteGetResponse> getVote(@PathVariable final Long voteId) {
+		GetVoteServiceResponse voteServiceResponse = voteService.getVote(voteId);
+		VoteGetResponse response = VoteGetResponse.from(voteServiceResponse);
+
+		return ResponseEntity.ok(response);
 	}
 }
