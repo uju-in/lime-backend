@@ -28,8 +28,8 @@ public class InventoryAppender {
 		final Long memberId,
 		final InventoryContent content
 	) {
-		final List<InventoryItem> inventoryItems = createInventoryItem(content.itemIds());
-		final Inventory inventory = new Inventory(memberId, content.hobby());
+		List<InventoryItem> inventoryItems = createInventoryItem(content.itemIds());
+		Inventory inventory = new Inventory(memberId, content.hobby());
 		inventoryItems.forEach(inventory::addInventoryItem);
 
 		inventoryRepository.save(inventory);
@@ -38,8 +38,8 @@ public class InventoryAppender {
 	public List<InventoryItem> createInventoryItem(final List<Long> itemIds) {
 		return itemIds.stream()
 			.map(id -> {
-				final Item item = itemReader.read(id);
-				final InventoryItem inventoryItem = new InventoryItem(item);
+				Item item = itemReader.read(id);
+				InventoryItem inventoryItem = new InventoryItem(item);
 
 				return inventoryItem;
 			}).distinct()

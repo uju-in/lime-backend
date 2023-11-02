@@ -20,9 +20,6 @@ public record InventoryCreateRequest(
 	List<Long> itemIds
 ) {
 	public InventoryContent toContent() {
-		return InventoryContent.builder()
-			.hobby(Hobby.valueOf(hobby))
-			.itemIds(itemIds)
-			.build();
+		return new InventoryContent(Hobby.valueOf(hobby), itemIds);
 	}
 }
