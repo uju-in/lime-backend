@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.item.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,5 +47,12 @@ public class ItemController {
 		GetItemServiceResponse response = itemService.getItemDetails(itemId);
 
 		return ResponseEntity.ok(response.toItemGetResponse());
+	}
+
+	@DeleteMapping("/myItems/{itemId}")
+	public ResponseEntity<Void> deleteMyItem(@PathVariable final Long itemId) {
+		itemService.removeMemberItem(itemId);
+
+		return ResponseEntity.ok().build();
 	}
 }
