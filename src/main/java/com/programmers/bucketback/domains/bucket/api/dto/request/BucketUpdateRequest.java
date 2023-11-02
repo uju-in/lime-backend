@@ -2,8 +2,9 @@ package com.programmers.bucketback.domains.bucket.api.dto.request;
 
 import java.util.List;
 
-import com.programmers.bucketback.domains.bucket.application.BucketContent;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.global.annotation.Enum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -11,8 +12,9 @@ import jakarta.validation.constraints.NotNull;
 public record BucketUpdateRequest(
 
 	@Schema(description = "취미", example = "농구")
-	@NotNull(message = "취미를 입력하세요") // enumvalidater로 추가 예정
-	String hobby,
+	@NotNull(message = "취미를 입력하세요")
+	@Enum
+	Hobby hobby,
 
 	@Schema(description = "버킷 이름", example = "유러피안 농구")
 	@NotNull(message = "버킷 이름을 입력하세요")
@@ -23,15 +25,15 @@ public record BucketUpdateRequest(
 
 	@Schema(description = "여러 아이템 id")
 	@NotNull(message = "아이템 id를 입력하세요")
-	List<Long> itemIds
+	List<Long> bucketItemIds
 ) {
 
 	public BucketContent toContent() {
 		return BucketContent.builder()
-			.hobby(Hobby.valueOf(hobby))
-			.name(bucketName)
-			.budget(bucketBudget)
-			.itemIds(itemIds)
+			.hobby(hobby)
+			.bucketName(bucketName)
+			.bucketBudget(bucketBudget)
+			.bucketItemIds(bucketItemIds)
 			.build();
 	}
 }

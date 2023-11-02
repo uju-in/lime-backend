@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
+import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.domain.Item;
-import com.programmers.bucketback.domains.item.repository.ItemRepository;
-import com.programmers.bucketback.global.error.exception.BusinessException;
-import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,36 +21,35 @@ import lombok.RequiredArgsConstructor;
 public class BucketAppender {
 
 	private final BucketRepository bucketRepository;
-	private final ItemRepository itemRepository;
+	private final ItemReader itemReader;
 
 	/** 버킷 생성 */
 	@Transactional
 	public void append(final BucketContent content) {
-		List<BucketItem> bucketItems = createBucketItems(content.itemIds());
+		List<BucketItem> bucketItems = createBucketItems(content.bucketItemIds());
 
 		Bucket bucket = Bucket.builder()
-			// .memberId(memberId) // memberId값 필요함
+			.memberId(MemberUtils.getCurrentMemberId())
 			.hobby(content.hobby())
-			.name(content.name())
-			.budget(content.budget())
+			.name(content.bucketName())
+			.budget(content.bucketBudget())
 			.build();
 		bucketItems.forEach(bucket::addBucketItem);
 
 		bucketRepository.save(bucket);
 	}
 
+	/** 버킷 아이템 생성 */
+	@Transactional
 	public List<BucketItem> createBucketItems(final List<Long> itemIds){
-		//itemReader와 같이 병곤이가 사용하는 로직이 있으면 대체 예정
 		return itemIds.stream()
-			.map(id ->
-				{
-					Item item = itemRepository.findById(id)
-						.orElseThrow(() -> new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR)); //병곤 예외 있으면 변경예정
-					BucketItem bucketItem = new BucketItem(item);
+			.map(itemId -> {
+				Item item = itemReader.read(itemId);
+				BucketItem bucketItem = new BucketItem(item);
 
-					return bucketItem;
-				}
-			).distinct()
+				return bucketItem;
+			})
+			.distinct()
 			.collect(Collectors.toList());
 	}
 }
