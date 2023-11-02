@@ -64,7 +64,7 @@ public class ItemService {
 	public GetItemNamesServiceResponse getItemNamesByKeyword(final String keyword) {
 		final String trimedKeyword = keyword.trim();
 
-		if (trimedKeyword.isBlank() || trimedKeyword.isEmpty()) {
+		if (trimedKeyword.isEmpty()) {
 			return new GetItemNamesServiceResponse(Collections.emptyList());
 		}
 
