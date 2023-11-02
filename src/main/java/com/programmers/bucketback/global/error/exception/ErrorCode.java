@@ -34,8 +34,10 @@ public enum ErrorCode {
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),
 	VOTE_NOT_CONTAIN_ITEM("VOTE_002", "투표에 포함된 아이템이 아닙니다."),
 	VOTE_NOT_OWNER("VOTE_003", "투표의 작성자가 아닙니다."),
-	;
 
+	// MemberItem
+	MEMBER_ITEM_NOT_FOUND("MEMBER_ITEM_001", "나의 아이템을 찾을 수 없습니다."),
+	MEMBER_NOT_MINE("MEMBER_ITEM_002", "아이템 담기에 없는 아이템 입니다.");
 	private final String code;
 	private final String message;
 }
