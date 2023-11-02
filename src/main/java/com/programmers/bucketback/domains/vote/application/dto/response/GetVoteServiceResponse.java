@@ -1,8 +1,7 @@
 package com.programmers.bucketback.domains.vote.application.dto.response;
 
-import java.time.LocalDateTime;
-
 import com.programmers.bucketback.domains.vote.application.OptionItem;
+import com.programmers.bucketback.domains.vote.application.VoteInfo;
 
 import lombok.Builder;
 
@@ -10,12 +9,8 @@ import lombok.Builder;
 public record GetVoteServiceResponse(
 	OptionItem option1Item,
 	OptionItem option2Item,
-	String content,
-	LocalDateTime createAt,
-	boolean isVoting,
-	int option1Votes,
-	int option2Votes,
-	int participants,
+	VoteInfo voteInfo,
+	boolean isOwner,
 	Long selectedItemId
 ) {
 }

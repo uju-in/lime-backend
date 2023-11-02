@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.vote.application;
 
-import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -65,38 +65,44 @@ public class VoteService {
 		final Vote vote = voteReader.read(voteId);
 		final Long option1ItemId = vote.getOption1ItemId();
 		final Long option2ItemId = vote.getOption2ItemId();
-
 		final Item item1 = itemReader.read(option1ItemId);
 		final Item item2 = itemReader.read(option2ItemId);
+
+		boolean isOwner = false;
+		Long selectedItemId = null;
+		if (MemberUtils.isLoggedIn()) {
+			final Long memberId = MemberUtils.getCurrentMemberId();
+			isOwner = isOwner(vote, memberId);
+			selectedItemId = getSelectedItemId(vote, memberId);
+		}
+
 		final int option1Votes = voteCounter.count(vote, option1ItemId);
 		final int option2Votes = voteCounter.count(vote, option2ItemId);
+		final VoteInfo voteInfo = VoteInfo.of(vote, option1Votes, option2Votes);
 
 		return GetVoteServiceResponse.builder()
 			.option1Item(OptionItem.from(item1))
 			.option2Item(OptionItem.from(item2))
-			.content(vote.getContent())
-			.createAt(vote.getCreatedAt())
-			.isVoting(isVoting(vote.getEndTime()))
-			.option1Votes(option1Votes)
-			.option2Votes(option2Votes)
-			.participants(option1Votes + option2Votes)
-			.selectedItemId(getSelectedItemId(vote))
+			.voteInfo(voteInfo)
+			.isOwner(isOwner)
+			.selectedItemId(selectedItemId)
 			.build();
 	}
 
-	private static boolean isVoting(final LocalDateTime endTime) {
-		return LocalDateTime.now()
-			.isAfter(endTime);
+	private boolean isOwner(
+		final Vote vote,
+		final Long memberId
+	) {
+		return vote.getMemberId().equals(memberId);
 	}
 
-	private Long getSelectedItemId(final Vote vote) {
-		Long selectedItemId = null;
-		if (MemberUtils.isLoggedIn()) {
-			final Long memberId = MemberUtils.getCurrentMemberId();
-			final Voter voter = voterReader.read(vote, memberId);
-			selectedItemId = voter.getItemId();
-		}
+	private Long getSelectedItemId(
+		final Vote vote,
+		final Long memberId
+	) {
+		final Optional<Voter> voter = voterReader.read(vote, memberId);
 
-		return selectedItemId;
+		return voter.map(Voter::getItemId)
+			.orElse(null);
 	}
 }
