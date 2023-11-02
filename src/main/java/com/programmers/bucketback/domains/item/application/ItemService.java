@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.item.application.dto.AddMemberItemServiceRequest;
-import com.programmers.bucketback.domains.item.application.dto.GetItemNameResult;
 import com.programmers.bucketback.domains.item.application.dto.GetItemNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.review.application.ReviewStatistics;
@@ -68,7 +68,7 @@ public class ItemService {
 			return new GetItemNamesServiceResponse(Collections.emptyList());
 		}
 
-		List<GetItemNameResult> itemNameResults = itemFinder.getItemNamesByKeyword(trimedKeyword);
+		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(trimedKeyword);
 		return new GetItemNamesServiceResponse(itemNameResults);
 	}
 }

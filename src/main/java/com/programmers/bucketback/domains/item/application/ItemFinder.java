@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.domains.item.application.dto.GetItemNameResult;
+import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
 
@@ -16,11 +16,11 @@ public class ItemFinder {
 
 	private final ItemRepository itemRepository;
 
-	public List<GetItemNameResult> getItemNamesByKeyword(final String name) {
+	public List<ItemNameGetResult> getItemNamesByKeyword(final String name) {
 		List<Item> items = itemRepository.findItemsByNameContains(name);
 
 		return items.stream()
-			.map(GetItemNameResult::from)
+			.map(ItemNameGetResult::from)
 			.toList();
 	}
 }
