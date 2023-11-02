@@ -8,6 +8,10 @@ import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.domain.Voter;
 
 public interface VoterRepository extends JpaRepository<Voter, Long> {
+	int countByVoteAndItemId(
+		final Vote vote,
+		final Long itemId
+	);
 
 	Optional<Voter> findByVoteAndMemberId(
 		final Vote vote,
