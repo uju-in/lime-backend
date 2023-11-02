@@ -6,6 +6,7 @@ import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.item.application.dto.AddMemberItemServiceRequest;
 import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
 import com.programmers.bucketback.domains.item.domain.Item;
+import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.review.application.ReviewStatistics;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,8 @@ public class ItemService {
 	private final MemberItemChecker memberItemChecker;
 	private final ItemReader itemReader;
 	private final ReviewStatistics reviewStatistics;
+	private final MemberItemReader memberItemReader;
+	private final MemberItemRemover memberItemRemover;
 
 	public void addItem(final AddMemberItemServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
@@ -44,5 +47,11 @@ public class ItemService {
 			.itemName(item.getName())
 			.itemImage(item.getImage())
 			.build();
+	}
+
+	public void removeMemberItem(final Long itemId) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+		MemberItem memberItem = memberItemReader.read(itemId, memberId);
+		memberItemRemover.remove(memberItem.getId());
 	}
 }
