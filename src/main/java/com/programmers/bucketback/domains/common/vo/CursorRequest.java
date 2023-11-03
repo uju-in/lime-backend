@@ -1,10 +1,8 @@
-package com.programmers.bucketback.domains.bucket.api.dto.request;
-
-import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
+package com.programmers.bucketback.domains.common.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record BucketGetByCursorRequest(
+public record CursorRequest(
 
 	@Schema(description = "커서아이디, 첫 조회는 커서아이디 없는 요청입니다.", example = "2023110124000001")
 	String cursorId,
