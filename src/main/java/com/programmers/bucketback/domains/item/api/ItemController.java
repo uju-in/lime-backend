@@ -7,13 +7,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
+import com.programmers.bucketback.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
 import com.programmers.bucketback.domains.item.application.EnrollItemService;
 import com.programmers.bucketback.domains.item.application.ItemService;
+import com.programmers.bucketback.domains.item.application.dto.GetItemNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
 
 import jakarta.validation.Valid;
@@ -54,5 +57,12 @@ public class ItemController {
 		itemService.removeMemberItem(itemId);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/itemNames")
+	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
+		GetItemNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
+
+		return ResponseEntity.ok(serviceResponse.toItemGetNamesResponse());
 	}
 }
