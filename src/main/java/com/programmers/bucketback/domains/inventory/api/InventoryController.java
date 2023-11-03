@@ -1,12 +1,14 @@
 package com.programmers.bucketback.domains.inventory.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryCreateRequest;
+import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryUpdateRequest;
 import com.programmers.bucketback.domains.inventory.application.InventoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +26,17 @@ public class InventoryController {
 	@PostMapping("/inventories")
 	public ResponseEntity<Void> createInventory(@RequestBody @Valid final InventoryCreateRequest request) {
 		inventoryService.createInventory(request.toContent());
+
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "인벤토리 수정", description = "InventoryUpdateRequestDTO 을 이용하여 인벤토리를 업데이트힙니다.")
+	@PostMapping("/inventories/{inventoryId}")
+	public ResponseEntity<Void> modifyInventory(
+		@PathVariable final Long inventoryId,
+		@RequestBody @Valid final InventoryUpdateRequest request
+	) {
+		inventoryService.modifyInventory(inventoryId, request.toContent());
 
 		return ResponseEntity.ok().build();
 	}

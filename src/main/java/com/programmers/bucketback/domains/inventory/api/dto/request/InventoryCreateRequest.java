@@ -3,7 +3,7 @@ package com.programmers.bucketback.domains.inventory.api.dto.request;
 import java.util.List;
 
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.domains.inventory.application.vo.InventoryContent;
+import com.programmers.bucketback.domains.inventory.application.vo.InventoryCreateContent;
 import com.programmers.bucketback.global.annotation.Enum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +19,7 @@ public record InventoryCreateRequest(
 	@NotNull
 	List<Long> itemIds
 ) {
-	public InventoryContent toContent() {
-		return new InventoryContent(Hobby.valueOf(hobby), itemIds);
+	public InventoryCreateContent toContent() {
+		return new InventoryCreateContent(Hobby.valueOf(hobby), itemIds);
 	}
 }
