@@ -41,6 +41,13 @@ public class InventoryReader {
 			});
 	}
 
+	public Inventory read(final Long inventoryId){
+		return inventoryRepository.findById(inventoryId)
+			.orElseThrow(()->{
+				throw new BusinessException(ErrorCode.INVENTORY_NOT_FOUND);
+			});
+	}
+
 	/** 인벤토링 아이템 조회 */
 	public List<InventoryItem> inventoryItemRead(final Long inventoryId) {
 		return inventoryItemRepository.findByInventoryId(inventoryId)

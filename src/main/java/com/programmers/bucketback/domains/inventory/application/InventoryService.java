@@ -1,12 +1,17 @@
 package com.programmers.bucketback.domains.inventory.application;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryItemGetResponse;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryCreateContent;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryUpdateContent;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
+import com.programmers.bucketback.domains.item.application.ItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -20,6 +25,7 @@ public class InventoryService {
 	private final InventoryReader inventoryReader;
 	private final InventoryModifier inventoryModifier;
 	private final InventoryRemover inventoryRemover;
+	private final ItemReader itemReader;
 
 	/** 인벤토리 생성 */
 	public void createInventory(
@@ -45,9 +51,20 @@ public class InventoryService {
 	}
 
 	/** 인벤토리 삭제 */
-	@Transactional
 	public void deleteInventory(final Long inventoryId) {
 		inventoryRemover.remove(inventoryId);
+	}
+
+	/** 인벤토리 상세 조회 */
+	public InventoryGetResponse getInventory(final Long inventoryId) {
+		Inventory inventory = inventoryReader.read(inventoryId);
+
+		List<InventoryItemGetResponse> inventoryItemGetResponses = inventory.getInventoryItems().stream()
+			.map(inventoryItem -> itemReader.read(inventoryItem.getItem().getId()))
+			.map(item -> new InventoryItemGetResponse(ItemInfo.from(item), item.getUrl()))
+			.toList();
+
+		return InventoryGetResponse.from(inventory, inventoryItemGetResponses);
 	}
 
 	private void validateDuplication(
