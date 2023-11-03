@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryUpdateContent;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
-import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InventoryModifier {
 
-	private final InventoryRepository inventoryRepository;
 	private final InventoryRemover inventoryRemover;
 	private final InventoryAppender inventoryAppender;
 

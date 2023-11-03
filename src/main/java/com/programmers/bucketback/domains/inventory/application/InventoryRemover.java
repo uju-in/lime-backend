@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepository;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
@@ -23,6 +25,10 @@ public class InventoryRemover {
 	/** 인벤토리 삭제 */
 	@Transactional
 	public void remove(final Long inventoryId){
+		Long memberId = MemberUtils.getCurrentMemberId();
+		Inventory inventory = inventoryReader.read(inventoryId, memberId);
+
+		inventoryRepository.delete(inventory);
 
 	}
 

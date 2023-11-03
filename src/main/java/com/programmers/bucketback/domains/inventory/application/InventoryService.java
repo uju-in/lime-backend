@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.inventory.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryCreateContent;
@@ -18,6 +19,7 @@ public class InventoryService {
 	private final InventoryAppender inventoryAppender;
 	private final InventoryReader inventoryReader;
 	private final InventoryModifier inventoryModifier;
+	private final InventoryRemover inventoryRemover;
 
 	/** 인벤토리 생성 */
 	public void createInventory(
@@ -42,6 +44,12 @@ public class InventoryService {
 		inventoryModifier.modify(inventory, content);
 	}
 
+	/** 인벤토리 삭제 */
+	@Transactional
+	public void deleteInventory(final Long inventoryId) {
+		inventoryRemover.remove(inventoryId);
+	}
+
 	private void validateDuplication(
 		final InventoryCreateContent content,
 		final Long memberId
@@ -50,4 +58,5 @@ public class InventoryService {
 			throw new BusinessException(ErrorCode.INVENTORY_ALREADY_EXIST);
 		}
 	}
+
 }

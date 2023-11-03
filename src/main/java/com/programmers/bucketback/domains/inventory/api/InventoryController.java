@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.inventory.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,16 @@ public class InventoryController {
 		@RequestBody @Valid final InventoryUpdateRequest request
 	) {
 		inventoryService.modifyInventory(inventoryId, request.toContent());
+
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "인벤토리 삭제", description = "InventoryId를 이용하여 버킷을 삭제힙니다.")
+	@DeleteMapping("/inventories/{inventoryId}")
+	public ResponseEntity<Void> deleteInventory(
+		@PathVariable final Long inventoryId
+	){
+		inventoryService.deleteInventory(inventoryId);
 
 		return ResponseEntity.ok().build();
 	}
