@@ -10,6 +10,7 @@ import com.programmers.bucketback.domains.item.application.dto.AddMemberItemServ
 import com.programmers.bucketback.domains.item.application.dto.GetItemNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.review.application.ReviewStatistics;
@@ -27,6 +28,7 @@ public class ItemService {
 	private final MemberItemReader memberItemReader;
 	private final MemberItemRemover memberItemRemover;
 	private final ItemFinder itemFinder;
+	private final ItemMapper itemMapper;
 
 	public void addItem(final AddMemberItemServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
@@ -43,15 +45,13 @@ public class ItemService {
 		}
 
 		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
+		ItemInfo itemInfo = itemMapper.getItemInfo(item);
 
 		return GetItemServiceResponse.builder()
-			.itemId(item.getId())
+			.itemInfo(itemInfo)
 			.isMemberItem(isMemberItem)
 			.itemUrl(item.getUrl())
 			.itemAvgRate(itemAvgRating)
-			.itemPrice(item.getPrice())
-			.itemName(item.getName())
-			.itemImage(item.getImage())
 			.build();
 	}
 
