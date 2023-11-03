@@ -77,7 +77,8 @@ public class MemberController {
 
 	@PostMapping("/check/email")
 	public ResponseEntity<MemberCheckEmailResponse> checkEmail(
-		@Valid @RequestBody final MemberCheckEmailRequest request) {
+		@Valid @RequestBody final MemberCheckEmailRequest request
+	) {
 		final String code = memberService.checkEmail(request.email());
 		final MemberCheckEmailResponse response = new MemberCheckEmailResponse(code);
 
