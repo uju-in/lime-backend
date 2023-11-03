@@ -1,4 +1,4 @@
-name : bucket-back CICD
+name: bucket-back CICD
 on:
   push:
     branches: [ "main" ]
@@ -10,42 +10,48 @@ env:
   BUCKET_NAME: team-02-bucket
   CODE_DEPLOY_APP_NAME: team-02-codeDeployApplication
   DEPLOYMENT_GROUP_NAME: team-02-bucketBack
-  
+
 jobs:
   deploy:
-    runs-on : ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up JDK 17
-        uses : actions/setup-java@v3
-        with :
-          java-version : '17'
-          distribution : 'temurin'
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
-  
+
+      - name: Set YML
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+          find src
+
       - name: Build and Test
         run: ./gradlew build test
 
       - name: Make Zip File # zip 파일 생성
         run: zip -qq -r ./$GITHUB_SHA.zip .
         shell: bash
-        
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
           aws-region: ap-northeast-2
-      
+
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
 
       - name: Code Deploy To EC2 instance
-        run: aws deploy create-deployment 
-                --application-name $CODE_DEPLOY_APP_NAME 
-                --deployment-config-name CodeDeployDefault.AllAtOnce
-                --deployment-group-name $DEPLOYMENT_GROUP_NAME 
-                --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+        run: aws deploy create-deployment
+          --application-name $CODE_DEPLOY_APP_NAME
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name $DEPLOYMENT_GROUP_NAME
+          --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip

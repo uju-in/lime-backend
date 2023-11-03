@@ -9,6 +9,7 @@ import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,6 +23,7 @@ public class MemberService {
 	private final MemberRemover memberRemover;
 	private final MemberUpdater memberUpdater;
 	private final MemberChecker memberChecker;
+	private final EmailSender emailSender;
 
 	@Transactional
 	public void signup(
@@ -63,5 +65,15 @@ public class MemberService {
 
 	public boolean checkNickname(final String nickname) {
 		return memberChecker.checkNicknameDuplication(nickname);
+	}
+
+	public String checkEmail(final String email) {
+		memberChecker.checkEmailDuplication(email);
+
+		try {
+			return emailSender.send(email);
+		} catch (final MessagingException e) {
+			throw new BusinessException(ErrorCode.MAIL_SEND_FAIL);
+		}
 	}
 }
