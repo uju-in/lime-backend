@@ -43,7 +43,7 @@ public class BucketController {
 	@Operation(summary = "버킷 수정", description = "BucketId, BucketUpdateRequest 을 이용하여 버킷을 수정힙니다.")
 	@PutMapping("/buckets/{bucketId}")
 	public ResponseEntity<Void> modifyBucket(
-		@PathVariable(required = true) final Long bucketId,
+		@PathVariable final Long bucketId,
 		@RequestBody @Valid final BucketUpdateRequest request
 	){
 		bucketService.modifyBucket(bucketId, request.toContent());
@@ -53,7 +53,7 @@ public class BucketController {
 
 	@Operation(summary = "버킷 삭제", description = "BucketId을 이용하여 버킷을 삭제힙니다.")
 	@DeleteMapping("/buckets/{bucketId}")
-	public ResponseEntity<Void> deleteBucket(@PathVariable(required = true) final Long bucketId){
+	public ResponseEntity<Void> deleteBucket(@PathVariable final Long bucketId){
 		bucketService.deleteBucket(bucketId);
 
 		return ResponseEntity.ok().build();
@@ -62,8 +62,8 @@ public class BucketController {
 	@Operation(summary = "버킷 상세 조회", description = "BucketId을 이용하여 버킷을 조회힙니다.")
 	@GetMapping("/{nickname}/buckets/{bucketId}")
 	public ResponseEntity<BucketGetResponse> getBucket(
-		@PathVariable(required = true) final String nickname,
-		@PathVariable(required = true) final Long bucketId
+		@PathVariable final String nickname,
+		@PathVariable final Long bucketId
 	){
 		return ResponseEntity.ok(bucketService.getBucket(bucketId));
 	}
@@ -71,8 +71,8 @@ public class BucketController {
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
 	@GetMapping("/{nickname}/bucketlist")
 	public ResponseEntity<BucketGetByCursorResponse> getBucket(
-		@PathVariable(required = true) final String nickname,
-		@RequestParam(required = true) final String hobby,
+		@PathVariable final String nickname,
+		@RequestParam final String hobby,
 		@RequestBody @Valid final BucketGetByCursorRequest request
 	){
 		BucketGetByCursorResponse response = bucketService.getBucketsByCursor(
