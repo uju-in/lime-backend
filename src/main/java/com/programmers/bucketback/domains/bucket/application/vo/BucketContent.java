@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.bucket.application.vo;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.Hobby;
 
@@ -15,7 +15,7 @@ public record BucketContent(
 	String name,
 	Integer budget,
 
-	@JsonIgnore()
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	List<Long> itemIds,
 
 	Long bucketId,
