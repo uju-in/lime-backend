@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemImage{
-	private Long itemId;
-	private String itemImgUr;
+	private Long id;
+	private String imgUrl;
 }

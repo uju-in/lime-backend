@@ -8,8 +8,8 @@ import lombok.Builder;
 public record BucketCursorSummary(
 	String cursorId,
 	Long bucketId,
-	String bucketName,
-	Integer bucketBudget,
+	String name,
+	Integer budget,
 	List<ItemImage> itemImages
 ) {
 	public static BucketCursorSummary of(
@@ -19,8 +19,8 @@ public record BucketCursorSummary(
 		return BucketCursorSummary.builder()
 			.cursorId(cursorId)
 			.bucketId(bucketSummary.getBucketId())
-			.bucketName(bucketSummary.getBucketName())
-			.bucketBudget(bucketSummary.getBucketBudget())
+			.name(bucketSummary.getBucketName())
+			.budget(bucketSummary.getBucketBudget())
 			.itemImages(bucketSummary.getItemImages())
 			.build();
 	}

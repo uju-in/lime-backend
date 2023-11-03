@@ -31,9 +31,9 @@ public record BucketUpdateRequest(
 	public BucketContent toContent() {
 		return BucketContent.builder()
 			.hobby(hobby)
-			.bucketName(bucketName)
-			.bucketBudget(bucketBudget)
-			.bucketItemIds(bucketItemIds)
+			.name(bucketName)
+			.budget(bucketBudget)
+			.itemIds(bucketItemIds)
 			.build();
 	}
 }
