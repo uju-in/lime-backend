@@ -21,7 +21,6 @@ public class InventoryRemover {
 	private final InventoryItemRepository inventoryItemRepository;
 	private final InventoryReader inventoryReader;
 
-
 	/** 인벤토리 삭제 */
 	@Transactional
 	public void remove(final Long inventoryId){
@@ -29,7 +28,6 @@ public class InventoryRemover {
 		Inventory inventory = inventoryReader.read(inventoryId, memberId);
 
 		inventoryRepository.delete(inventory);
-
 	}
 
 	/** 인벤토리 아이템 삭제
@@ -39,6 +37,6 @@ public class InventoryRemover {
 	public void removeInventoryItems(final Long inventoryId){
 		List<InventoryItem> inventoryItems = inventoryReader.inventoryItemRead(inventoryId);
 
-		inventoryItems.forEach(inventoryItem -> inventoryItemRepository.delete(inventoryItem));
+		inventoryItemRepository.deleteAllInBatch(inventoryItems);
 	}
 }

@@ -41,7 +41,7 @@ public class InventoryReader {
 	){
 		return inventoryRepository.findByIdAndMemberId(inventoryId,memberId)
 			.orElseThrow(()->{
-				throw new BusinessException(ErrorCode.INVENTORY_NOT_FOUND);
+				throw new EntityNotFoundException(ErrorCode.INVENTORY_NOT_FOUND);
 			});
 	}
 
@@ -54,10 +54,7 @@ public class InventoryReader {
 
 	/** 인벤토링 아이템 조회 */
 	public List<InventoryItem> inventoryItemRead(final Long inventoryId) {
-		return inventoryItemRepository.findByInventoryId(inventoryId)
-			.orElseThrow(()-> {
-				throw new BusinessException(ErrorCode.INVENTORY_ITEM_NOT_FOUND);
-			});
+		return inventoryItemRepository.findByInventoryId(inventoryId);
 	}
 
 	/** 인벤토리 목록 조회 */

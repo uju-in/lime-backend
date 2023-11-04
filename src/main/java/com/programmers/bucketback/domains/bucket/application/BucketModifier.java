@@ -29,11 +29,11 @@ public class BucketModifier {
 		bucket.removeBucketItems();
 		bucketRemover.removeBucketItems(bucket.getId());
 
-		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.bucketItemIds());
+		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.itemIds());
 		bucket.modifyBucket(
 			content.hobby(),
-			content.bucketName(),
-			content.bucketBudget()
+			content.name(),
+			content.budget()
 		);
 		bucketItems.forEach(bucket::addBucketItem);
 
