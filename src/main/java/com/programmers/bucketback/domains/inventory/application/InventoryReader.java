@@ -43,9 +43,6 @@ public class InventoryReader {
 
 	/** 인벤토링 아이템 조회 */
 	public List<InventoryItem> inventoryItemRead(final Long inventoryId) {
-		return inventoryItemRepository.findByInventoryId(inventoryId)
-			.orElseThrow(()-> {
-				throw new EntityNotFoundException(ErrorCode.INVENTORY_ITEM_NOT_FOUND);
-			});
+		return inventoryItemRepository.findByInventoryId(inventoryId);
 	}
 }
