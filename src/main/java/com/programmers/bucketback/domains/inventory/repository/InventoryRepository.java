@@ -8,7 +8,7 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
-	boolean existsByHobbyAndMemberId(Hobby hobby, Long memberId);
+	boolean existsByHobbyAndMemberId(final Hobby hobby, final Long memberId);
 
-	Optional<Inventory> findByIdAndMemberId(Long inventoryId, Long memberId);
+	Optional<Inventory> findByIdAndMemberId(final Long inventoryId, final Long memberId);
 }

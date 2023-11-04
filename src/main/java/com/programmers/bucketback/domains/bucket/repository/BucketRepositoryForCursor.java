@@ -7,9 +7,9 @@ import com.programmers.bucketback.domains.common.Hobby;
 
 public interface BucketRepositoryForCursor {
 	List<BucketSummary> findAllByCursor(
-		Long memberId,
-		Hobby hobby,
-		String cursorId,
-		int pageSize
+		final Long memberId,
+		final Hobby hobby,
+		final String cursorId,
+		final int pageSize
 	);
 }
