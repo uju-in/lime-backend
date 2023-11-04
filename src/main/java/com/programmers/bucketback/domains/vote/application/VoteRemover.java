@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.vote.domain.Vote;
-import com.programmers.bucketback.domains.vote.repository.VoteReposiory;
+import com.programmers.bucketback.domains.vote.repository.VoteRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +12,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VoteRemover {
 
-	private final VoteReposiory voteReposiory;
+	private final VoteRepository voteRepository;
 
 	@Transactional
 	public void remove(final Vote vote) {
-		voteReposiory.delete(vote);
+		voteRepository.delete(vote);
 	}
 }
