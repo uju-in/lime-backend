@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryCreateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryUpdateRequest;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
 import com.programmers.bucketback.domains.inventory.application.InventoryService;
 
@@ -62,14 +63,14 @@ public class InventoryController {
 	){
 		return ResponseEntity.ok(inventoryService.getInventory(inventoryId));
 	}
-	//
-	// @Operation(summary = "인벤토리 목록 조회", description = "닉네임으로 유저의 인벤토리 목록을 조회한다.")
-	// @GetMapping("/{nickname}/inventoryList")
-	// public ResponseEntity<InventoriesGetResponse> getInventories(
-	// 	@PathVariable final String nickname
-	// ){
-	// 	InventoriesGetResponse response = inventoryService.getInventories(nickname);
-	//
-	// 	return ResponseEntity.ok(response);
-	// }
+
+	@Operation(summary = "인벤토리 목록 조회", description = "닉네임으로 유저의 인벤토리 목록을 조회한다.")
+	@GetMapping("/{nickname}/inventoryList")
+	public ResponseEntity<InventoriesGetResponse> getInventories(
+		@PathVariable final String nickname
+	){
+		InventoriesGetResponse response = inventoryService.getInventories(nickname);
+
+		return ResponseEntity.ok(response);
+	}
 }

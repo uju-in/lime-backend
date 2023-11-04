@@ -6,10 +6,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepository;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
+import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -22,6 +24,7 @@ public class InventoryReader {
 
 	private final InventoryRepository inventoryRepository;
 	private final InventoryItemRepository inventoryItemRepository;
+	private final MemberReader memberReader;
 
 	public boolean isCreated(
 		final Hobby hobby,
@@ -30,7 +33,7 @@ public class InventoryReader {
 		return inventoryRepository.existsByHobbyAndMemberId(hobby, memberId);
 	}
 
-	/** 인벤토링 조회 */
+	/** 인벤토리 조회 */
 	public Inventory read(
 		final Long inventoryId,
 		final Long memberId
@@ -54,5 +57,20 @@ public class InventoryReader {
 			.orElseThrow(()-> {
 				throw new BusinessException(ErrorCode.INVENTORY_ITEM_NOT_FOUND);
 			});
+	}
+
+	/** 인벤토리 목록 조회 */
+	public List<InventoryInfoSummary> readSummary(final String nickname) {
+		Long memberId = memberReader.read(nickname).getId();
+		List<InventoryInfoSummary> results = inventoryRepository.findInfoSummaries(memberId);
+
+		for (InventoryInfoSummary result : results) {
+			result.setItemImages(
+				result.getItemImages()
+				.subList(0, Math.min(3, result.getItemImages().size()))
+			);
+		}
+
+		return results;
 	}
 }

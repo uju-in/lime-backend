@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryItemGetResponse;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryCreateContent;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryUpdateContent;
@@ -67,6 +69,13 @@ public class InventoryService {
 		return InventoryGetResponse.from(inventory, inventoryItemGetResponses);
 	}
 
+	/** 인벤토리 목록 조회 */
+	public InventoriesGetResponse getInventories(final String nickname) {
+		List<InventoryInfoSummary> inventoryInfoSummaries = inventoryReader.readSummary(nickname);
+
+		return InventoriesGetResponse.from(inventoryInfoSummaries);
+	}
+
 	private void validateDuplication(
 		final InventoryCreateContent content,
 		final Long memberId
@@ -75,5 +84,4 @@ public class InventoryService {
 			throw new BusinessException(ErrorCode.INVENTORY_ALREADY_EXIST);
 		}
 	}
-
 }
