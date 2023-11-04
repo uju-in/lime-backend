@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.item.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,12 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
+import com.programmers.bucketback.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
 import com.programmers.bucketback.domains.item.application.EnrollItemService;
 import com.programmers.bucketback.domains.item.application.ItemService;
+import com.programmers.bucketback.domains.item.application.dto.GetItemByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.GetItemNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
 
@@ -64,5 +68,18 @@ public class ItemController {
 		GetItemNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
 
 		return ResponseEntity.ok(serviceResponse.toItemGetNamesResponse());
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
+		@RequestParam final String keyword,
+		@ModelAttribute("request") @Valid final CursorRequest request
+	) {
+		GetItemByCursorServiceResponse serviceResponse = itemService.getReviewsByCursor(
+			keyword,
+			request.toParameters()
+		);
+
+		return ResponseEntity.ok(serviceResponse.toItemGetByCursorResponse());
 	}
 }
