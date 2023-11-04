@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class SwaggerConfiguration {
 
 	@Bean
-	public OpenAPI openAPI(ServletContext servletContext) {
+	public OpenAPI openAPI(final ServletContext servletContext) {
 		String contextPath = servletContext.getContextPath();
 		Server server = new Server().url(contextPath);
 
@@ -114,7 +114,7 @@ public class SwaggerConfiguration {
 	// 	ApiResponses responses, Map<Integer, List<ExampleHolder>> statusWithExampleHolders) {
 	// 	statusWithExampleHolders.forEach(
 	// 		(status, v) -> {
-	// 			Content content = new Content();
+	// 			Content message = new Content();
 	// 			MediaType mediaType = new MediaType();
 	// 			// 상태 코드마다 ApiResponse을 생성합니다.
 	// 			ApiResponse apiResponse = new ApiResponse();
@@ -122,9 +122,9 @@ public class SwaggerConfiguration {
 	// 			v.forEach(
 	// 				exampleHolder -> mediaType.addExamples(
 	// 					exampleHolder.getErrorCode(), exampleHolder.getHolder()));
-	// 			// ApiResponse 의 content 에 mediaType을 추가합니다.
-	// 			content.addMediaType("application/json", mediaType);
-	// 			apiResponse.setContent(content);
+	// 			// ApiResponse 의 message 에 mediaType을 추가합니다.
+	// 			message.addMediaType("application/json", mediaType);
+	// 			apiResponse.setContent(message);
 	// 			// 상태코드를 key 값으로 responses 에 추가합니다.
 	// 			responses.addApiResponse(status.toString(), apiResponse);
 	// 		});
