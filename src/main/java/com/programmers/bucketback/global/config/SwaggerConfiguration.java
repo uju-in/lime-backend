@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class SwaggerConfiguration {
 
 	@Bean
-	public OpenAPI openAPI(final ServletContext servletContext) {
+	public OpenAPI openAPI(ServletContext servletContext) {
 		String contextPath = servletContext.getContextPath();
 		Server server = new Server().url(contextPath);
 
@@ -57,8 +57,6 @@ public class SwaggerConfiguration {
 			.description("버킷백 서버의 API 문서 입니다.")
 			.license(license);
 	}
-
-
 
 	// @Bean
 	// public OperationCustomizer customize() {
