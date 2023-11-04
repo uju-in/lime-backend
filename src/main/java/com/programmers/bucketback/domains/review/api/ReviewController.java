@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.review.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,8 +51,9 @@ public class ReviewController {
 	@GetMapping()
 	public ResponseEntity<ReviewGetByCursorResponse> getReviewsByCursor(
 		@PathVariable final Long itemId,
-		@RequestBody @Valid final CursorRequest request
+		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
+
 		GetReviewByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
 			itemId,
 			request.toParameters()
