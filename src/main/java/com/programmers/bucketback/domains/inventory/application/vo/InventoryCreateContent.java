@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.common.Hobby;
 
-public record InventoryContent(
+public record InventoryCreateContent(
 	Hobby hobby,
 	List<Long> itemIds
 ) {

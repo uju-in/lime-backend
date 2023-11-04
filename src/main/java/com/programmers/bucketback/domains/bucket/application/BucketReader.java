@@ -47,11 +47,8 @@ public class BucketReader {
 	}
 
 	/** 버킷 아이템 정보 조회 */
-	public List<BucketItem> bucketItemRead(
-		final Long bucketId
-	) {
-		return bucketItemRepository.findByBucketId(bucketId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.BUCKET_ITEM_NOT_FOUND));
+	public List<BucketItem> bucketItemRead(final Long bucketId) {
+		return bucketItemRepository.findByBucketId(bucketId);
 	}
 
 	/** 버킷 정보 커서 페이징 조회 */

@@ -44,7 +44,7 @@ public class Inventory extends BaseEntity {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-	private List<InventoryItem> inventoryItems = new ArrayList<>();
+	private final List<InventoryItem> inventoryItems = new ArrayList<>();
 
 	public Inventory(
 		@NotNull final Long memberId,
@@ -57,5 +57,9 @@ public class Inventory extends BaseEntity {
 	public void addInventoryItem(final InventoryItem inventoryItem) {
 		inventoryItems.add(inventoryItem);
 		inventoryItem.changeInventory(this);
+	}
+
+	public void removeInventoryItems() {
+		this.inventoryItems.clear();
 	}
 }
