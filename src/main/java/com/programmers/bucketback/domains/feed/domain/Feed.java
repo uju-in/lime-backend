@@ -31,35 +31,25 @@ import lombok.NoArgsConstructor;
 @Table(name = "feeds")
 public class Feed extends BaseEntity {
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
+	private final List<FeedItem> feedItems = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Long id;
-
 	@NotNull
-	@Column(name="member_id")
+	@Column(name = "member_id")
 	private Long memberId;
-
 	@NotNull
-	@Column(name="hobby")
+	@Column(name = "hobby")
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
-
 	@NotNull
-	@Column(name="message")
+	@Column(name = "message")
 	private String message;
-
 	@Embedded
 	private BucketInfo bucketInfo;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
-	private final List<FeedItem> feedItems = new ArrayList<>();
-
-	public void addFeedItem(final FeedItem feedItem) {
-		feedItems.add(feedItem);
-		feedItem.changeFeed(this);
-	}
 
 	@Builder
 	public Feed(
@@ -72,7 +62,12 @@ public class Feed extends BaseEntity {
 		this.memberId = memberId;
 		this.hobby = hobby;
 		this.message = message;
-		this.bucketInfo = new BucketInfo(bucketName,bucketBudget);
+		this.bucketInfo = new BucketInfo(bucketName, bucketBudget);
+	}
+
+	public void addFeedItem(final FeedItem feedItem) {
+		feedItems.add(feedItem);
+		feedItem.changeFeed(this);
 	}
 
 }
