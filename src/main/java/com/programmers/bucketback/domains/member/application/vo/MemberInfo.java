@@ -9,4 +9,10 @@ public record MemberInfo(
 	String profileImage,
 	int level
 ) {
+	public MemberInfo(
+		final Long memberId,
+		final String nickName
+	) {
+		this(memberId, nickName, null, 0);
+	}
 }
