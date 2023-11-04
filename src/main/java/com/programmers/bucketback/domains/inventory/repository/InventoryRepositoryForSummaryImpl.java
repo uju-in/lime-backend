@@ -33,7 +33,7 @@ public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryFor
 		return jpaQueryFactory.selectFrom(inventoryItem)
 			.join(item).on(inventoryItem.item.id.eq(item.id))
 			.where(inventoryItem.inventory.id.in(inventoryIds))
-			.orderBy(new OrderSpecifier(Order.DESC, inventory.createdAt))
+			.orderBy(new OrderSpecifier<>(Order.DESC, inventory.createdAt))
 			.transform(groupBy(inventory.id).list(
 				Projections.constructor(InventoryInfoSummary.class,
 					inventory.hobby,

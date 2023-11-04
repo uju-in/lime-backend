@@ -66,7 +66,7 @@ public class InventoryService {
 			.map(item -> new InventoryItemGetResponse(ItemInfo.from(item), item.getUrl()))
 			.toList();
 
-		return InventoryGetResponse.from(inventory, inventoryItemGetResponses);
+		return InventoryGetResponse.of(inventory, inventoryItemGetResponses);
 	}
 
 	/** 인벤토리 목록 조회 */

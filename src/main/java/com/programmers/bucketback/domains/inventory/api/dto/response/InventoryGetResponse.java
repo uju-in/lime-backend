@@ -15,7 +15,7 @@ public record InventoryGetResponse(
 	List<InventoryItemGetResponse> inventoryItemGetResponses
 ) {
 
-	public static InventoryGetResponse from(
+	public static InventoryGetResponse of(
 		final Inventory inventory,
 		final List<InventoryItemGetResponse> inventoryItemGetResponses
 	){

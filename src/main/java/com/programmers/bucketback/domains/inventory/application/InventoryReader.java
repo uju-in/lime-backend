@@ -13,6 +13,7 @@ import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepo
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class InventoryReader {
 	public Inventory read(final Long inventoryId){
 		return inventoryRepository.findById(inventoryId)
 			.orElseThrow(()->{
-				throw new BusinessException(ErrorCode.INVENTORY_NOT_FOUND);
+				throw new EntityNotFoundException(ErrorCode.INVENTORY_NOT_FOUND);
 			});
 	}
 

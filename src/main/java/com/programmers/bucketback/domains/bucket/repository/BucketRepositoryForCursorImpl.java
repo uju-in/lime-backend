@@ -64,7 +64,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 	}
 
 	private OrderSpecifier decrease() {
-		return new OrderSpecifier(Order.DESC, bucket.createdAt);
+		return new OrderSpecifier<>(Order.DESC, bucket.createdAt);
 	}
 
 	private BooleanExpression cursorIdCondition(final String cursorId) {
