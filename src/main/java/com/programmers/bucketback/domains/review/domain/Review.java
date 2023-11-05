@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.review.domain;
 
+import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
 
 import jakarta.persistence.Column;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "reviews")
-public class Review {
+public class Review extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
