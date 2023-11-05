@@ -48,8 +48,7 @@ public class FeedAppender {
 	}
 
 	/** 피드 아이템 생성 */
-	@Transactional
-	public List<FeedItem> createFeedItems(final List<Long> itemIds){
+	public List<FeedItem> createFeedItems(final List<Long> itemIds) {
 		return itemIds.stream()
 			.map(itemId -> {
 				Item item = itemReader.read(itemId);
