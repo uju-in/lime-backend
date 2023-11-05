@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.bucket.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
-import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
-import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.BucketService;
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.domains.common.vo.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +35,7 @@ public class BucketController {
 
 	@Operation(summary = "버킷 생성", description = "BucketCreateRequest 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/buckets")
-	public ResponseEntity<Void> createBucket(@RequestBody @Valid final BucketCreateRequest request){
+	public ResponseEntity<Void> createBucket(@RequestBody @Valid final BucketCreateRequest request) {
 		bucketService.createBucket(request.toContent());
 
 		return ResponseEntity.ok().build();
@@ -45,7 +46,7 @@ public class BucketController {
 	public ResponseEntity<Void> modifyBucket(
 		@PathVariable final Long bucketId,
 		@RequestBody @Valid final BucketUpdateRequest request
-	){
+	) {
 		bucketService.modifyBucket(bucketId, request.toContent());
 
 		return ResponseEntity.ok().build();
@@ -53,7 +54,7 @@ public class BucketController {
 
 	@Operation(summary = "버킷 삭제", description = "BucketId을 이용하여 버킷을 삭제힙니다.")
 	@DeleteMapping("/buckets/{bucketId}")
-	public ResponseEntity<Void> deleteBucket(@PathVariable final Long bucketId){
+	public ResponseEntity<Void> deleteBucket(@PathVariable final Long bucketId) {
 		bucketService.deleteBucket(bucketId);
 
 		return ResponseEntity.ok().build();
@@ -64,17 +65,17 @@ public class BucketController {
 	public ResponseEntity<BucketGetResponse> getBucket(
 		@PathVariable final String nickname,
 		@PathVariable final Long bucketId
-	){
+	) {
 		return ResponseEntity.ok(bucketService.getBucket(bucketId));
 	}
 
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
-	@GetMapping("/{nickname}/bucketlist")
+	@GetMapping("/{nickname}")
 	public ResponseEntity<BucketGetByCursorResponse> getBucket(
 		@PathVariable final String nickname,
 		@RequestParam final String hobby,
-		@RequestBody @Valid final CursorRequest request
-	){
+		@ModelAttribute("request") @Valid final CursorRequest request
+	) {
 		BucketGetByCursorResponse response = bucketService.getBucketsByCursor(
 			nickname,
 			Hobby.valueOf(hobby.toUpperCase()),

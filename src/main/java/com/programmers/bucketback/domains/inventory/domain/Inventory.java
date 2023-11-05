@@ -44,12 +44,12 @@ public class Inventory extends BaseEntity {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-	private final List<InventoryItem> inventoryItems = new ArrayList<>();
+	private List<InventoryItem> inventoryItems = new ArrayList<>();
 
 	public Inventory(
 		@NotNull final Long memberId,
 		@NotNull final Hobby hobby
-	){
+	) {
 		this.memberId = memberId;
 		this.hobby = hobby;
 	}
