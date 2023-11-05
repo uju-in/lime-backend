@@ -66,7 +66,7 @@ public class InventoryController {
 	}
 
 	@Operation(summary = "인벤토리 목록 조회", description = "닉네임으로 유저의 인벤토리 목록을 조회한다.")
-	@GetMapping("/{nickname}/inventory-list")
+	@GetMapping("/{nickname}/inventories")
 	public ResponseEntity<InventoriesGetResponse> getInventories(
 		@PathVariable final String nickname
 	) {

@@ -70,7 +70,7 @@ public class BucketController {
 	}
 
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
-	@GetMapping("/{nickname}/bucket-list")
+	@GetMapping("/{nickname}")
 	public ResponseEntity<BucketGetByCursorResponse> getBucket(
 		@PathVariable final String nickname,
 		@RequestParam final String hobby,
