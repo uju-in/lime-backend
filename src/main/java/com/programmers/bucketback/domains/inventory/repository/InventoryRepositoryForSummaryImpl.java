@@ -15,9 +15,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryForSummary {
 
@@ -41,15 +39,13 @@ public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryFor
 				.list(Projections.constructor(InventoryInfoSummary.class,
 						inventory.hobby,
 						inventory.id,
-						item.price.sum(),
+						sum(item.price), //refactor
 						list(Projections.constructor(ItemImage.class,
 							item.id,
 							item.image
 						))
 					)
 				));
-
-		// log.info(transform.get(1).getItemImages().get(0).getImgUrl());
 
 		return transform;
 	}
