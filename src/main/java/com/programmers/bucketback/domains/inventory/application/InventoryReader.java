@@ -12,12 +12,13 @@ import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepository;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 import com.programmers.bucketback.domains.member.application.MemberReader;
-import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -38,16 +39,16 @@ public class InventoryReader {
 	public Inventory read(
 		final Long inventoryId,
 		final Long memberId
-	){
-		return inventoryRepository.findByIdAndMemberId(inventoryId,memberId)
-			.orElseThrow(()->{
+	) {
+		return inventoryRepository.findByIdAndMemberId(inventoryId, memberId)
+			.orElseThrow(() -> {
 				throw new EntityNotFoundException(ErrorCode.INVENTORY_NOT_FOUND);
 			});
 	}
 
-	public Inventory read(final Long inventoryId){
+	public Inventory read(final Long inventoryId) {
 		return inventoryRepository.findById(inventoryId)
-			.orElseThrow(()->{
+			.orElseThrow(() -> {
 				throw new EntityNotFoundException(ErrorCode.INVENTORY_NOT_FOUND);
 			});
 	}
@@ -59,13 +60,13 @@ public class InventoryReader {
 
 	/** 인벤토리 목록 조회 */
 	public List<InventoryInfoSummary> readSummary(final String nickname) {
-		Long memberId = memberReader.read(nickname).getId();
+		Long memberId = memberReader.readByNickname(nickname).getId();
 		List<InventoryInfoSummary> results = inventoryRepository.findInfoSummaries(memberId);
 
 		for (InventoryInfoSummary result : results) {
 			result.setItemImages(
 				result.getItemImages()
-				.subList(0, Math.min(3, result.getItemImages().size()))
+					.subList(0, Math.min(3, result.getItemImages().size()))
 			);
 		}
 

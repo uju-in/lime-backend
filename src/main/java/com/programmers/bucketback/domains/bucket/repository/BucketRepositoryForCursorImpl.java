@@ -24,7 +24,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
+public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
@@ -52,17 +52,18 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 			.join(item).on(bucketItem.item.id.eq(item.id))
 			.where(bucketItem.bucket.id.in(bucketIds))
 			.orderBy(decrease())
-			.transform(groupBy(bucket.id).list(
-				Projections.constructor(BucketSummary.class,
-					bucket.id,
-					bucket.bucketInfo.name,
-					bucket.bucketInfo.budget,
-					bucket.createdAt,
-					list(Projections.constructor(ItemImage.class,
-						item.id, item.url)
+			.transform(groupBy(bucket.id)
+				.list(Projections.constructor(BucketSummary.class,
+						bucket.id,
+						bucket.bucketInfo.name,
+						bucket.bucketInfo.budget,
+						bucket.createdAt,
+						list(Projections.constructor(ItemImage.class,
+							item.id,
+							item.image
+						))
 					)
-				)
-			));
+				));
 	}
 
 	private OrderSpecifier<LocalDateTime> decrease() {
@@ -82,7 +83,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor{
 
 		return dateCursor.concat(StringExpressions.lpad(
 				bucket.id.stringValue(), 8, '0'
-				))
+			))
 			.lt(cursorId);
 	}
 

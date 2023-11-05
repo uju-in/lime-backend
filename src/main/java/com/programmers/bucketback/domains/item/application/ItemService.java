@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.dto.AddMemberItemServiceRequest;
+import com.programmers.bucketback.domains.item.application.dto.GetItemByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.GetItemNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
@@ -29,6 +31,7 @@ public class ItemService {
 	private final MemberItemRemover memberItemRemover;
 	private final ItemFinder itemFinder;
 	private final ItemMapper itemMapper;
+	private final ItemCursorReader itemCursorReader;
 
 	public void addItem(final AddMemberItemServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
@@ -70,5 +73,21 @@ public class ItemService {
 
 		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(trimedKeyword);
 		return new GetItemNamesServiceResponse(itemNameResults);
+	}
+
+	public GetItemByCursorServiceResponse getReviewsByCursor(
+		final String keyword,
+		final CursorPageParameters parameters
+	) {
+		final String trimedKeyword = keyword.trim();
+
+		if (trimedKeyword.isEmpty()) {
+			return new GetItemByCursorServiceResponse(null, Collections.emptyList());
+		}
+
+		return itemCursorReader.readByCursor(
+			trimedKeyword,
+			parameters
+		);
 	}
 }

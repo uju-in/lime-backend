@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.bucket.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,11 +70,11 @@ public class BucketController {
 	}
 
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
-	@GetMapping("/{nickname}/bucketlist")
+	@GetMapping("/{nickname}")
 	public ResponseEntity<BucketGetByCursorResponse> getBucketsByCursor(
 		@PathVariable final String nickname,
 		@RequestParam final String hobby,
-		@RequestBody @Valid final CursorRequest request
+		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
 		BucketGetByCursorResponse response = bucketService.getBucketsByCursor(
 			nickname,

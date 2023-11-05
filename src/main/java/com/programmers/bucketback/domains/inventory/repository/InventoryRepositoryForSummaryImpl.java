@@ -4,7 +4,6 @@ import static com.programmers.bucketback.domains.inventory.domain.QInventory.*;
 import static com.programmers.bucketback.domains.inventory.domain.QInventoryItem.*;
 import static com.programmers.bucketback.domains.item.domain.QItem.*;
 import static com.querydsl.core.group.GroupBy.*;
-import static com.querydsl.jpa.JPAExpressions.*;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryForSummary{
+public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryForSummary {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
@@ -28,22 +27,26 @@ public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryFor
 		List<Long> inventoryIds = jpaQueryFactory
 			.select(inventory.id)
 			.from(inventory)
+			.where(inventory.memberId.eq(memberId))
 			.fetch();
 
-		return jpaQueryFactory.selectFrom(inventoryItem)
+		List<InventoryInfoSummary> transform = jpaQueryFactory
+			.selectFrom(inventoryItem)
 			.join(item).on(inventoryItem.item.id.eq(item.id))
 			.where(inventoryItem.inventory.id.in(inventoryIds))
 			.orderBy(new OrderSpecifier<>(Order.DESC, inventory.createdAt))
-			.transform(groupBy(inventory.id).list(
-				Projections.constructor(InventoryInfoSummary.class,
-					inventory.hobby,
-					inventory.id,
-					select(item.price.sum()),
-					list(Projections.constructor(ItemImage.class,
-						item.id,
-						item.url
-					))
-				)
-			));
+			.transform(groupBy(inventory.id)
+				.list(Projections.constructor(InventoryInfoSummary.class,
+						inventory.hobby,
+						inventory.id,
+						sum(item.price), //refactor
+						list(Projections.constructor(ItemImage.class,
+							item.id,
+							item.image
+						))
+					)
+				));
+
+		return transform;
 	}
 }
