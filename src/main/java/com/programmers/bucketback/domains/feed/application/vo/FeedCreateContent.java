@@ -1,8 +1,8 @@
-package com.programmers.bucketback.domains.feed.api.request;
+package com.programmers.bucketback.domains.feed.application.vo;
 
 import com.programmers.bucketback.domains.common.Hobby;
 
-public record FeedContent(
+public record FeedCreateContent(
 	Hobby hobby,
 	Long bucketId,
 	String message
