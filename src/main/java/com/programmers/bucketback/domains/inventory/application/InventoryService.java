@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.inventory.application;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
@@ -41,10 +42,11 @@ public class InventoryService {
 	}
 
 	/** 인벤토리 수정 */
+	@Transactional
 	public void modifyInventory(
 		final Long inventoryId,
 		final InventoryUpdateContent content
-	){
+	) {
 		//취미별로 중복되면 안됨(이미 생성된 인벤토리가 있는지 확인)
 		Long memberId = MemberUtils.getCurrentMemberId();
 		Inventory inventory = inventoryReader.read(inventoryId, memberId);
@@ -58,6 +60,7 @@ public class InventoryService {
 	}
 
 	/** 인벤토리 상세 조회 */
+	@Transactional
 	public InventoryGetResponse getInventory(final Long inventoryId) {
 		Inventory inventory = inventoryReader.read(inventoryId);
 

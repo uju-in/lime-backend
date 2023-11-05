@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +36,7 @@ public class InventoryController {
 	}
 
 	@Operation(summary = "인벤토리 수정", description = "InventoryUpdateRequestDTO 을 이용하여 인벤토리를 업데이트힙니다.")
-	@PostMapping("/inventories/{inventoryId}")
+	@PutMapping("/inventories/{inventoryId}")
 	public ResponseEntity<Void> modifyInventory(
 		@PathVariable final Long inventoryId,
 		@RequestBody @Valid final InventoryUpdateRequest request
@@ -49,7 +50,7 @@ public class InventoryController {
 	@DeleteMapping("/inventories/{inventoryId}")
 	public ResponseEntity<Void> deleteInventory(
 		@PathVariable final Long inventoryId
-	){
+	) {
 		inventoryService.deleteInventory(inventoryId);
 
 		return ResponseEntity.ok().build();
@@ -60,7 +61,7 @@ public class InventoryController {
 	public ResponseEntity<InventoryGetResponse> getInventory(
 		@PathVariable final String nickname,
 		@PathVariable final Long inventoryId
-	){
+	) {
 		return ResponseEntity.ok(inventoryService.getInventory(inventoryId));
 	}
 
@@ -68,7 +69,7 @@ public class InventoryController {
 	@GetMapping("/{nickname}/inventoryList")
 	public ResponseEntity<InventoriesGetResponse> getInventories(
 		@PathVariable final String nickname
-	){
+	) {
 		InventoriesGetResponse response = inventoryService.getInventories(nickname);
 
 		return ResponseEntity.ok(response);

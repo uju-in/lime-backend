@@ -13,13 +13,13 @@ public record InventoryCreateRequest(
 
 	@Schema(description = "취미", example = "농구")
 	@Enum
-	String hobby,
+	Hobby hobby,
 
 	@Schema(description = "아이템 아이디 값", example = "[1,2,3]")
 	@NotNull
 	List<Long> itemIds
 ) {
 	public InventoryCreateContent toContent() {
-		return new InventoryCreateContent(Hobby.valueOf(hobby), itemIds);
+		return new InventoryCreateContent(hobby, itemIds);
 	}
 }
