@@ -19,10 +19,12 @@ public enum ErrorCode {
 	MEMBER_ANONYMOUS("MEMBER_003", "익명의 사용자 입니다."),
 	MEMBER_DELETED("MEMBER_004", "탈퇴한 회원 입니다."),
 	MEMBER_EMAIL_EXIST("MEMBER_005", "이메일이 중복되었습니다."),
+	MEMBER_NOT_LOGIN("MEMBER_006", "로그인 하지 않은 유저 입니다."),
 
 	// Item
 	ITEM_MARKET_NOT_FOUND("ITEM_001", "요청 url에 해당하는 상품을 찾을 수 없습니다."),
 	ITEM_NOT_FOUND("ITEM_002", "해당하는 아이템은 찾을 수 없습니다."),
+	ITEM_URL_DUPLICATED("ITEM_003", "중복되는 ITEM URL 입니다."),
 
 	// REVIEW
 	REVIEW_NOT_FOUND("REVIEW_001", "해당하는 리뷰는 찾을 수 없습니다."),
@@ -42,12 +44,11 @@ public enum ErrorCode {
 	// MemberItem
 	MEMBER_ITEM_NOT_FOUND("MEMBER_ITEM_001", "나의 아이템을 찾을 수 없습니다."),
 	MEMBER_NOT_MINE("MEMBER_ITEM_002", "아이템 담기에 없는 아이템 입니다."),
-	
+
 	//Inventory
 	INVENTORY_NOT_FOUND("INVENTORY_001", "인벤토리를 찾을 수 없습니다."),
 	INVENTORY_ALREADY_EXIST("INVENTORY_002", "이미 생성된인벤토리가 잇습니다."),
-	INVENTORY_ITEM_NOT_FOUND("INVENTORY_003", "인벤토리의 아이템을 찾을 수 없습니다.")
-  ;
+	INVENTORY_ITEM_NOT_FOUND("INVENTORY_003", "인벤토리의 아이템을 찾을 수 없습니다.");
 
 	private final String code;
 	private final String message;
