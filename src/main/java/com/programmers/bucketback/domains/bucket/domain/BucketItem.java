@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.bucket.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.item.domain.Item;
 
 import jakarta.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "bucket_items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BucketItem {
+public class BucketItem extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
