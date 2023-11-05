@@ -54,7 +54,7 @@ public class ItemCursorReader {
 				String cursorId = cursorIds.get(idx);
 				ItemSummary itemSummary = itemSummaries.get(idx);
 
-				return ItemCursorSummary.of(cursorId, itemSummary);
+				return new ItemCursorSummary(cursorId, itemSummary);
 			}).toList();
 	}
 
