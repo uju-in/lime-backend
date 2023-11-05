@@ -32,7 +32,7 @@ public class BucketController {
 
 	private final BucketService bucketService;
 
-	@Operation(summary = "버킷 생성", description = "FundingCreateRequestDTO 을 이용하여 버킷을 생성힙니다.")
+	@Operation(summary = "버킷 생성", description = "BucketCreateRequest 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/buckets")
 	public ResponseEntity<Void> createBucket(@RequestBody @Valid final BucketCreateRequest request){
 		bucketService.createBucket(request.toContent());

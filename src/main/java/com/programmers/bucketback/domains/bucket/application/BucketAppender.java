@@ -40,8 +40,7 @@ public class BucketAppender {
 	}
 
 	/** 버킷 아이템 생성 */
-	@Transactional
-	public List<BucketItem> createBucketItems(final List<Long> itemIds){
+	public List<BucketItem> createBucketItems(final List<Long> itemIds) {
 		return itemIds.stream()
 			.map(itemId -> {
 				Item item = itemReader.read(itemId);
