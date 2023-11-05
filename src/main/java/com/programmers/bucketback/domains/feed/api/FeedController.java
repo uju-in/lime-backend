@@ -43,10 +43,10 @@ public class FeedController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "피드 삭제", description = "FeedId를 이용하여 피드를 수정힙니다.")
+	@Operation(summary = "피드 삭제", description = "FeedId를 이용하여 피드를 삭제힙니다.")
 	@DeleteMapping("/{feedId}")
 	public ResponseEntity<Void> modifyFeed(@PathVariable final Long feedId) {
-		feedService.removeFeed(feedId);
+		feedService.deleteFeed(feedId);
 
 		return ResponseEntity.ok().build();
 	}

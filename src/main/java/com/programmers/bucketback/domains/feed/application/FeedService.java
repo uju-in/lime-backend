@@ -32,7 +32,7 @@ public class FeedService {
 	}
 
 	/** 피드 삭제 */
-	public void removeFeed(final Long feedId) {
+	public void deleteFeed(final Long feedId) {
 		feedRemover.remove(feedId);
 	}
 }
