@@ -77,7 +77,8 @@ public class ItemService {
 
 	public GetItemByCursorServiceResponse getReviewsByCursor(
 		final String keyword,
-		final CursorPageParameters parameters) {
+		final CursorPageParameters parameters
+	) {
 		final String trimedKeyword = keyword.trim();
 
 		if (trimedKeyword.isEmpty()) {
