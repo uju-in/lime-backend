@@ -60,7 +60,7 @@ public class InventoryService {
 	}
 
 	/** 인벤토리 상세 조회 */
-	@Transactional
+	@Transactional(readOnly = true)
 	public InventoryGetResponse getInventory(final Long inventoryId) {
 		Inventory inventory = inventoryReader.read(inventoryId);
 
