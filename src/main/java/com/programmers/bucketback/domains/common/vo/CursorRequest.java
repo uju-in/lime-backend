@@ -8,10 +8,10 @@ public record CursorRequest(
 	String cursorId,
 
 	@Schema(description = "페이징 사이즈입니다", example = "10")
-	int size
+	Integer size
 
 ) {
-	public CursorPageParameters toParameters(){
+	public CursorPageParameters toParameters() {
 		return new CursorPageParameters(cursorId, size);
 	}
 }
