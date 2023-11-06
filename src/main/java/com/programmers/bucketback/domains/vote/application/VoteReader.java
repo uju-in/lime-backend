@@ -35,13 +35,15 @@ public class VoteReader {
 	public GetVotesServiceResponse readByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
-		VoteSortCondition sortCondition,
+		final String sortCondition,
 		final CursorPageParameters parameters
 	) {
 		final int pageSize = parameters.size() == null ? 20 : parameters.size();
 
-		if (statusCondition != VoteStatusCondition.COMPLETED || sortCondition != VoteSortCondition.POPULARITY) {
-			sortCondition = VoteSortCondition.RECENT;
+		VoteSortCondition voteSortCondition = VoteSortCondition.RECENT;
+		if (statusCondition == VoteStatusCondition.COMPLETED
+			&& sortCondition != null && sortCondition.equals("popularity")) {
+			voteSortCondition = VoteSortCondition.POPULARITY;
 		}
 
 		Long memberId = null;
@@ -52,7 +54,7 @@ public class VoteReader {
 		final List<VoteSummary> voteSummaries = voteRepository.findAllByCursor(
 			hobby,
 			statusCondition,
-			sortCondition,
+			voteSortCondition,
 			memberId,
 			parameters.cursorId(),
 			pageSize

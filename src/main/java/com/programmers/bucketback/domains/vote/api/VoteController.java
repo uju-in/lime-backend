@@ -19,7 +19,6 @@ import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateRespon
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByCursorResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
-import com.programmers.bucketback.domains.vote.application.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
@@ -77,7 +76,7 @@ public class VoteController {
 		final GetVotesServiceResponse serviceResponse = voteService.getVotesByCursor(
 			Hobby.valueOf(hobby.toUpperCase()),
 			VoteStatusCondition.valueOf(statusCondition.toUpperCase()),
-			sortCondition == null ? VoteSortCondition.RECENT : VoteSortCondition.valueOf(sortCondition.toUpperCase()),
+			sortCondition,
 			request.toParameters()
 		);
 		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(serviceResponse);

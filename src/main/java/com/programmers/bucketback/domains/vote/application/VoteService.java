@@ -95,7 +95,7 @@ public class VoteService {
 	public GetVotesServiceResponse getVotesByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
-		final VoteSortCondition sortCondition,
+		final String sortCondition,
 		final CursorPageParameters parameters
 	) {
 		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters);
