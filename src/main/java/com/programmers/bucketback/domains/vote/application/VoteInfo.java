@@ -21,6 +21,16 @@ public record VoteInfo(
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	Integer option2Votes
 ) {
+	public static VoteInfo from(final Vote vote) {
+		return VoteInfo.builder()
+			.id(vote.getId())
+			.content(vote.getContent())
+			.createAt(vote.getCreatedAt())
+			.isVoting(isVoting(vote.getEndTime()))
+			.participants(vote.getVoters().size())
+			.build();
+	}
+
 	public static VoteInfo of(
 		final Vote vote,
 		final int option1Votes,

@@ -4,11 +4,14 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.domain.Voter;
 import com.programmers.bucketback.global.error.exception.BusinessException;
@@ -87,6 +90,15 @@ public class VoteService {
 			.isOwner(isOwner)
 			.selectedItemId(selectedItemId)
 			.build();
+	}
+
+	public GetVotesServiceResponse getVotesByCursor(
+		final Hobby hobby,
+		final VoteStatusCondition statusCondition,
+		final VoteSortCondition sortCondition,
+		final CursorPageParameters parameters
+	) {
+		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters);
 	}
 
 	private boolean isOwner(
