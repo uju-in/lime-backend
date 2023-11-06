@@ -1,6 +1,5 @@
 package com.programmers.bucketback.domains.item.application;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -49,8 +48,7 @@ public class EnrollItemService {
 	}
 
 	private AddMemberItemServiceRequest getAddMemberItemServiceRequest(final Long enrolledItemId) {
-		List<Long> ids = new ArrayList<>();
-		ids.add(enrolledItemId);
+		List<Long> ids = List.of(enrolledItemId);
 
 		return new AddMemberItemServiceRequest(ids);
 	}
