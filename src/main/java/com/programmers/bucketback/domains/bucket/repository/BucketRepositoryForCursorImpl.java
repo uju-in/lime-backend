@@ -3,11 +3,13 @@ package com.programmers.bucketback.domains.bucket.repository;
 import static com.programmers.bucketback.domains.bucket.domain.QBucket.*;
 import static com.programmers.bucketback.domains.bucket.domain.QBucketItem.*;
 import static com.programmers.bucketback.domains.item.domain.QItem.*;
+import static com.programmers.bucketback.domains.item.domain.QMemberItem.*;
 import static com.querydsl.core.group.GroupBy.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.ItemImage;
 import com.programmers.bucketback.domains.common.Hobby;
@@ -16,6 +18,7 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.core.types.dsl.StringTemplate;
@@ -66,6 +69,45 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 				));
 	}
 
+	@Override
+	public List<BucketMemberItemSummary> findBucketMemberItemsByCursor(
+		final List<Long> itemIdsFromBucketItem,
+		final Long memberId,
+		final String cursorId,
+		final int pageSize
+	) {
+		List<Long> itemIdsFromMemberItem = jpaQueryFactory
+			.select(memberItem.item.id)
+			.from(memberItem)
+			.where(
+				cursorIdConditionFromMemberItem(cursorId),
+				memberItem.memberId.eq(memberId)
+			)
+			.orderBy(new OrderSpecifier<>(Order.DESC, memberItem.createdAt))
+			.limit(pageSize)
+			.fetch();
+
+		BooleanExpression isSelected = new CaseBuilder()
+			.when(item.id.in(itemIdsFromBucketItem))
+			.then(true)
+			.otherwise(false);
+
+		return jpaQueryFactory
+			.selectFrom(item)
+			.where(item.id.in(itemIdsFromMemberItem))
+			.orderBy(new OrderSpecifier<>(Order.DESC, item.createdAt))
+			.transform(groupBy(item.id)
+				.list(Projections.constructor(BucketMemberItemSummary.class,
+					item.id,
+					item.name,
+					item.price,
+					item.image,
+					isSelected,
+					item.createdAt
+				))
+			);
+	}
+
 	private OrderSpecifier<LocalDateTime> decrease() {
 		return new OrderSpecifier<>(Order.DESC, bucket.createdAt);
 	}
@@ -83,6 +125,23 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 
 		return dateCursor.concat(StringExpressions.lpad(
 				bucket.id.stringValue(), 8, '0'
+			))
+			.lt(cursorId);
+	}
+
+	private BooleanExpression cursorIdConditionFromMemberItem(final String cursorId) {
+		if (cursorId == null) {
+			return null;
+		}
+
+		StringTemplate dateCursor = Expressions.stringTemplate(
+			"DATE_FORMAT({0}, {1})",
+			memberItem.createdAt,
+			ConstantImpl.create("%Y%m%d%H%i%s")
+		);
+
+		return dateCursor.concat(StringExpressions.lpad(
+				memberItem.id.stringValue(), 8, '0'
 			))
 			.lt(cursorId);
 	}
