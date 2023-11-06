@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.feed.application;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.repository.FeedRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class FeedReader {
 
 	private final FeedRepository feedRepository;
