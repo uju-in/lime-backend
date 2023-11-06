@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.item.domain;
 
+import com.programmers.bucketback.domains.common.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "members_items")
-public class MemberItem {
+public class MemberItem extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,18 +28,18 @@ public class MemberItem {
 	private Long id;
 
 	@NotNull
-	@Column(name = "members_id")
-	private Long membersId;
+	@Column(name = "member_id")
+	private Long memberId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "items_id")
+	@JoinColumn(name = "item_id")
 	private Item item;
 
 	public MemberItem(
-		@NotNull final Long membersId,
+		@NotNull final Long memberId,
 		final Item item
 	) {
-		this.membersId = membersId;
+		this.memberId = memberId;
 		this.item = item;
 	}
 }
