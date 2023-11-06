@@ -52,8 +52,6 @@ public class EnrollItemService {
 		List<Long> ids = new ArrayList<>();
 		ids.add(enrolledItemId);
 
-		return new AddMemberItemServiceRequest(
-			ids
-		);
+		return new AddMemberItemServiceRequest(ids);
 	}
 }
