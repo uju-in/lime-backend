@@ -36,6 +36,7 @@ public enum ErrorCode {
 	VOTE_NOT_CONTAIN_ITEM("VOTE_002", "투표에 포함된 아이템이 아닙니다."),
 	VOTE_NOT_OWNER("VOTE_003", "투표의 작성자가 아닙니다."),
 	VOTE_NOT_VOTER("VOTE_004", "투표의 투표자가 아닙니다."),
+	VOTE_BAD_POPULARITY("VOTE_005", "종료된 투표만 인기순 조회가 가능합니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
