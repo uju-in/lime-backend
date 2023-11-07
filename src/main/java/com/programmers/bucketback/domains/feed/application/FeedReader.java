@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.feed.domain.Feed;
+import com.programmers.bucketback.domains.feed.repository.FeedLikeRepository;
 import com.programmers.bucketback.domains.feed.repository.FeedRepository;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -16,6 +17,16 @@ import lombok.RequiredArgsConstructor;
 public class FeedReader {
 
 	private final FeedRepository feedRepository;
+	private final FeedLikeRepository feedLikeRepository;
+
+	public Feed read(
+		final Long feedId
+	) {
+		return feedRepository.findById(feedId)
+			.orElseThrow(() -> {
+				throw new EntityNotFoundException(ErrorCode.FEED_NOT_FOUND);
+			});
+	}
 
 	public Feed read(
 		final Long feedId,
@@ -25,5 +36,12 @@ public class FeedReader {
 			.orElseThrow(() -> {
 				throw new EntityNotFoundException(ErrorCode.FEED_NOT_FOUND);
 			});
+	}
+
+	public boolean alreadyLiked(
+		final Long memberId,
+		final Feed feed
+	) {
+		return feedLikeRepository.existsByMemberIdAndFeed(memberId, feed);
 	}
 }
