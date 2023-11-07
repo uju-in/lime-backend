@@ -55,11 +55,11 @@ public class BucketController {
 
 	@Operation(summary = "버킷 수정을 위한 내가 담은 아이템 목록 커서 조회")
 	@GetMapping("/buckets/{bucketId}/myitems")
-	public ResponseEntity<BucketGetMemberItemResponse> getMemberItemsWithBucket(
+	public ResponseEntity<BucketGetMemberItemResponse> getMemberItemsForModify(
 		@PathVariable final Long bucketId,
 		@ModelAttribute("request") @Valid final CursorRequest cursorRequest
 	) {
-		BucketGetMemberItemResponse bucketGetMemberItemResponse = bucketService.getMemberItemsWithBucket(bucketId,
+		BucketGetMemberItemResponse bucketGetMemberItemResponse = bucketService.getMemberItemsForModify(bucketId,
 			cursorRequest.toParameters());
 
 		return ResponseEntity.ok(bucketGetMemberItemResponse);

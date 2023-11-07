@@ -46,7 +46,7 @@ public class BucketService {
 	}
 
 	/** 버킷 수정을 위한 멤버 아이템 목록 조회 */
-	public BucketGetMemberItemResponse getMemberItemsWithBucket(
+	public BucketGetMemberItemResponse getMemberItemsForModify(
 		final Long bucketId,
 		final CursorPageParameters parameters
 	) {
