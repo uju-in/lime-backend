@@ -92,14 +92,7 @@ public class VoteReader {
 			final Long option2ItemId = voteSummary.option2ItemId();
 			final Item item2 = itemReader.read(option2ItemId);
 
-			voteCursorSummaries.add(
-				VoteCursorSummary.builder()
-					.voteInfo(voteSummary.voteInfo())
-					.option1Item(OptionItem.from(item1))
-					.option2Item(OptionItem.from(item2))
-					.cursorId(voteSummary.cursorId())
-					.build()
-			);
+			voteCursorSummaries.add(VoteCursorSummary.of(voteSummary, item1, item2));
 		}
 
 		return voteCursorSummaries;
