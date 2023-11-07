@@ -11,7 +11,7 @@ import lombok.Builder;
 public record VoteInfo(
 	Long id,
 	String content,
-	LocalDateTime createAt,
+	LocalDateTime startTime,
 	boolean isVoting,
 	int participants,
 
@@ -21,6 +21,16 @@ public record VoteInfo(
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	Integer option2Votes
 ) {
+	public VoteInfo(
+		final Long id,
+		final String content,
+		final LocalDateTime startTime,
+		final LocalDateTime endTime,
+		final int participants
+	) {
+		this(id, content, startTime, isVoting(endTime), participants, null, null);
+	}
+
 	public static VoteInfo of(
 		final Vote vote,
 		final int option1Votes,
@@ -29,7 +39,7 @@ public record VoteInfo(
 		return VoteInfo.builder()
 			.id(vote.getId())
 			.content(vote.getContent())
-			.createAt(vote.getCreatedAt())
+			.startTime(vote.getStartTime())
 			.isVoting(isVoting(vote.getEndTime()))
 			.participants(option1Votes + option2Votes)
 			.option1Votes(option1Votes)

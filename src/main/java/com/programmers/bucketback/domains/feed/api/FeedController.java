@@ -50,4 +50,20 @@ public class FeedController {
 
 		return ResponseEntity.ok().build();
 	}
+
+	@Operation(summary = "피드 좋아요", description = "FeedId를 이용하여 좋아요를 할 수 있습니다.")
+	@PostMapping("/{feedId}/like")
+	public ResponseEntity<Void> likeFeed(@PathVariable final Long feedId) {
+		feedService.likeFeed(feedId);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "피드 좋아요 취소", description = "FeedId를 이용하여 좋아요한 피드를 취소 할 수 있습니다.")
+	@DeleteMapping("/{feedId}/unlike")
+	public ResponseEntity<Void> cancelLikedFeed(@PathVariable final Long feedId) {
+		feedService.unLikeFeed(feedId);
+
+		return ResponseEntity.ok().build();
+	}
 }

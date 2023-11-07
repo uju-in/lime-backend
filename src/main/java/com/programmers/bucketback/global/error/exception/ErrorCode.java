@@ -37,6 +37,7 @@ public enum ErrorCode {
 	VOTE_NOT_CONTAIN_ITEM("VOTE_002", "투표에 포함된 아이템이 아닙니다."),
 	VOTE_NOT_OWNER("VOTE_003", "투표의 작성자가 아닙니다."),
 	VOTE_NOT_VOTER("VOTE_004", "투표의 투표자가 아닙니다."),
+	VOTE_BAD_POPULARITY("VOTE_005", "종료된 투표만 인기순 조회가 가능합니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
@@ -52,7 +53,9 @@ public enum ErrorCode {
 	INVENTORY_ITEM_NOT_FOUND("INVENTORY_003", "인벤토리의 아이템을 찾을 수 없습니다."),
 
 	//Feed
-	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다.");
+	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다."),
+	FEED_ALREADY_LIKED("FEED_002", "이미 좋아요룰 늘렀습니다."),
+	FEED_LIKE_NOT_FOUND("FEED_003", "좋아요한 피드를 찾을 수 없습니다.");
 
 	private final String code;
 	private final String message;
