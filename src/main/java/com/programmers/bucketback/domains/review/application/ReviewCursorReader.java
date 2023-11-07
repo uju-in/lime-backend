@@ -1,14 +1,12 @@
 package com.programmers.bucketback.domains.review.application;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.review.application.dto.GetReviewByCursorServiceResponse;
 import com.programmers.bucketback.domains.review.application.vo.ReviewCursorSummary;
-import com.programmers.bucketback.domains.review.application.vo.ReviewSummary;
 import com.programmers.bucketback.domains.review.repository.ReviewRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,25 +17,30 @@ public class ReviewCursorReader {
 
 	private final ReviewRepository reviewRepository;
 
+	private static String getNextCursorId(final List<ReviewCursorSummary> reviewCursorSummaries) {
+		int reviewCursorSummariesSize = reviewCursorSummaries.size();
+		if (reviewCursorSummariesSize == 0) {
+			return null;
+		}
+
+		ReviewCursorSummary lastElement = reviewCursorSummaries.get(reviewCursorSummariesSize - 1);
+
+		return lastElement.cursorId();
+	}
+
 	public GetReviewByCursorServiceResponse readByCursor(
 		final Long itemId,
 		final CursorPageParameters parameters
 	) {
 		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
 
-		List<ReviewSummary> reviewSummaries = reviewRepository.findAllByCursor(
+		List<ReviewCursorSummary> reviewCursorSummaries = reviewRepository.findAllByCursor(
 			itemId,
 			parameters.cursorId(),
 			pageSize
 		);
 
-		List<String> cursorIds = reviewSummaries.stream()
-			.map(this::generateCursorId)
-			.toList();
-
-		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
-
-		List<ReviewCursorSummary> reviewCursorSummaries = getReviewCursorSummaries(reviewSummaries, cursorIds);
+		String nextCursorId = getNextCursorId(reviewCursorSummaries);
 
 		Long reviewCount = reviewRepository.getReviewCount(itemId);
 
@@ -46,27 +49,5 @@ public class ReviewCursorReader {
 			nextCursorId,
 			reviewCursorSummaries
 		);
-	}
-
-	private List<ReviewCursorSummary> getReviewCursorSummaries(
-		final List<ReviewSummary> reviewSummaries,
-		final List<String> cursorIds
-	) {
-		return IntStream.range(0, reviewSummaries.size())
-			.mapToObj(idx -> {
-				String cursorId = cursorIds.get(idx);
-				ReviewSummary reviewSummary = reviewSummaries.get(idx);
-
-				return ReviewCursorSummary.of(cursorId, reviewSummary);
-			}).toList();
-	}
-
-	private String generateCursorId(final ReviewSummary reviewSummary) {
-		return reviewSummary.createdAt().toString()
-			.replace("T", "")
-			.replace("-", "")
-			.replace(":", "")
-			.replace(".", "")
-			+ String.format("%08d", reviewSummary.reviewId());
 	}
 }

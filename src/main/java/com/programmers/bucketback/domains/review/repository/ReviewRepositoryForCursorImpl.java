@@ -7,13 +7,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.bucketback.domains.member.application.vo.MemberInfo;
-import com.programmers.bucketback.domains.review.application.vo.ReviewSummary;
+import com.programmers.bucketback.domains.review.application.vo.ReviewCursorSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,7 +27,7 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<ReviewSummary> findAllByCursor(
+	public List<ReviewCursorSummary> findAllByCursor(
 		final Long itemId,
 		final String cursorId,
 		final int pageSize
@@ -34,7 +35,8 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 		return jpaQueryFactory
 			.select(
 				Projections.constructor(
-					ReviewSummary.class,
+					ReviewCursorSummary.class,
+					generateCursorId(),
 					Projections.constructor(
 						MemberInfo.class,
 						member.id,
@@ -53,7 +55,8 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 				cursorIdCondition(cursorId),
 				review.itemId.eq(itemId)
 			)
-			.orderBy(decrease())
+			.limit(pageSize)
+			.orderBy(decrease(), review.id.desc())
 			.fetch();
 	}
 
@@ -76,6 +79,11 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 			return null;
 		}
 
+		return generateCursorId()
+			.lt(cursorId);
+	}
+
+	public StringExpression generateCursorId() {
 		StringTemplate dateCursor = Expressions.stringTemplate(
 			"DATE_FORMAT({0}, {1})",
 			review.createdAt,
@@ -83,8 +91,7 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 		);
 
 		return dateCursor.concat(StringExpressions.lpad(
-				review.id.stringValue(), 8, '0'
-			))
-			.lt(cursorId);
+			review.id.stringValue(), 8, '0'
+		));
 	}
 }
