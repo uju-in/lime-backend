@@ -20,6 +20,7 @@ public class HobbyController {
 	@GetMapping
 	public ResponseEntity<HobbyGetResponse> getHobby() {
 		HobbyGetResponse response = hobbyService.getHobbies();
+
 		return ResponseEntity.ok(response);
 	}
 }

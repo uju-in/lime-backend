@@ -12,6 +12,7 @@ public class HobbyService {
 
 	public HobbyGetResponse getHobbies() {
 		List<Hobby> hobbies = List.of(Hobby.values());
+		
 		return new HobbyGetResponse(
 			hobbies
 		);
