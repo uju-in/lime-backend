@@ -19,10 +19,12 @@ public enum ErrorCode {
 	MEMBER_ANONYMOUS("MEMBER_003", "익명의 사용자 입니다."),
 	MEMBER_DELETED("MEMBER_004", "탈퇴한 회원 입니다."),
 	MEMBER_EMAIL_EXIST("MEMBER_005", "이메일이 중복되었습니다."),
+	MEMBER_NOT_LOGIN("MEMBER_006", "로그인 하지 않은 유저 입니다."),
 
 	// Item
 	ITEM_MARKET_NOT_FOUND("ITEM_001", "요청 url에 해당하는 상품을 찾을 수 없습니다."),
 	ITEM_NOT_FOUND("ITEM_002", "해당하는 아이템은 찾을 수 없습니다."),
+	ITEM_URL_DUPLICATED("ITEM_003", "중복되는 ITEM URL 입니다."),
 
 	// REVIEW
 	REVIEW_NOT_FOUND("REVIEW_001", "해당하는 리뷰는 찾을 수 없습니다."),
