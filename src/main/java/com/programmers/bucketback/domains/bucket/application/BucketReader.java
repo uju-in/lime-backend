@@ -153,11 +153,11 @@ public class BucketReader {
 	}
 
 	private String generateBucketMemberItemCursorId(final BucketMemberItemSummary bucketMemberItemSummary) {
-		return bucketMemberItemSummary.getCreatedAt().toString()
+		return bucketMemberItemSummary.createdAt().toString()
 			.replace("-", "")
 			.replace(":", "")
 			.replace(".", "")
-			+ String.format("%08d", bucketMemberItemSummary.getItemId());
+			+ String.format("%08d", bucketMemberItemSummary.itemId());
 	}
 
 }
