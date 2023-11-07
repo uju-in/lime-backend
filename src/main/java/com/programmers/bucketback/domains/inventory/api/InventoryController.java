@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.inventory.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryCreateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryUpdateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
+import com.programmers.bucketback.domains.inventory.application.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.application.InventoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,6 +66,18 @@ public class InventoryController {
 		@PathVariable final Long inventoryId
 	) {
 		return ResponseEntity.ok(inventoryService.getInventory(inventoryId));
+	}
+
+	@Operation(summary = "인벤토리 수정을 위한 내가 리뷰한 아이템 조회")
+	@GetMapping("/inventories/{inventoryId}/myitems")
+	public ResponseEntity<InventoryGetReviewedItemResponse> getReviewedItemsForModify(
+		@PathVariable final Long inventoryId,
+		@ModelAttribute("request") @Valid final CursorRequest cursorRequest
+	) {
+		InventoryGetReviewedItemResponse inventoryGetReviewedItemResponse =
+			inventoryService.getReviewedItemsForModify(inventoryId, cursorRequest.toParameters());
+
+		return ResponseEntity.ok(inventoryGetReviewedItemResponse);
 	}
 
 	@Operation(summary = "인벤토리 목록 조회", description = "닉네임으로 유저의 인벤토리 목록을 조회한다.")

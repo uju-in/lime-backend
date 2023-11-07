@@ -9,9 +9,12 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.bucket.application.vo.ItemImage;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
+import com.programmers.bucketback.domains.inventory.application.InventoryReviewedItem;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -48,5 +51,32 @@ public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryFor
 				));
 
 		return transform;
+	}
+
+	@Override
+	public List<InventoryReviewedItem> findReviewedItems(
+		final List<Long> reviewedItemIds,
+		final List<Long> itemIdsInInventory,
+		final String cursorId,
+		final Integer pageSize
+	) {
+		BooleanExpression isSelected = new CaseBuilder()
+			.when(item.id.in(itemIdsInInventory))
+			.then(true)
+			.otherwise(false);
+
+		return jpaQueryFactory
+			.selectFrom(item)
+			.where(item.id.in(reviewedItemIds))
+			.orderBy(new OrderSpecifier<>(Order.DESC, item.createdAt))
+			.transform(groupBy(item.id)
+				.list(Projections.constructor(InventoryReviewedItem.class,
+					item.id,
+					item.name,
+					item.price,
+					item.image,
+					isSelected,
+					item.createdAt))
+			);
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
@@ -79,6 +80,14 @@ public class InventoryService {
 		return InventoriesGetResponse.from(inventoryInfoSummaries);
 	}
 
+	/** 인벤토리  수정을 위한 내가 리뷰한 아이템 목록 조회  */
+	public InventoryGetReviewedItemResponse getReviewedItemsForModify(
+		final Long inventoryId,
+		final CursorPageParameters parameters
+	) {
+		return inventoryReader.readReviewedItem(inventoryId, parameters);
+	}
+
 	private void validateDuplication(
 		final InventoryCreateContent content,
 		final Long memberId
@@ -87,4 +96,5 @@ public class InventoryService {
 			throw new BusinessException(ErrorCode.INVENTORY_ALREADY_EXIST);
 		}
 	}
+
 }
