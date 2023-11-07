@@ -15,6 +15,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -93,7 +94,8 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			memberId = 0L;
 		}
 
-		return vote.voters.any().memberId.eq(memberId);
+		return vote.voters.any()
+			.memberId.eq(memberId);
 	}
 
 	private OrderSpecifier<?> getOrderSpecifierBy(final VoteSortCondition sortCondition) {
@@ -117,8 +119,10 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 
 	private StringExpression generateCursorId(final VoteSortCondition sortCondition) {
 		if (sortCondition == VoteSortCondition.POPULARITY) {
+			final NumberExpression<Integer> popularity = vote.voters.size();
+
 			return StringExpressions.lpad(
-				vote.voters.size().stringValue(), 8, '0'
+				popularity.stringValue(), 8, '0'
 			).concat(StringExpressions.lpad(
 				vote.id.stringValue(), 8, '0'
 			));
