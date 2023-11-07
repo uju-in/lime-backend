@@ -42,7 +42,7 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/myItem")
+	@PostMapping("/myItems")
 	public ResponseEntity<Void> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
 		itemService.addItem(request.toAddMemberItemServiceRequest());
 
