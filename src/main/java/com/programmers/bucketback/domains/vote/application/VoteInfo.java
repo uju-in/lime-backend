@@ -21,14 +21,14 @@ public record VoteInfo(
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	Integer option2Votes
 ) {
-	public static VoteInfo from(final Vote vote) {
-		return VoteInfo.builder()
-			.id(vote.getId())
-			.content(vote.getContent())
-			.startTime(vote.getStartTime())
-			.isVoting(isVoting(vote.getEndTime()))
-			.participants(vote.getVoters().size())
-			.build();
+	public VoteInfo(
+		final Long id,
+		final String content,
+		final LocalDateTime startTime,
+		final LocalDateTime endTime,
+		final int participants
+	) {
+		this(id, content, startTime, isVoting(endTime), participants, null, null);
 	}
 
 	public static VoteInfo of(

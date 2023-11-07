@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.domains.vote.application.VoteInfo;
 import com.programmers.bucketback.domains.vote.application.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.application.VoteSummary;
@@ -38,7 +39,15 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 	) {
 		return jpaQueryFactory
 			.select(Projections.constructor(VoteSummary.class,
-				vote,
+				Projections.constructor(VoteInfo.class,
+					vote.id,
+					vote.content,
+					vote.startTime,
+					vote.endTime,
+					vote.voters.size()
+				),
+				vote.option1ItemId,
+				vote.option2ItemId,
 				generateCursorId(sortCondition)
 			))
 			.from(vote)

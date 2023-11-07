@@ -1,9 +1,9 @@
 package com.programmers.bucketback.domains.vote.application;
 
-import com.programmers.bucketback.domains.vote.domain.Vote;
-
 public record VoteSummary(
-	Vote vote,
+	VoteInfo voteInfo,
+	Long option1ItemId,
+	Long option2ItemId,
 	String cursorId
 ) {
 }
