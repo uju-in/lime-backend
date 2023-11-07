@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.vote.application;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
+import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -41,11 +43,7 @@ public class VoteReader {
 	) {
 		final int pageSize = parameters.size() == null ? 20 : parameters.size();
 
-		VoteSortCondition voteSortCondition = VoteSortCondition.RECENT;
-		if (statusCondition == VoteStatusCondition.COMPLETED
-			&& sortCondition != null && sortCondition.equals("popularity")) {
-			voteSortCondition = VoteSortCondition.POPULARITY;
-		}
+		final VoteSortCondition voteSortCondition = getVoteSortCondition(statusCondition, sortCondition);
 
 		Long memberId = null;
 		if (MemberUtils.isLoggedIn()) {
@@ -69,6 +67,21 @@ public class VoteReader {
 		final String nextCursorId = getNextCursorId(voteSummaries);
 
 		return new GetVotesServiceResponse(nextCursorId, voteCursorSummaries);
+	}
+
+	private VoteSortCondition getVoteSortCondition(
+		final VoteStatusCondition statusCondition,
+		final String sortCondition
+	) {
+		if (statusCondition != VoteStatusCondition.COMPLETED && Objects.equals(sortCondition, "popularity")) {
+			throw new BusinessException(ErrorCode.VOTE_BAD_POPULARITY);
+		}
+
+		if (statusCondition == VoteStatusCondition.COMPLETED && Objects.equals(sortCondition, "popularity")) {
+			return VoteSortCondition.POPULARITY;
+		}
+
+		return VoteSortCondition.RECENT;
 	}
 
 	private List<VoteCursorSummary> getVoteCursorSummaries(final List<VoteSummary> voteSummaries) {
