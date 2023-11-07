@@ -49,7 +49,7 @@ public class Inventory extends BaseEntity {
 	public Inventory(
 		@NotNull final Long memberId,
 		@NotNull final Hobby hobby
-	){
+	) {
 		this.memberId = memberId;
 		this.hobby = hobby;
 	}
@@ -57,5 +57,9 @@ public class Inventory extends BaseEntity {
 	public void addInventoryItem(final InventoryItem inventoryItem) {
 		inventoryItems.add(inventoryItem);
 		inventoryItem.changeInventory(this);
+	}
+
+	public void removeInventoryItems() {
+		this.inventoryItems.clear();
 	}
 }
