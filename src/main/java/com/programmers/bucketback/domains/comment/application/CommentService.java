@@ -11,7 +11,8 @@ public class CommentService {
 	private final CommentAppender commentAppender;
 
 	public void createComment(
-		final Long feedId, final String content
+		final Long feedId,
+		final String content
 	) {
 		commentAppender.append(feedId, content);
 	}
