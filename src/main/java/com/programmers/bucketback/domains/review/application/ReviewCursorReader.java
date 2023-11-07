@@ -32,7 +32,7 @@ public class ReviewCursorReader {
 		final Long itemId,
 		final CursorPageParameters parameters
 	) {
-		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
+		int pageSize = parameters.size() == null ? 20 : parameters.size();
 
 		List<ReviewCursorSummary> reviewCursorSummaries = reviewRepository.findAllByCursor(
 			itemId,
