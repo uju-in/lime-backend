@@ -76,10 +76,7 @@ public class FeedAppender {
 			throw new BusinessException(ErrorCode.FEED_ALREADY_LIKED);
 		}
 
-		FeedLike feedLike = FeedLike.builder()
-			.memberId(memberId)
-			.feed(feed)
-			.build();
+		FeedLike feedLike = new FeedLike(memberId, feed);
 
 		feedLikeRepository.save(feedLike);
 	}

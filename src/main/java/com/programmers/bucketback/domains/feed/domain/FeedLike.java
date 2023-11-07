@@ -10,7 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,7 +31,6 @@ public class FeedLike {
 	@JoinColumn(name = "feed_id")
 	private Feed feed;
 
-	@Builder
 	public FeedLike(
 		final Long memberId,
 		final Feed feed
