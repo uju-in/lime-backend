@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.vote.application;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -49,6 +50,10 @@ public class VoteReader {
 		Long memberId = null;
 		if (MemberUtils.isLoggedIn()) {
 			memberId = MemberUtils.getCurrentMemberId();
+		}
+
+		if (memberId == null && statusCondition.isRequiredLogin()) {
+			return new GetVotesServiceResponse(null, Collections.emptyList());
 		}
 
 		final List<VoteSummary> voteSummaries = voteRepository.findAllByCursor(

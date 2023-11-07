@@ -4,5 +4,9 @@ public enum VoteStatusCondition {
 	INPROGRESS,
 	COMPLETED,
 	POSTED,
-	PARTICIPATED
+	PARTICIPATED;
+
+	public boolean isRequiredLogin() {
+		return this == POSTED || this == PARTICIPATED;
+	}
 }

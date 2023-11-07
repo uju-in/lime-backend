@@ -81,19 +81,11 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		return vote.endTime.before(LocalDateTime.now());
 	}
 
-	private BooleanExpression isPosted(Long memberId) {
-		if (memberId == null) {
-			memberId = 0L;
-		}
-
+	private BooleanExpression isPosted(final Long memberId) {
 		return vote.memberId.eq(memberId);
 	}
 
-	private BooleanExpression isParticipatedIn(Long memberId) {
-		if (memberId == null) {
-			memberId = 0L;
-		}
-
+	private BooleanExpression isParticipatedIn(final Long memberId) {
 		return vote.voters.any()
 			.memberId.eq(memberId);
 	}
