@@ -20,6 +20,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -98,6 +99,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 			.orderBy(new OrderSpecifier<>(Order.DESC, item.createdAt))
 			.transform(groupBy(item.id)
 				.list(Projections.constructor(BucketMemberItemSummary.class,
+					generateMemberItemCursorId(),
 					item.id,
 					item.name,
 					item.price,
@@ -144,6 +146,16 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 				memberItem.id.stringValue(), 8, '0'
 			))
 			.lt(cursorId);
+	}
+
+	private StringExpression generateMemberItemCursorId() {
+		return Expressions.stringTemplate(
+				"DATE_FORMAT({0}, {1})",
+				item.createdAt,
+				ConstantImpl.create("%Y%m%d%H%i%s"))
+			.concat(StringExpressions.lpad(
+				item.id.stringValue(), 8, '0'
+			));
 	}
 
 }
