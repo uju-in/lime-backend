@@ -17,6 +17,11 @@ public class FeedReader {
 
 	private final FeedRepository feedRepository;
 
+	public Feed read(final Long feedId) {
+		return feedRepository.findById(feedId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.FEED_NOT_FOUND));
+	}
+
 	public Feed read(
 		final Long feedId,
 		final Long memberId
