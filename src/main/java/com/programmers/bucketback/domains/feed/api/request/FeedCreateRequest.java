@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.feed.api.request;
 
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.domains.feed.application.vo.FeedCreateContent;
 import com.programmers.bucketback.global.annotation.Enum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,7 +23,7 @@ public record FeedCreateRequest(
 	String message
 
 ) {
-	public FeedContent toContent(){
-		return new FeedContent(hobby,bucketId,message);
+	public FeedCreateContent toContent() {
+		return new FeedCreateContent(hobby, bucketId, message);
 	}
 }

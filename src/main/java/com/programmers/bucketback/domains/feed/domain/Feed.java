@@ -70,4 +70,7 @@ public class Feed extends BaseEntity {
 		feedItem.changeFeed(this);
 	}
 
+	public void modifyFeed(final String message) {
+		this.message = message;
+	}
 }
