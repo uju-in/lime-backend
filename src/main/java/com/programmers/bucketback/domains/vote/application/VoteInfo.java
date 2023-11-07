@@ -11,7 +11,7 @@ import lombok.Builder;
 public record VoteInfo(
 	Long id,
 	String content,
-	LocalDateTime createAt,
+	LocalDateTime startTime,
 	boolean isVoting,
 	int participants,
 
@@ -25,7 +25,7 @@ public record VoteInfo(
 		return VoteInfo.builder()
 			.id(vote.getId())
 			.content(vote.getContent())
-			.createAt(vote.getCreatedAt())
+			.startTime(vote.getStartTime())
 			.isVoting(isVoting(vote.getEndTime()))
 			.participants(vote.getVoters().size())
 			.build();
@@ -39,7 +39,7 @@ public record VoteInfo(
 		return VoteInfo.builder()
 			.id(vote.getId())
 			.content(vote.getContent())
-			.createAt(vote.getCreatedAt())
+			.startTime(vote.getStartTime())
 			.isVoting(isVoting(vote.getEndTime()))
 			.participants(option1Votes + option2Votes)
 			.option1Votes(option1Votes)
