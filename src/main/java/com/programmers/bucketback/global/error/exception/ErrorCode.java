@@ -51,7 +51,9 @@ public enum ErrorCode {
 	INVENTORY_ITEM_NOT_FOUND("INVENTORY_003", "인벤토리의 아이템을 찾을 수 없습니다."),
 
 	//Feed
-	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다.");
+	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다."),
+	FEED_ALREADY_LIKED("FEED_002", "이미 좋아요룰 늘렀습니다."),
+	FEED_LIKE_NOT_FOUND("FEED_003", "좋아요한 피드를 찾을 수 없습니다.");
 
 	private final String code;
 	private final String message;
