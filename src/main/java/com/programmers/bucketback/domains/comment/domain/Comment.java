@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.comment.domain;
 
+import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 
 import jakarta.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "comments")
-public class Comment {
+public class Comment extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
