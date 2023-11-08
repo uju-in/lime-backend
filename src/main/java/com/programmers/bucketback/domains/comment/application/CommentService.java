@@ -3,6 +3,8 @@ package com.programmers.bucketback.domains.comment.application;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,9 +28,21 @@ public class CommentService {
 		final Long commentId,
 		final String content
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
 		commentValidator.validCommentInFeed(feedId, commentId);
 		commentValidator.validCommentOwner(commentId, memberId);
 		commentModifier.modify(commentId, content);
+	}
+
+	public void adoptComment(
+		final Long feedId,
+		final Long commentId
+	) {
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+		final Long memberId = MemberUtils.getCurrentMemberId();
+
+		commentModifier.adopt(feedId, commentId, memberId);
 	}
 }

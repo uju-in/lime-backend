@@ -32,6 +32,16 @@ public class CommentController {
 		return ResponseEntity.ok().build();
 	}
 
+	@PostMapping("/{commentId}/adoption")
+	public ResponseEntity<Void> adoptComment(
+		@PathVariable final Long feedId,
+		@PathVariable final Long commentId
+	) {
+		commentService.adoptComment(feedId, commentId);
+
+		return ResponseEntity.ok().build();
+	}
+
 	@PutMapping("/{commentId}")
 	public ResponseEntity<Void> modifyComment(
 		@PathVariable final Long feedId,
