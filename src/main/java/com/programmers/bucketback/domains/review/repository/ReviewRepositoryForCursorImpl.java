@@ -79,8 +79,7 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 			return null;
 		}
 
-		return generateCursorId()
-			.lt(cursorId);
+		return generateCursorId().lt(cursorId);
 	}
 
 	public StringExpression generateCursorId() {
