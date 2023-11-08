@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.inventory.application;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +13,7 @@ import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepository;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
+import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.domains.review.application.ReviewReader;
 import com.programmers.bucketback.domains.review.domain.Review;
@@ -33,6 +33,7 @@ public class InventoryReader {
 	private final InventoryItemRepository inventoryItemRepository;
 	private final MemberReader memberReader;
 	private final ReviewReader reviewReader;
+	private final ItemReader itemReader;
 
 	public boolean isCreated(
 		final Hobby hobby,
@@ -80,64 +81,33 @@ public class InventoryReader {
 	}
 
 	/** 내가 리뷰한 아이템 목록 조회 */
-	public InventoryGetReviewedItemResponse readReviewedItem(
+	public InventorReviewedItemCursorSummary readReviewedItem(
 		final Long inventoryId,
 		final CursorPageParameters parameters
 	) {
 		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
 
 		Long memberId = MemberUtils.getCurrentMemberId();
-		List<Long> itemIdsInInventory = read(inventoryId, memberId)
+		List<Long> itemIdsFromInventory = read(inventoryId, memberId)
 			.getInventoryItems().stream()
 			.map(inventoryItem -> inventoryItem.getItem().getId())
 			.toList();
 
 		List<Review> reviews = reviewReader.readByMemberId(memberId);
-		List<Long> reviewedItemIds = reviews.stream()
+		List<Long> itemIdsFromReview = reviews.stream()
 			.map(review -> review.getItemId())
 			.toList();
 
-		List<InventoryReviewedItem> inventoryReviewedItems = inventoryRepository.findReviewedItems(
-			reviewedItemIds,
-			itemIdsInInventory,
+		List<InventoryReviewItemSummary> summaries = itemReader.readReviewedItem(
+			itemIdsFromReview,
+			itemIdsFromInventory,
 			parameters.cursorId(),
 			pageSize
 		);
 
-		List<String> cursorIds = inventoryReviewedItems.stream()
-			.map(inventoryReviewedItem -> generateReviewedItemCursorId(inventoryReviewedItem))
-			.toList();
+		String nextCursorId = summaries.size() == 0 ? null : summaries.get(summaries.size() - 1).cursorId();
+		int summaryCount = summaries.size();
 
-		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
-
-		List<InventoryReviewedItemCursorSummary> inventoryReviewedItemCursorSummaries =
-			getInventoryReviewedItemCursorSummaries(inventoryReviewedItems, cursorIds);
-		int itemCount = inventoryReviewedItemCursorSummaries.size();
-
-		return new InventoryGetReviewedItemResponse(nextCursorId, itemCount, inventoryReviewedItemCursorSummaries);
-	}
-
-	private List<InventoryReviewedItemCursorSummary> getInventoryReviewedItemCursorSummaries(
-		final List<InventoryReviewedItem> inventoryReviewedItems,
-		final List<String> cursorIds
-	) {
-		List<InventoryReviewedItemCursorSummary> inventoryReviewedItemCursorSummaries =
-			IntStream.range(0, inventoryReviewedItems.size())
-				.mapToObj(i -> {
-					String cursorId = cursorIds.get(i);
-					InventoryReviewedItem inventoryReviewedItem = inventoryReviewedItems.get(i);
-
-					return InventoryReviewedItemCursorSummary.of(cursorId, inventoryReviewedItem);
-				}).toList();
-
-		return inventoryReviewedItemCursorSummaries;
-	}
-
-	private String generateReviewedItemCursorId(final InventoryReviewedItem inventoryReviewedItem) {
-		return inventoryReviewedItem.getCreatedAt().toString()
-			.replace("-", "")
-			.replace(":", "")
-			.replace(".", "")
-			+ String.format("%08d", inventoryReviewedItem.getItemId());
+		return new InventorReviewedItemCursorSummary(nextCursorId, summaryCount, summaries);
 	}
 }

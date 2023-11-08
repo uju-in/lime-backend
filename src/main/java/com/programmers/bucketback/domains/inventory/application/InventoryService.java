@@ -9,6 +9,7 @@ import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryItemGetResponse;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryCreateContent;
@@ -85,7 +86,9 @@ public class InventoryService {
 		final Long inventoryId,
 		final CursorPageParameters parameters
 	) {
-		return inventoryReader.readReviewedItem(inventoryId, parameters);
+		InventorReviewedItemCursorSummary inventorReviewedItemCursorSummary =
+			inventoryReader.readReviewedItem(inventoryId, parameters);
+		return new InventoryGetReviewedItemResponse(inventorReviewedItemCursorSummary);
 	}
 
 	private void validateDuplication(

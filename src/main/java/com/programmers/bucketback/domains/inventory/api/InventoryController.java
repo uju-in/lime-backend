@@ -16,7 +16,7 @@ import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryCre
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryUpdateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
-import com.programmers.bucketback.domains.inventory.application.InventoryGetReviewedItemResponse;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.application.InventoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
