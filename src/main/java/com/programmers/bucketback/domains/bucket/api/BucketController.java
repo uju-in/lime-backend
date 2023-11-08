@@ -59,8 +59,8 @@ public class BucketController {
 		@PathVariable final Long bucketId,
 		@ModelAttribute("request") @Valid final CursorRequest cursorRequest
 	) {
-		BucketGetMemberItemResponse bucketGetMemberItemResponse = bucketService.getMemberItemsForModify(bucketId,
-			cursorRequest.toParameters());
+		BucketGetMemberItemResponse bucketGetMemberItemResponse =
+			bucketService.getMemberItemsForModify(bucketId, cursorRequest.toParameters());
 
 		return ResponseEntity.ok(bucketGetMemberItemResponse);
 	}

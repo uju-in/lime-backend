@@ -23,7 +23,7 @@ public record BucketCreateRequest(
 	@Schema(description = "예산", example = "100000")
 	Integer bucketBudget,
 
-	@Schema(description = "여러 아이템 id")
+	@Schema(description = "여러 아이템 id", example = "[1,2]")
 	@NotNull(message = "아이템 id를 입력하세요")
 	List<Long> bucketItemIds
 ) {

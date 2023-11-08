@@ -46,6 +46,11 @@ public class BucketService {
 		bucketModifier.modify(bucket, content);
 	}
 
+	/** 버킷 삭제 */
+	public void deleteBucket(final Long bucketId) {
+		bucketRemover.remove(bucketId);
+	}
+	
 	/** 버킷 수정을 위한 멤버 아이템 목록 조회 */
 	public BucketGetMemberItemResponse getMemberItemsForModify(
 		final Long bucketId,
@@ -57,11 +62,6 @@ public class BucketService {
 			bucketReader.readByMemberItems(bucketId, memberId, parameters);
 
 		return new BucketGetMemberItemResponse(bucketMemberItemCursorSummary);
-	}
-
-	/** 버킷 삭제 */
-	public void deleteBucket(final Long bucketId) {
-		bucketRemover.remove(bucketId);
 	}
 
 	/** 버킷 상세 조회 */
