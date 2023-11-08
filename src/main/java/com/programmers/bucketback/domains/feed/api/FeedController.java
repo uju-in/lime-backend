@@ -25,7 +25,7 @@ public class FeedController {
 	private final FeedService feedService;
 
 	@Operation(summary = "피드 생성", description = "FeedCreateRequest 을 이용하여 피드를 생성힙니다.")
-	@PostMapping("/")
+	@PostMapping
 	public ResponseEntity<Void> createFeed(@RequestBody @Valid final FeedCreateRequest request) {
 		feedService.createFeed(request.toContent());
 
