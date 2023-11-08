@@ -57,10 +57,10 @@ public class CommentController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("")
+	@GetMapping
 	public ResponseEntity<CommentGetCursorResponse> getFeedComments(
 		@PathVariable final Long feedId,
-		@Valid @ModelAttribute("request") final CursorRequest cursorRequest
+		@Valid @ModelAttribute final CursorRequest cursorRequest
 	) {
 		CommentGetCursorResponse commentGetCursorResponse =
 			commentService.getFeedComments(feedId, cursorRequest.toParameters());
