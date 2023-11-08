@@ -2,7 +2,9 @@ package com.programmers.bucketback.domains.comment.application;
 
 import org.springframework.stereotype.Service;
 
+import com.programmers.bucketback.domains.comment.api.dto.response.CommentGetCursorResponse;
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -15,6 +17,7 @@ public class CommentService {
 	private final CommentAppender commentAppender;
 	private final CommentValidator commentValidator;
 	private final CommentModifier commentModifier;
+	private final CommentReader commentReader;
 
 	public void createComment(
 		final Long feedId,
@@ -32,6 +35,16 @@ public class CommentService {
 		commentValidator.validCommentInFeed(feedId, commentId);
 		commentValidator.validCommentOwner(commentId, memberId);
 		commentModifier.modify(commentId, content);
+	}
+
+	public CommentGetCursorResponse getFeedComments(
+		final Long feedId,
+		final CursorPageParameters parameters
+	) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+		CommentCursorSummary commentCursorSummary = commentReader.readByCursor(feedId, memberId, parameters);
+
+		return new CommentGetCursorResponse(commentCursorSummary);
 	}
 
 	public void adoptComment(
