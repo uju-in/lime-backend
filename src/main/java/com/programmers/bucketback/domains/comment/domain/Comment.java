@@ -56,7 +56,7 @@ public class Comment extends BaseEntity {
 		this.adoption = false;
 	}
 
-	public boolean containsFeed(final Long feedId) {
+	public boolean isInFeed(final Long feedId) {
 		Long thisFeedId = this.feed.getId();
 		return thisFeedId.equals(feedId);
 	}

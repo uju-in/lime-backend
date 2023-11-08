@@ -19,7 +19,7 @@ public class CommentValidator {
 		final Long commentId
 	) {
 		Comment comment = commentReader.read(commentId);
-		if (!comment.containsFeed(feedId)) {
+		if (!comment.isInFeed(feedId)) {
 			throw new BusinessException(ErrorCode.COMMENT_NOT_IN_FEED);
 		}
 	}
