@@ -30,7 +30,7 @@ public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryFor
 			.where(inventory.memberId.eq(memberId))
 			.fetch();
 
-		List<InventoryInfoSummary> transform = jpaQueryFactory
+		return jpaQueryFactory
 			.selectFrom(inventoryItem)
 			.join(item).on(inventoryItem.item.id.eq(item.id))
 			.where(inventoryItem.inventory.id.in(inventoryIds))
@@ -39,14 +39,12 @@ public class InventoryRepositoryForSummaryImpl implements InventoryRepositoryFor
 				.list(Projections.constructor(InventoryInfoSummary.class,
 						inventory.hobby,
 						inventory.id,
-						sum(item.price), //refactor
+						sum(item.price),
 						list(Projections.constructor(ItemImage.class,
 							item.id,
 							item.image
 						))
 					)
 				));
-
-		return transform;
 	}
 }

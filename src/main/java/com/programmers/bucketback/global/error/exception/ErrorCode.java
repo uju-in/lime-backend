@@ -13,6 +13,7 @@ public enum ErrorCode {
 	SECURITY_CONTEXT_NOT_FOUND("COMMON_003", "Security context를 찾을 수 없습니다."),
 	MAIL_SEND_FAIL("COMMON_004", "이메일 인증코드 전송이 실패했습니다."),
 	UNAUTHORIZED("COMMON_005", "로그인이 필요한 기능입니다."),
+	FORBIDDEN("COMMON_006", "권한이 없습니다."),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -60,7 +61,9 @@ public enum ErrorCode {
 	//Comment
 	COMMENT_NOT_FOUND("COMMENT_001", "피드 댓글을 찾을 수 없습니다."),
 	COMMENT_NOT_IN_FEED("COMMENT_002", "피드에 존재하지 않은 댓글 입니다."),
-	COMMENT_NOT_MINE("COMMENT_003", "댓글 작성자와 일치 하지 않은 사용자 입니다.");
+	COMMENT_NOT_MINE("COMMENT_003", "댓글 작성자와 일치 하지 않은 사용자 입니다."),
+	COMMENT_CANNOT_ADOPT("COMMENT_004", "본인의 댓글을 채택할 수 없습니다."),
+	;
 
 	private final String code;
 	private final String message;

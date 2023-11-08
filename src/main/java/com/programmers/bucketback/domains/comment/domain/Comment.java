@@ -57,7 +57,7 @@ public class Comment extends BaseEntity {
 	}
 
 	public boolean isInFeed(final Long feedId) {
-		Long thisFeedId = this.feed.getId();
+		final Long thisFeedId = this.feed.getId();
 		return thisFeedId.equals(feedId);
 	}
 
@@ -67,5 +67,9 @@ public class Comment extends BaseEntity {
 
 	public void changeContent(final String content) {
 		this.content = content;
+	}
+
+	public void adopt() {
+		this.adoption = true;
 	}
 }
