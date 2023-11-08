@@ -9,4 +9,6 @@ import com.programmers.bucketback.domains.item.domain.Item;
 public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryForCursor {
 
 	List<Item> findItemsByNameContains(String name);
+
+	boolean existsItemsByUrl(String url);
 }

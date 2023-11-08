@@ -17,6 +17,7 @@ public class ReviewService {
 	private final ReviewModifier reviewModifier;
 	private final ReviewValidator reviewValidator;
 	private final ReviewCursorReader reviewCursorReader;
+	private final ReviewRemover reviewRemover;
 
 	public void createReview(
 		final Long itemId,
@@ -42,5 +43,15 @@ public class ReviewService {
 		final CursorPageParameters parameters
 	) {
 		return reviewCursorReader.readByCursor(itemId, parameters);
+	}
+
+	public void deleteReview(
+		final Long itemId,
+		final Long reviewId
+	) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+		reviewValidator.validItemReview(itemId, reviewId);
+		reviewValidator.validOwner(reviewId, memberId);
+		reviewRemover.remove(reviewId);
 	}
 }
