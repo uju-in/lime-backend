@@ -3,7 +3,6 @@ package com.programmers.bucketback.domains.comment.application;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.repository.CommentRepository;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CommentReader {
 
 	private final CommentRepository commentRepository;
