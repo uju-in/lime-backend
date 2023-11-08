@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.feed.application;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.feed.application.vo.FeedCreateContent;
 import com.programmers.bucketback.domains.feed.application.vo.FeedUpdateContent;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class FeedService {
 
 	private final FeedAppender feedAppender;

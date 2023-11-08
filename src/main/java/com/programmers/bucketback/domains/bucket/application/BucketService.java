@@ -9,6 +9,7 @@ import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMembe
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketItemContent;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
@@ -52,10 +53,10 @@ public class BucketService {
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 
-		BucketGetMemberItemResponse bucketGetMemberItemResponse =
+		BucketMemberItemCursorSummary bucketMemberItemCursorSummary =
 			bucketReader.readByMemberItems(bucketId, memberId, parameters);
 
-		return bucketGetMemberItemResponse;
+		return new BucketGetMemberItemResponse(bucketMemberItemCursorSummary);
 	}
 
 	/** 버킷 삭제 */
