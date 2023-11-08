@@ -60,12 +60,10 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 	}
 
 	private BooleanExpression getIsSelected(final List<Long> itemIdsFromBucketItem) {
-		BooleanExpression isSelected = new CaseBuilder()
+		return new CaseBuilder()
 			.when(memberItem.item.id.in(itemIdsFromBucketItem))
 			.then(true)
 			.otherwise(false);
-
-		return isSelected;
 	}
 
 	private BooleanExpression cursorIdConditionFromMemberItem(final String cursorId) {
