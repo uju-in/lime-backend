@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.review.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,4 +12,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
 
 	@Query("SELECT ROUND(AVG(r.rating), 1) FROM Review r WHERE r.itemId = :itemId")
 	double getAvgRatingByReviewId(@Param("itemId") Long itemId);
+
+	List<Review> findByMemberId(Long memberId);
 }
