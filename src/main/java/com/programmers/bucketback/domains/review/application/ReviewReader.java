@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.review.application;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,5 +22,9 @@ public class ReviewReader {
 	public Review read(final Long reviewId) {
 		return reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
+	}
+
+	public List<Review> readByMemberId(final Long memberId) {
+		return reviewRepository.findByMemberId(memberId);
 	}
 }

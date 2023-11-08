@@ -47,7 +47,7 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 			.transform(groupBy(item.id)
 				.list(Projections.constructor(BucketMemberItemSummary.class,
 					generateMemberItemCursorId(),
-					getIsSelected(itemIdsFromBucketItem),
+					isSelected(itemIdsFromBucketItem),
 					item.createdAt,
 					Projections.constructor(ItemInfo.class,
 						item.id,
@@ -59,13 +59,11 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 			);
 	}
 
-	private BooleanExpression getIsSelected(final List<Long> itemIdsFromBucketItem) {
-		BooleanExpression isSelected = new CaseBuilder()
+	private BooleanExpression isSelected(final List<Long> itemIdsFromBucketItem) {
+		return new CaseBuilder()
 			.when(memberItem.item.id.in(itemIdsFromBucketItem))
 			.then(true)
 			.otherwise(false);
-
-		return isSelected;
 	}
 
 	private BooleanExpression cursorIdConditionFromMemberItem(final String cursorId) {
