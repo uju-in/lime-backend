@@ -55,4 +55,17 @@ public class Comment extends BaseEntity {
 		this.content = content;
 		this.adoption = false;
 	}
+
+	public boolean isInFeed(final Long feedId) {
+		Long thisFeedId = this.feed.getId();
+		return thisFeedId.equals(feedId);
+	}
+
+	public boolean isOwner(final Long memberId) {
+		return this.memberId.equals(memberId);
+	}
+
+	public void changeContent(final String content) {
+		this.content = content;
+	}
 }

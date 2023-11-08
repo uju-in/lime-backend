@@ -55,7 +55,12 @@ public enum ErrorCode {
 	//Feed
 	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다."),
 	FEED_ALREADY_LIKED("FEED_002", "이미 좋아요룰 늘렀습니다."),
-	FEED_LIKE_NOT_FOUND("FEED_003", "좋아요한 피드를 찾을 수 없습니다.");
+	FEED_LIKE_NOT_FOUND("FEED_003", "좋아요한 피드를 찾을 수 없습니다."),
+
+	//Comment
+	COMMENT_NOT_FOUND("COMMENT_001", "피드 댓글을 찾을 수 없습니다."),
+	COMMENT_NOT_IN_FEED("COMMENT_002", "피드에 존재하지 않은 댓글 입니다."),
+	COMMENT_NOT_MINE("COMMENT_003", "댓글 작성자와 일치 하지 않은 사용자 입니다.");
 
 	private final String code;
 	private final String message;
