@@ -42,7 +42,7 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/myItems")
+	@PostMapping("/myitems")
 	public ResponseEntity<Void> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
 		itemService.addItem(request.toAddMemberItemServiceRequest());
 
@@ -56,14 +56,14 @@ public class ItemController {
 		return ResponseEntity.ok(response.toItemGetResponse());
 	}
 
-	@DeleteMapping("/myItems/{itemId}")
+	@DeleteMapping("/myitems/{itemId}")
 	public ResponseEntity<Void> deleteMyItem(@PathVariable final Long itemId) {
 		itemService.removeMemberItem(itemId);
 
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/itemNames")
+	@GetMapping("/item-names")
 	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
 		GetItemNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
 
