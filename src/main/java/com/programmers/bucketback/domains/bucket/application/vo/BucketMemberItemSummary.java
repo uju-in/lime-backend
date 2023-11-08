@@ -2,13 +2,12 @@ package com.programmers.bucketback.domains.bucket.application.vo;
 
 import java.time.LocalDateTime;
 
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
+
 public record BucketMemberItemSummary(
 	String cursorId,
-	Long itemId,
-	String name,
-	Integer price,
-	String image,
 	boolean isSelected,
-	LocalDateTime createdAt
+	LocalDateTime createdAt,
+	ItemInfo itemInfo
 ) {
 }

@@ -17,6 +17,7 @@ import com.programmers.bucketback.domains.bucket.repository.BucketItemRepository
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.item.application.MemberItemReader;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -29,6 +30,7 @@ public class BucketReader {
 
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
+	private final MemberItemReader memberItemReader;
 
 	/** 버킷 정보 조회 */
 	public Bucket read(final Long bucketId) {
@@ -53,9 +55,7 @@ public class BucketReader {
 		return bucketItemRepository.findByBucketId(bucketId);
 	}
 
-	/**
-	 * 버킷 수정을 위한 MemberItem 커서 조회
-	 */
+	/** 버킷 수정을 위한 MemberItem 커서 조회 */
 	public BucketMemberItemCursorSummary readByMemberItems(
 		final Long bucketId,
 		final Long memberId,
@@ -67,9 +67,13 @@ public class BucketReader {
 		List<Long> itemIdsFromBucketItem = bucket.getBucketItems().stream()
 			.map(bucketItem -> bucketItem.getItem().getId())
 			.toList();
+		List<Long> itemIdsFromMemberItem = memberItemReader.readByMemberId(memberId).stream()
+			.map(memberItem -> memberItem.getItem().getId())
+			.toList();
 
-		List<BucketMemberItemSummary> summaries = bucketRepository.findBucketMemberItemsByCursor(
+		List<BucketMemberItemSummary> summaries = memberItemReader.readBucketMemberItem(
 			itemIdsFromBucketItem,
+			itemIdsFromMemberItem,
 			memberId,
 			parameters.cursorId(),
 			pageSize

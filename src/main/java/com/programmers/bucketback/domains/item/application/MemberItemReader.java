@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.item.repository.MemberItemRepository;
@@ -35,5 +36,21 @@ public class MemberItemReader {
 
 	public List<MemberItem> readByMemberId(final Long memberId) {
 		return memberItemRepository.findByMemberId(memberId);
+	}
+
+	public List<BucketMemberItemSummary> readBucketMemberItem(
+		final List<Long> itemIdsFromBucketItem,
+		final List<Long> itemIdsFromMemberItem,
+		final Long memberId,
+		final String cursorId,
+		final int pageSize
+	) {
+		return memberItemRepository.findBucketMemberItemsByCursor(
+			itemIdsFromBucketItem,
+			itemIdsFromMemberItem,
+			memberId,
+			cursorId,
+			pageSize
+		);
 	}
 }
