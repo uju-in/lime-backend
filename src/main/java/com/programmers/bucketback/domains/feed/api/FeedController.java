@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.feed.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.feed.api.request.FeedCreateRequest;
 import com.programmers.bucketback.domains.feed.api.request.FeedUpdateRequest;
+import com.programmers.bucketback.domains.feed.api.response.FeedGetResponse;
 import com.programmers.bucketback.domains.feed.application.FeedService;
+import com.programmers.bucketback.domains.feed.application.dto.response.GetFeedServiceResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -65,5 +68,13 @@ public class FeedController {
 		feedService.unLikeFeed(feedId);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/{feedId}")
+	public ResponseEntity<FeedGetResponse> getFeed(@PathVariable final Long feedId) {
+		final GetFeedServiceResponse serviceResponse = feedService.getFeed(feedId);
+		final FeedGetResponse response = FeedGetResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
 	}
 }

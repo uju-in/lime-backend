@@ -31,32 +31,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed extends BaseEntity {
 
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+	private final List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+	private final List<FeedLike> likes = new ArrayList<>();
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
+	private final List<FeedItem> feedItems = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-
 	@NotNull
 	@Column(name = "member_id")
 	private Long memberId;
-
 	@NotNull
 	@Column(name = "hobby")
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
-
 	@NotNull
 	@Column(name = "message")
 	private String message;
-
 	@Embedded
 	private BucketInfo bucketInfo;
-
-	@OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
-	private List<FeedItem> feedItems = new ArrayList<>();
-  
-	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
-	private final List<Comment> comments = new ArrayList<>();
 
 	@Builder
 	public Feed(
