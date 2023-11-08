@@ -82,7 +82,7 @@ public class BucketReader {
 		String nextCursorId = summaries.size() == 0 ? null : summaries.get(summaries.size() - 1).cursorId();
 		int summaryCount = summaries.size();
 
-		return BucketMemberItemCursorSummary.of(nextCursorId, summaryCount, summaries);
+		return new BucketMemberItemCursorSummary(nextCursorId, summaryCount, summaries);
 	}
 
 	/** 버킷 정보 커서 페이징 조회 */
