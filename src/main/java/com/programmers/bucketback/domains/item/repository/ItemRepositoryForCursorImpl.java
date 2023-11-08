@@ -65,7 +65,7 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			.transform(groupBy(item.id)
 				.list(Projections.constructor(InventoryReviewItemSummary.class,
 					generateItemCursorId(),
-					getIsSelected(itemIdsFromInventory),
+					isSelected(itemIdsFromInventory),
 					item.createdAt,
 					Projections.constructor(ItemInfo.class,
 						item.id,
@@ -77,7 +77,7 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			);
 	}
 
-	private BooleanExpression getIsSelected(final List<Long> itemIdsFromInventory) {
+	private BooleanExpression isSelected(final List<Long> itemIdsFromInventory) {
 		return new CaseBuilder()
 			.when(item.id.in(itemIdsFromInventory))
 			.then(true)

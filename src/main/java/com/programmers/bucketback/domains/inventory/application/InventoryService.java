@@ -88,6 +88,7 @@ public class InventoryService {
 	) {
 		InventorReviewedItemCursorSummary inventorReviewedItemCursorSummary =
 			inventoryReader.readReviewedItem(inventoryId, parameters);
+
 		return new InventoryGetReviewedItemResponse(inventorReviewedItemCursorSummary);
 	}
 
