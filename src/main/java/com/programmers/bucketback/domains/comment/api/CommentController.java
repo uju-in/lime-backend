@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.comment.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,6 +40,16 @@ public class CommentController {
 		@Valid @RequestBody final CommentModifyRequest request
 	) {
 		commentService.modifyComment(feedId, commentId, request.content());
+
+		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("/{commentId}")
+	public ResponseEntity<Void> deleteComment(
+		@PathVariable final Long feedId,
+		@PathVariable final Long commentId
+	) {
+		commentService.deleteComment(feedId, commentId);
 
 		return ResponseEntity.ok().build();
 	}

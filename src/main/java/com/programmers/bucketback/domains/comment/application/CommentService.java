@@ -13,6 +13,7 @@ public class CommentService {
 	private final CommentAppender commentAppender;
 	private final CommentValidator commentValidator;
 	private final CommentModifier commentModifier;
+	private final CommentRemover commentRemover;
 
 	public void createComment(
 		final Long feedId,
@@ -30,5 +31,15 @@ public class CommentService {
 		commentValidator.validCommentInFeed(feedId, commentId);
 		commentValidator.validCommentOwner(commentId, memberId);
 		commentModifier.modify(commentId, content);
+	}
+
+	public void deleteComment(
+		final Long feedId,
+		final Long commentId
+	) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+		commentValidator.validCommentInFeed(feedId, commentId);
+		commentValidator.validCommentOwner(commentId, memberId);
+		commentRemover.remove(commentId);
 	}
 }
