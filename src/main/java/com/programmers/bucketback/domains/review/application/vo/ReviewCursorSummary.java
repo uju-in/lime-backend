@@ -22,18 +22,4 @@ public record ReviewCursorSummary(
 
 	LocalDateTime updatedAt
 ) {
-	public static ReviewCursorSummary of(
-		final String cursorId,
-		final ReviewSummary reviewSummary
-	) {
-		return ReviewCursorSummary.builder()
-			.cursorId(cursorId)
-			.memberInfo(reviewSummary.memberInfo())
-			.reviewId(reviewSummary.reviewId())
-			.rate(reviewSummary.rate())
-			.content(reviewSummary.content())
-			.createdAt(reviewSummary.createdAt())
-			.updatedAt(reviewSummary.updatedAt())
-			.build();
-	}
 }

@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
 import com.programmers.bucketback.domains.vote.domain.Vote;
-import com.programmers.bucketback.domains.vote.repository.VoteReposiory;
+import com.programmers.bucketback.domains.vote.repository.VoteRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VoteAppender {
 
-	private final VoteReposiory voteReposiory;
+	private final VoteRepository voteRepository;
 
 	@Transactional
 	public Vote append(
@@ -28,6 +28,6 @@ public class VoteAppender {
 			.content(request.content())
 			.build();
 
-		return voteReposiory.save(vote);
+		return voteRepository.save(vote);
 	}
 }

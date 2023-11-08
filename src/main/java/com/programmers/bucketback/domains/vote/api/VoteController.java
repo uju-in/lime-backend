@@ -3,18 +3,25 @@ package com.programmers.bucketback.domains.vote.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateResponse;
+import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByCursorResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
+import com.programmers.bucketback.domains.vote.application.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +36,7 @@ public class VoteController {
 	@PostMapping
 	public ResponseEntity<VoteCreateResponse> createVote(@Valid @RequestBody final VoteCreateRequest request) {
 		final Long voteId = voteService.createVote(request.toCreateVoteServiceRequest());
-		VoteCreateResponse response = new VoteCreateResponse(voteId);
+		final VoteCreateResponse response = new VoteCreateResponse(voteId);
 
 		return ResponseEntity.ok(response);
 	}
@@ -53,9 +60,28 @@ public class VoteController {
 
 	@GetMapping("{voteId}")
 	public ResponseEntity<VoteGetResponse> getVote(@PathVariable final Long voteId) {
-		GetVoteServiceResponse voteServiceResponse = voteService.getVote(voteId);
-		VoteGetResponse response = VoteGetResponse.from(voteServiceResponse);
+		final GetVoteServiceResponse voteServiceResponse = voteService.getVote(voteId);
+		final VoteGetResponse response = VoteGetResponse.from(voteServiceResponse);
 
 		return ResponseEntity.ok(response);
 	}
+
+	@GetMapping
+	public ResponseEntity<VoteGetByCursorResponse> getVotesByCursor(
+		@RequestParam final String hobby,
+		@RequestParam(name = "status") final String statusCondition,
+		@RequestParam(required = false, name = "sort") final String sortCondition,
+		@ModelAttribute @Valid final CursorRequest request
+	) {
+		final GetVotesServiceResponse serviceResponse = voteService.getVotesByCursor(
+			Hobby.valueOf(hobby.toUpperCase()),
+			VoteStatusCondition.valueOf(statusCondition.toUpperCase()),
+			sortCondition,
+			request.toParameters()
+		);
+		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
+	}
+
 }

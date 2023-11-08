@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
+import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.common.Hobby;
 
@@ -51,6 +52,9 @@ public class Feed extends BaseEntity {
 	@Embedded
 	private BucketInfo bucketInfo;
 
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+	private final List<Comment> comments = new ArrayList<>();
+
 	@Builder
 	public Feed(
 		final Long memberId,
@@ -70,4 +74,7 @@ public class Feed extends BaseEntity {
 		feedItem.changeFeed(this);
 	}
 
+	public void modifyFeed(final String message) {
+		this.message = message;
+	}
 }

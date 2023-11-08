@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.review.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,5 +61,15 @@ public class ReviewController {
 		);
 
 		return ResponseEntity.ok(serviceResponse.toReviewGetByCursorResponse());
+	}
+
+	@DeleteMapping("/{reviewId}")
+	public ResponseEntity<Void> deleteReview(
+		@PathVariable final Long itemId,
+		@PathVariable final Long reviewId
+	) {
+		reviewService.deleteReview(itemId, reviewId);
+
+		return ResponseEntity.ok().build();
 	}
 }

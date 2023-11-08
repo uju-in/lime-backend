@@ -2,10 +2,10 @@ package com.programmers.bucketback.domains.review.repository;
 
 import java.util.List;
 
-import com.programmers.bucketback.domains.review.application.vo.ReviewSummary;
+import com.programmers.bucketback.domains.review.application.vo.ReviewCursorSummary;
 
 public interface ReviewRepositoryForCursor {
-	List<ReviewSummary> findAllByCursor(
+	List<ReviewCursorSummary> findAllByCursor(
 		Long itemId,
 		String cursorId,
 		int pageSize

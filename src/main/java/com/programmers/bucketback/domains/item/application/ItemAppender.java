@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.item.application;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.item.application.dto.CreateItemServiceRequest;
 import com.programmers.bucketback.domains.item.domain.Item;
@@ -11,13 +10,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class CreateItemService {
+public class ItemAppender {
 
 	private final ItemRepository itemRepository;
 
-	@Transactional
-	public void createItem(final CreateItemServiceRequest request) {
+	public Long append(final CreateItemServiceRequest request) {
 		Item item = Item.builder().
 			hobby(request.hobby()).
 			image(request.imageUrl()).
@@ -26,6 +23,7 @@ public class CreateItemService {
 			name(request.itemName())
 			.build();
 
-		itemRepository.save(item);
+		Item savedItem = itemRepository.save(item);
+		return savedItem.getId();
 	}
 }
