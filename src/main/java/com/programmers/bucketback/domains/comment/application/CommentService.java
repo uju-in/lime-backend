@@ -45,6 +45,7 @@ public class CommentService {
 		CommentCursorSummary commentCursorSummary = commentReader.readByCursor(feedId, memberId, parameters);
 
 		return new CommentGetCursorResponse(commentCursorSummary);
+	}
 
 	public void adoptComment(
 		final Long feedId,
