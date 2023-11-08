@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.comment.api.dto.request.CommentCreateRequest;
 import com.programmers.bucketback.domains.comment.api.dto.request.CommentModifyRequest;
-import com.programmers.bucketback.domains.comment.application.CommentGetCursorResponse;
+import com.programmers.bucketback.domains.comment.api.dto.response.CommentGetCursorResponse;
 import com.programmers.bucketback.domains.comment.application.CommentService;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
 

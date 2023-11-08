@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.comment.application;
 
 import org.springframework.stereotype.Service;
 
+import com.programmers.bucketback.domains.comment.api.dto.response.CommentGetCursorResponse;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 
