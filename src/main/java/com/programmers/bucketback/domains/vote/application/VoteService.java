@@ -53,6 +53,15 @@ public class VoteService {
 		voteManager.vote(vote, memberId, itemId);
 	}
 
+	public void cancelVote(final Long voteId) {
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.MEMBER_ANONYMOUS); // 더 핏한 예러코드로 바꿀 예정
+		}
+		final Long memberId = MemberUtils.getCurrentMemberId();
+
+		voteManager.cancel(voteId, memberId);
+	}
+
 	public void deleteVote(final Long voteId) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
