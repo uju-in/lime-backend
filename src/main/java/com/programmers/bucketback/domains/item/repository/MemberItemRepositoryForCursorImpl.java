@@ -34,10 +34,6 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 		final String cursorId,
 		final int pageSize
 	) {
-		BooleanExpression isSelected = new CaseBuilder()
-			.when(memberItem.item.id.in(itemIdsFromBucketItem))
-			.then(true)
-			.otherwise(false);
 
 		return jpaQueryFactory
 			.selectFrom(item)
@@ -51,7 +47,7 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 			.transform(groupBy(item.id)
 				.list(Projections.constructor(BucketMemberItemSummary.class,
 					generateMemberItemCursorId(),
-					isSelected,
+					getIsSelected(itemIdsFromBucketItem),
 					item.createdAt,
 					Projections.constructor(ItemInfo.class,
 						item.id,
@@ -61,6 +57,15 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 					)
 				))
 			);
+	}
+
+	private BooleanExpression getIsSelected(final List<Long> itemIdsFromBucketItem) {
+		BooleanExpression isSelected = new CaseBuilder()
+			.when(memberItem.item.id.in(itemIdsFromBucketItem))
+			.then(true)
+			.otherwise(false);
+
+		return isSelected;
 	}
 
 	private BooleanExpression cursorIdConditionFromMemberItem(final String cursorId) {
