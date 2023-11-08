@@ -3,7 +3,6 @@ package com.programmers.bucketback.domains.feed.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.common.Hobby;
@@ -26,30 +25,34 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "feeds")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed extends BaseEntity {
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
-	private final List<FeedItem> feedItems = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
+
 	@NotNull
 	@Column(name = "member_id")
 	private Long memberId;
+
 	@NotNull
 	@Column(name = "hobby")
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
+
 	@NotNull
 	@Column(name = "message")
 	private String message;
+
 	@Embedded
 	private BucketInfo bucketInfo;
+
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
+	private List<FeedItem> feedItems = new ArrayList<>();
 
 	@Builder
 	public Feed(

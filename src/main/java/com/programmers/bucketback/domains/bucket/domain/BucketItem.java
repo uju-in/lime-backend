@@ -1,6 +1,5 @@
 package com.programmers.bucketback.domains.bucket.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.item.domain.Item;
 
@@ -32,12 +31,11 @@ public class BucketItem extends BaseEntity {
 	@JoinColumn(name = "item_id")
 	private Item item;
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "bucket_id")
 	private Bucket bucket;
 
-	public BucketItem(final Item item){
+	public BucketItem(final Item item) {
 		this.item = item;
 	}
 

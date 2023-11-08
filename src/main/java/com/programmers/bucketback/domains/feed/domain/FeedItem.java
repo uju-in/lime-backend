@@ -1,6 +1,5 @@
 package com.programmers.bucketback.domains.feed.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.bucketback.domains.item.domain.Item;
 
 import jakarta.persistence.Column;
@@ -17,9 +16,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "feed_items")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedItem {
 
 	@Id
@@ -31,12 +30,11 @@ public class FeedItem {
 	@JoinColumn(name = "item_id")
 	private Item item;
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "bucket_id")
+	@JoinColumn(name = "feed_id")
 	private Feed feed;
 
-	public FeedItem(final Item item){
+	public FeedItem(final Item item) {
 		this.item = item;
 	}
 
