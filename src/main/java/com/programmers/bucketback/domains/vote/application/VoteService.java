@@ -53,6 +53,10 @@ public class VoteService {
 		voteManager.vote(vote, memberId, itemId);
 	}
 
+	public void cancelVote(final Long voteId) {
+		voteManager.cancel(voteId);
+	}
+
 	public void deleteVote(final Long voteId) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);

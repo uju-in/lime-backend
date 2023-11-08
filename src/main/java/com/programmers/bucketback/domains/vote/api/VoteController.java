@@ -51,6 +51,13 @@ public class VoteController {
 		return ResponseEntity.ok().build();
 	}
 
+	@DeleteMapping("/{voteId}/cancel")
+	public ResponseEntity<Void> cancelVote(@PathVariable final Long voteId) {
+		voteService.cancelVote(voteId);
+
+		return ResponseEntity.ok().build();
+	}
+
 	@DeleteMapping("{voteId}")
 	public ResponseEntity<Void> deleteVote(@PathVariable final Long voteId) {
 		voteService.deleteVote(voteId);
