@@ -1,7 +1,10 @@
 package com.programmers.bucketback.domains.item.application;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.item.repository.MemberItemRepository;
@@ -24,10 +27,30 @@ public class MemberItemReader {
 
 	public MemberItem read(
 		final Long itemId,
-		final Long memberIteId
+		final Long memberItemId
 	) {
 		Item item = itemReader.read(itemId);
-		return memberItemRepository.findMemberItemByMembersIdAndItem(memberIteId, item)
+		return memberItemRepository.findMemberItemByMemberIdAndItem(memberItemId, item)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_ITEM_NOT_FOUND));
+	}
+
+	public List<MemberItem> readByMemberId(final Long memberId) {
+		return memberItemRepository.findByMemberId(memberId);
+	}
+
+	public List<BucketMemberItemSummary> readBucketMemberItem(
+		final List<Long> itemIdsFromBucketItem,
+		final List<Long> itemIdsFromMemberItem,
+		final Long memberId,
+		final String cursorId,
+		final int pageSize
+	) {
+		return memberItemRepository.findBucketMemberItemsByCursor(
+			itemIdsFromBucketItem,
+			itemIdsFromMemberItem,
+			memberId,
+			cursorId,
+			pageSize
+		);
 	}
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMemberItemResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.BucketService;
 import com.programmers.bucketback.domains.common.Hobby;
@@ -50,6 +51,18 @@ public class BucketController {
 		bucketService.modifyBucket(bucketId, request.toContent());
 
 		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "버킷 수정을 위한 내가 담은 아이템 목록 커서 조회")
+	@GetMapping("/buckets/{bucketId}/myitems")
+	public ResponseEntity<BucketGetMemberItemResponse> getMemberItemsWithBucket(
+		@PathVariable final Long bucketId,
+		@ModelAttribute("request") @Valid final CursorRequest cursorRequest
+	) {
+		BucketGetMemberItemResponse bucketGetMemberItemResponse = bucketService.getMemberItemsWithBucket(bucketId,
+			cursorRequest.toParameters());
+
+		return ResponseEntity.ok(bucketGetMemberItemResponse);
 	}
 
 	@Operation(summary = "버킷 삭제", description = "BucketId을 이용하여 버킷을 삭제힙니다.")

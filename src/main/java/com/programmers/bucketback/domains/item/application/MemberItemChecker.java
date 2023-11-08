@@ -20,7 +20,7 @@ public class MemberItemChecker {
 		final Item item
 	) {
 		return memberItemRepository.
-			existsMemberItemByMembersIdAndItem(
+			existsMemberItemByMemberIdAndItem(
 				memberId,
 				item
 			);

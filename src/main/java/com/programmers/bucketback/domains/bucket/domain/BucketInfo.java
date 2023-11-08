@@ -16,13 +16,14 @@ public class BucketInfo {
 	@Column(name = "name")
 	private String name;
 
+	@NotNull
 	@Column(name = "budget")
 	private Integer budget;
 
 	public BucketInfo(
 		final String name,
 		final Integer budget
-	){
+	) {
 		this.name = name;
 		this.budget = budget;
 	}

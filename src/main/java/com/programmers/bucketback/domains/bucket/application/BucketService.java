@@ -4,14 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMemberItemResponse;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketItemContent;
-import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 
@@ -42,6 +44,19 @@ public class BucketService {
 		Bucket bucket = bucketReader.read(bucketId, memberId);
 
 		bucketModifier.modify(bucket, content);
+	}
+
+	/** 버킷 수정을 위한 멤버 아이템 목록 조회 */
+	public BucketGetMemberItemResponse getMemberItemsWithBucket(
+		final Long bucketId,
+		final CursorPageParameters parameters
+	) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+
+		BucketMemberItemCursorSummary bucketMemberItemCursorSummary =
+			bucketReader.readByMemberItems(bucketId, memberId, parameters);
+
+		return new BucketGetMemberItemResponse(bucketMemberItemCursorSummary);
 	}
 
 	/** 버킷 삭제 */

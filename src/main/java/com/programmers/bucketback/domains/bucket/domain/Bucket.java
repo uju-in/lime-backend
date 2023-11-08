@@ -3,7 +3,6 @@ package com.programmers.bucketback.domains.bucket.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.common.Hobby;
 
@@ -47,7 +46,6 @@ public class Bucket extends BaseEntity {
 	@Embedded
 	private BucketInfo bucketInfo;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
 	private List<BucketItem> bucketItems = new ArrayList<>();
 
@@ -57,7 +55,7 @@ public class Bucket extends BaseEntity {
 		final Long memberId,
 		final String name,
 		final Integer budget
-	){
+	) {
 		this.hobby = hobby;
 		this.memberId = memberId;
 		this.bucketInfo = new BucketInfo(name, budget);
@@ -74,10 +72,10 @@ public class Bucket extends BaseEntity {
 		final Integer budget
 	) {
 		this.hobby = hobby;
-		this.bucketInfo = new BucketInfo(name,budget);
+		this.bucketInfo = new BucketInfo(name, budget);
 	}
 
-	public void removeBucketItems(){
+	public void removeBucketItems() {
 		this.bucketItems.clear();
 	}
 }
