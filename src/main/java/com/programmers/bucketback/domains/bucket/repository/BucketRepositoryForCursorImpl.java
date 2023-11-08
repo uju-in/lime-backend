@@ -136,16 +136,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 			return null;
 		}
 
-		StringTemplate dateCursor = Expressions.stringTemplate(
-			"DATE_FORMAT({0}, {1})",
-			memberItem.createdAt,
-			ConstantImpl.create("%Y%m%d%H%i%s")
-		);
-
-		return dateCursor.concat(StringExpressions.lpad(
-				memberItem.id.stringValue(), 8, '0'
-			))
-			.lt(cursorId);
+		return generateMemberItemCursorId().lt(cursorId);
 	}
 
 	private StringExpression generateMemberItemCursorId() {
