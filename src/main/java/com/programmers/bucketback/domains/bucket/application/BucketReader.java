@@ -135,4 +135,7 @@ public class BucketReader {
 			+ String.format("%08d", bucketSummary.getBucketId());
 	}
 
+	public List<Bucket> readByMemberId(final Long memberId) {
+		return bucketRepository.findByMemberId(memberId);
+	}
 }

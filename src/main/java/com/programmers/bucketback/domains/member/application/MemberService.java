@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
+import com.programmers.bucketback.domains.member.application.vo.MyPage;
 import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.global.error.exception.BusinessException;
@@ -75,5 +76,9 @@ public class MemberService {
 		} catch (final MessagingException e) {
 			throw new BusinessException(ErrorCode.MAIL_SEND_FAIL);
 		}
+	}
+
+	public MyPage getMyPage(final String nickname) {
+		return memberReader.readMyPage(nickname);
 	}
 }
