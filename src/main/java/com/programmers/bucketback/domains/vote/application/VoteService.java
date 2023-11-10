@@ -57,9 +57,11 @@ public class VoteService {
 		if (!MemberUtils.isLoggedIn()) {
 			throw new BusinessException(ErrorCode.UNAUTHORIZED);
 		}
-		final Long memberId = MemberUtils.getCurrentMemberId();
 
-		voteManager.cancel(voteId, memberId);
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Vote vote = voteReader.read(voteId);
+
+		voteManager.cancel(vote, memberId);
 	}
 
 	public void deleteVote(final Long voteId) {

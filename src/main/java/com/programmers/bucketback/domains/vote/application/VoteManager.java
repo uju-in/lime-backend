@@ -32,13 +32,9 @@ public class VoteManager {
 
 	@Transactional
 	public void cancel(
-		final Long voteId,
+		final Vote vote,
 		final Long memberId
 	) {
-		final Vote vote = voteReader.read(voteId);
-
-		if (voterRepository.existsByVoteAndMemberId(vote, memberId)) {
-			voterRepository.deleteByVoteAndMemberId(vote, memberId);
-		}
+		voterRepository.deleteByVoteAndMemberId(vote, memberId);
 	}
 }
