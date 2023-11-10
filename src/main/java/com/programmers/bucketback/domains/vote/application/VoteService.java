@@ -55,7 +55,7 @@ public class VoteService {
 
 	public void cancelVote(final Long voteId) {
 		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.MEMBER_ANONYMOUS); // 더 핏한 예러코드로 바꿀 예정
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
 		}
 		final Long memberId = MemberUtils.getCurrentMemberId();
 
