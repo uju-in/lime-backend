@@ -26,7 +26,7 @@ public class VoteManager {
 		final Voter voter = voterReader.read(vote, memberId)
 			.orElseGet(() -> new Voter(vote, memberId, itemId));
 
-		voter.changeItem(itemId);
+		voter.voteItem(itemId);
 		vote.addVoter(voter);
 	}
 
