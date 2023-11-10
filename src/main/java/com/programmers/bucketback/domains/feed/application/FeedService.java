@@ -1,6 +1,5 @@
 package com.programmers.bucketback.domains.feed.application;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -81,6 +80,7 @@ public class FeedService {
 			final Long currentMemberId = MemberUtils.getCurrentMemberId();
 			return feedLikeRepository.existsByMemberIdAndFeed(currentMemberId, feed);
 		}
+
 		return null;
 	}
 
@@ -90,12 +90,8 @@ public class FeedService {
 	}
 
 	private List<FeedItemInfo> getFeedItemInfos(final List<FeedItem> feedItems) {
-		final List<FeedItemInfo> feedItemInfos = new ArrayList<>();
-		for (final FeedItem feedItem : feedItems) {
-			final FeedItemInfo feedItemInfo = FeedItemInfo.from(feedItem);
-			feedItemInfos.add(feedItemInfo);
-		}
-
-		return feedItemInfos;
+		return feedItems.stream()
+			.map(FeedItemInfo::from)
+			.toList();
 	}
 }
