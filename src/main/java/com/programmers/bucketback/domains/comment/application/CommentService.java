@@ -17,6 +17,7 @@ public class CommentService {
 	private final CommentAppender commentAppender;
 	private final CommentValidator commentValidator;
 	private final CommentModifier commentModifier;
+	private final CommentRemover commentRemover;
 	private final CommentReader commentReader;
 
 	public void createComment(
@@ -37,6 +38,14 @@ public class CommentService {
 		commentModifier.modify(commentId, content);
 	}
 
+	public void deleteComment(
+		final Long feedId,
+		final Long commentId
+	) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+		commentValidator.validCommentInFeed(feedId, commentId);
+		commentValidator.validCommentOwner(commentId, memberId);
+		commentRemover.remove(commentId);
 	public CommentGetCursorResponse getFeedComments(
 		final Long feedId,
 		final CursorPageParameters parameters
