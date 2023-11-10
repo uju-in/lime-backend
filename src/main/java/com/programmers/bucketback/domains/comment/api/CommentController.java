@@ -66,7 +66,8 @@ public class CommentController {
 		commentService.deleteComment(feedId, commentId);
 
 		return ResponseEntity.ok().build();
-    
+	}
+
 	@GetMapping
 	public ResponseEntity<CommentGetCursorResponse> getFeedComments(
 		@PathVariable final Long feedId,

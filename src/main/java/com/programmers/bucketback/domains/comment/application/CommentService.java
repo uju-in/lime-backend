@@ -46,6 +46,8 @@ public class CommentService {
 		commentValidator.validCommentInFeed(feedId, commentId);
 		commentValidator.validCommentOwner(commentId, memberId);
 		commentRemover.remove(commentId);
+	}
+
 	public CommentGetCursorResponse getFeedComments(
 		final Long feedId,
 		final CursorPageParameters parameters
