@@ -53,10 +53,7 @@ public class MemberService {
 		final String introduction
 	) {
 		final Long memberId = getCurrentMemberId();
-
-		if (memberManager.checkNicknameDuplication(nickname)) {
-			throw new BusinessException(ErrorCode.MEMBER_NICKNAME_DUPLICATE);
-		}
+		memberManager.checkNicknameDuplication(nickname);
 
 		memberModifier.modify(memberId, nickname, introduction);
 	}
@@ -67,8 +64,8 @@ public class MemberService {
 		memberModifier.modify(memberId, password);
 	}
 
-	public boolean checkNickname(final String nickname) {
-		return memberManager.checkNicknameDuplication(nickname);
+	public void checkNickname(final String nickname) {
+		memberManager.checkNicknameDuplication(nickname);
 	}
 
 	public String checkEmail(final String email) {

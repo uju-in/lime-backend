@@ -30,8 +30,10 @@ public class MemberManager {
 		return new LoginMemberServiceResponse(memberId, nickname, jwtToken);
 	}
 
-	public boolean checkNicknameDuplication(final String nickname) {
-		return memberRepository.existsByNickname(nickname);
+	public void checkNicknameDuplication(final String nickname) {
+		if (memberRepository.existsByNickname(nickname)) {
+			throw new BusinessException(ErrorCode.MEMBER_NICKNAME_DUPLICATE);
+		}
 	}
 
 	public void checkEmailDuplication(final String email) {

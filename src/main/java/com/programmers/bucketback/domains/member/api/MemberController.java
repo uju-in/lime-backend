@@ -70,10 +70,9 @@ public class MemberController {
 	public ResponseEntity<MemberCheckNicknameResponse> checkNickname(
 		@Valid @RequestBody final MemberCheckNicknameRequest request
 	) {
-		final boolean isDuplicated = memberService.checkNickname(request.nickname());
-		final MemberCheckNicknameResponse response = new MemberCheckNicknameResponse(isDuplicated);
+		memberService.checkNickname(request.nickname());
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/check/email")
