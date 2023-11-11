@@ -66,7 +66,9 @@ public enum ErrorCode {
 	COMMENT_NOT_IN_FEED("COMMENT_002", "피드에 존재하지 않은 댓글 입니다."),
 	COMMENT_NOT_MINE("COMMENT_003", "댓글 작성자와 일치 하지 않은 사용자 입니다."),
 	COMMENT_CANNOT_ADOPT("COMMENT_004", "본인의 댓글을 채택할 수 없습니다."),
-	;
+
+	// Hobby
+	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다.");
 
 	private final String code;
 	private final String message;

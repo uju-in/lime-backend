@@ -82,7 +82,7 @@ public class VoteController {
 		@ModelAttribute @Valid final CursorRequest request
 	) {
 		final GetVotesServiceResponse serviceResponse = voteService.getVotesByCursor(
-			Hobby.valueOf(hobby.toUpperCase()),
+			Hobby.from(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
 			request.toParameters()
