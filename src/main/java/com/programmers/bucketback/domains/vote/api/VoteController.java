@@ -58,14 +58,14 @@ public class VoteController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("{voteId}")
+	@DeleteMapping("/{voteId}")
 	public ResponseEntity<Void> deleteVote(@PathVariable final Long voteId) {
 		voteService.deleteVote(voteId);
 
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("{voteId}")
+	@GetMapping("/{voteId}")
 	public ResponseEntity<VoteGetResponse> getVote(@PathVariable final Long voteId) {
 		final GetVoteServiceResponse voteServiceResponse = voteService.getVote(voteId);
 		final VoteGetResponse response = VoteGetResponse.from(voteServiceResponse);
