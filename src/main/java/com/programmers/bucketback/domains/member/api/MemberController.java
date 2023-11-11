@@ -40,7 +40,7 @@ public class MemberController {
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody final MemberLoginRequest request) {
 		final LoginMemberServiceResponse serviceResponse = memberService.login(request.toLoginInfo());
-		final MemberLoginResponse response = serviceResponse.toMemberLoginResponse();
+		final MemberLoginResponse response = MemberLoginResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
