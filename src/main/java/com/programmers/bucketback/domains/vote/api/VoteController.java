@@ -67,8 +67,8 @@ public class VoteController {
 
 	@GetMapping("/{voteId}")
 	public ResponseEntity<VoteGetResponse> getVote(@PathVariable final Long voteId) {
-		final GetVoteServiceResponse voteServiceResponse = voteService.getVote(voteId);
-		final VoteGetResponse response = VoteGetResponse.from(voteServiceResponse);
+		final GetVoteServiceResponse serviceResponse = voteService.getVote(voteId);
+		final VoteGetResponse response = VoteGetResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
