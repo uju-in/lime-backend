@@ -31,7 +31,7 @@ public class MemberManager {
 	}
 
 	public void checkNicknameDuplication(final String nickname) {
-		if (memberRepository.existsByNickname(nickname)) {
+		if (memberRepository.existsByNicknameNickname(nickname)) {
 			throw new BusinessException(ErrorCode.MEMBER_NICKNAME_DUPLICATE);
 		}
 	}

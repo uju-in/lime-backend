@@ -31,9 +31,8 @@ public class Member extends BaseEntity {
 	@Embedded
 	private LoginInfo loginInfo;
 
-	@NotNull
-	@Column(name = "nickname")
-	private String nickname;
+	@Embedded
+	private Nickname nickname;
 
 	@Column(name = "introduction")
 	private String introduction;
@@ -60,7 +59,7 @@ public class Member extends BaseEntity {
 		@NotNull final Role role
 	) {
 		this.loginInfo = new LoginInfo(email, password);
-		this.nickname = nickname;
+		this.nickname = new Nickname(nickname);
 		this.levelPoint = 0;
 		this.role = role;
 		this.status = MemberStatus.ACTIVE;
@@ -68,6 +67,10 @@ public class Member extends BaseEntity {
 
 	public String getPassword() {
 		return loginInfo.getPassword();
+	}
+
+	public String getNickname() {
+		return nickname.getNickname();
 	}
 
 	public void delete() {
@@ -82,11 +85,11 @@ public class Member extends BaseEntity {
 		final String nickname,
 		final String introduction
 	) {
-		this.nickname = nickname;
+		this.nickname = new Nickname(nickname);
 		this.introduction = introduction;
 	}
 
-	public void updatePassword(String password) {
+	public void updatePassword(final String password) {
 		this.loginInfo.updatePassword(password);
 	}
 }
