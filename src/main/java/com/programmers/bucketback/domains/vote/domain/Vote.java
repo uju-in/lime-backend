@@ -39,10 +39,10 @@ public class Vote extends BaseEntity {
 	@Column(name = "member_id")
 	private Long memberId;
 	@NotNull
-	@Column(name = "option1_item_id")
+	@Column(name = "item1_id")
 	private Long item1Id;
 	@NotNull
-	@Column(name = "option2_item_id")
+	@Column(name = "item2_id")
 	private Long item2Id;
 	@NotNull
 	@Column(name = "hobby")
