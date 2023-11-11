@@ -87,10 +87,10 @@ public class VoteReader {
 	private List<VoteCursorSummary> getVoteCursorSummaries(final List<VoteSummary> voteSummaries) {
 		final List<VoteCursorSummary> voteCursorSummaries = new ArrayList<>();
 		for (final VoteSummary voteSummary : voteSummaries) {
-			final Long option1ItemId = voteSummary.option1ItemId();
-			final Item item1 = itemReader.read(option1ItemId);
-			final Long option2ItemId = voteSummary.option2ItemId();
-			final Item item2 = itemReader.read(option2ItemId);
+			final Long item1Id = voteSummary.item1Id();
+			final Item item1 = itemReader.read(item1Id);
+			final Long item2Id = voteSummary.item2Id();
+			final Item item2 = itemReader.read(item2Id);
 
 			voteCursorSummaries.add(VoteCursorSummary.of(voteSummary, item1, item2));
 		}

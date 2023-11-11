@@ -2,8 +2,8 @@ package com.programmers.bucketback.domains.vote.application;
 
 public record VoteSummary(
 	VoteInfo voteInfo,
-	Long option1ItemId,
-	Long option2ItemId,
+	Long item1Id,
+	Long item2Id,
 	String cursorId
 ) {
 }

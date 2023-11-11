@@ -8,6 +8,7 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
@@ -95,8 +96,8 @@ public class VoteService {
 		final VoteInfo voteInfo = VoteInfo.of(vote, option1Votes, option2Votes);
 
 		return GetVoteServiceResponse.builder()
-			.option1Item(OptionItem.from(item1))
-			.option2Item(OptionItem.from(item2))
+			.item1Info(ItemInfo.from(item1))
+			.item2Info(ItemInfo.from(item2))
 			.voteInfo(voteInfo)
 			.isOwner(isOwner)
 			.selectedItemId(selectedItemId)

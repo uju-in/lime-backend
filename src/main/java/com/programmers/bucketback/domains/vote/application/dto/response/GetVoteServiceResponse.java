@@ -1,14 +1,14 @@
 package com.programmers.bucketback.domains.vote.application.dto.response;
 
-import com.programmers.bucketback.domains.vote.application.OptionItem;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.vote.application.VoteInfo;
 
 import lombok.Builder;
 
 @Builder
 public record GetVoteServiceResponse(
-	OptionItem option1Item,
-	OptionItem option2Item,
+	ItemInfo item1Info,
+	ItemInfo item2Info,
 	VoteInfo voteInfo,
 	boolean isOwner,
 	Long selectedItemId
