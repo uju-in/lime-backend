@@ -25,8 +25,11 @@ public class VoteService {
 	private final VoteRemover voteRemover;
 
 	public Long createVote(final CreateVoteServiceRequest request) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
 
+		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteAppender.append(memberId, request);
 
 		return vote.getId();
@@ -36,6 +39,10 @@ public class VoteService {
 		final Long voteId,
 		final Long itemId
 	) {
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
@@ -58,6 +65,10 @@ public class VoteService {
 	}
 
 	public void deleteVote(final Long voteId) {
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
