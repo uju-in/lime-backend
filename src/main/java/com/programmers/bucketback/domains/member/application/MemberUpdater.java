@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.member.application;
 
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.member.domain.Member;
 
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ public class MemberUpdater {
 		final String nickname,
 		final String introduction
 	) {
-		final Member member = memberReader.read();
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Member member = memberReader.read(memberId);
 		member.updateProfile(nickname, introduction);
 	}
 
 	public void update(final String password) {
-		final Member member = memberReader.read();
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Member member = memberReader.read(memberId);
 		member.updatePassword(password);
 	}
 }
