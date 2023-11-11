@@ -129,12 +129,12 @@ public class VoteReader {
 		final VoteStatusCondition statusCondition,
 		final String sortCondition
 	) {
-		if (statusCondition != VoteStatusCondition.COMPLETED && Objects.equals(sortCondition, "popularity")) {
-			throw new BusinessException(ErrorCode.VOTE_BAD_POPULARITY);
-		}
+		if (Objects.equals(sortCondition, "popularity")) {
+			if (statusCondition == VoteStatusCondition.COMPLETED) {
+				return VoteSortCondition.POPULARITY;
+			}
 
-		if (statusCondition == VoteStatusCondition.COMPLETED && Objects.equals(sortCondition, "popularity")) {
-			return VoteSortCondition.POPULARITY;
+			throw new BusinessException(ErrorCode.VOTE_BAD_POPULARITY);
 		}
 
 		return VoteSortCondition.RECENT;
