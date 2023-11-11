@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VoteManager {
 
-	private final VoteReader voteReader;
 	private final VoterReader voterReader;
 	private final VoterRepository voterRepository;
 
