@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.member.application;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.domain.LoginInfo;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class MemberService {
 
 	private final SecurityManager securityManager;
@@ -25,7 +23,6 @@ public class MemberService {
 	private final MemberChecker memberChecker;
 	private final EmailSender emailSender;
 
-	@Transactional
 	public void signup(
 		final LoginInfo loginInfo,
 		final String nickname
@@ -49,12 +46,10 @@ public class MemberService {
 		return new LoginMemberServiceResponse(memberId, nickname, jwtToken);
 	}
 
-	@Transactional
 	public void deleteMember() {
 		memberRemover.remove();
 	}
 
-	@Transactional
 	public void updateProfile(
 		final String nickname,
 		final String introduction
@@ -62,7 +57,6 @@ public class MemberService {
 		memberModifier.modify(nickname, introduction);
 	}
 
-	@Transactional
 	public void updatePassword(final String password) {
 		memberModifier.modify(password);
 	}

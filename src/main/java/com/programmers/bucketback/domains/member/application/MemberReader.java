@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.member.application;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
@@ -15,6 +16,7 @@ public class MemberReader {
 
 	private final MemberRepository memberRepository;
 
+	@Transactional(readOnly = true)
 	public Member read(final Long memberId) {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
