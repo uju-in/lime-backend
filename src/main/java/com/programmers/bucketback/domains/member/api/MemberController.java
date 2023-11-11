@@ -39,9 +39,10 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody final MemberLoginRequest request) {
-		final LoginMemberServiceResponse response = memberService.login(request.toLoginInfo());
+		final LoginMemberServiceResponse serviceResponse = memberService.login(request.toLoginInfo());
+		final MemberLoginResponse response = serviceResponse.toMemberLoginResponse();
 
-		return ResponseEntity.ok(response.toMemberLoginResponse());
+		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/delete")
