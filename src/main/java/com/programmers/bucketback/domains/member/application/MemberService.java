@@ -15,12 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
-	private final SecurityManager securityManager;
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
 	private final MemberRemover memberRemover;
 	private final MemberModifier memberModifier;
-	private final MemberChecker memberChecker;
+	private final MemberManager memberManager;
 	private final EmailSender emailSender;
 
 	public void signup(
@@ -34,17 +33,12 @@ public class MemberService {
 		final String email = loginInfo.getEmail();
 		final String rawPassword = loginInfo.getPassword();
 		final Member member = memberReader.readByEmail(email);
-		final Long memberId = member.getId();
-		final String nickname = member.getNickname();
 
 		if (member.isDeleted()) {
 			throw new BusinessException(ErrorCode.MEMBER_DELETED);
 		}
 
-		securityManager.authenticate(memberId, rawPassword);
-		final String jwtToken = securityManager.generateToken(member);
-
-		return new LoginMemberServiceResponse(memberId, nickname, jwtToken);
+		return memberManager.login(rawPassword, member);
 	}
 
 	public void deleteMember() {
@@ -63,11 +57,11 @@ public class MemberService {
 	}
 
 	public boolean checkNickname(final String nickname) {
-		return memberChecker.checkNicknameDuplication(nickname);
+		return memberManager.checkNicknameDuplication(nickname);
 	}
 
 	public String checkEmail(final String email) {
-		memberChecker.checkEmailDuplication(email);
+		memberManager.checkEmailDuplication(email);
 
 		try {
 			return emailSender.send(email);
