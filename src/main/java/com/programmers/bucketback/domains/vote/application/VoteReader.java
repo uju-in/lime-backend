@@ -2,7 +2,6 @@ package com.programmers.bucketback.domains.vote.application;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -75,7 +74,7 @@ public class VoteReader {
 	public GetVotesServiceResponse readByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
-		final String sortCondition,
+		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters,
 		final Long memberId
 	) {
@@ -83,13 +82,16 @@ public class VoteReader {
 			return new GetVotesServiceResponse(null, Collections.emptyList());
 		}
 
-		final VoteSortCondition voteSortCondition = getVoteSortCondition(statusCondition, sortCondition);
+		if (sortCondition == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED) {
+			throw new BusinessException(ErrorCode.VOTE_BAD_POPULARITY);
+		}
+
 		final int pageSize = parameters.size() == null ? 20 : parameters.size();
 
 		final List<VoteSummary> voteSummaries = voteRepository.findAllByCursor(
 			hobby,
 			statusCondition,
-			voteSortCondition,
+			sortCondition,
 			memberId,
 			parameters.cursorId(),
 			pageSize
@@ -122,21 +124,6 @@ public class VoteReader {
 
 		return voter.map(Voter::getItemId)
 			.orElse(null);
-	}
-
-	private VoteSortCondition getVoteSortCondition(
-		final VoteStatusCondition statusCondition,
-		final String sortCondition
-	) {
-		if (Objects.equals(sortCondition, "popularity")) {
-			if (statusCondition == VoteStatusCondition.COMPLETED) {
-				return VoteSortCondition.POPULARITY;
-			}
-
-			throw new BusinessException(ErrorCode.VOTE_BAD_POPULARITY);
-		}
-
-		return VoteSortCondition.RECENT;
 	}
 
 	private List<VoteCursorSummary> getVoteCursorSummaries(final List<VoteSummary> voteSummaries) {

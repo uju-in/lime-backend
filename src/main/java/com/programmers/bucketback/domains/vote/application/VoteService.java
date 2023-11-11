@@ -6,6 +6,7 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
@@ -91,7 +92,7 @@ public class VoteService {
 	public GetVotesServiceResponse getVotesByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
-		final String sortCondition,
+		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = null;
