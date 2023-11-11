@@ -31,10 +31,11 @@ public class MemberService {
 	}
 
 	public LoginMemberServiceResponse login(final LoginInfo loginInfo) {
-		final Member member = memberReader.readByEmail(loginInfo.getEmail());
+		final String email = loginInfo.getEmail();
+		final String rawPassword = loginInfo.getPassword();
+		final Member member = memberReader.readByEmail(email);
 		final Long memberId = member.getId();
 		final String nickname = member.getNickname();
-		final String rawPassword = loginInfo.getPassword();
 
 		if (member.isDeleted()) {
 			throw new BusinessException(ErrorCode.MEMBER_DELETED);
