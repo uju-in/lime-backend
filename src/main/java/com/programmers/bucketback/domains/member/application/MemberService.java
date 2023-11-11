@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.member.application;
 
 import org.springframework.stereotype.Service;
 
+import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
@@ -42,18 +43,24 @@ public class MemberService {
 	}
 
 	public void deleteMember() {
-		memberRemover.remove();
+		final Long memberId = getCurrentMemberId();
+
+		memberRemover.remove(memberId);
 	}
 
 	public void updateProfile(
 		final String nickname,
 		final String introduction
 	) {
-		memberModifier.modify(nickname, introduction);
+		final Long memberId = getCurrentMemberId();
+
+		memberModifier.modify(memberId, nickname, introduction);
 	}
 
 	public void updatePassword(final String password) {
-		memberModifier.modify(password);
+		final Long memberId = getCurrentMemberId();
+
+		memberModifier.modify(memberId, password);
 	}
 
 	public boolean checkNickname(final String nickname) {
@@ -68,5 +75,13 @@ public class MemberService {
 		} catch (final MessagingException e) {
 			throw new BusinessException(ErrorCode.MAIL_SEND_FAIL);
 		}
+	}
+
+	private Long getCurrentMemberId() {
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
+		return MemberUtils.getCurrentMemberId();
 	}
 }
