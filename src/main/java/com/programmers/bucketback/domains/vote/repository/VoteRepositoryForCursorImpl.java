@@ -66,17 +66,19 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		final VoteStatusCondition statusCondition,
 		final Long memberId
 	) {
-		if (statusCondition == VoteStatusCondition.INPROGRESS) {
-			return isInProgress();
-		}
-		if (statusCondition == VoteStatusCondition.COMPLETED) {
-			return isCompleted();
-		}
-		if (statusCondition == VoteStatusCondition.POSTED) {
-			return isPosted(memberId);
-		}
-		if (statusCondition == VoteStatusCondition.PARTICIPATED) {
-			return isParticipatedIn(memberId);
+		switch (statusCondition) {
+			case INPROGRESS -> {
+				return isInProgress();
+			}
+			case COMPLETED -> {
+				return isCompleted();
+			}
+			case POSTED -> {
+				return isPosted(memberId);
+			}
+			case PARTICIPATED -> {
+				return isParticipatedIn(memberId);
+			}
 		}
 
 		return null;
