@@ -74,13 +74,12 @@ public class VoteReader {
 		final CursorPageParameters parameters,
 		final Long memberId
 	) {
-		final int pageSize = parameters.size() == null ? 20 : parameters.size();
-
-		final VoteSortCondition voteSortCondition = getVoteSortCondition(statusCondition, sortCondition);
-
 		if (memberId == null && statusCondition.isRequiredLogin()) {
 			return new GetVotesServiceResponse(null, Collections.emptyList());
 		}
+
+		final VoteSortCondition voteSortCondition = getVoteSortCondition(statusCondition, sortCondition);
+		final int pageSize = parameters.size() == null ? 20 : parameters.size();
 
 		final List<VoteSummary> voteSummaries = voteRepository.findAllByCursor(
 			hobby,
