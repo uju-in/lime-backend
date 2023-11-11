@@ -66,6 +66,7 @@ public class VoteReader {
 			.build();
 	}
 
+	@Transactional(readOnly = true)
 	public GetVotesServiceResponse readByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
