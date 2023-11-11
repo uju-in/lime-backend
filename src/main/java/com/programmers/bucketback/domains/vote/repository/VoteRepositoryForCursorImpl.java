@@ -46,8 +46,8 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 					vote.endTime,
 					vote.voters.size()
 				),
-				vote.option1ItemId,
-				vote.option2ItemId,
+				vote.item1Id,
+				vote.item2Id,
 				generateCursorId(sortCondition)
 			))
 			.from(vote)

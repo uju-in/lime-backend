@@ -47,14 +47,14 @@ public class VoteReader {
 		final Long memberId
 	) {
 		final Vote vote = read(voteId);
-		final Long option1ItemId = vote.getOption1ItemId();
-		final Long option2ItemId = vote.getOption2ItemId();
-		final ItemInfo item1Info = getItemInfo(option1ItemId);
-		final ItemInfo item2Info = getItemInfo(option2ItemId);
+		final Long item1Id = vote.getItem1Id();
+		final Long item2Id = vote.getItem2Id();
+		final ItemInfo item1Info = getItemInfo(item1Id);
+		final ItemInfo item2Info = getItemInfo(item2Id);
 
-		final int option1Votes = voteCounter.count(vote, option1ItemId);
-		final int option2Votes = voteCounter.count(vote, option2ItemId);
-		final VoteInfo voteInfo = VoteInfo.of(vote, option1Votes, option2Votes);
+		final int item1Votes = voteCounter.count(vote, item1Id);
+		final int item2Votes = voteCounter.count(vote, item2Id);
+		final VoteInfo voteInfo = VoteInfo.of(vote, item1Votes, item2Votes);
 
 		final boolean isOwner = isOwner(vote, memberId);
 		final Long selectedItemId = getSelectedItemId(vote, memberId);

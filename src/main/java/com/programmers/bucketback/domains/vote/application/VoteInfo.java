@@ -16,10 +16,10 @@ public record VoteInfo(
 	int participants,
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	Integer option1Votes,
+	Integer item1Votes,
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	Integer option2Votes
+	Integer item2Votes
 ) {
 	public VoteInfo(
 		final Long id,
@@ -33,17 +33,17 @@ public record VoteInfo(
 
 	public static VoteInfo of(
 		final Vote vote,
-		final int option1Votes,
-		final int option2Votes
+		final int item1Votes,
+		final int item2Votes
 	) {
 		return VoteInfo.builder()
 			.id(vote.getId())
 			.content(vote.getContent())
 			.startTime(vote.getStartTime())
 			.isVoting(isVoting(vote.getEndTime()))
-			.participants(option1Votes + option2Votes)
-			.option1Votes(option1Votes)
-			.option2Votes(option2Votes)
+			.participants(item1Votes + item2Votes)
+			.item1Votes(item1Votes)
+			.item2Votes(item2Votes)
 			.build();
 	}
 

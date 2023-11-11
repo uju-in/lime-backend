@@ -40,10 +40,10 @@ public class Vote extends BaseEntity {
 	private Long memberId;
 	@NotNull
 	@Column(name = "option1_item_id")
-	private Long option1ItemId;
+	private Long item1Id;
 	@NotNull
 	@Column(name = "option2_item_id")
-	private Long option2ItemId;
+	private Long item2Id;
 	@NotNull
 	@Column(name = "hobby")
 	@Enumerated(EnumType.STRING)
@@ -61,14 +61,14 @@ public class Vote extends BaseEntity {
 	@Builder
 	private Vote(
 		@NotNull final Long memberId,
-		@NotNull final Long option1ItemId,
-		@NotNull final Long option2ItemId,
+		@NotNull final Long item1Id,
+		@NotNull final Long item2Id,
 		@NotNull final Hobby hobby,
 		@NotNull final String content
 	) {
 		this.memberId = memberId;
-		this.option1ItemId = option1ItemId;
-		this.option2ItemId = option2ItemId;
+		this.item1Id = item1Id;
+		this.item2Id = item2Id;
 		this.hobby = hobby;
 		this.content = content;
 		this.startTime = LocalDateTime.now();
@@ -76,7 +76,7 @@ public class Vote extends BaseEntity {
 	}
 
 	public boolean containsItem(final Long itemId) {
-		return option1ItemId.equals(itemId) || option2ItemId.equals(itemId);
+		return item1Id.equals(itemId) || item2Id.equals(itemId);
 	}
 
 	public void addVoter(final Voter voter) {

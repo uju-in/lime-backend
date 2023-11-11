@@ -13,17 +13,17 @@ public record VoteCreateRequest(
 	String content,
 
 	@NotNull
-	Long option1ItemId,
+	Long item1Id,
 
 	@NotNull
-	Long option2ItemId
+	Long item2Id
 ) {
 	public CreateVoteServiceRequest toCreateVoteServiceRequest() {
 		return CreateVoteServiceRequest.builder()
 			.hobby(hobby)
 			.content(content)
-			.option1ItemId(option1ItemId)
-			.option2ItemId(option2ItemId)
+			.item1Id(item1Id)
+			.item2Id(item2Id)
 			.build();
 	}
 }
