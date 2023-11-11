@@ -31,7 +31,7 @@ public class MemberService {
 	}
 
 	public LoginMemberServiceResponse login(final LoginInfo loginInfo) {
-		final Member member = memberReader.read(loginInfo.getEmail());
+		final Member member = memberReader.readByEmail(loginInfo.getEmail());
 		final Long memberId = member.getId();
 		final String nickname = member.getNickname();
 		final String rawPassword = loginInfo.getPassword();

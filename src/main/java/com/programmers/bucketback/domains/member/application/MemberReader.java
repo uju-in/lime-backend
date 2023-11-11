@@ -22,7 +22,7 @@ public class MemberReader {
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 	}
 
-	public Member read(final String email) {
+	public Member readByEmail(final String email) {
 		return memberRepository.findByLoginInfoEmail(email)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_LOGIN_FAIL));
 	}
