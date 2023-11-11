@@ -35,14 +35,18 @@ public class MemberService {
 
 	public LoginMemberServiceResponse login(final LoginInfo loginInfo) {
 		final Member member = memberReader.read(loginInfo.getEmail());
+		final Long memberId = member.getId();
+		final String nickname = member.getNickname();
+		final String rawPassword = loginInfo.getPassword();
+
 		if (member.isDeleted()) {
 			throw new BusinessException(ErrorCode.MEMBER_DELETED);
 		}
 
-		securityManager.authenticate(member.getId(), loginInfo.getPassword());
+		securityManager.authenticate(memberId, rawPassword);
 		final String jwtToken = securityManager.generateToken(member);
 
-		return new LoginMemberServiceResponse(member.getId(), member.getNickname(), jwtToken);
+		return new LoginMemberServiceResponse(memberId, nickname, jwtToken);
 	}
 
 	@Transactional
