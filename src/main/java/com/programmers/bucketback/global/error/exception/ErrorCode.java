@@ -22,6 +22,7 @@ public enum ErrorCode {
 	MEMBER_DELETED("MEMBER_004", "탈퇴한 회원 입니다."),
 	MEMBER_EMAIL_EXIST("MEMBER_005", "이메일이 중복되었습니다."),
 	MEMBER_NOT_LOGIN("MEMBER_006", "로그인 하지 않은 유저 입니다."),
+	MEMBER_NICKNAME_DUPLICATE("MEMBER_007", "닉네임이 중복되었습니다."),
 
 	// Item
 	ITEM_MARKET_NOT_FOUND("ITEM_001", "요청 url에 해당하는 상품을 찾을 수 없습니다."),

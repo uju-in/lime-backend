@@ -54,6 +54,10 @@ public class MemberService {
 	) {
 		final Long memberId = getCurrentMemberId();
 
+		if (memberManager.checkNicknameDuplication(nickname)) {
+			throw new BusinessException(ErrorCode.MEMBER_NICKNAME_DUPLICATE);
+		}
+
 		memberModifier.modify(memberId, nickname, introduction);
 	}
 
