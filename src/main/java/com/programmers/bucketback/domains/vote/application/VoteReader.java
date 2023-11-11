@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +13,12 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.item.domain.Item;
+import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
 import com.programmers.bucketback.domains.vote.domain.Vote;
+import com.programmers.bucketback.domains.vote.domain.Voter;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
@@ -26,13 +30,42 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VoteReader {
 
+	private final VoteCounter voteCounter;
 	private final VoteRepository voteRepository;
+	private final VoterReader voterReader;
 	private final ItemReader itemReader;
 
 	@Transactional(readOnly = true)
 	public Vote read(final Long voteId) {
 		return voteRepository.findById(voteId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.VOTE_NOT_FOUND));
+	}
+
+	@Transactional(readOnly = true)
+	public GetVoteServiceResponse read(
+		final Long voteId,
+		final Long memberId
+	) {
+		final Vote vote = read(voteId);
+		final Long option1ItemId = vote.getOption1ItemId();
+		final Long option2ItemId = vote.getOption2ItemId();
+		final ItemInfo item1Info = getItemInfo(option1ItemId);
+		final ItemInfo item2Info = getItemInfo(option2ItemId);
+
+		final int option1Votes = voteCounter.count(vote, option1ItemId);
+		final int option2Votes = voteCounter.count(vote, option2ItemId);
+		final VoteInfo voteInfo = VoteInfo.of(vote, option1Votes, option2Votes);
+
+		final boolean isOwner = isOwner(vote, memberId);
+		final Long selectedItemId = getSelectedItemId(vote, memberId);
+
+		return GetVoteServiceResponse.builder()
+			.item1Info(item1Info)
+			.item2Info(item2Info)
+			.voteInfo(voteInfo)
+			.isOwner(isOwner)
+			.selectedItemId(selectedItemId)
+			.build();
 	}
 
 	public GetVotesServiceResponse readByCursor(
@@ -67,6 +100,29 @@ public class VoteReader {
 		final String nextCursorId = getNextCursorId(voteSummaries);
 
 		return new GetVotesServiceResponse(nextCursorId, voteCursorSummaries);
+	}
+
+	private ItemInfo getItemInfo(final Long itemId) {
+		final Item item = itemReader.read(itemId);
+
+		return ItemInfo.from(item);
+	}
+
+	private boolean isOwner(
+		final Vote vote,
+		final Long memberId
+	) {
+		return vote.getMemberId().equals(memberId);
+	}
+
+	private Long getSelectedItemId(
+		final Vote vote,
+		final Long memberId
+	) {
+		final Optional<Voter> voter = voterReader.read(vote, memberId);
+
+		return voter.map(Voter::getItemId)
+			.orElse(null);
 	}
 
 	private VoteSortCondition getVoteSortCondition(
