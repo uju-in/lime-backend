@@ -82,7 +82,7 @@ public class VoteController {
 	) {
 		final GetVotesServiceResponse serviceResponse = voteService.getVotesByCursor(
 			Hobby.valueOf(hobby.toUpperCase()),
-			VoteStatusCondition.valueOf(statusCondition.toUpperCase()),
+			VoteStatusCondition.from(statusCondition),
 			sortCondition,
 			request.toParameters()
 		);

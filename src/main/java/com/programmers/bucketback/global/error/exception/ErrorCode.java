@@ -40,6 +40,7 @@ public enum ErrorCode {
 	VOTE_NOT_OWNER("VOTE_003", "투표의 작성자가 아닙니다."),
 	VOTE_NOT_VOTER("VOTE_004", "투표의 투표자가 아닙니다."),
 	VOTE_BAD_POPULARITY("VOTE_005", "종료된 투표만 인기순 조회가 가능합니다."),
+	VOTE_BAD_STATUS_CONDITION("VOTE_006", "잘못된 status 입니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
