@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.member.application;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberModifier {
 
 	private final MemberReader memberReader;
+	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public void modify(
@@ -30,7 +32,8 @@ public class MemberModifier {
 		final String password
 	) {
 		final Member member = memberReader.read(memberId);
+		final String encodedPassword = passwordEncoder.encode(password);
 
-		member.updatePassword(password);
+		member.updatePassword(encodedPassword);
 	}
 }
