@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.vote.application.dto.response;
 
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
-import com.programmers.bucketback.domains.vote.application.VoteInfo;
 
 import lombok.Builder;
 

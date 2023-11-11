@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.domains.vote.application.VoteInfo;
-import com.programmers.bucketback.domains.vote.application.VoteSortCondition;
-import com.programmers.bucketback.domains.vote.application.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.application.VoteSummary;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteInfo;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;

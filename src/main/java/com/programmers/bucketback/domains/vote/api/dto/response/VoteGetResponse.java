@@ -2,8 +2,8 @@ package com.programmers.bucketback.domains.vote.api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
-import com.programmers.bucketback.domains.vote.application.VoteInfo;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteInfo;
 
 import lombok.Builder;
 

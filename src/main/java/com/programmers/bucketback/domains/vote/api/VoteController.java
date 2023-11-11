@@ -19,7 +19,7 @@ import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateRespon
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByCursorResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
-import com.programmers.bucketback.domains.vote.application.VoteStatusCondition;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
 

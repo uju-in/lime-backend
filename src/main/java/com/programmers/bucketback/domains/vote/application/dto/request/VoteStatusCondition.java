@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.vote.application;
+package com.programmers.bucketback.domains.vote.application.dto.request;
 
 public enum VoteStatusCondition {
 	INPROGRESS,
