@@ -27,6 +27,10 @@ public class MemberService {
 		final LoginInfo loginInfo,
 		final String nickname
 	) {
+		final String email = loginInfo.getEmail();
+		memberManager.checkEmailDuplication(email);
+		memberManager.checkNicknameDuplication(nickname);
+
 		memberAppender.append(loginInfo, nickname);
 	}
 
