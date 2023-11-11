@@ -29,34 +29,42 @@ import lombok.NoArgsConstructor;
 @Table(name = "votes")
 public class Vote extends BaseEntity {
 
-	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
-	private final List<Voter> voters = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
+
 	@NotNull
 	@Column(name = "member_id")
 	private Long memberId;
+
 	@NotNull
 	@Column(name = "item1_id")
 	private Long item1Id;
+
 	@NotNull
 	@Column(name = "item2_id")
 	private Long item2Id;
+
 	@NotNull
 	@Column(name = "hobby")
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
+
 	@NotNull
 	@Column(name = "content")
 	private String content;
+
 	@NotNull
 	@Column(name = "start_time")
 	private LocalDateTime startTime;
+
 	@NotNull
 	@Column(name = "end_time")
 	private LocalDateTime endTime;
+
+	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
+	private final List<Voter> voters = new ArrayList<>();
 
 	@Builder
 	private Vote(
