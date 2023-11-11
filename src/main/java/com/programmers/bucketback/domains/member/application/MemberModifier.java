@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class MemberUpdater {
+public class MemberModifier {
 
 	private final MemberReader memberReader;
 
-	public void update(
+	public void modify(
 		final String nickname,
 		final String introduction
 	) {
@@ -22,7 +22,7 @@ public class MemberUpdater {
 		member.updateProfile(nickname, introduction);
 	}
 
-	public void update(final String password) {
+	public void modify(final String password) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Member member = memberReader.read(memberId);
 		member.updatePassword(password);

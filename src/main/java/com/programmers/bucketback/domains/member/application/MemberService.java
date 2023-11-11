@@ -21,7 +21,7 @@ public class MemberService {
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
 	private final MemberRemover memberRemover;
-	private final MemberUpdater memberUpdater;
+	private final MemberModifier memberModifier;
 	private final MemberChecker memberChecker;
 	private final EmailSender emailSender;
 
@@ -59,12 +59,12 @@ public class MemberService {
 		final String nickname,
 		final String introduction
 	) {
-		memberUpdater.update(nickname, introduction);
+		memberModifier.modify(nickname, introduction);
 	}
 
 	@Transactional
 	public void updatePassword(final String password) {
-		memberUpdater.update(password);
+		memberModifier.modify(password);
 	}
 
 	public boolean checkNickname(final String nickname) {
