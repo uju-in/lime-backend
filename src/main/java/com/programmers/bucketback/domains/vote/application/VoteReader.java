@@ -1,6 +1,5 @@
 package com.programmers.bucketback.domains.vote.application;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -135,17 +134,16 @@ public class VoteReader {
 	}
 
 	private List<VoteCursorSummary> getVoteCursorSummaries(final List<VoteSummary> voteSummaries) {
-		final List<VoteCursorSummary> voteCursorSummaries = new ArrayList<>();
-		for (final VoteSummary voteSummary : voteSummaries) {
-			final Long item1Id = voteSummary.item1Id();
-			final Item item1 = itemReader.read(item1Id);
-			final Long item2Id = voteSummary.item2Id();
-			final Item item2 = itemReader.read(item2Id);
+		return voteSummaries.stream()
+			.map(voteSummary -> {
+				final Long item1Id = voteSummary.item1Id();
+				final Item item1 = itemReader.read(item1Id);
+				final Long item2Id = voteSummary.item2Id();
+				final Item item2 = itemReader.read(item2Id);
 
-			voteCursorSummaries.add(VoteCursorSummary.of(voteSummary, item1, item2));
-		}
-
-		return voteCursorSummaries;
+				return VoteCursorSummary.of(voteSummary, item1, item2);
+			})
+			.toList();
 	}
 
 	private String getNextCursorId(final List<VoteSummary> voteSummaries) {
