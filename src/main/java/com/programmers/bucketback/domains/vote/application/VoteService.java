@@ -82,6 +82,11 @@ public class VoteService {
 		final String sortCondition,
 		final CursorPageParameters parameters
 	) {
-		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters);
+		Long memberId = null;
+		if (MemberUtils.isLoggedIn()) {
+			memberId = MemberUtils.getCurrentMemberId();
+		}
+
+		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters, memberId);
 	}
 }

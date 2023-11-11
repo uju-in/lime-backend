@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
@@ -72,16 +71,12 @@ public class VoteReader {
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final String sortCondition,
-		final CursorPageParameters parameters
+		final CursorPageParameters parameters,
+		final Long memberId
 	) {
 		final int pageSize = parameters.size() == null ? 20 : parameters.size();
 
 		final VoteSortCondition voteSortCondition = getVoteSortCondition(statusCondition, sortCondition);
-
-		Long memberId = null;
-		if (MemberUtils.isLoggedIn()) {
-			memberId = MemberUtils.getCurrentMemberId();
-		}
 
 		if (memberId == null && statusCondition.isRequiredLogin()) {
 			return new GetVotesServiceResponse(null, Collections.emptyList());
