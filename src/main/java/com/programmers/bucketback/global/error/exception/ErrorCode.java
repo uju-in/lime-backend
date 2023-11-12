@@ -43,6 +43,8 @@ public enum ErrorCode {
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
 	BUCKET_ITEM_NOT_FOUND("BUCKET_002", "버킷아이템을 찾을 수 없습니다."),
 	BUCKET_EXCEED_BUDGET("BUCKET_003", "버킷 예산을 초과했습니다."),
+	BUCKET_INVALID_NAME("BUCKET_004", "유효하지 않은 길이의 버킷 이름입니다."),
+	BUCKET_INVALID_BUDGET("BUCKET_005", "유호하지 않은 버킷 예산입니다."),
 
 	// MemberItem
 	MEMBER_ITEM_NOT_FOUND("MEMBER_ITEM_001", "나의 아이템을 찾을 수 없습니다."),
@@ -61,7 +63,8 @@ public enum ErrorCode {
 	//Comment
 	COMMENT_NOT_FOUND("COMMENT_001", "피드 댓글을 찾을 수 없습니다."),
 	COMMENT_NOT_IN_FEED("COMMENT_002", "피드에 존재하지 않은 댓글 입니다."),
-	COMMENT_NOT_MINE("COMMENT_003", "댓글 작성자와 일치 하지 않은 사용자 입니다.");
+	COMMENT_NOT_MINE("COMMENT_003", "댓글 작성자와 일치 하지 않은 사용자 입니다."),
+	;
 
 	private final String code;
 	private final String message;
