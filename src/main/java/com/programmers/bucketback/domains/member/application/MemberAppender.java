@@ -3,9 +3,9 @@ package com.programmers.bucketback.domains.member.application;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
-import com.programmers.bucketback.domains.member.domain.Role;
+import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
+import com.programmers.bucketback.domains.member.domain.vo.Role;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.member.domain;
+package com.programmers.bucketback.domains.member.domain.vo;
 
 import java.util.regex.Pattern;
 

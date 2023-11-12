@@ -1,6 +1,10 @@
 package com.programmers.bucketback.domains.member.domain;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
+import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
+import com.programmers.bucketback.domains.member.domain.vo.MemberStatus;
+import com.programmers.bucketback.domains.member.domain.vo.Nickname;
+import com.programmers.bucketback.domains.member.domain.vo.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
