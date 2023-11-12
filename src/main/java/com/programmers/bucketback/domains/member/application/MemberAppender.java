@@ -21,9 +21,13 @@ public class MemberAppender {
 		final LoginInfo loginInfo,
 		final String nickname
 	) {
+		final String rawPassword = loginInfo.getPassword();
+		Member.validatePassword(rawPassword);
+		final String encodedPassword = passwordEncoder.encode(rawPassword);
+
 		final Member member = Member.builder()
 			.email(loginInfo.getEmail())
-			.password(passwordEncoder.encode(loginInfo.getPassword()))
+			.password(encodedPassword)
 			.nickname(nickname)
 			.role(Role.USER)
 			.build();

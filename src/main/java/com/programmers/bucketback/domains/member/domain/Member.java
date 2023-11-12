@@ -65,6 +65,10 @@ public class Member extends BaseEntity {
 		this.status = MemberStatus.ACTIVE;
 	}
 
+	public static void validatePassword(final String password) {
+		LoginInfo.validatePassword(password);
+	}
+
 	public String getPassword() {
 		return loginInfo.getPassword();
 	}

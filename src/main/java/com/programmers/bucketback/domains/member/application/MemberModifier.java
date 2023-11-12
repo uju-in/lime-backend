@@ -32,6 +32,7 @@ public class MemberModifier {
 		final String password
 	) {
 		final Member member = memberReader.read(memberId);
+		Member.validatePassword(password);
 		final String encodedPassword = passwordEncoder.encode(password);
 
 		member.updatePassword(encodedPassword);
