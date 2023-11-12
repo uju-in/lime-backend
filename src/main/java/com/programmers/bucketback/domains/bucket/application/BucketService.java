@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.bucket.application;
 
+import static java.util.stream.Collectors.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.member.application.MemberReader;
+import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +37,8 @@ public class BucketService {
 
 	/** 버킷 생성 */
 	public void createBucket(final BucketContent content) {
+		validateExceedBudget(content);
+
 		bucketAppender.append(content);
 	}
 
@@ -41,6 +47,8 @@ public class BucketService {
 		final Long bucketId,
 		final BucketContent content
 	) {
+		validateExceedBudget(content);
+
 		Long memberId = MemberUtils.getCurrentMemberId();
 		Bucket bucket = bucketReader.read(bucketId, memberId);
 
@@ -89,6 +97,19 @@ public class BucketService {
 		BucketCursorSummary bucketCursorSummary = bucketReader.readByCursor(memberId, hobby, parameters);
 
 		return BucketGetByCursorResponse.from(bucketCursorSummary);
+	}
+
+	private void validateExceedBudget(final BucketContent content) {
+		if (content.budget() != null) {
+			Integer totalPrice = content.itemIds().stream()
+				.map(itemId -> itemReader.read(itemId).getPrice())
+				.collect(reducing(Integer::sum))
+				.get();
+
+			if (totalPrice > content.budget()) {
+				throw new BusinessException(ErrorCode.BUCKET_EXCEED_BUDGET);
+			}
+		}
 	}
 
 }
