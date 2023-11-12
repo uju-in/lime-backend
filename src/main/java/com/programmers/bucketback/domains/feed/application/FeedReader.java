@@ -63,7 +63,8 @@ public class FeedReader {
 		final Boolean isLiked = isLiked(feed, memberId);
 		final FeedInfo feedInfo = FeedInfo.of(feed, isLiked);
 
-		final List<FeedItemInfo> feedItemInfos = getFeedItemInfos(feed.getFeedItems());
+		final List<FeedItem> feedItems = feed.getFeedItems();
+		final List<FeedItemInfo> feedItemInfos = getFeedItemInfos(feedItems);
 
 		return new GetFeedServiceResponse(memberInfo, feedInfo, feedItemInfos);
 	}
