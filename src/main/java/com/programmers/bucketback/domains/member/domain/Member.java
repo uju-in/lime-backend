@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.member.domain;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
+import com.programmers.bucketback.domains.member.domain.vo.Introduction;
 import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.vo.MemberStatus;
 import com.programmers.bucketback.domains.member.domain.vo.Nickname;
@@ -38,8 +39,8 @@ public class Member extends BaseEntity {
 	@Embedded
 	private Nickname nickname;
 
-	@Column(name = "introduction")
-	private String introduction;
+	@Embedded
+	private Introduction introduction;
 
 	@NotNull
 	@Column(name = "level_point")
@@ -94,7 +95,7 @@ public class Member extends BaseEntity {
 		final String introduction
 	) {
 		this.nickname = new Nickname(nickname);
-		this.introduction = introduction;
+		this.introduction = new Introduction(introduction);
 	}
 
 	public void updatePassword(final String password) {
