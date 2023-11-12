@@ -11,13 +11,13 @@ import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMembe
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
-import com.programmers.bucketback.domains.bucket.application.vo.BucketItemContent;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -77,12 +77,12 @@ public class BucketService {
 	public BucketGetResponse getBucket(final Long bucketId) {
 		Bucket bucket = bucketReader.read(bucketId);
 
-		List<BucketItemContent> bucketItemContents = bucket.getBucketItems().stream()
+		List<ItemInfo> itemInfos = bucket.getBucketItems().stream()
 			.map(bucketItem -> itemReader.read(bucketItem.getItem().getId()))
-			.map(item -> BucketItemContent.from(item))
+			.map(item -> ItemInfo.from(item))
 			.toList();
 
-		return new BucketGetResponse(BucketContent.from(bucket), bucketItemContents);
+		return new BucketGetResponse(BucketContent.from(bucket), itemInfos);
 	}
 
 	/**
