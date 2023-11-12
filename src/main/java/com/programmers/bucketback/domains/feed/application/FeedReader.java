@@ -59,7 +59,7 @@ public class FeedReader {
 		final Feed feed = read(feedId);
 		final Long feedMemberId = feed.getMemberId();
 		final Member member = memberReader.read(feedMemberId);
-		final MemberInfo memberInfo = new MemberInfo(feedMemberId, member.getNickname()); // 정적 팩토리 메서드 패턴 사용
+		final MemberInfo memberInfo = MemberInfo.from(member);
 
 		final boolean hasAdoptedComment = hasAdoptedComment(feed.getComments());
 		final Boolean isLiked = isLiked(feed, memberId);
