@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.feed.application.dto.response.GetFeedServiceResponse;
 import com.programmers.bucketback.domains.feed.application.vo.FeedInfo;
 import com.programmers.bucketback.domains.feed.application.vo.FeedItemInfo;
@@ -61,18 +60,12 @@ public class FeedReader {
 		final Member member = memberReader.read(feedMemberId);
 		final MemberInfo memberInfo = MemberInfo.from(member);
 
-		final boolean hasAdoptedComment = hasAdoptedComment(feed.getComments());
 		final Boolean isLiked = isLiked(feed, memberId);
-		final FeedInfo feedInfo = FeedInfo.of(feed, hasAdoptedComment, isLiked);
+		final FeedInfo feedInfo = FeedInfo.of(feed, isLiked);
 
 		final List<FeedItemInfo> feedItemInfos = getFeedItemInfos(feed.getFeedItems());
 
 		return new GetFeedServiceResponse(memberInfo, feedInfo, feedItemInfos);
-	}
-
-	private boolean hasAdoptedComment(final List<Comment> comments) {
-		return comments.stream()
-			.anyMatch(Comment::isAdoption);
 	}
 
 	private Boolean isLiked(
