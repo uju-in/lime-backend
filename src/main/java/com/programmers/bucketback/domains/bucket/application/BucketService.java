@@ -8,6 +8,7 @@ import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCur
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMemberItemResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketItemContent;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
@@ -50,7 +51,7 @@ public class BucketService {
 	public void deleteBucket(final Long bucketId) {
 		bucketRemover.remove(bucketId);
 	}
-	
+
 	/** 버킷 수정을 위한 멤버 아이템 목록 조회 */
 	public BucketGetMemberItemResponse getMemberItemsForModify(
 		final Long bucketId,
@@ -76,15 +77,18 @@ public class BucketService {
 		return new BucketGetResponse(BucketContent.from(bucket), bucketItemContents);
 	}
 
-	/** 버킷 커서 조회 */
+	/**
+	 * 버킷 커서 조회
+	 */
 	public BucketGetByCursorResponse getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = memberReader.readByNickname(nickname).getId();
+		BucketCursorSummary bucketCursorSummary = bucketReader.readByCursor(memberId, hobby, parameters);
 
-		return bucketReader.readByCursor(memberId, hobby, parameters);
+		return BucketGetByCursorResponse.from(bucketCursorSummary);
 	}
 
 }

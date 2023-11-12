@@ -17,8 +17,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
-import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -54,6 +54,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 			.orderBy(decrease())
 			.transform(groupBy(bucket.id)
 				.list(Projections.constructor(BucketSummary.class,
+						generateBucketCursorId(),
 						bucket.id,
 						bucket.bucketInfo.name,
 						bucket.bucketInfo.budget,
@@ -75,16 +76,17 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 			return null;
 		}
 
-		StringTemplate dateCursor = Expressions.stringTemplate(
+		return generateBucketCursorId().lt(cursorId);
+	}
+
+	private StringExpression generateBucketCursorId() {
+		return Expressions.stringTemplate(
 			"DATE_FORMAT({0}, {1})",
 			bucket.createdAt,
 			ConstantImpl.create("%Y%m%d%H%i%s")
-		);
-
-		return dateCursor.concat(StringExpressions.lpad(
-				bucket.id.stringValue(), 8, '0'
-			))
-			.lt(cursorId);
+		).concat(StringExpressions.lpad(
+			bucket.id.stringValue(), 8, '0'
+		));
 	}
 
 }

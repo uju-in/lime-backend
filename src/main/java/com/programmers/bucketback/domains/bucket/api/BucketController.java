@@ -87,7 +87,7 @@ public class BucketController {
 	public ResponseEntity<BucketGetByCursorResponse> getBucketsByCursor(
 		@PathVariable final String nickname,
 		@RequestParam final String hobby,
-		@ModelAttribute("request") @Valid final CursorRequest request
+		@ModelAttribute @Valid final CursorRequest request
 	) {
 		BucketGetByCursorResponse response = bucketService.getBucketsByCursor(
 			nickname,

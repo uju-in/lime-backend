@@ -1,12 +1,10 @@
 package com.programmers.bucketback.domains.bucket.application;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
@@ -85,54 +83,27 @@ public class BucketReader {
 		return new BucketMemberItemCursorSummary(nextCursorId, summaryCount, summaries);
 	}
 
-	/** 버킷 정보 커서 페이징 조회 */
-	public BucketGetByCursorResponse readByCursor(
+	/**
+	 * 버킷 정보 커서 페이징 조회
+	 */
+	public BucketCursorSummary readByCursor(
 		final Long memberId,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
 
-		List<BucketSummary> bucketSummaries = bucketRepository.findAllByCursor(
+		List<BucketSummary> summaries = bucketRepository.findAllByCursor(
 			memberId,
 			hobby,
 			parameters.cursorId(),
 			pageSize
 		);
 
-		List<String> cursorIds = bucketSummaries.stream()
-			.map(bucketSummary -> generateBucketCursorId(bucketSummary))
-			.toList();
+		String nextCursorId = summaries.size() == 0 ? null : summaries.get(summaries.size() - 1).cursorId();
+		int summaryCount = summaries.size();
 
-		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
-
-		List<BucketCursorSummary> bucketCursorSummaries = getBucketCursorSummaries(bucketSummaries, cursorIds);
-
-		return new BucketGetByCursorResponse(nextCursorId, bucketCursorSummaries);
-	}
-
-	private List<BucketCursorSummary> getBucketCursorSummaries(
-		final List<BucketSummary> bucketSummaries,
-		final List<String> cursorIds
-	) {
-		List<BucketCursorSummary> bucketCursorSummaries = IntStream.range(0, bucketSummaries.size())
-			.mapToObj(i -> {
-				String cursorId = cursorIds.get(i);
-				BucketSummary bucketSummary = bucketSummaries.get(i);
-
-				return BucketCursorSummary.of(cursorId, bucketSummary);
-			}).toList();
-
-		return bucketCursorSummaries;
-	}
-
-	private String generateBucketCursorId(final BucketSummary bucketSummary) {
-		return bucketSummary.getCreatedAt().toString()
-			.replace("T", "")
-			.replace("-", "")
-			.replace(":", "")
-			.replace(".", "")
-			+ String.format("%08d", bucketSummary.getBucketId());
+		return new BucketCursorSummary(nextCursorId, summaryCount, summaries);
 	}
 
 }
