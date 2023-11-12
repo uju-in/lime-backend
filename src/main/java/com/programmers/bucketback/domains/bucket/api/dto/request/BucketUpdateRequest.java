@@ -19,21 +19,21 @@ public record BucketUpdateRequest(
 
 	@Schema(description = "버킷 이름", example = "유러피안 농구")
 	@NotNull(message = "버킷 이름을 입력하세요")
-	String bucketName,
+	String name,
 
 	@Schema(description = "예산", example = "200000")
-	Integer bucketBudget,
+	Integer budget,
 
 	@Schema(description = "여러 아이템 id", example = "[1,3]")
 	@NotNull(message = "아이템 id를 입력하세요")
-	List<Long> bucketItemIds
+	List<Long> itemIds
 ) {
 
 	public BucketInfo toInfo() {
-		return new BucketInfo(hobby, bucketName, bucketBudget);
+		return new BucketInfo(hobby, name, budget);
 	}
 
 	public ItemIdRegistry toRegistry() {
-		return new ItemIdRegistry(bucketItemIds);
+		return new ItemIdRegistry(itemIds);
 	}
 }
