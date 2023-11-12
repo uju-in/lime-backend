@@ -6,8 +6,8 @@ import java.util.List;
 public record BucketSummary(
 	String cursorId,
 	Long bucketId,
-	String bucketName,
-	Integer bucketBudget,
+	String name,
+	Integer budget,
 	LocalDateTime createdAt,
 	List<ItemImage> itemImages
 ) {
