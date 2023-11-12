@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
+import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
+import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 
@@ -24,17 +25,14 @@ public class BucketModifier {
 	@Transactional
 	public void modify(
 		final Bucket bucket,
-		final BucketContent content
+		final BucketInfo bucketInfo,
+		final ItemIdRegistry registry
 	) {
 		bucket.removeBucketItems();
 		bucketRemover.removeBucketItems(bucket.getId());
 
-		List<BucketItem> bucketItems = bucketAppender.createBucketItems(content.itemIds());
-		bucket.modifyBucket(
-			content.hobby(),
-			content.name(),
-			content.budget()
-		);
+		List<BucketItem> bucketItems = bucketAppender.createBucketItems(registry);
+		bucket.modifyBucket(bucketInfo, bucket.getMemberId());
 		bucketItems.forEach(bucket::addBucketItem);
 
 		bucketRepository.save(bucket);

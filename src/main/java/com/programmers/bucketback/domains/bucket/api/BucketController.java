@@ -37,7 +37,7 @@ public class BucketController {
 	@Operation(summary = "버킷 생성", description = "BucketCreateRequest 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/buckets")
 	public ResponseEntity<Void> createBucket(@RequestBody @Valid final BucketCreateRequest request) {
-		bucketService.createBucket(request.toContent());
+		bucketService.createBucket(request.toInfo(), request.toRegistry());
 
 		return ResponseEntity.ok().build();
 	}
@@ -48,7 +48,7 @@ public class BucketController {
 		@PathVariable final Long bucketId,
 		@RequestBody @Valid final BucketUpdateRequest request
 	) {
-		bucketService.modifyBucket(bucketId, request.toContent());
+		bucketService.modifyBucket(bucketId, request.toInfo(), request.toRegistry());
 
 		return ResponseEntity.ok().build();
 	}

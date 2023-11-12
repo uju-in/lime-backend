@@ -1,10 +1,13 @@
 package com.programmers.bucketback.domains.bucket.domain;
 
+import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,6 +23,11 @@ public class BucketInfo {
 	private static final int MIN_BUDGET = 0;
 
 	@NotNull
+	@Column(name = "hobby")
+	@Enumerated(EnumType.STRING)
+	private Hobby hobby;
+
+	@NotNull
 	@Column(name = "name")
 	private String name;
 
@@ -28,11 +36,13 @@ public class BucketInfo {
 	private Integer budget;
 
 	public BucketInfo(
+		final Hobby hobby,
 		final String name,
 		final Integer budget
 	) {
 		validateBucketName(name);
 		validateBucketBudget(budget);
+		this.hobby = hobby;
 		this.name = name;
 		this.budget = budget;
 	}

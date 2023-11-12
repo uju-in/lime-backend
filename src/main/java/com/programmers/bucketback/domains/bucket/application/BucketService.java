@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMemberItemResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
-import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
+import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
@@ -36,23 +37,27 @@ public class BucketService {
 	private final ItemReader itemReader;
 
 	/** 버킷 생성 */
-	public void createBucket(final BucketContent content) {
-		validateExceedBudget(content);
+	public void createBucket(
+		final BucketInfo bucketInfo,
+		final ItemIdRegistry registry
+	) {
+		validateExceedBudget(bucketInfo, registry);
 
-		bucketAppender.append(content);
+		bucketAppender.append(bucketInfo, registry);
 	}
 
 	/** 버킷 수정 */
 	public void modifyBucket(
 		final Long bucketId,
-		final BucketContent content
+		final BucketInfo bucketInfo,
+		final ItemIdRegistry registry
 	) {
-		validateExceedBudget(content);
+		validateExceedBudget(bucketInfo, registry);
 
 		Long memberId = MemberUtils.getCurrentMemberId();
 		Bucket bucket = bucketReader.read(bucketId, memberId);
 
-		bucketModifier.modify(bucket, content);
+		bucketModifier.modify(bucket, bucketInfo, registry);
 	}
 
 	/** 버킷 삭제 */
@@ -82,7 +87,7 @@ public class BucketService {
 			.map(item -> ItemInfo.from(item))
 			.toList();
 
-		return new BucketGetResponse(BucketContent.from(bucket), itemInfos);
+		return BucketGetResponse.of(bucket, itemInfos);
 	}
 
 	/**
@@ -99,14 +104,17 @@ public class BucketService {
 		return BucketGetByCursorResponse.from(bucketCursorSummary);
 	}
 
-	private void validateExceedBudget(final BucketContent content) {
-		if (content.budget() != null) {
-			Integer totalPrice = content.itemIds().stream()
+	private void validateExceedBudget(
+		final BucketInfo bucketInfo,
+		final ItemIdRegistry registry
+	) {
+		if (bucketInfo.getBudget() != null) {
+			Integer totalPrice = registry.itemIds().stream()
 				.map(itemId -> itemReader.read(itemId).getPrice())
 				.collect(reducing(Integer::sum))
 				.get();
 
-			if (totalPrice > content.budget()) {
+			if (totalPrice > bucketInfo.getBudget()) {
 				throw new BusinessException(ErrorCode.BUCKET_EXCEED_BUDGET);
 			}
 		}
