@@ -26,9 +26,13 @@ public class Nickname {
 	private String nickname;
 
 	public Nickname(@NotNull final String nickname) {
+		validate(nickname);
+		this.nickname = nickname;
+	}
+
+	private void validate(final String nickname) {
 		validateLength(nickname);
 		validatePattern(nickname);
-		this.nickname = nickname;
 	}
 
 	private void validateLength(final String nickname) {

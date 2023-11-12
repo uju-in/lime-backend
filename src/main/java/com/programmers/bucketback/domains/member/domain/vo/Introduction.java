@@ -20,11 +20,11 @@ public class Introduction {
 	private String introduction;
 
 	public Introduction(final String introduction) {
-		validateLength(introduction);
+		validate(introduction);
 		this.introduction = introduction;
 	}
 
-	private void validateLength(final String introduction) {
+	private void validate(final String introduction) {
 		if (introduction.length() > MAX_INTRODUCTION_LENGTH) {
 			throw new BusinessException(ErrorCode.MEMBER_INTRODUCTION_BAD_LENGTH);
 		}
