@@ -2,7 +2,8 @@ package com.programmers.bucketback.domains.bucket.api.dto.request;
 
 import java.util.List;
 
-import com.programmers.bucketback.domains.bucket.application.vo.BucketContent;
+import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
+import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.global.annotation.Enum;
 
@@ -28,12 +29,12 @@ public record BucketCreateRequest(
 	List<Long> bucketItemIds
 ) {
 
-	public BucketContent toContent() {
-		return BucketContent.builder()
-			.hobby(hobby)
-			.name(bucketName)
-			.budget(bucketBudget)
-			.itemIds(bucketItemIds)
-			.build();
+	public BucketInfo toInfo() {
+		return new BucketInfo(hobby, bucketName, bucketBudget);
 	}
+
+	public ItemIdRegistry toRegistry() {
+		return new ItemIdRegistry(bucketItemIds);
+	}
+
 }
