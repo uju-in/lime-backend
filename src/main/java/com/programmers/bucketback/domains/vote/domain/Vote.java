@@ -64,7 +64,7 @@ public class Vote extends BaseEntity {
 	private LocalDateTime endTime;
 
 	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
-	private final List<Voter> voters = new ArrayList<>();
+	private List<Voter> voters = new ArrayList<>();
 
 	@Builder
 	private Vote(
