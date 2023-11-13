@@ -6,7 +6,7 @@ public class NaverCrawler implements WebCrawler {
 
 	private final String url;
 
-	public NaverCrawler(String url) {
+	public NaverCrawler(final String url) {
 		this.url = url;
 	}
 
