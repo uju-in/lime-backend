@@ -4,9 +4,6 @@ import static java.util.stream.Collectors.*;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
-import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMemberItemResponse;
-import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.GetBucketServiceResponse;
@@ -64,8 +61,10 @@ public class BucketService {
 		bucketRemover.remove(bucketId, memberId);
 	}
 
-	/** 버킷 수정을 위한 멤버 아이템 목록 조회 */
-	public BucketGetMemberItemResponse getMemberItemsForModify(
+	/**
+	 * 버킷 수정을 위한 멤버 아이템 목록 조회
+	 */
+	public BucketMemberItemCursorSummary getMemberItemsForModify(
 		final Long bucketId,
 		final CursorPageParameters parameters
 	) {
@@ -74,30 +73,27 @@ public class BucketService {
 		BucketMemberItemCursorSummary bucketMemberItemCursorSummary =
 			bucketReader.readByMemberItems(bucketId, memberId, parameters);
 
-		return new BucketGetMemberItemResponse(bucketMemberItemCursorSummary);
+		return bucketMemberItemCursorSummary;
 	}
 
 	/**
 	 * 버킷 상세 조회
 	 */
-	public BucketGetResponse getBucket(final Long bucketId) {
-		GetBucketServiceResponse response = bucketReader.readDetail(bucketId);
-
-		return response.toBucketGetResponse();
+	public GetBucketServiceResponse getBucket(final Long bucketId) {
+		return bucketReader.readDetail(bucketId);
 	}
 
 	/**
 	 * 버킷 커서 조회
 	 */
-	public BucketGetByCursorResponse getBucketsByCursor(
+	public BucketCursorSummary getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = memberReader.readByNickname(nickname).getId();
-		BucketCursorSummary bucketCursorSummary = bucketReader.readByCursor(memberId, hobby, parameters);
 
-		return bucketCursorSummary.toBucketGetByCursorResponse();
+		return bucketReader.readByCursor(memberId, hobby, parameters);
 	}
 
 	private void validateExceedBudget(

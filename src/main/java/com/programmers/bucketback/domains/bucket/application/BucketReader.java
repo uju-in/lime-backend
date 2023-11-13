@@ -108,7 +108,9 @@ public class BucketReader {
 		return new BucketCursorSummary(nextCursorId, summaryCount, summaries);
 	}
 
-	/** 버킷 정보 상세 조회 */
+	/**
+	 * 버킷 정보 상세 조회
+	 */
 	public GetBucketServiceResponse readDetail(final Long bucketId) {
 		Bucket bucket = read(bucketId);
 		List<ItemInfo> itemInfos = bucket.getBucketItems().stream()
