@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.member.application;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.member.domain.Member;
 
@@ -12,8 +13,10 @@ public class MemberRemover {
 
 	private final MemberReader memberReader;
 
-	public void remove() {
-		final Member member = memberReader.read();
+	@Transactional
+	public void remove(final Long memberId) {
+		final Member member = memberReader.read(memberId);
+
 		member.delete();
 	}
 }
