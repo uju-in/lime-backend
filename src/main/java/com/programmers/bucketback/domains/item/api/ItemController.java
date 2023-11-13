@@ -51,9 +51,10 @@ public class ItemController {
 
 	@GetMapping("/{itemId}")
 	public ResponseEntity<ItemGetResponse> getItem(@PathVariable final Long itemId) {
-		ItemGetServiceResponse response = itemService.getItemDetails(itemId);
+		ItemGetServiceResponse serviceResponse = itemService.getItemDetails(itemId);
 
-		return ResponseEntity.ok(response.toItemGetResponse());
+		ItemGetResponse response = ItemGetResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/myitems/{itemId}")
@@ -67,7 +68,8 @@ public class ItemController {
 	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
 		ItemGetNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
 
-		return ResponseEntity.ok(serviceResponse.toItemGetNamesResponse());
+		ItemGetNamesResponse response = ItemGetNamesResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/search")
@@ -80,6 +82,7 @@ public class ItemController {
 			request.toParameters()
 		);
 
-		return ResponseEntity.ok(serviceResponse.toItemGetByCursorResponse());
+		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 }
