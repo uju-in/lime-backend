@@ -17,8 +17,8 @@ public class ItemFinder {
 
 	private final ItemRepository itemRepository;
 
-	public List<ItemNameGetResult> getItemNamesByKeyword(final String name) {
-		final String trimmedKeyword = name.trim();
+	public List<ItemNameGetResult> getItemNamesByKeyword(final String keyword) {
+		final String trimmedKeyword = keyword.trim();
 
 		if (trimmedKeyword.isEmpty()) {
 			return Collections.emptyList();

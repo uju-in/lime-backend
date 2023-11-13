@@ -15,9 +15,9 @@ public class ItemEnrollValidator {
 	private final ItemRepository itemRepository;
 
 	public void validItemURLNotDuplicated(final String itemURL) {
-		boolean isItemURLIsDuplicated = itemRepository.existsItemsByUrl(itemURL);
+		boolean isItemURLIsExist = itemRepository.existsItemsByUrl(itemURL);
 
-		if (isItemURLIsDuplicated) {
+		if (isItemURLIsExist) {
 			throw new BusinessException(ErrorCode.ITEM_URL_ALREADY_EXIST);
 		}
 	}
