@@ -64,13 +64,13 @@ public class ItemService {
 	}
 
 	public ItemGetNamesServiceResponse getItemNamesByKeyword(final String keyword) {
-		final String trimedKeyword = keyword.trim();
+		final String trimmedKeyword = keyword.trim();
 
-		if (trimedKeyword.isEmpty()) {
+		if (trimmedKeyword.isEmpty()) {
 			return new ItemGetNamesServiceResponse(Collections.emptyList());
 		}
 
-		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(trimedKeyword);
+		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(trimmedKeyword);
 		return new ItemGetNamesServiceResponse(itemNameResults);
 	}
 
@@ -78,14 +78,14 @@ public class ItemService {
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
-		final String trimedKeyword = keyword.trim();
+		final String trimmedKeyword = keyword.trim();
 
-		if (trimedKeyword.isEmpty()) {
+		if (trimmedKeyword.isEmpty()) {
 			return new ItemGetByCursorServiceResponse(null, Collections.emptyList());
 		}
 
 		return itemCursorReader.readByCursor(
-			trimedKeyword,
+			trimmedKeyword,
 			parameters
 		);
 	}
