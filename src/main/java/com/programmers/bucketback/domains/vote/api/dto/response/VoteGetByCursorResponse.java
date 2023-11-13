@@ -7,9 +7,9 @@ import com.programmers.bucketback.domains.vote.application.dto.response.VoteCurs
 
 public record VoteGetByCursorResponse(
 	String nextCursorId,
-	List<VoteCursorSummary> voteCursorSummaries
+	List<VoteCursorSummary> votes
 ) {
 	public static VoteGetByCursorResponse from(final GetVotesServiceResponse serviceResponse) {
-		return new VoteGetByCursorResponse(serviceResponse.nextCursorId(), serviceResponse.voteCursorSummaries());
+		return new VoteGetByCursorResponse(serviceResponse.nextCursorId(), serviceResponse.votes());
 	}
 }
