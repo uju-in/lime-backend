@@ -37,7 +37,7 @@ public class ItemService {
 		memberItemAddService.addMemberItems(request.itemIds(), memberId);
 	}
 
-	public ItemGetServiceResponse getItemDetails(final Long itemId) {
+	public ItemGetServiceResponse getItem(final Long itemId) {
 		boolean isMemberItem = false;
 
 		Item item = itemReader.read(itemId);
@@ -74,7 +74,7 @@ public class ItemService {
 		return new ItemGetNamesServiceResponse(itemNameResults);
 	}
 
-	public ItemGetByCursorServiceResponse getReviewsByCursor(
+	public ItemGetByCursorServiceResponse getItemsByCursor(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {

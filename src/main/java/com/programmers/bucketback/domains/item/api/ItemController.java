@@ -51,7 +51,7 @@ public class ItemController {
 
 	@GetMapping("/{itemId}")
 	public ResponseEntity<ItemGetResponse> getItem(@PathVariable final Long itemId) {
-		ItemGetServiceResponse serviceResponse = itemService.getItemDetails(itemId);
+		ItemGetServiceResponse serviceResponse = itemService.getItem(itemId);
 
 		ItemGetResponse response = ItemGetResponse.from(serviceResponse);
 		return ResponseEntity.ok(response);
@@ -77,7 +77,7 @@ public class ItemController {
 		@RequestParam final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		ItemGetByCursorServiceResponse serviceResponse = itemService.getReviewsByCursor(
+		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
 			request.toParameters()
 		);
