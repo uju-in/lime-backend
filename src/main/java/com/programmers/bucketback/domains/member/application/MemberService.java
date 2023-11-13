@@ -58,14 +58,14 @@ public class MemberService {
 	) {
 		final Long memberId = getCurrentMemberId();
 		memberManager.checkNicknameDuplication(nickname);
-
-		memberModifier.modify(memberId, nickname, introduction);
+    
+		memberModifier.modifyProfile(memberId, nickname, introduction);
 	}
 
 	public void updatePassword(final String password) {
 		final Long memberId = getCurrentMemberId();
 
-		memberModifier.modify(memberId, password);
+		memberModifier.modifyPassword(memberId, password);
 	}
 
 	public void checkNickname(final String nickname) {

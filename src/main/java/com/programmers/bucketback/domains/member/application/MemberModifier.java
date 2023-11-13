@@ -16,7 +16,7 @@ public class MemberModifier {
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
-	public void modify(
+	public void modifyProfile(
 		final Long memberId,
 		final String nickname,
 		final String introduction
@@ -27,7 +27,7 @@ public class MemberModifier {
 	}
 
 	@Transactional
-	public void modify(
+	public void modifyPassword(
 		final Long memberId,
 		final String password
 	) {
