@@ -5,11 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.repository.CommentRepository;
-import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.feed.application.FeedReader;
 import com.programmers.bucketback.domains.feed.domain.Feed;
-import com.programmers.bucketback.global.error.exception.BusinessException;
-import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,13 +20,9 @@ public class CommentAppender {
 	@Transactional
 	public void append(
 		final Long feedId,
-		final String content
+		final String content,
+		final Long memberId
 	) {
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
-		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Feed feed = feedReader.read(feedId);
 		final Comment comment = new Comment(feed, memberId, content);
 

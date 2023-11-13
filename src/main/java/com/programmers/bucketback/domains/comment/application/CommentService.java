@@ -24,7 +24,12 @@ public class CommentService {
 		final Long feedId,
 		final String content
 	) {
-		commentAppender.append(feedId, content);
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+		final Long memberId = MemberUtils.getCurrentMemberId();
+
+		commentAppender.append(feedId, content, memberId);
 	}
 
 	public void modifyComment(
@@ -42,7 +47,7 @@ public class CommentService {
 		final Long feedId,
 		final Long commentId
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
 		commentValidator.validCommentInFeed(feedId, commentId);
 		commentValidator.validCommentOwner(commentId, memberId);
 		commentRemover.remove(commentId);
@@ -52,8 +57,8 @@ public class CommentService {
 		final Long feedId,
 		final CursorPageParameters parameters
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
-		CommentCursorSummary commentCursorSummary = commentReader.readByCursor(feedId, memberId, parameters);
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final CommentCursorSummary commentCursorSummary = commentReader.readByCursor(feedId, memberId, parameters);
 
 		return new CommentGetCursorResponse(commentCursorSummary);
 	}
