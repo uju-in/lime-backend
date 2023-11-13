@@ -30,7 +30,6 @@ public class ItemService {
 	private final MemberItemReader memberItemReader;
 	private final MemberItemRemover memberItemRemover;
 	private final ItemFinder itemFinder;
-	private final ItemMapper itemMapper;
 	private final ItemCursorReader itemCursorReader;
 
 	public void addItem(final AddMemberItemServiceRequest request) {
@@ -48,7 +47,7 @@ public class ItemService {
 		}
 
 		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
-		ItemInfo itemInfo = itemMapper.getItemInfo(item);
+		ItemInfo itemInfo = ItemInfo.from(item);
 
 		return GetItemServiceResponse.builder()
 			.itemInfo(itemInfo)
