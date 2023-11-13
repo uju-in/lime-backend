@@ -9,11 +9,14 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryItemGetResponse;
+import com.programmers.bucketback.domains.inventory.application.dto.GetInventoryServiceResponse;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepository;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 import com.programmers.bucketback.domains.item.application.ItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.domains.review.application.ReviewReader;
 import com.programmers.bucketback.domains.review.domain.Review;
@@ -65,6 +68,20 @@ public class InventoryReader {
 		return inventoryItemRepository.findByInventoryId(inventoryId);
 	}
 
+	/**
+	 * 인벤토링 아이템 상세 조회
+	 */
+	public GetInventoryServiceResponse readDetail(final Long inventoryId) {
+		Inventory inventory = read(inventoryId);
+
+		List<InventoryItemGetResponse> inventoryItemGetResponses = inventory.getInventoryItems().stream()
+			.map(inventoryItem -> itemReader.read(inventoryItem.getItem().getId()))
+			.map(item -> new InventoryItemGetResponse(ItemInfo.from(item), item.getUrl()))
+			.toList();
+
+		return GetInventoryServiceResponse.of(inventory, inventoryItemGetResponses);
+	}
+
 	/** 인벤토리 목록 조회 */
 	public List<InventoryInfoSummary> readSummary(final String nickname) {
 		Long memberId = memberReader.readByNickname(nickname).getId();
@@ -110,4 +127,5 @@ public class InventoryReader {
 
 		return new InventorReviewedItemCursorSummary(nextCursorId, summaryCount, summaries);
 	}
+
 }

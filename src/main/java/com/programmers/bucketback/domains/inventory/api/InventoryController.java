@@ -65,7 +65,11 @@ public class InventoryController {
 		@PathVariable final String nickname,
 		@PathVariable final Long inventoryId
 	) {
-		return ResponseEntity.ok(inventoryService.getInventory(inventoryId));
+		InventoryGetResponse response = InventoryGetResponse.from(
+			inventoryService.getInventory(inventoryId)
+		);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "인벤토리 수정을 위한 내가 리뷰한 아이템 조회")
