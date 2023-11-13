@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.member.api.dto.request;
 
-import com.programmers.bucketback.domains.member.domain.LoginInfo;
+import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
 
 import jakarta.validation.constraints.NotNull;
 

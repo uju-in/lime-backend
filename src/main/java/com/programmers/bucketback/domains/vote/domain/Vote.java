@@ -6,9 +6,11 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.common.Hobby;
+import com.programmers.bucketback.domains.vote.domain.vo.Content;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -51,9 +53,8 @@ public class Vote extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
 
-	@NotNull
-	@Column(name = "content")
-	private String content;
+	@Embedded
+	private Content content;
 
 	@NotNull
 	@Column(name = "start_time")
@@ -78,9 +79,13 @@ public class Vote extends BaseEntity {
 		this.item1Id = item1Id;
 		this.item2Id = item2Id;
 		this.hobby = hobby;
-		this.content = content;
+		this.content = new Content(content);
 		this.startTime = LocalDateTime.now();
 		this.endTime = startTime.plusDays(1);
+	}
+
+	public String getContent() {
+		return content.getContent();
 	}
 
 	public boolean containsItem(final Long itemId) {

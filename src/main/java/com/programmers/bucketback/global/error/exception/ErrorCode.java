@@ -23,6 +23,12 @@ public enum ErrorCode {
 	MEMBER_DELETED("MEMBER_004", "탈퇴한 회원 입니다."),
 	MEMBER_EMAIL_EXIST("MEMBER_005", "이메일이 중복되었습니다."),
 	MEMBER_NOT_LOGIN("MEMBER_006", "로그인 하지 않은 유저 입니다."),
+	MEMBER_NICKNAME_DUPLICATE("MEMBER_007", "닉네임이 중복되었습니다."),
+	MEMBER_NICKNAME_BAD_LENGTH("MEMBER_008", "닉네임은 3글자에서 25글자 사이여야 합니다."),
+	MEMBER_NICKNAME_BAD_PATTERN("MEMBER_009", "닉네임은 영어 대소문자, 숫자 그리고 언더스코어만 허용합니다."),
+	MEMBER_PASSWORD_BAD_LENGTH("MEMBER_010", "비밀번호는 6글자에서 10글자 사이여야 합니다."),
+	MEMBER_PASSWORD_BAD_PATTERN("MEMBER_011", "비밀번호는 영어, 숫자, 특수문자가 최소 1개씩 포함되야합니다."),
+	MEMBER_INTRODUCTION_BAD_LENGTH("MEMBER_012", "자기소개는 최대 300자 입니다."),
 
 	// Item
 	ITEM_MARKET_NOT_FOUND("ITEM_001", "요청 url에 해당하는 상품을 찾을 수 없습니다."),
@@ -43,6 +49,7 @@ public enum ErrorCode {
 	VOTE_BAD_STATUS_CONDITION("VOTE_006", "잘못된 status 파라미터 값입니다."),
 	VOTE_BAD_SORT_CONDITION("VOTE_007", "잘못된 sort 파라미터 값입니다."),
 	VOTE_CANNOT_PARTICIPATE("VOTE_008", "종료된 투표에는 참여할 수 없습니다."),
+	VOTE_CONTENT_BAD_LENGTH("VOTE_009", "투표 내용은 최대 1000자 입니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
@@ -67,9 +74,11 @@ public enum ErrorCode {
 	COMMENT_NOT_IN_FEED("COMMENT_002", "피드에 존재하지 않은 댓글 입니다."),
 	COMMENT_NOT_MINE("COMMENT_003", "댓글 작성자와 일치 하지 않은 사용자 입니다."),
 	COMMENT_CANNOT_ADOPT("COMMENT_004", "본인의 댓글을 채택할 수 없습니다."),
+	COMMENT_CONTENT_BAD_LENGTH("COMMENT_005", "댓글 내용은 최대 300자 입니다."),
 
 	// Hobby
-	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다.");
+	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다."),
+	;
 
 	private final String code;
 	private final String message;
