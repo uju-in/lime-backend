@@ -1,6 +1,5 @@
 package com.programmers.bucketback.domains.item.application;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -64,13 +63,8 @@ public class ItemService {
 	}
 
 	public ItemGetNamesServiceResponse getItemNamesByKeyword(final String keyword) {
-		final String trimmedKeyword = keyword.trim();
+		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(keyword);
 
-		if (trimmedKeyword.isEmpty()) {
-			return new ItemGetNamesServiceResponse(Collections.emptyList());
-		}
-
-		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(trimmedKeyword);
 		return new ItemGetNamesServiceResponse(itemNameResults);
 	}
 
@@ -78,14 +72,8 @@ public class ItemService {
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
-		final String trimmedKeyword = keyword.trim();
-
-		if (trimmedKeyword.isEmpty()) {
-			return new ItemGetByCursorServiceResponse(null, Collections.emptyList());
-		}
-
 		return itemCursorReader.readByCursor(
-			trimmedKeyword,
+			keyword,
 			parameters
 		);
 	}

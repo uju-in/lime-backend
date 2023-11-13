@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.item.application;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -17,7 +18,13 @@ public class ItemFinder {
 	private final ItemRepository itemRepository;
 
 	public List<ItemNameGetResult> getItemNamesByKeyword(final String name) {
-		List<Item> items = itemRepository.findItemsByNameContains(name);
+		final String trimmedKeyword = name.trim();
+
+		if (trimmedKeyword.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<Item> items = itemRepository.findItemsByNameContains(trimmedKeyword);
 
 		return items.stream()
 			.map(ItemNameGetResult::from)

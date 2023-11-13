@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.item.application;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -23,10 +24,16 @@ public class ItemCursorReader {
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
+		final String trimmedKeyword = keyword.trim();
+
+		if (trimmedKeyword.isEmpty()) {
+			return new ItemGetByCursorServiceResponse(null, Collections.emptyList());
+		}
+
 		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
 
 		List<ItemSummary> itemSummaries = itemRepository.findAllByCursor(
-			keyword,
+			trimmedKeyword,
 			parameters.cursorId(),
 			pageSize
 		);
