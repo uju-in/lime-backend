@@ -4,6 +4,6 @@ import java.util.List;
 
 public record GetVotesServiceResponse(
 	String nextCursorId,
-	List<VoteCursorSummary> voteCursorSummaries
+	List<VoteCursorSummary> votes
 ) {
 }

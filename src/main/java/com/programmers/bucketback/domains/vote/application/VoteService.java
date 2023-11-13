@@ -6,6 +6,7 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
@@ -25,8 +26,11 @@ public class VoteService {
 	private final VoteRemover voteRemover;
 
 	public Long createVote(final CreateVoteServiceRequest request) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
 
+		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteAppender.append(memberId, request);
 
 		return vote.getId();
@@ -36,8 +40,16 @@ public class VoteService {
 		final Long voteId,
 		final Long itemId
 	) {
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
+
+		if (!vote.isVoting()) {
+			throw new BusinessException(ErrorCode.VOTE_CANNOT_PARTICIPATE);
+		}
 
 		if (!vote.containsItem(itemId)) {
 			throw new BusinessException(ErrorCode.VOTE_NOT_CONTAIN_ITEM);
@@ -58,6 +70,10 @@ public class VoteService {
 	}
 
 	public void deleteVote(final Long voteId) {
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
@@ -80,7 +96,7 @@ public class VoteService {
 	public GetVotesServiceResponse getVotesByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
-		final String sortCondition,
+		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = null;

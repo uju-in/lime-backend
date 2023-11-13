@@ -14,6 +14,7 @@ public enum ErrorCode {
 	MAIL_SEND_FAIL("COMMON_004", "이메일 인증코드 전송이 실패했습니다."),
 	UNAUTHORIZED("COMMON_005", "로그인이 필요한 기능입니다."),
 	FORBIDDEN("COMMON_006", "권한이 없습니다."),
+	MISSING_PARAMETER("COMMON_007", "필수 파라미터가 있습니다."),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -44,8 +45,11 @@ public enum ErrorCode {
 	VOTE_NOT_CONTAIN_ITEM("VOTE_002", "투표에 포함된 아이템이 아닙니다."),
 	VOTE_NOT_OWNER("VOTE_003", "투표의 작성자가 아닙니다."),
 	VOTE_NOT_VOTER("VOTE_004", "투표의 투표자가 아닙니다."),
-	VOTE_BAD_POPULARITY("VOTE_005", "종료된 투표만 인기순 조회가 가능합니다."),
-	VOTE_CONTENT_BAD_LENGTH("VOTE_006", "투표 내용은 최대 1000자 입니다."),
+	VOTE_CANNOT_SORT("VOTE_005", "인기순 정렬을 할 수 없습니다."),
+	VOTE_BAD_STATUS_CONDITION("VOTE_006", "잘못된 status 파라미터 값입니다."),
+	VOTE_BAD_SORT_CONDITION("VOTE_007", "잘못된 sort 파라미터 값입니다."),
+	VOTE_CANNOT_PARTICIPATE("VOTE_008", "종료된 투표에는 참여할 수 없습니다."),
+	VOTE_CONTENT_BAD_LENGTH("VOTE_009", "투표 내용은 최대 1000자 입니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
@@ -71,6 +75,9 @@ public enum ErrorCode {
 	COMMENT_NOT_MINE("COMMENT_003", "댓글 작성자와 일치 하지 않은 사용자 입니다."),
 	COMMENT_CANNOT_ADOPT("COMMENT_004", "본인의 댓글을 채택할 수 없습니다."),
 	COMMENT_CONTENT_BAD_LENGTH("COMMENT_005", "댓글 내용은 최대 300자 입니다."),
+
+	// Hobby
+	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다."),
 	;
 
 	private final String code;
