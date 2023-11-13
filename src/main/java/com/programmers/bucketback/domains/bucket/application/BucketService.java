@@ -2,8 +2,6 @@ package com.programmers.bucketback.domains.bucket.application;
 
 import static java.util.stream.Collectors.*;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
@@ -11,6 +9,7 @@ import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMembe
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.GetBucketServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
@@ -18,7 +17,6 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
-import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -62,7 +60,8 @@ public class BucketService {
 
 	/** 버킷 삭제 */
 	public void deleteBucket(final Long bucketId) {
-		bucketRemover.remove(bucketId);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		bucketRemover.remove(bucketId, memberId);
 	}
 
 	/** 버킷 수정을 위한 멤버 아이템 목록 조회 */
@@ -78,16 +77,12 @@ public class BucketService {
 		return new BucketGetMemberItemResponse(bucketMemberItemCursorSummary);
 	}
 
-	/** 버킷 상세 조회 */
+	/**
+	 * 버킷 상세 조회
+	 */
 	public BucketGetResponse getBucket(final Long bucketId) {
-		Bucket bucket = bucketReader.read(bucketId);
-
-		List<ItemInfo> itemInfos = bucket.getBucketItems().stream()
-			.map(bucketItem -> itemReader.read(bucketItem.getItem().getId()))
-			.map(item -> ItemInfo.from(item))
-			.toList();
-
-		return BucketGetResponse.of(bucket, itemInfos);
+		GetBucketServiceResponse response = bucketReader.readDetail(bucketId);
+		return response.toBucketGetResponse();
 	}
 
 	/**

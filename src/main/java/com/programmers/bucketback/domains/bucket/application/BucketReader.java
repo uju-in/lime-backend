@@ -9,13 +9,16 @@ import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSumm
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.GetBucketServiceResponse;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketItemRepository;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.application.MemberItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -29,6 +32,7 @@ public class BucketReader {
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
 	private final MemberItemReader memberItemReader;
+	private final ItemReader itemReader;
 
 	/** 버킷 정보 조회 */
 	public Bucket read(final Long bucketId) {
@@ -83,9 +87,7 @@ public class BucketReader {
 		return new BucketMemberItemCursorSummary(nextCursorId, summaryCount, summaries);
 	}
 
-	/**
-	 * 버킷 정보 커서 페이징 조회
-	 */
+	/** 버킷 정보 커서 페이징 조회 */
 	public BucketCursorSummary readByCursor(
 		final Long memberId,
 		final Hobby hobby,
@@ -106,4 +108,14 @@ public class BucketReader {
 		return new BucketCursorSummary(nextCursorId, summaryCount, summaries);
 	}
 
+	/** 버킷 정보 상세 조회 */
+	public GetBucketServiceResponse readDetail(final Long bucketId) {
+		Bucket bucket = read(bucketId);
+		List<ItemInfo> itemInfos = bucket.getBucketItems().stream()
+			.map(bucketItem -> itemReader.read(bucketItem.getItem().getId()))
+			.map(item -> ItemInfo.from(item))
+			.toList();
+
+		return new GetBucketServiceResponse(bucket, itemInfos);
+	}
 }

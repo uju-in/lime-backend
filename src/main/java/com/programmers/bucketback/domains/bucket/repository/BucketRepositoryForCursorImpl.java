@@ -41,7 +41,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 			.where(
 				cursorIdCondition(cursorId),
 				bucket.memberId.eq(memberId),
-				bucket.hobby.eq(hobby)
+				bucket.bucketInfo.hobby.eq(hobby)
 			)
 			.orderBy(decrease())
 			.limit(pageSize)
