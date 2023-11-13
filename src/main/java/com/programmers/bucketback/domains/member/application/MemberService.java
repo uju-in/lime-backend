@@ -2,9 +2,10 @@ package com.programmers.bucketback.domains.member.application;
 
 import org.springframework.stereotype.Service;
 
+import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
-import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
+import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -26,6 +27,10 @@ public class MemberService {
 		final LoginInfo loginInfo,
 		final String nickname
 	) {
+		final String email = loginInfo.getEmail();
+		memberManager.checkEmailDuplication(email);
+		memberManager.checkNicknameDuplication(nickname);
+
 		memberAppender.append(loginInfo, nickname);
 	}
 
@@ -42,22 +47,29 @@ public class MemberService {
 	}
 
 	public void deleteMember() {
-		memberRemover.remove();
+		final Long memberId = getCurrentMemberId();
+
+		memberRemover.remove(memberId);
 	}
 
 	public void updateProfile(
 		final String nickname,
 		final String introduction
 	) {
-		memberModifier.modifyProfile(nickname, introduction);
+		final Long memberId = getCurrentMemberId();
+		memberManager.checkNicknameDuplication(nickname);
+    
+		memberModifier.modifyProfile(memberId, nickname, introduction);
 	}
 
 	public void updatePassword(final String password) {
-		memberModifier.modifyPassword(password);
+		final Long memberId = getCurrentMemberId();
+
+		memberModifier.modifyPassword(memberId, password);
 	}
 
-	public boolean checkNickname(final String nickname) {
-		return memberManager.checkNicknameDuplication(nickname);
+	public void checkNickname(final String nickname) {
+		memberManager.checkNicknameDuplication(nickname);
 	}
 
 	public String checkEmail(final String email) {
@@ -68,5 +80,13 @@ public class MemberService {
 		} catch (final MessagingException e) {
 			throw new BusinessException(ErrorCode.MAIL_SEND_FAIL);
 		}
+	}
+
+	private Long getCurrentMemberId() {
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
+		return MemberUtils.getCurrentMemberId();
 	}
 }

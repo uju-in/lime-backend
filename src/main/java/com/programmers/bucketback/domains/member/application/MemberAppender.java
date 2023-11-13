@@ -3,9 +3,9 @@ package com.programmers.bucketback.domains.member.application;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
-import com.programmers.bucketback.domains.member.domain.Role;
+import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
+import com.programmers.bucketback.domains.member.domain.vo.Role;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,9 @@ public class MemberAppender {
 		final String nickname
 	) {
 		final String email = loginInfo.getEmail();
-		final String encodedPassword = passwordEncoder.encode(loginInfo.getPassword());
+		final String rawPassword = loginInfo.getPassword();
+		Member.validatePassword(rawPassword);
+		final String encodedPassword = passwordEncoder.encode(rawPassword);
 
 		final Member member = Member.builder()
 			.email(email)
