@@ -1,5 +1,6 @@
-package com.programmers.bucketback.domains.vote.application;
+package com.programmers.bucketback.domains.vote.application.dto.response;
 
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.item.domain.Item;
 
 import lombok.Builder;
@@ -7,8 +8,8 @@ import lombok.Builder;
 @Builder
 public record VoteCursorSummary(
 	VoteInfo voteInfo,
-	OptionItem option1Item,
-	OptionItem option2Item,
+	ItemInfo item1Info,
+	ItemInfo item2Info,
 	String cursorId
 ) {
 	public static VoteCursorSummary of(
@@ -18,8 +19,8 @@ public record VoteCursorSummary(
 	) {
 		return VoteCursorSummary.builder()
 			.voteInfo(voteSummary.voteInfo())
-			.option1Item(OptionItem.from(item1))
-			.option2Item(OptionItem.from(item2))
+			.item1Info(ItemInfo.from(item1))
+			.item2Info(ItemInfo.from(item2))
 			.cursorId(voteSummary.cursorId())
 			.build();
 	}

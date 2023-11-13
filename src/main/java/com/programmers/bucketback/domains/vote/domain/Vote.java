@@ -41,12 +41,12 @@ public class Vote extends BaseEntity {
 	private Long memberId;
 
 	@NotNull
-	@Column(name = "option1_item_id")
-	private Long option1ItemId;
+	@Column(name = "item1_id")
+	private Long item1Id;
 
 	@NotNull
-	@Column(name = "option2_item_id")
-	private Long option2ItemId;
+	@Column(name = "item2_id")
+	private Long item2Id;
 
 	@NotNull
 	@Column(name = "hobby")
@@ -64,20 +64,20 @@ public class Vote extends BaseEntity {
 	@Column(name = "end_time")
 	private LocalDateTime endTime;
 
-	@OneToMany(mappedBy = "vote", cascade = CascadeType.REMOVE)
-	private final List<Voter> voters = new ArrayList<>();
+	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
+	private List<Voter> voters = new ArrayList<>();
 
 	@Builder
 	private Vote(
 		@NotNull final Long memberId,
-		@NotNull final Long option1ItemId,
-		@NotNull final Long option2ItemId,
+		@NotNull final Long item1Id,
+		@NotNull final Long item2Id,
 		@NotNull final Hobby hobby,
 		@NotNull final String content
 	) {
 		this.memberId = memberId;
-		this.option1ItemId = option1ItemId;
-		this.option2ItemId = option2ItemId;
+		this.item1Id = item1Id;
+		this.item2Id = item2Id;
 		this.hobby = hobby;
 		this.content = new Content(content);
 		this.startTime = LocalDateTime.now();
@@ -89,7 +89,7 @@ public class Vote extends BaseEntity {
 	}
 
 	public boolean containsItem(final Long itemId) {
-		return option1ItemId.equals(itemId) || option2ItemId.equals(itemId);
+		return item1Id.equals(itemId) || item2Id.equals(itemId);
 	}
 
 	public void addVoter(final Voter voter) {
@@ -100,5 +100,10 @@ public class Vote extends BaseEntity {
 
 	public boolean isOwner(final Long memberId) {
 		return this.memberId.equals(memberId);
+	}
+
+	public boolean isVoting() {
+		final LocalDateTime now = LocalDateTime.now();
+		return this.endTime.isAfter(now);
 	}
 }
