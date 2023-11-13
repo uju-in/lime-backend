@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.inventory.application;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
@@ -18,6 +19,7 @@ public class InventoryModifier {
 	private final InventoryAppender inventoryAppender;
 
 	/** 인벤토리 수정 */
+	@Transactional
 	public void modify(
 		final Inventory inventory,
 		final ItemIdRegistry registry
