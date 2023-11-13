@@ -82,6 +82,7 @@ public class BucketService {
 	 */
 	public BucketGetResponse getBucket(final Long bucketId) {
 		GetBucketServiceResponse response = bucketReader.readDetail(bucketId);
+
 		return response.toBucketGetResponse();
 	}
 
@@ -96,7 +97,7 @@ public class BucketService {
 		Long memberId = memberReader.readByNickname(nickname).getId();
 		BucketCursorSummary bucketCursorSummary = bucketReader.readByCursor(memberId, hobby, parameters);
 
-		return BucketGetByCursorResponse.from(bucketCursorSummary);
+		return bucketCursorSummary.toBucketGetByCursorResponse();
 	}
 
 	private void validateExceedBudget(
