@@ -43,7 +43,7 @@ public class VoteService {
 			throw new BusinessException(ErrorCode.VOTE_NOT_CONTAIN_ITEM);
 		}
 
-		voteManager.vote(vote, memberId, itemId);
+		voteManager.participate(vote, memberId, itemId);
 	}
 
 	public void cancelVote(final Long voteId) {

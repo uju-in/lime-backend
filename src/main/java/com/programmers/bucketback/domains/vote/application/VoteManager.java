@@ -17,7 +17,7 @@ public class VoteManager {
 	private final VoterRepository voterRepository;
 
 	@Transactional
-	public void vote(
+	public void participate(
 		final Vote vote,
 		final Long memberId,
 		final Long itemId
@@ -25,7 +25,7 @@ public class VoteManager {
 		final Voter voter = voterReader.read(vote, memberId)
 			.orElseGet(() -> new Voter(vote, memberId, itemId));
 
-		voter.selectItem(itemId);
+		voter.participate(itemId);
 		vote.addVoter(voter);
 	}
 
