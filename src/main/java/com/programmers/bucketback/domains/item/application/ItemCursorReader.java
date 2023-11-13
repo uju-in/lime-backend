@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.item.application.dto.GetItemByCursorServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.vo.ItemCursorSummary;
 import com.programmers.bucketback.domains.item.application.vo.ItemSummary;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
@@ -19,7 +19,7 @@ public class ItemCursorReader {
 
 	private final ItemRepository itemRepository;
 
-	public GetItemByCursorServiceResponse readByCursor(
+	public ItemGetByCursorServiceResponse readByCursor(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
@@ -39,7 +39,7 @@ public class ItemCursorReader {
 
 		List<ItemCursorSummary> itemCursorSummaries = getItemCursorSummaries(itemSummaries, cursorIds);
 
-		return new GetItemByCursorServiceResponse(
+		return new ItemGetByCursorServiceResponse(
 			nextCursorId,
 			itemCursorSummaries
 		);

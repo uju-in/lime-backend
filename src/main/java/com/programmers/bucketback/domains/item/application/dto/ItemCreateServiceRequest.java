@@ -6,7 +6,7 @@ import com.programmers.bucketback.domains.item.application.crawling.ItemInfo;
 import lombok.Builder;
 
 @Builder
-public record CreateItemServiceRequest(
+public record ItemCreateServiceRequest(
 	Hobby hobby,
 	String itemName,
 	Integer price,
@@ -14,11 +14,11 @@ public record CreateItemServiceRequest(
 	String url
 ) {
 
-	public static CreateItemServiceRequest of(
+	public static ItemCreateServiceRequest of(
 		final Hobby hobby,
 		final ItemInfo itemInfo
 	) {
-		return CreateItemServiceRequest.builder().
+		return ItemCreateServiceRequest.builder().
 			hobby(hobby).
 			imageUrl(itemInfo.imageUrl()).
 			url(itemInfo.url()).

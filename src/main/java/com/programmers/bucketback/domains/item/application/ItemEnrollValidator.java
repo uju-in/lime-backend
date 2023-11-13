@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class EnrollItemValidator {
+public class ItemEnrollValidator {
 
 	private final ItemRepository itemRepository;
 

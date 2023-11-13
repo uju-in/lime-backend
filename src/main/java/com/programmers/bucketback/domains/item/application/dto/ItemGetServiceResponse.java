@@ -6,7 +6,7 @@ import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import lombok.Builder;
 
 @Builder
-public record GetItemServiceResponse(
+public record ItemGetServiceResponse(
 	ItemInfo itemInfo,
 	String itemUrl,
 	Double itemAvgRate,
