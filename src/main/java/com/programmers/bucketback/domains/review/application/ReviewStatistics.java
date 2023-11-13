@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 public class ReviewStatistics {
 
 	private final ReviewRepository reviewRepository;
-	
-	public double getReviewAvgByItemId(final Long itemId) {
+
+	public Double getReviewAvgByItemId(final Long itemId) {
 		return reviewRepository.getAvgRatingByReviewId(itemId);
 	}
 }
