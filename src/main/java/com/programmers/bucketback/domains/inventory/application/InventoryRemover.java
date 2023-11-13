@@ -31,9 +31,7 @@ public class InventoryRemover {
 		inventoryRepository.delete(inventory);
 	}
 
-	/** 인벤토리 아이템 삭제
-	 * refactor : orphanRemoval = true 설정에 대해서 알아보고 리팩토링 잡아보기
-	 * */
+	/** 인벤토리 아이템 삭제 */
 	@Transactional
 	public void removeInventoryItems(final Long inventoryId) {
 		List<InventoryItem> inventoryItems = inventoryReader.inventoryItemRead(inventoryId);
