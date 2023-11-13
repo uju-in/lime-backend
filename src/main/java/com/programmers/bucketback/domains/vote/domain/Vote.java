@@ -96,4 +96,9 @@ public class Vote extends BaseEntity {
 	public boolean isOwner(final Long memberId) {
 		return this.memberId.equals(memberId);
 	}
+
+	public boolean isVoting() {
+		final LocalDateTime now = LocalDateTime.now();
+		return this.endTime.isAfter(now);
+	}
 }

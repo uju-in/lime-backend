@@ -47,6 +47,10 @@ public class VoteService {
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
+		if (!vote.isVoting()) {
+			throw new BusinessException(ErrorCode.VOTE_CANNOT_PARTICIPATE);
+		}
+
 		if (!vote.containsItem(itemId)) {
 			throw new BusinessException(ErrorCode.VOTE_NOT_CONTAIN_ITEM);
 		}

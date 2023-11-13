@@ -42,6 +42,7 @@ public enum ErrorCode {
 	VOTE_BAD_POPULARITY("VOTE_005", "종료된 투표만 인기순 조회가 가능합니다."),
 	VOTE_BAD_STATUS_CONDITION("VOTE_006", "잘못된 status 파라미터 값입니다."),
 	VOTE_BAD_SORT_CONDITION("VOTE_007", "잘못된 sort 파라미터 값입니다."),
+	VOTE_CANNOT_PARTICIPATE("VOTE_008", "종료된 투표에는 참여할 수 없습니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
