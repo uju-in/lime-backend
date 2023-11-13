@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.comment.application;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.repository.CommentRepository;
@@ -17,7 +16,6 @@ public class CommentAppender {
 	private final CommentRepository commentRepository;
 	private final FeedReader feedReader;
 
-	@Transactional
 	public void append(
 		final Long feedId,
 		final String content,
