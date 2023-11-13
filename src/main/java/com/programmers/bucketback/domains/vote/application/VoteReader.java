@@ -83,7 +83,7 @@ public class VoteReader {
 		}
 
 		if (sortCondition == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED) {
-			throw new BusinessException(ErrorCode.VOTE_BAD_POPULARITY);
+			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
 		}
 
 		final int pageSize = parameters.size() == null ? 20 : parameters.size();
