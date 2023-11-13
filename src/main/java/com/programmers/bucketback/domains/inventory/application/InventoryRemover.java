@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepository;
@@ -23,8 +22,10 @@ public class InventoryRemover {
 
 	/** 인벤토리 삭제 */
 	@Transactional
-	public void remove(final Long inventoryId){
-		Long memberId = MemberUtils.getCurrentMemberId();
+	public void remove(
+		final Long inventoryId,
+		final Long memberId
+	) {
 		Inventory inventory = inventoryReader.read(inventoryId, memberId);
 
 		inventoryRepository.delete(inventory);
@@ -34,7 +35,7 @@ public class InventoryRemover {
 	 * refactor : orphanRemoval = true 설정에 대해서 알아보고 리팩토링 잡아보기
 	 * */
 	@Transactional
-	public void removeInventoryItems(final Long inventoryId){
+	public void removeInventoryItems(final Long inventoryId) {
 		List<InventoryItem> inventoryItems = inventoryReader.inventoryItemRead(inventoryId);
 
 		inventoryItemRepository.deleteAllInBatch(inventoryItems);
