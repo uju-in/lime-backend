@@ -12,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberReader {
 
 	private final MemberRepository memberRepository;
 
-	@Transactional(readOnly = true)
 	public Member read(final Long memberId) {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
