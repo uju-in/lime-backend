@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
+import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
@@ -12,8 +14,6 @@ import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGe
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryItemGetResponse;
-import com.programmers.bucketback.domains.inventory.application.vo.InventoryCreateContent;
-import com.programmers.bucketback.domains.inventory.application.vo.InventoryUpdateContent;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
@@ -34,31 +34,31 @@ public class InventoryService {
 
 	/** 인벤토리 생성 */
 	public void createInventory(
-		final InventoryCreateContent content
+		final Hobby hobby,
+		final ItemIdRegistry registry
 	) {
-		//취미별로 중복되면 안됨(이미 생성된 인벤토리가 있는지 확인)
 		Long memberId = MemberUtils.getCurrentMemberId();
-		validateDuplication(content, memberId);
+		validateDuplication(hobby, memberId);
 
-		inventoryAppender.append(memberId, content);
+		inventoryAppender.append(memberId, hobby, registry);
 	}
 
 	/** 인벤토리 수정 */
 	@Transactional
 	public void modifyInventory(
 		final Long inventoryId,
-		final InventoryUpdateContent content
+		final ItemIdRegistry itemIdRegistry
 	) {
-		//취미별로 중복되면 안됨(이미 생성된 인벤토리가 있는지 확인)
 		Long memberId = MemberUtils.getCurrentMemberId();
 		Inventory inventory = inventoryReader.read(inventoryId, memberId);
 
-		inventoryModifier.modify(inventory, content);
+		inventoryModifier.modify(inventory, itemIdRegistry);
 	}
 
 	/** 인벤토리 삭제 */
 	public void deleteInventory(final Long inventoryId) {
-		inventoryRemover.remove(inventoryId);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		inventoryRemover.remove(inventoryId, memberId);
 	}
 
 	/** 인벤토리 상세 조회 */
@@ -93,10 +93,10 @@ public class InventoryService {
 	}
 
 	private void validateDuplication(
-		final InventoryCreateContent content,
+		final Hobby hobby,
 		final Long memberId
 	) {
-		if (inventoryReader.isCreated(content.hobby(), memberId)) {
+		if (inventoryReader.isCreated(hobby, memberId)) {
 			throw new BusinessException(ErrorCode.INVENTORY_ALREADY_EXIST);
 		}
 	}

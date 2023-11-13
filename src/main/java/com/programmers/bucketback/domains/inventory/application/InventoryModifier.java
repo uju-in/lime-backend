@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.domains.inventory.application.vo.InventoryUpdateContent;
+import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 
@@ -20,12 +20,12 @@ public class InventoryModifier {
 	/** 인벤토리 수정 */
 	public void modify(
 		final Inventory inventory,
-		final InventoryUpdateContent content
+		final ItemIdRegistry registry
 	) {
 		inventory.removeInventoryItems();
 		inventoryRemover.removeInventoryItems(inventory.getId());
 
-		List<InventoryItem> inventoryItems = inventoryAppender.createInventoryItem(content.itemIds());
+		List<InventoryItem> inventoryItems = inventoryAppender.createInventoryItem(registry);
 		inventoryItems.forEach(inventory::addInventoryItem);
 	}
 }

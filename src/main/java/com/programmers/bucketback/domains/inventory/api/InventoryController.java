@@ -33,7 +33,7 @@ public class InventoryController {
 	@Operation(summary = "인벤토리 생성", description = "InventoryCreateRequestDTO 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/inventories")
 	public ResponseEntity<Void> createInventory(@RequestBody @Valid final InventoryCreateRequest request) {
-		inventoryService.createInventory(request.toContent());
+		inventoryService.createInventory(request.hobby(), request.toRegistry());
 
 		return ResponseEntity.ok().build();
 	}
@@ -44,7 +44,7 @@ public class InventoryController {
 		@PathVariable final Long inventoryId,
 		@RequestBody @Valid final InventoryUpdateRequest request
 	) {
-		inventoryService.modifyInventory(inventoryId, request.toContent());
+		inventoryService.modifyInventory(inventoryId, request.toRegistry());
 
 		return ResponseEntity.ok().build();
 	}
