@@ -59,10 +59,15 @@ public class BucketController {
 		@PathVariable final Long bucketId,
 		@ModelAttribute @Valid final CursorRequest cursorRequest
 	) {
-		BucketGetMemberItemResponse bucketGetMemberItemResponse =
-			bucketService.getMemberItemsForModify(bucketId, cursorRequest.toParameters());
 
-		return ResponseEntity.ok(bucketGetMemberItemResponse);
+		BucketGetMemberItemResponse response = BucketGetMemberItemResponse.from(
+			bucketService.getMemberItemsForModify(
+				bucketId,
+				cursorRequest.toParameters()
+			)
+		);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "버킷 삭제", description = "BucketId을 이용하여 버킷을 삭제힙니다.")
@@ -79,7 +84,9 @@ public class BucketController {
 		@PathVariable final String nickname,
 		@PathVariable final Long bucketId
 	) {
-		return ResponseEntity.ok(bucketService.getBucket(bucketId));
+		BucketGetResponse response = BucketGetResponse.from(bucketService.getBucket(bucketId));
+
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "버킷 목록 조회(커서)", description = "유저이름, 취미, 커서 방식 조회 요청을 이용하여 버킷을 조회힙니다.")
@@ -89,11 +96,12 @@ public class BucketController {
 		@RequestParam final String hobby,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		BucketGetByCursorResponse response = bucketService.getBucketsByCursor(
-			nickname,
-			Hobby.valueOf(hobby.toUpperCase()),
-			request.toParameters()
-		);
+		BucketGetByCursorResponse response = BucketGetByCursorResponse.from(
+			bucketService.getBucketsByCursor(
+				nickname,
+				Hobby.valueOf(hobby.toUpperCase()),
+				request.toParameters()
+			));
 
 		return ResponseEntity.ok(response);
 	}
