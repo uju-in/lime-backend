@@ -15,7 +15,7 @@ public class MemberModifier {
 	private final MemberReader memberReader;
 
 	@Transactional
-	public void modify(
+	public void modifyProfile(
 		final String nickname,
 		final String introduction
 	) {
@@ -25,7 +25,7 @@ public class MemberModifier {
 	}
 
 	@Transactional
-	public void modify(final String password) {
+	public void modifyPassword(final String password) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Member member = memberReader.read(memberId);
 		member.updatePassword(password);

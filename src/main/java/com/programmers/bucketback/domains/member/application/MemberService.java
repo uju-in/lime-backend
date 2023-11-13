@@ -49,11 +49,11 @@ public class MemberService {
 		final String nickname,
 		final String introduction
 	) {
-		memberModifier.modify(nickname, introduction);
+		memberModifier.modifyProfile(nickname, introduction);
 	}
 
 	public void updatePassword(final String password) {
-		memberModifier.modify(password);
+		memberModifier.modifyPassword(password);
 	}
 
 	public boolean checkNickname(final String nickname) {
