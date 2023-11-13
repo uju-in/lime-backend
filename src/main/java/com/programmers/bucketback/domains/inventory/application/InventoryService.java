@@ -8,7 +8,6 @@ import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.application.dto.GetInventoryServiceResponse;
@@ -62,11 +61,11 @@ public class InventoryService {
 		return inventoryReader.readDetail(inventoryId);
 	}
 
-	/** 인벤토리 목록 조회 */
-	public InventoriesGetResponse getInventories(final String nickname) {
-		List<InventoryInfoSummary> inventoryInfoSummaries = inventoryReader.readSummary(nickname);
-
-		return InventoriesGetResponse.from(inventoryInfoSummaries);
+	/**
+	 * 인벤토리 목록 조회
+	 */
+	public List<InventoryInfoSummary> getInventories(final String nickname) {
+		return inventoryReader.readSummary(nickname);
 	}
 
 	/** 인벤토리  수정을 위한 내가 리뷰한 아이템 목록 조회  */

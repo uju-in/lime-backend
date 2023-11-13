@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.inventory.application;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,12 +88,11 @@ public class InventoryReader {
 		Long memberId = memberReader.readByNickname(nickname).getId();
 		List<InventoryInfoSummary> results = inventoryRepository.findInfoSummaries(memberId);
 
-		for (InventoryInfoSummary result : results) {
-			result.setItemImages(
-				result.getItemImages()
-					.subList(0, Math.min(3, result.getItemImages().size()))
-			);
-		}
+		results.forEach(result ->
+			result.setItemImages(result.getItemImages().stream()
+				.limit(3)
+				.collect(Collectors.toList()))
+		);
 
 		return results;
 	}

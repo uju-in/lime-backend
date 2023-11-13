@@ -89,7 +89,9 @@ public class InventoryController {
 	public ResponseEntity<InventoriesGetResponse> getInventories(
 		@PathVariable final String nickname
 	) {
-		InventoriesGetResponse response = inventoryService.getInventories(nickname);
+		InventoriesGetResponse response = InventoriesGetResponse.from(
+			inventoryService.getInventories(nickname)
+		);
 
 		return ResponseEntity.ok(response);
 	}
