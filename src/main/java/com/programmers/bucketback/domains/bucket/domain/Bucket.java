@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
+import com.programmers.bucketback.domains.common.Hobby;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
