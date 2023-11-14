@@ -1,11 +1,9 @@
 package com.programmers.bucketback.domains.vote.application;
 
-import org.springframework.stereotype.Service;
-
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
@@ -13,8 +11,8 @@ import com.programmers.bucketback.domains.vote.application.dto.response.GetVotes
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class VoteService {
 	private final VoteManager voteManager;
 	private final VoteRemover voteRemover;
 
-	public Long createVote(final CreateVoteServiceRequest request) {
+	public Long createVote(final VoteCreateServiceRequest request) {
 		if (!MemberUtils.isLoggedIn()) {
 			throw new BusinessException(ErrorCode.UNAUTHORIZED);
 		}
