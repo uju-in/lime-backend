@@ -3,7 +3,7 @@ package com.programmers.bucketback.domains.inventory.api.dto.response;
 import java.util.List;
 
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.domains.inventory.application.dto.GetInventoryServiceResponse;
+import com.programmers.bucketback.domains.inventory.application.dto.InventoryGetServiceResponse;
 
 import lombok.Builder;
 
@@ -12,14 +12,14 @@ public record InventoryGetResponse(
 	Long memberId,
 	Hobby hobby,
 	int itemCount,
-	List<InventoryItemGetResponse> inventoryItemGetResponses
+	List<InventoryItemGetResponse> inventoryItemInfos
 ) {
-	public static InventoryGetResponse from(final GetInventoryServiceResponse serviceResponse) {
+	public static InventoryGetResponse from(final InventoryGetServiceResponse serviceResponse) {
 		return InventoryGetResponse.builder()
 			.memberId(serviceResponse.memberId())
 			.hobby(serviceResponse.hobby())
 			.itemCount(serviceResponse.itemCount())
-			.inventoryItemGetResponses(serviceResponse.inventoryItemGetResponses())
+			.inventoryItemInfos(serviceResponse.inventoryItemInfos())
 			.build();
 	}
 }
