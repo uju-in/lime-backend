@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.bucket.application;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
@@ -18,6 +19,8 @@ import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.MemberItemReader;
+import com.programmers.bucketback.domains.item.domain.Item;
+import com.programmers.bucketback.domains.member.application.vo.BucketProfile;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -137,5 +140,41 @@ public class BucketReader {
 
 	public List<Bucket> readByMemberId(final Long memberId) {
 		return bucketRepository.findByMemberId(memberId);
+	}
+
+	/**
+	 * 마이페이지를 위한 버킷 프로필 조회 (3개)
+	 */
+	public List<BucketProfile> readBucketProfile(final Long memberId) {
+		List<Bucket> buckets = readByMemberId(memberId);
+		return selectBucketProfile(buckets);
+	}
+
+	private List<BucketProfile> selectBucketProfile(final List<Bucket> buckets) {
+		List<Bucket> selectedBuckets = selectBucketsByHobby(buckets);
+		return selectedBuckets.stream()
+			.map(bucket -> {
+				List<String> itemImages = extractBucketItemImages(bucket);
+				return BucketProfile.of(bucket, itemImages);
+			})
+			.toList();
+	}
+
+	private List<Bucket> selectBucketsByHobby(final List<Bucket> selectedBuckets) {
+		return selectedBuckets.stream()
+			.collect(Collectors.groupingBy(Bucket::getHobby))
+			.values()
+			.stream()
+			.map(group -> group.get(0))
+			.limit(3)
+			.toList();
+	}
+
+	private List<String> extractBucketItemImages(final Bucket bucket) {
+		return bucket.getBucketItems().stream()
+			.limit(4)
+			.map(BucketItem::getItem)
+			.map(Item::getImage)
+			.toList();
 	}
 }
