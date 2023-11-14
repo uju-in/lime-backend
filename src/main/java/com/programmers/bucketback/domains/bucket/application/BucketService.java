@@ -6,7 +6,6 @@ import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSumm
 import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
-import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
@@ -47,9 +46,7 @@ public class BucketService {
 		validateExceedBudget(bucketInfo, registry);
 
 		Long memberId = MemberUtils.getCurrentMemberId();
-		Bucket bucket = bucketReader.read(bucketId, memberId);
-
-		bucketModifier.modify(bucket, bucketInfo, registry);
+		bucketModifier.modify(memberId, bucketId, bucketInfo, registry);
 	}
 
 	/** 버킷 삭제 */
