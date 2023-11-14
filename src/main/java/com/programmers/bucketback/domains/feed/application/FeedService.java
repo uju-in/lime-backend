@@ -1,22 +1,13 @@
 package com.programmers.bucketback.domains.feed.application;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.feed.application.dto.response.GetFeedServiceResponse;
 import com.programmers.bucketback.domains.feed.application.vo.FeedCreateContent;
-import com.programmers.bucketback.domains.feed.application.vo.FeedInfo;
-import com.programmers.bucketback.domains.feed.application.vo.FeedItemInfo;
 import com.programmers.bucketback.domains.feed.application.vo.FeedUpdateContent;
-import com.programmers.bucketback.domains.feed.domain.Feed;
-import com.programmers.bucketback.domains.feed.domain.FeedItem;
-import com.programmers.bucketback.domains.feed.repository.FeedLikeRepository;
-import com.programmers.bucketback.domains.member.application.MemberReader;
-import com.programmers.bucketback.domains.member.application.vo.MemberInfo;
-import com.programmers.bucketback.domains.member.domain.Member;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,8 +19,7 @@ public class FeedService {
 	private final FeedReader feedReader;
 	private final FeedModifier feedModifier;
 	private final FeedRemover feedRemover;
-	private final FeedLikeRepository feedLikeRepository;
-	private final MemberReader memberReader;
+	private final FeedCursorReader feedCursorReader;
 
 	/** 피드 생성 */
 	public void createFeed(final FeedCreateContent content) {
@@ -42,6 +32,24 @@ public class FeedService {
 		final FeedUpdateContent toContent
 	) {
 		feedModifier.modify(feedId, toContent);
+	}
+
+	public FeedGetByCursorServiceResponse getFeedByCursor(
+		final String hobbyName,
+		final String nickName,
+		final String sortCondition,
+		final CursorPageParameters parameters
+	) {
+		FeedSortCondition feedSortCondition =
+			sortCondition != null ?
+				FeedSortCondition.valueOf(sortCondition) : null;
+
+		return feedCursorReader.getFeedByCursor(
+			hobbyName,
+			nickName,
+			feedSortCondition,
+			parameters
+		);
 	}
 
 	/** 피드 삭제 */
@@ -61,37 +69,11 @@ public class FeedService {
 
 	/** 피드 상세 조회 **/
 	public GetFeedServiceResponse getFeed(final Long feedId) {
-		final Feed feed = feedReader.read(feedId);
-		final Long memberId = feed.getMemberId();
-		final Member member = memberReader.read(memberId);
-		final MemberInfo memberInfo = new MemberInfo(memberId, member.getNickname());
-
-		final boolean hasAdoptedComment = hasAdoptedComment(feed.getComments());
-		final Boolean isLiked = isLiked(feed);
-		final FeedInfo feedInfo = FeedInfo.of(feed, hasAdoptedComment, isLiked);
-
-		final List<FeedItemInfo> feedItemInfos = getFeedItemInfos(feed.getFeedItems());
-
-		return new GetFeedServiceResponse(memberInfo, feedInfo, feedItemInfos);
-	}
-
-	private Boolean isLiked(final Feed feed) {
+		Long memberId = null;
 		if (MemberUtils.isLoggedIn()) {
-			final Long currentMemberId = MemberUtils.getCurrentMemberId();
-			return feedLikeRepository.existsByMemberIdAndFeed(currentMemberId, feed);
+			memberId = MemberUtils.getCurrentMemberId();
 		}
 
-		return null;
-	}
-
-	private boolean hasAdoptedComment(final List<Comment> comments) {
-		return comments.stream()
-			.anyMatch(Comment::isAdoption);
-	}
-
-	private List<FeedItemInfo> getFeedItemInfos(final List<FeedItem> feedItems) {
-		return feedItems.stream()
-			.map(FeedItemInfo::from)
-			.toList();
+		return feedReader.readFeed(feedId, memberId);
 	}
 }

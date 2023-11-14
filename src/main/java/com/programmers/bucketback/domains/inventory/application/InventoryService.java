@@ -12,6 +12,9 @@ import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGe
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.application.dto.GetInventoryServiceResponse;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
+import com.programmers.bucketback.domains.item.application.ItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
+import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -25,6 +28,8 @@ public class InventoryService {
 	private final InventoryReader inventoryReader;
 	private final InventoryModifier inventoryModifier;
 	private final InventoryRemover inventoryRemover;
+	private final ItemReader itemReader;
+	private final MemberReader memberReader;
 
 	/** 인벤토리 생성 */
 	public void createInventory(

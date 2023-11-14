@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.domains.vote.application.VoteInfo;
-import com.programmers.bucketback.domains.vote.application.VoteSortCondition;
-import com.programmers.bucketback.domains.vote.application.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.application.VoteSummary;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteInfo;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -46,8 +46,8 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 					vote.endTime,
 					vote.voters.size()
 				),
-				vote.option1ItemId,
-				vote.option2ItemId,
+				vote.item1Id,
+				vote.item2Id,
 				generateCursorId(sortCondition)
 			))
 			.from(vote)
@@ -66,17 +66,19 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		final VoteStatusCondition statusCondition,
 		final Long memberId
 	) {
-		if (statusCondition == VoteStatusCondition.INPROGRESS) {
-			return isInProgress();
-		}
-		if (statusCondition == VoteStatusCondition.COMPLETED) {
-			return isCompleted();
-		}
-		if (statusCondition == VoteStatusCondition.POSTED) {
-			return isPosted(memberId);
-		}
-		if (statusCondition == VoteStatusCondition.PARTICIPATED) {
-			return isParticipatedIn(memberId);
+		switch (statusCondition) {
+			case INPROGRESS -> {
+				return isInProgress();
+			}
+			case COMPLETED -> {
+				return isCompleted();
+			}
+			case POSTED -> {
+				return isPosted(memberId);
+			}
+			case PARTICIPATED -> {
+				return isParticipatedIn(memberId);
+			}
 		}
 
 		return null;

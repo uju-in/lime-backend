@@ -1,16 +1,16 @@
 package com.programmers.bucketback.domains.vote.api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.programmers.bucketback.domains.vote.application.OptionItem;
-import com.programmers.bucketback.domains.vote.application.VoteInfo;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteInfo;
 
 import lombok.Builder;
 
 @Builder
 public record VoteGetResponse(
-	OptionItem option1Item,
-	OptionItem option2Item,
+	ItemInfo item1Info,
+	ItemInfo item2Info,
 	VoteInfo voteInfo,
 	boolean isOwner,
 
@@ -19,8 +19,8 @@ public record VoteGetResponse(
 ) {
 	public static VoteGetResponse from(final GetVoteServiceResponse voteServiceResponse) {
 		return VoteGetResponse.builder()
-			.option1Item(voteServiceResponse.option1Item())
-			.option2Item(voteServiceResponse.option2Item())
+			.item1Info(voteServiceResponse.item1Info())
+			.item2Info(voteServiceResponse.item2Info())
 			.voteInfo(voteServiceResponse.voteInfo())
 			.isOwner(voteServiceResponse.isOwner())
 			.selectedItemId(voteServiceResponse.selectedItemId())
