@@ -12,7 +12,7 @@ import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryItemGetResponse;
-import com.programmers.bucketback.domains.inventory.application.dto.GetInventoryServiceResponse;
+import com.programmers.bucketback.domains.inventory.application.dto.InventoryGetServiceResponse;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryProfile;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
@@ -73,15 +73,15 @@ public class InventoryReader {
 	/**
 	 * 인벤토링 아이템 상세 조회
 	 */
-	public GetInventoryServiceResponse readDetail(final Long inventoryId) {
+	public InventoryGetServiceResponse readDetail(final Long inventoryId) {
 		Inventory inventory = read(inventoryId);
 
 		List<InventoryItemGetResponse> inventoryItemGetResponses = inventory.getInventoryItems().stream()
 			.map(inventoryItem -> itemReader.read(inventoryItem.getItem().getId()))
-			.map(item -> new InventoryItemGetResponse(ItemInfo.from(item), item.getUrl()))
+			.map(item -> InventoryItemGetResponse.of(ItemInfo.from(item), item.getUrl()))
 			.toList();
 
-		return GetInventoryServiceResponse.of(inventory, inventoryItemGetResponses);
+		return InventoryGetServiceResponse.of(inventory, inventoryItemGetResponses);
 	}
 
 	/** 인벤토리 목록 조회 */

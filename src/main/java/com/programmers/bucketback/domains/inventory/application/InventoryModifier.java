@@ -17,13 +17,17 @@ public class InventoryModifier {
 
 	private final InventoryRemover inventoryRemover;
 	private final InventoryAppender inventoryAppender;
+	private final InventoryReader inventoryReader;
 
 	/** 인벤토리 수정 */
 	@Transactional
 	public void modify(
-		final Inventory inventory,
+		final Long memberId,
+		final Long inventoryId,
 		final ItemIdRegistry registry
 	) {
+		Inventory inventory = inventoryReader.read(inventoryId, memberId);
+		
 		inventory.removeInventoryItems();
 		inventoryRemover.removeInventoryItems(inventory.getId());
 
