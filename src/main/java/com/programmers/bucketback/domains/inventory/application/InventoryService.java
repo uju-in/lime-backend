@@ -13,7 +13,6 @@ import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryIn
 import com.programmers.bucketback.domains.inventory.application.dto.GetInventoryServiceResponse;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.item.application.ItemReader;
-import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -70,7 +69,9 @@ public class InventoryService {
 	 * 인벤토리 목록 조회
 	 */
 	public List<InventoryInfoSummary> getInventories(final String nickname) {
-		return inventoryReader.readSummary(nickname);
+		Long memberId = memberReader.readByNickname(nickname).getId();
+
+		return inventoryReader.readSummary(memberId);
 	}
 
 	/** 인벤토리  수정을 위한 내가 리뷰한 아이템 목록 조회  */
