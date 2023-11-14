@@ -41,7 +41,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 		List<Long> feedIds = jpaQueryFactory.select(feed.id)
 			.from(feed)
 			.where(
-				eqHobby(hobby),
+				feed.hobby.eq(hobby),
 				eqMemberId(myPageMemberId),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).fetch();
@@ -99,14 +99,6 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 		}
 
 		return feed.memberId.eq(memberId);
-	}
-
-	private BooleanExpression eqHobby(final Hobby hobby) {
-		if (hobby == null) {
-			return null;
-		}
-
-		return feed.hobby.eq(hobby);
 	}
 
 	private BooleanExpression lessThanNextCursorId(
