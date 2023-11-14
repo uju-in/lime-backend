@@ -2,8 +2,10 @@ package com.programmers.bucketback.domains.comment.domain;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.feed.domain.Feed;
+import com.programmers.bucketback.domains.vote.domain.vo.Content;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -37,9 +39,8 @@ public class Comment extends BaseEntity {
 	@Column(name = "member_id")
 	private Long memberId;
 
-	@NotNull
-	@Column(name = "content")
-	private String content;
+	@Embedded
+	private Content content;
 
 	@NotNull
 	@Column(name = "adoption", columnDefinition = "TINYINT(1)")
@@ -52,12 +53,12 @@ public class Comment extends BaseEntity {
 	) {
 		this.feed = feed;
 		this.memberId = memberId;
-		this.content = content;
+		this.content = new Content(content);
 		this.adoption = false;
 	}
 
 	public boolean isInFeed(final Long feedId) {
-		Long thisFeedId = this.feed.getId();
+		final Long thisFeedId = this.feed.getId();
 		return thisFeedId.equals(feedId);
 	}
 
@@ -66,6 +67,10 @@ public class Comment extends BaseEntity {
 	}
 
 	public void changeContent(final String content) {
-		this.content = content;
+		this.content = new Content(content);
+	}
+
+	public void adopt() {
+		this.adoption = true;
 	}
 }
