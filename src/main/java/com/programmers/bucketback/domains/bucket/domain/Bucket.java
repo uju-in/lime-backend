@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
+import com.programmers.bucketback.domains.common.Hobby;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,6 +52,18 @@ public class Bucket extends BaseEntity {
 	public void addBucketItem(final BucketItem bucketItem) {
 		bucketItems.add(bucketItem);
 		bucketItem.changeBucket(this);
+	}
+
+	public String getName() {
+		return bucketInfo.getName();
+	}
+
+	public Hobby getHobby() {
+		return bucketInfo.getHobby();
+	}
+
+	public Integer getBudget() {
+		return bucketInfo.getBudget();
 	}
 
 	public void modifyBucket(
