@@ -1,8 +1,9 @@
 package com.programmers.bucketback.domains.bucket.application;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,12 +154,13 @@ public class BucketReader {
 	}
 
 	private List<Bucket> selectBucketsByHobby(final List<Bucket> selectedBuckets) {
-		return selectedBuckets.stream()
-			.collect(Collectors.groupingBy(Bucket::getHobby))
-			.values()
-			.stream()
-			.map(group -> group.get(0))
-			.limit(INVENTORY_PROFILE_LIMIT)
+		Map<Hobby, List<Bucket>> groupedBuckets = selectedBuckets.stream()
+			.collect(Collectors.groupingBy(Bucket::getHobby));
+
+		return groupedBuckets.values().stream()
+			.flatMap(group -> group.stream()
+				.sorted(Comparator.comparing(Bucket::getModifiedAt).reversed())
+				.limit(INVENTORY_PROFILE_LIMIT))
 			.toList();
 	}
 
