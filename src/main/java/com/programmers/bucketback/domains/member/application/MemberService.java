@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
 import com.programmers.bucketback.domains.member.application.vo.MyPage;
-import com.programmers.bucketback.domains.member.domain.LoginInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
 import com.programmers.bucketback.global.error.exception.BusinessException;
@@ -60,7 +59,7 @@ public class MemberService {
 	) {
 		final Long memberId = getCurrentMemberId();
 		memberManager.checkNicknameDuplication(nickname);
-    
+
 		memberModifier.modifyProfile(memberId, nickname, introduction);
 	}
 
@@ -86,6 +85,7 @@ public class MemberService {
 
 	public MyPage getMyPage(final String nickname) {
 		return memberReader.readMyPage(nickname);
+	}
 
 	private Long getCurrentMemberId() {
 		if (!MemberUtils.isLoggedIn()) {

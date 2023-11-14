@@ -6,10 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.bucket.application.BucketReader;
-import com.programmers.bucketback.domains.common.MemberUtils;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketProfile;
 import com.programmers.bucketback.domains.inventory.application.InventoryReader;
-import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
-import com.programmers.bucketback.domains.member.application.vo.BucketProfile;
+import com.programmers.bucketback.domains.inventory.application.vo.InventoryProfile;
 import com.programmers.bucketback.domains.member.application.vo.MemberProfile;
 import com.programmers.bucketback.domains.member.application.vo.MyPage;
 import com.programmers.bucketback.domains.member.domain.Member;
@@ -25,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberReader {
 
 	private final MemberRepository memberRepository;
-	private final InventoryRepository inventoryRepository;
 	private final BucketReader bucketReader;
 	private final InventoryReader inventoryReader;
 
@@ -54,5 +52,4 @@ public class MemberReader {
 
 		return new MyPage(memberProfile, bucketProfiles, inventoryProfiles);
 	}
-
 }
