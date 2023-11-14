@@ -22,9 +22,10 @@ public class FeedService {
 	private final FeedCursorReader feedCursorReader;
 
 	/** 피드 생성 */
-	public void createFeed(final FeedCreateServiceRequest request) {
+	public Long createFeed(final FeedCreateServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		feedAppender.append(memberId, request);
+
+		return feedAppender.append(memberId, request);
 	}
 
 	/** 피드 수정 */

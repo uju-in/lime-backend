@@ -34,7 +34,7 @@ public class FeedAppender {
 
 	/** 피드 생성 */
 	@Transactional
-	public void append(
+	public Long append(
 		final Long memberId,
 		final FeedCreateServiceRequest request
 	) {
@@ -53,7 +53,7 @@ public class FeedAppender {
 			.build();
 		feedItems.forEach(feed::addFeedItem);
 
-		feedRepository.save(feed);
+		return feedRepository.save(feed).getId();
 	}
 
 	/** 피드 아이템 생성 */
