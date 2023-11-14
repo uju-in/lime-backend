@@ -32,9 +32,10 @@ public class BucketService {
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
+		Long memberId = MemberUtils.getCurrentMemberId();
 		validateExceedBudget(bucketInfo, registry);
 
-		bucketAppender.append(bucketInfo, registry);
+		bucketAppender.append(memberId, bucketInfo, registry);
 	}
 
 	/** 버킷 수정 */

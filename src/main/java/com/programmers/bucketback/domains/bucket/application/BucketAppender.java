@@ -11,7 +11,6 @@ import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
-import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.domain.Item;
 
@@ -27,12 +26,13 @@ public class BucketAppender {
 	/** 버킷 생성 */
 	@Transactional
 	public void append(
+		final Long memberId,
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
 		List<BucketItem> bucketItems = createBucketItems(registry);
 
-		Bucket bucket = new Bucket(bucketInfo, MemberUtils.getCurrentMemberId());
+		Bucket bucket = new Bucket(bucketInfo, memberId);
 		bucketItems.forEach(bucket::addBucketItem);
 
 		bucketRepository.save(bucket);
