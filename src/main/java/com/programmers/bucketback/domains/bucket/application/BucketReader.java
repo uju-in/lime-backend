@@ -11,6 +11,7 @@ import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCur
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketProfile;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
@@ -20,7 +21,6 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.MemberItemReader;
 import com.programmers.bucketback.domains.item.domain.Item;
-import com.programmers.bucketback.domains.member.application.vo.BucketProfile;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -31,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class BucketReader {
 
+	private static final int ITEM_IMAGE_LIMIT = 4;
+	private static final int INVENTORY_PROFILE_LIMIT = 3;
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
 	private final MemberItemReader memberItemReader;
@@ -147,14 +149,17 @@ public class BucketReader {
 	 */
 	public List<BucketProfile> readBucketProfile(final Long memberId) {
 		List<Bucket> buckets = readByMemberId(memberId);
+
 		return selectBucketProfile(buckets);
 	}
 
 	private List<BucketProfile> selectBucketProfile(final List<Bucket> buckets) {
 		List<Bucket> selectedBuckets = selectBucketsByHobby(buckets);
+
 		return selectedBuckets.stream()
 			.map(bucket -> {
 				List<String> itemImages = extractBucketItemImages(bucket);
+
 				return BucketProfile.of(bucket, itemImages);
 			})
 			.toList();
@@ -166,13 +171,13 @@ public class BucketReader {
 			.values()
 			.stream()
 			.map(group -> group.get(0))
-			.limit(3)
+			.limit(INVENTORY_PROFILE_LIMIT)
 			.toList();
 	}
 
 	private List<String> extractBucketItemImages(final Bucket bucket) {
 		return bucket.getBucketItems().stream()
-			.limit(4)
+			.limit(ITEM_IMAGE_LIMIT)
 			.map(BucketItem::getItem)
 			.map(Item::getImage)
 			.toList();
