@@ -1,6 +1,5 @@
 package com.programmers.bucketback.domains.item.application;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -18,19 +17,17 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class ItemCursorReader {
 
+	private static final int DEFAULT_SIZE = 20;
 	private final ItemRepository itemRepository;
 
 	public ItemGetByCursorServiceResponse readByCursor(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
-		final String trimmedKeyword = keyword.trim();
 
-		if (trimmedKeyword.isEmpty()) {
-			return new ItemGetByCursorServiceResponse(null, Collections.emptyList());
-		}
+		int pageSize = getPageSize(parameters);
 
-		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
+		String trimmedKeyword = keyword.trim();
 
 		List<ItemCursorSummary> itemCursorSummaries = itemRepository.findAllByCursor(
 			trimmedKeyword,
@@ -38,12 +35,32 @@ public class ItemCursorReader {
 			pageSize
 		);
 
-		String nextCursorId =
-			itemCursorSummaries.size() == 0 ? null : itemCursorSummaries.get(itemCursorSummaries.size() - 1).cursorId();
-		
+		String nextCursorId = getNextCursorId(itemCursorSummaries);
+
 		return new ItemGetByCursorServiceResponse(
 			nextCursorId,
 			itemCursorSummaries
 		);
+	}
+
+	private int getPageSize(final CursorPageParameters parameters) {
+		Integer parameterSize = parameters.size();
+
+		if (parameterSize == 0) {
+			return DEFAULT_SIZE;
+		}
+
+		return parameterSize;
+	}
+
+	private String getNextCursorId(final List<ItemCursorSummary> itemCursorSummaries) {
+		int size = itemCursorSummaries.size();
+		if (size == 0) {
+			return null;
+		}
+
+		ItemCursorSummary lastElement = itemCursorSummaries.get(size - 1);
+
+		return lastElement.cursorId();
 	}
 }
