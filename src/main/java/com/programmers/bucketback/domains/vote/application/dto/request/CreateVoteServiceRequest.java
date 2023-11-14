@@ -8,7 +8,7 @@ import lombok.Builder;
 public record CreateVoteServiceRequest(
 	Hobby hobby,
 	String content,
-	Long option1ItemId,
-	Long option2ItemId
+	Long item1Id,
+	Long item2Id
 ) {
 }

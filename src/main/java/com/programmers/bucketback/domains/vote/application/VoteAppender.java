@@ -22,8 +22,8 @@ public class VoteAppender {
 	) {
 		final Vote vote = Vote.builder()
 			.memberId(memberId)
-			.option1ItemId(request.option1ItemId())
-			.option2ItemId(request.option2ItemId())
+			.item1Id(request.item1Id())
+			.item2Id(request.item2Id())
 			.hobby(request.hobby())
 			.content(request.content())
 			.build();

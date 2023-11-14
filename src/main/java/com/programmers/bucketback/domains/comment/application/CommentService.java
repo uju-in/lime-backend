@@ -3,8 +3,11 @@ package com.programmers.bucketback.domains.comment.application;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.comment.api.dto.response.CommentGetCursorResponse;
+import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.feed.application.FeedReader;
+import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -19,12 +22,18 @@ public class CommentService {
 	private final CommentModifier commentModifier;
 	private final CommentRemover commentRemover;
 	private final CommentReader commentReader;
+	private final FeedReader feedReader;
 
 	public void createComment(
 		final Long feedId,
 		final String content
 	) {
-		commentAppender.append(feedId, content);
+		if (!MemberUtils.isLoggedIn()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+		final Long memberId = MemberUtils.getCurrentMemberId();
+
+		commentAppender.append(feedId, content, memberId);
 	}
 
 	public void modifyComment(
@@ -42,7 +51,7 @@ public class CommentService {
 		final Long feedId,
 		final Long commentId
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
 		commentValidator.validCommentInFeed(feedId, commentId);
 		commentValidator.validCommentOwner(commentId, memberId);
 		commentRemover.remove(commentId);
@@ -52,8 +61,8 @@ public class CommentService {
 		final Long feedId,
 		final CursorPageParameters parameters
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
-		CommentCursorSummary commentCursorSummary = commentReader.readByCursor(feedId, memberId, parameters);
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final CommentCursorSummary commentCursorSummary = commentReader.readByCursor(feedId, memberId, parameters);
 
 		return new CommentGetCursorResponse(commentCursorSummary);
 	}
@@ -67,6 +76,20 @@ public class CommentService {
 		}
 		final Long memberId = MemberUtils.getCurrentMemberId();
 
-		commentModifier.adopt(feedId, commentId, memberId);
+		final Feed feed = feedReader.read(feedId);
+		if (!feed.isOwner(memberId)) {
+			throw new BusinessException(ErrorCode.FORBIDDEN);
+		}
+
+		final Comment comment = commentReader.read(commentId);
+		if (!comment.isInFeed(feedId)) {
+			throw new BusinessException(ErrorCode.COMMENT_NOT_IN_FEED);
+		}
+
+		if (comment.isOwner(memberId)) {
+			throw new BusinessException(ErrorCode.COMMENT_CANNOT_ADOPT);
+		}
+
+		commentModifier.adopt(comment);
 	}
 }

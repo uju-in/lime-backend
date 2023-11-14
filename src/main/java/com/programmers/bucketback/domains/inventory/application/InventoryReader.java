@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.inventory.application;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -9,12 +10,13 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
+import com.programmers.bucketback.domains.inventory.application.vo.InventoryProfile;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepository;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 import com.programmers.bucketback.domains.item.application.ItemReader;
-import com.programmers.bucketback.domains.member.application.MemberReader;
+import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.review.application.ReviewReader;
 import com.programmers.bucketback.domains.review.domain.Review;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
@@ -29,9 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional(readOnly = true)
 public class InventoryReader {
 
+	private static final int ITEM_IMAGE_LIMIT = 4;
+	private static final int INVENTORY_PROFILE_LIMIT = 3;
 	private final InventoryRepository inventoryRepository;
 	private final InventoryItemRepository inventoryItemRepository;
-	private final MemberReader memberReader;
 	private final ReviewReader reviewReader;
 	private final ItemReader itemReader;
 
@@ -66,8 +69,7 @@ public class InventoryReader {
 	}
 
 	/** 인벤토리 목록 조회 */
-	public List<InventoryInfoSummary> readSummary(final String nickname) {
-		Long memberId = memberReader.readByNickname(nickname).getId();
+	public List<InventoryInfoSummary> readSummary(final Long memberId) {
 		List<InventoryInfoSummary> results = inventoryRepository.findInfoSummaries(memberId);
 
 		for (InventoryInfoSummary result : results) {
@@ -109,5 +111,36 @@ public class InventoryReader {
 		int summaryCount = summaries.size();
 
 		return new InventorReviewedItemCursorSummary(nextCursorId, summaryCount, summaries);
+	}
+
+	/** 마이페이지를 위한 인벤토리 프로필 조회(3개) */
+	public List<InventoryProfile> readInventoryProfile(final Long memberId) {
+		List<Inventory> inventories = inventoryRepository.findByMemberId(memberId);
+
+		return selectInventoryProfile(inventories);
+	}
+
+	private List<InventoryProfile> selectInventoryProfile(final List<Inventory> inventories) {
+		List<Inventory> selectedInventories = inventories.stream()
+			.sorted(Comparator.comparing(Inventory::getModifiedAt).reversed())
+			.limit(INVENTORY_PROFILE_LIMIT)
+			.toList();
+
+		return selectedInventories.stream()
+			.map(inventory -> {
+				List<String> itemImages = extractInventoryItemImages(inventory);
+
+				return InventoryProfile.of(inventory, itemImages);
+			})
+			.toList();
+	}
+
+	private List<String> extractInventoryItemImages(final Inventory inventory) {
+		return inventory.getInventoryItems().stream()
+			.sorted(Comparator.comparing(InventoryItem::getModifiedAt).reversed())
+			.limit(ITEM_IMAGE_LIMIT)
+			.map(InventoryItem::getItem)
+			.map(Item::getImage)
+			.toList();
 	}
 }

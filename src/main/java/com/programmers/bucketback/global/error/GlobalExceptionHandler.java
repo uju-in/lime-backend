@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -47,6 +48,13 @@ public class GlobalExceptionHandler {
 		log.error("MessagingException", e);
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.MAIL_SEND_FAIL);
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	protected ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(final MissingServletRequestParameterException e) {
+		log.error("MissingServletRequestParameterException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.MISSING_PARAMETER);
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(BusinessException.class)
