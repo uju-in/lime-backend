@@ -10,9 +10,7 @@ import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
-import com.programmers.bucketback.domains.inventory.application.dto.GetInventoryServiceResponse;
-import com.programmers.bucketback.domains.inventory.domain.Inventory;
-import com.programmers.bucketback.domains.item.application.ItemReader;
+import com.programmers.bucketback.domains.inventory.application.dto.InventoryGetServiceResponse;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -27,7 +25,6 @@ public class InventoryService {
 	private final InventoryReader inventoryReader;
 	private final InventoryModifier inventoryModifier;
 	private final InventoryRemover inventoryRemover;
-	private final ItemReader itemReader;
 	private final MemberReader memberReader;
 
 	/** 인벤토리 생성 */
@@ -35,6 +32,7 @@ public class InventoryService {
 		final Hobby hobby,
 		final ItemIdRegistry registry
 	) {
+		validateEmptyRegistry(registry);
 		Long memberId = MemberUtils.getCurrentMemberId();
 		validateDuplication(hobby, memberId);
 
@@ -44,12 +42,12 @@ public class InventoryService {
 	/** 인벤토리 수정 */
 	public void modifyInventory(
 		final Long inventoryId,
-		final ItemIdRegistry itemIdRegistry
+		final ItemIdRegistry registry
 	) {
+		validateEmptyRegistry(registry);
 		Long memberId = MemberUtils.getCurrentMemberId();
-		Inventory inventory = inventoryReader.read(inventoryId, memberId);
 
-		inventoryModifier.modify(inventory, itemIdRegistry);
+		inventoryModifier.modify(memberId, inventoryId, registry);
 	}
 
 	/** 인벤토리 삭제 */
@@ -61,7 +59,7 @@ public class InventoryService {
 	/**
 	 * 인벤토리 상세 조회
 	 */
-	public GetInventoryServiceResponse getInventory(final Long inventoryId) {
+	public InventoryGetServiceResponse getInventory(final Long inventoryId) {
 		return inventoryReader.readDetail(inventoryId);
 	}
 
@@ -91,6 +89,12 @@ public class InventoryService {
 	) {
 		if (inventoryReader.isCreated(hobby, memberId)) {
 			throw new BusinessException(ErrorCode.INVENTORY_ALREADY_EXIST);
+		}
+	}
+
+	private void validateEmptyRegistry(final ItemIdRegistry registry) {
+		if (registry.itemIds().isEmpty()) {
+			throw new BusinessException(ErrorCode.INVENTORY_NOTHING_REQUESTED);
 		}
 	}
 
