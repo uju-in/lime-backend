@@ -2,6 +2,8 @@ package com.programmers.bucketback.domains.member.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +18,11 @@ import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdatePas
 import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdateProfileRequest;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckEmailResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckNicknameResponse;
+import com.programmers.bucketback.domains.member.api.dto.response.MemberGetMyPageResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
 import com.programmers.bucketback.domains.member.application.MemberService;
 import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
+import com.programmers.bucketback.domains.member.application.vo.MyPage;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +85,16 @@ public class MemberController {
 	) {
 		final String code = memberService.checkEmail(request.email());
 		final MemberCheckEmailResponse response = new MemberCheckEmailResponse(code);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{nickname}")
+	public ResponseEntity<MemberGetMyPageResponse> getMyPage(
+		@PathVariable String nickname
+	) {
+		MyPage myPage = memberService.getMyPage(nickname);
+		MemberGetMyPageResponse response = MemberGetMyPageResponse.from(myPage);
 
 		return ResponseEntity.ok(response);
 	}
