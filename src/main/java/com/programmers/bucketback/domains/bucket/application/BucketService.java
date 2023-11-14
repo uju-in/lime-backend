@@ -12,6 +12,8 @@ import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.member.application.MemberReader;
+import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +33,7 @@ public class BucketService {
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
+		validateEmptyRegistry(registry);
 		Long memberId = MemberUtils.getCurrentMemberId();
 		validateExceedBudget(bucketInfo, registry);
 
@@ -43,6 +46,7 @@ public class BucketService {
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
+		validateEmptyRegistry(registry);
 		validateExceedBudget(bucketInfo, registry);
 
 		Long memberId = MemberUtils.getCurrentMemberId();
@@ -100,6 +104,12 @@ public class BucketService {
 				.reduce(0, Integer::sum);
 
 			bucketInfo.validateBucketBudget(totalPrice, bucketInfo.getBudget());
+		}
+	}
+
+	private void validateEmptyRegistry(final ItemIdRegistry registry) {
+		if (registry.itemIds().isEmpty()) {
+			throw new BusinessException(ErrorCode.BUCKET_ITEM_NOT_REQUESTED);
 		}
 	}
 
