@@ -94,7 +94,7 @@ public class InventoryService {
 
 	private void validateEmptyRegistry(final ItemIdRegistry registry) {
 		if (registry.itemIds().isEmpty()) {
-			throw new BusinessException(ErrorCode.INVENTORY_NOTHING_REQUESTED);
+			throw new BusinessException(ErrorCode.INVENTORY_ITEM_NOT_REQUESTED);
 		}
 	}
 
