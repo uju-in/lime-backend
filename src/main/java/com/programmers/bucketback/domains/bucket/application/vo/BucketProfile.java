@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.member.application.vo;
+package com.programmers.bucketback.domains.bucket.application.vo;
 
 import java.util.List;
 
