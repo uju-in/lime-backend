@@ -20,9 +20,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "buckets")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Bucket extends BaseEntity {
 
 	@Id
@@ -51,6 +51,18 @@ public class Bucket extends BaseEntity {
 	public void addBucketItem(final BucketItem bucketItem) {
 		bucketItems.add(bucketItem);
 		bucketItem.changeBucket(this);
+	}
+
+	public String getName() {
+		return bucketInfo.getName();
+	}
+
+	public Hobby getHobby() {
+		return bucketInfo.getHobby();
+	}
+
+	public Integer getBudget() {
+		return bucketInfo.getBudget();
 	}
 
 	public void modifyBucket(

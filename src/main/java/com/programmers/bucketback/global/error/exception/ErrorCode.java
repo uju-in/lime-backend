@@ -54,6 +54,9 @@ public enum ErrorCode {
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
 	BUCKET_ITEM_NOT_FOUND("BUCKET_002", "버킷아이템을 찾을 수 없습니다."),
+	BUCKET_EXCEED_BUDGET("BUCKET_003", "버킷 예산을 초과했습니다."),
+	BUCKET_INVALID_NAME("BUCKET_004", "유효하지 않은 길이의 버킷 이름입니다."),
+	BUCKET_INVALID_BUDGET("BUCKET_005", "유호하지 않은 버킷 예산입니다."),
 
 	// MemberItem
 	MEMBER_ITEM_NOT_FOUND("MEMBER_ITEM_001", "나의 아이템을 찾을 수 없습니다."),
