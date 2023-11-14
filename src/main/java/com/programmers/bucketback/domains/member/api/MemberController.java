@@ -85,7 +85,7 @@ public class MemberController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "마이페이지 조회")
+	@Operation(summary = "마이페이지 조회", description = "닉네임을 이용하여 마이페이지를 조회합니다.")
 	@GetMapping("/{nickname}")
 	public ResponseEntity<MemberGetMyPageResponse> getMyPage(
 		@PathVariable String nickname
