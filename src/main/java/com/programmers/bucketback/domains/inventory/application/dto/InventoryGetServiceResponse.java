@@ -9,21 +9,21 @@ import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import lombok.Builder;
 
 @Builder
-public record GetInventoryServiceResponse(
+public record InventoryGetServiceResponse(
 	Long memberId,
 	Hobby hobby,
 	Integer itemCount,
-	List<InventoryItemGetResponse> inventoryItemGetResponses
+	List<InventoryItemGetResponse> inventoryItemInfos
 ) {
-	public static GetInventoryServiceResponse of(
+	public static InventoryGetServiceResponse of(
 		final Inventory inventory,
 		final List<InventoryItemGetResponse> inventoryItemGetResponses
 	) {
-		return GetInventoryServiceResponse.builder()
+		return InventoryGetServiceResponse.builder()
 			.memberId(inventory.getMemberId())
 			.hobby(inventory.getHobby())
 			.itemCount(inventoryItemGetResponses.size())
-			.inventoryItemGetResponses(inventoryItemGetResponses)
+			.inventoryItemInfos(inventoryItemGetResponses)
 			.build();
 	}
 }
