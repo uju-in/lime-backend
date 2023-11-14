@@ -29,10 +29,10 @@ public record FeedInfo(
 	) {
 		return FeedInfo.builder()
 			.id(feed.getId())
-			.hobby(feed.getBucketInfo().getHobby())
+			.hobby(feed.getHobby())
 			.message(feed.getMessage())
-			.bucketName(feed.getBucketInfo().getName())
-			.bucketBudget(feed.getBucketInfo().getBudget())
+			.bucketName(feed.getName())
+			.bucketBudget(feed.getBudget())
 			.createdAt(feed.getCreatedAt())
 			.hasAdoptedComment(hasAdoptedComment)
 			.likeCount(feed.getLikes().size())
