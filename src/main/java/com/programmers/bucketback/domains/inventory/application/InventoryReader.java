@@ -20,7 +20,6 @@ import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepo
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
-import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.review.application.ReviewReader;
 import com.programmers.bucketback.domains.review.domain.Review;
@@ -28,9 +27,7 @@ import com.programmers.bucketback.global.error.exception.EntityNotFoundException
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -115,7 +112,7 @@ public class InventoryReader {
 
 		List<Review> reviews = reviewReader.readByMemberId(memberId);
 		List<Long> itemIdsFromReview = reviews.stream()
-			.map(review -> review.getItemId())
+			.map(Review::getItemId)
 			.toList();
 
 		List<InventoryReviewItemSummary> summaries = itemReader.readReviewedItem(
