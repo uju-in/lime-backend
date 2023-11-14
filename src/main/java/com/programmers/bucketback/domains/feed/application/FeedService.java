@@ -19,8 +19,6 @@ public class FeedService {
 	private final FeedReader feedReader;
 	private final FeedModifier feedModifier;
 	private final FeedRemover feedRemover;
-	private final FeedLikeRepository feedLikeRepository;
-	private final MemberReader memberReader;
 	private final FeedCursorReader feedCursorReader;
 
 	/** 피드 생성 */
