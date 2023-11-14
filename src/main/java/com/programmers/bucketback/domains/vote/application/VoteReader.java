@@ -65,7 +65,7 @@ public class VoteReader {
 	}
 
 	@Transactional(readOnly = true)
-	public GetVotesServiceResponse readByCursor(
+	public VotesGetServiceResponse readByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
@@ -73,7 +73,7 @@ public class VoteReader {
 		final Long memberId
 	) {
 		if (memberId == null && statusCondition.isRequiredLogin()) {
-			return new GetVotesServiceResponse(null, Collections.emptyList());
+			return new VotesGetServiceResponse(null, Collections.emptyList());
 		}
 
 		if (sortCondition == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED) {
@@ -94,7 +94,7 @@ public class VoteReader {
 		final List<VoteCursorSummary> voteCursorSummaries = getVoteCursorSummaries(voteSummaries);
 		final String nextCursorId = getNextCursorId(voteSummaries);
 
-		return new GetVotesServiceResponse(nextCursorId, voteCursorSummaries);
+		return new VotesGetServiceResponse(nextCursorId, voteCursorSummaries);
 	}
 
 	private ItemInfo getItemInfo(final Long itemId) {

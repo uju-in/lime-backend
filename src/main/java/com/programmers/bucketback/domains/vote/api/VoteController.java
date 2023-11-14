@@ -10,8 +10,8 @@ import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VotesGetServiceResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +71,7 @@ public class VoteController {
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		final GetVotesServiceResponse serviceResponse = voteService.getVotesByCursor(
+		final VotesGetServiceResponse serviceResponse = voteService.getVotesByCursor(
 			Hobby.from(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
