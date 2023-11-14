@@ -77,7 +77,7 @@ public class FeedController {
 
 	@GetMapping
 	public ResponseEntity<FeedGetByCursorResponse> getFeedByCursor(
-		@RequestParam(required = false) final String hobbyName,
+		@RequestParam final String hobbyName,
 		@RequestParam(required = false) final String nickname,
 		@RequestParam(required = false) final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
