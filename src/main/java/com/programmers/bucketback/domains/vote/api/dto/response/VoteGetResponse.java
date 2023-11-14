@@ -2,9 +2,8 @@ package com.programmers.bucketback.domains.vote.api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteInfo;
-
 import lombok.Builder;
 
 @Builder
@@ -17,7 +16,7 @@ public record VoteGetResponse(
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	Long selectedItemId
 ) {
-	public static VoteGetResponse from(final GetVoteServiceResponse voteServiceResponse) {
+	public static VoteGetResponse from(final VoteGetServiceResponse voteServiceResponse) {
 		return VoteGetResponse.builder()
 			.item1Info(voteServiceResponse.item1Info())
 			.item2Info(voteServiceResponse.item2Info())

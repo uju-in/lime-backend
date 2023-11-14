@@ -6,8 +6,8 @@ import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -82,7 +82,7 @@ public class VoteService {
 		voteRemover.remove(vote);
 	}
 
-	public GetVoteServiceResponse getVote(final Long voteId) {
+	public VoteGetServiceResponse getVote(final Long voteId) {
 		Long memberId = null;
 		if (MemberUtils.isLoggedIn()) {
 			memberId = MemberUtils.getCurrentMemberId();
