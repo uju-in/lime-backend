@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.item.application;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.item.application.crawling.ItemInfo;
@@ -16,7 +16,7 @@ import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ItemEnrollService {
 

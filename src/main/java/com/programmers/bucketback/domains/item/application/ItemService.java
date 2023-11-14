@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ItemService {
 
-	private final MemberItemAddService memberItemAddService;
+	private final MemberItemAppender memberItemAppender;
 	private final MemberItemChecker memberItemChecker;
 	private final ItemReader itemReader;
 	private final ReviewStatistics reviewStatistics;
@@ -33,7 +33,7 @@ public class ItemService {
 
 	public void addItem(final MemberItemAddServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		memberItemAddService.addMemberItems(request.itemIds(), memberId);
+		memberItemAppender.addMemberItems(request.itemIds(), memberId);
 	}
 
 	public ItemGetServiceResponse getItem(final Long itemId) {
