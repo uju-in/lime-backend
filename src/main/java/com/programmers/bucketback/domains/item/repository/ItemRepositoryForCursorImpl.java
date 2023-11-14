@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.bucketback.domains.inventory.application.InventoryReviewItemSummary;
+import com.programmers.bucketback.domains.item.application.vo.ItemCursorSummary;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.item.application.vo.ItemSummary;
 import com.querydsl.core.types.ConstantImpl;
@@ -28,7 +29,7 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<ItemSummary> findAllByCursor(
+	public List<ItemCursorSummary> findAllByCursor(
 		final String keyword,
 		final String cursorId,
 		final int pageSize
@@ -36,18 +37,23 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 		return jpaQueryFactory
 			.select(
 				Projections.constructor(
-					ItemSummary.class,
-					item.id,
-					item.name,
-					item.price,
-					item.image,
-					item.createdAt
+					ItemCursorSummary.class,
+					generateItemCursorId(),
+					Projections.constructor(
+						ItemSummary.class,
+						item.id,
+						item.name,
+						item.price,
+						item.image,
+						item.createdAt
+					)
 				)
 			).from(item)
 			.where(
 				cursorIdCondition(cursorId),
 				item.name.contains(keyword)
-			).orderBy(decrease())
+			).orderBy(decrease(), item.id.desc())
+			.limit(pageSize)
 			.fetch();
 	}
 
@@ -61,7 +67,7 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 		return jpaQueryFactory
 			.selectFrom(item)
 			.where(item.id.in(itemIdsFromReview))
-			.orderBy(decrease())
+			.orderBy(decrease(), item.id.desc())
 			.transform(groupBy(item.id)
 				.list(Projections.constructor(InventoryReviewItemSummary.class,
 					generateItemCursorId(),
