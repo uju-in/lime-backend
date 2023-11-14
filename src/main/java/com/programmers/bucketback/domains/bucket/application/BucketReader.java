@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
-import com.programmers.bucketback.domains.bucket.application.vo.GetBucketServiceResponse;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketItemRepository;
@@ -111,13 +111,13 @@ public class BucketReader {
 	/**
 	 * 버킷 정보 상세 조회
 	 */
-	public GetBucketServiceResponse readDetail(final Long bucketId) {
+	public BucketGetServiceResponse readDetail(final Long bucketId) {
 		Bucket bucket = read(bucketId);
 		List<ItemInfo> itemInfos = bucket.getBucketItems().stream()
 			.map(bucketItem -> itemReader.read(bucketItem.getItem().getId()))
 			.map(item -> ItemInfo.from(item))
 			.toList();
 
-		return new GetBucketServiceResponse(bucket, itemInfos);
+		return new BucketGetServiceResponse(bucket, itemInfos);
 	}
 }

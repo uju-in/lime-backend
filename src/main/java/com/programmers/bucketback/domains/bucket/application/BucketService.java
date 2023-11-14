@@ -5,8 +5,8 @@ import static java.util.stream.Collectors.*;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
-import com.programmers.bucketback.domains.bucket.application.vo.GetBucketServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
@@ -79,7 +79,7 @@ public class BucketService {
 	/**
 	 * 버킷 상세 조회
 	 */
-	public GetBucketServiceResponse getBucket(final Long bucketId) {
+	public BucketGetServiceResponse getBucket(final Long bucketId) {
 		return bucketReader.readDetail(bucketId);
 	}
 
@@ -106,7 +106,7 @@ public class BucketService {
 				.collect(reducing(Integer::sum))
 				.get();
 
-			if (totalPrice > bucketInfo.getBudget()) {
+			if (totalPrice > bucketInfo.getBudget()) { //refactor : bucket도메인으로 이동
 				throw new BusinessException(ErrorCode.BUCKET_EXCEED_BUDGET);
 			}
 		}
