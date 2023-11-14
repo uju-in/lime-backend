@@ -55,7 +55,7 @@ public class BucketInfo {
 	}
 
 	public void validateBucketBudget(Integer budget) {
-		if (budget != null && budget > MIN_BUDGET) {
+		if (budget != null && budget < MIN_BUDGET) {
 			throw new BusinessException(ErrorCode.BUCKET_INVALID_BUDGET);
 		}
 	}
