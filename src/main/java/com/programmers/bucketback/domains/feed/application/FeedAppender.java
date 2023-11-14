@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.bucketback.domains.bucket.application.BucketReader;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.common.MemberUtils;
-import com.programmers.bucketback.domains.feed.application.vo.FeedCreateContent;
+import com.programmers.bucketback.domains.feed.application.vo.FeedCreateServiceRequest;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.domain.FeedItem;
 import com.programmers.bucketback.domains.feed.domain.FeedLike;
@@ -34,19 +34,22 @@ public class FeedAppender {
 
 	/** 피드 생성 */
 	@Transactional
-	public void append(final FeedCreateContent content) {
-		Bucket bucket = bucketReader.read(content.bucketId());
+	public void append(
+		final Long memberId,
+		final FeedCreateServiceRequest request
+	) {
+		Bucket bucket = bucketReader.read(request.bucketId(), memberId);
 		List<Long> itemIds = bucket.getBucketItems().stream()
 			.map(bucketItem -> bucketItem.getItem().getId())
 			.toList();
 		List<FeedItem> feedItems = createFeedItems(itemIds);
 
 		Feed feed = Feed.builder()
-			.memberId(MemberUtils.getCurrentMemberId())
-			.hobby(content.hobby())
-			.message(content.message())
-			.bucketName(bucket.getBucketInfo().getName())
-			.bucketBudget(bucket.getBucketInfo().getBudget())
+			.memberId(memberId)
+			.content(request.content())
+			.hobby(bucket.getHobby())
+			.bucketName(bucket.getName())
+			.bucketBudget(bucket.getBudget())
 			.build();
 		feedItems.forEach(feed::addFeedItem);
 
