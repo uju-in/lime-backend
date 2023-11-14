@@ -1,7 +1,5 @@
 package com.programmers.bucketback.domains.bucket.application;
 
-import static java.util.stream.Collectors.*;
-
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
@@ -15,8 +13,6 @@ import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.member.application.MemberReader;
-import com.programmers.bucketback.global.error.exception.BusinessException;
-import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -101,14 +97,11 @@ public class BucketService {
 		final ItemIdRegistry registry
 	) {
 		if (bucketInfo.getBudget() != null) {
-			Integer totalPrice = registry.itemIds().stream()
+			int totalPrice = registry.itemIds().stream()
 				.map(itemId -> itemReader.read(itemId).getPrice())
-				.collect(reducing(Integer::sum))
-				.get();
+				.reduce(0, Integer::sum);
 
-			if (totalPrice > bucketInfo.getBudget()) { //refactor : bucket도메인으로 이동
-				throw new BusinessException(ErrorCode.BUCKET_EXCEED_BUDGET);
-			}
+			bucketInfo.validateBucketBudget(totalPrice, bucketInfo.getBudget());
 		}
 	}
 
