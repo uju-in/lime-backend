@@ -28,6 +28,8 @@ public class SecurityManager {
 	}
 
 	public String generateToken(final Member member) {
-		return jwtService.generateToken(new MemberSecurity(member));
+		final MemberSecurity memberSecurity = new MemberSecurity(member);
+
+		return jwtService.generateToken(memberSecurity);
 	}
 }

@@ -39,9 +39,10 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody final MemberLoginRequest request) {
-		final LoginMemberServiceResponse response = memberService.login(request.toLoginInfo());
+		final LoginMemberServiceResponse serviceResponse = memberService.login(request.toLoginInfo());
+		final MemberLoginResponse response = MemberLoginResponse.from(serviceResponse);
 
-		return ResponseEntity.ok(response.toMemberLoginResponse());
+		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/delete")
@@ -69,10 +70,9 @@ public class MemberController {
 	public ResponseEntity<MemberCheckNicknameResponse> checkNickname(
 		@Valid @RequestBody final MemberCheckNicknameRequest request
 	) {
-		final boolean isDuplicated = memberService.checkNickname(request.nickname());
-		final MemberCheckNicknameResponse response = new MemberCheckNicknameResponse(isDuplicated);
+		memberService.checkNickname(request.nickname());
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/check/email")

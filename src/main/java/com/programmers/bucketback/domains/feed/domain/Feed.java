@@ -91,4 +91,9 @@ public class Feed extends BaseEntity {
 	public boolean isOwner(final Long memberId) {
 		return this.memberId.equals(memberId);
 	}
+
+	public boolean hasAdoptedComment() {
+		return this.comments.stream()
+			.anyMatch(Comment::isAdoption);
+	}
 }

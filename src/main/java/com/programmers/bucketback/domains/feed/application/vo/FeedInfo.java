@@ -24,7 +24,6 @@ public record FeedInfo(
 ) {
 	public static FeedInfo of(
 		final Feed feed,
-		final boolean hasAdoptedComment,
 		final Boolean isLiked
 	) {
 		return FeedInfo.builder()
@@ -34,7 +33,7 @@ public record FeedInfo(
 			.bucketName(feed.getName())
 			.bucketBudget(feed.getBudget())
 			.createdAt(feed.getCreatedAt())
-			.hasAdoptedComment(hasAdoptedComment)
+			.hasAdoptedComment(feed.hasAdoptedComment())
 			.likeCount(feed.getLikes().size())
 			.isLiked(isLiked)
 			.build();

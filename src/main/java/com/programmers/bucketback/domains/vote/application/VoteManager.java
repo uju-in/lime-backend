@@ -13,33 +13,27 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VoteManager {
 
-	private final VoteReader voteReader;
+	private final VoterReader voterReader;
 	private final VoterRepository voterRepository;
 
 	@Transactional
-	public void vote(
+	public void participate(
 		final Vote vote,
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = voterRepository.findByVoteAndMemberId(vote, memberId)
+		final Voter voter = voterReader.read(vote, memberId)
 			.orElseGet(() -> new Voter(vote, memberId, itemId));
 
-		voterRepository.save(voter);
-
-		voter.changeItem(itemId);
+		voter.participate(itemId);
 		vote.addVoter(voter);
 	}
 
 	@Transactional
 	public void cancel(
-		final Long voteId,
+		final Vote vote,
 		final Long memberId
 	) {
-		final Vote vote = voteReader.read(voteId);
-
-		if (voterRepository.existsByVoteAndMemberId(vote, memberId)) {
-			voterRepository.deleteByVoteAndMemberId(vote, memberId);
-		}
+		voterRepository.deleteByVoteAndMemberId(vote, memberId);
 	}
 }
