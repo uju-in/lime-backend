@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ItemCursorReader {
 
 	private final ItemRepository itemRepository;

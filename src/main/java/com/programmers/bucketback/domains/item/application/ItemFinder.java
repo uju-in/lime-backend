@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
 import com.programmers.bucketback.domains.item.domain.Item;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ItemFinder {
 
 	private final ItemRepository itemRepository;
