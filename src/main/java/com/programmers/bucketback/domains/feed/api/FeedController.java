@@ -35,7 +35,7 @@ public class FeedController {
 	@Operation(summary = "피드 생성", description = "FeedCreateRequest 을 이용하여 피드를 생성힙니다.")
 	@PostMapping
 	public ResponseEntity<Void> createFeed(@RequestBody @Valid final FeedCreateRequest request) {
-		feedService.createFeed(request.toContent());
+		feedService.createFeed(request.toServiceRequest());
 
 		return ResponseEntity.ok().build();
 	}
@@ -46,7 +46,7 @@ public class FeedController {
 		@PathVariable final Long feedId,
 		@RequestBody @Valid final FeedUpdateRequest request
 	) {
-		feedService.modifyFeed(feedId, request.toContent());
+		feedService.modifyFeed(feedId, request.toServiceRequest());
 
 		return ResponseEntity.ok().build();
 	}
