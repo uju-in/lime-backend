@@ -85,7 +85,7 @@ public class FeedController {
 		FeedGetByCursorServiceResponse serviceResponse = feedService.getFeedByCursor(hobbyName, nickname, sortCondition,
 			request.toParameters());
 
-		FeedGetByCursorResponse response = serviceResponse.toFeedGetByCursorResponse();
+		FeedGetByCursorResponse response = FeedGetByCursorResponse.from(serviceResponse);
 		return ResponseEntity.ok(response);
 	}
 
