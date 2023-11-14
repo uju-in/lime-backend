@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.bucket.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ public interface BucketRepository extends JpaRepository<Bucket, Long>, BucketRep
 		final Long bucketId,
 		final Long memberId
 	);
+
+	List<Bucket> findByMemberId(final Long memberId);
 }

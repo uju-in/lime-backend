@@ -1,6 +1,8 @@
 package com.programmers.bucketback.domains.bucket.application;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSumm
 import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketProfile;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
@@ -19,6 +22,7 @@ import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.application.MemberItemReader;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
+import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -29,6 +33,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class BucketReader {
 
+	private static final int ITEM_IMAGE_LIMIT = 4;
+	private static final int INVENTORY_PROFILE_LIMIT = 3;
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
 	private final MemberItemReader memberItemReader;
@@ -119,5 +125,48 @@ public class BucketReader {
 			.toList();
 
 		return new BucketGetServiceResponse(bucket, itemInfos);
+	}
+
+	public List<Bucket> readByMemberId(final Long memberId) {
+		return bucketRepository.findByMemberId(memberId);
+	}
+
+	/**
+	 * 마이페이지를 위한 버킷 프로필 조회 (3개)
+	 */
+	public List<BucketProfile> readBucketProfile(final Long memberId) {
+		List<Bucket> buckets = readByMemberId(memberId);
+
+		return selectBucketProfile(buckets);
+	}
+
+	private List<BucketProfile> selectBucketProfile(final List<Bucket> buckets) {
+		List<Bucket> selectedBuckets = selectBucketsByHobby(buckets);
+
+		return selectedBuckets.stream()
+			.map(bucket -> {
+				List<String> itemImages = extractBucketItemImages(bucket);
+
+				return BucketProfile.of(bucket, itemImages);
+			})
+			.toList();
+	}
+
+	private List<Bucket> selectBucketsByHobby(final List<Bucket> selectedBuckets) {
+		return selectedBuckets.stream()
+			.collect(Collectors.groupingBy(Bucket::getHobby))
+			.values()
+			.stream()
+			.map(group -> group.get(0))
+			.limit(INVENTORY_PROFILE_LIMIT)
+			.toList();
+	}
+
+	private List<String> extractBucketItemImages(final Bucket bucket) {
+		return bucket.getBucketItems().stream()
+			.limit(ITEM_IMAGE_LIMIT)
+			.map(BucketItem::getItem)
+			.map(Item::getImage)
+			.toList();
 	}
 }
