@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.review.application.dto.GetReviewByCursorServiceResponse;
+import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.review.application.vo.ReviewCursorSummary;
 import com.programmers.bucketback.domains.review.repository.ReviewRepository;
 
@@ -15,24 +15,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewCursorReader {
 
+	private final static int defaultPageSize = 20;
 	private final ReviewRepository reviewRepository;
 
-	private static String getNextCursorId(final List<ReviewCursorSummary> reviewCursorSummaries) {
-		int reviewCursorSummariesSize = reviewCursorSummaries.size();
-		if (reviewCursorSummariesSize == 0) {
-			return null;
-		}
-
-		ReviewCursorSummary lastElement = reviewCursorSummaries.get(reviewCursorSummariesSize - 1);
-
-		return lastElement.cursorId();
-	}
-
-	public GetReviewByCursorServiceResponse readByCursor(
+	public ReviewGetByCursorServiceResponse readByCursor(
 		final Long itemId,
 		final CursorPageParameters parameters
 	) {
-		int pageSize = parameters.size() == null ? 20 : parameters.size();
+		int pageSize = getPageSize(parameters);
 
 		List<ReviewCursorSummary> reviewCursorSummaries = reviewRepository.findAllByCursor(
 			itemId,
@@ -44,10 +34,31 @@ public class ReviewCursorReader {
 
 		Long reviewCount = reviewRepository.getReviewCount(itemId);
 
-		return new GetReviewByCursorServiceResponse(
+		return new ReviewGetByCursorServiceResponse(
 			reviewCount,
 			nextCursorId,
 			reviewCursorSummaries
 		);
+	}
+
+	private int getPageSize(final CursorPageParameters parameters) {
+		Integer parametersSize = parameters.size();
+
+		if (parametersSize == null) {
+			return defaultPageSize;
+		}
+
+		return parametersSize;
+	}
+
+	private String getNextCursorId(final List<ReviewCursorSummary> reviewCursorSummaries) {
+		int reviewCursorSummariesSize = reviewCursorSummaries.size();
+		if (reviewCursorSummariesSize == 0) {
+			return null;
+		}
+
+		ReviewCursorSummary lastElement = reviewCursorSummaries.get(reviewCursorSummariesSize - 1);
+
+		return lastElement.cursorId();
 	}
 }

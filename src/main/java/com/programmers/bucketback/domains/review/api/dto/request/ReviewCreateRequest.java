@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.review.api.dto.request;
 
-import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
+import com.programmers.bucketback.domains.review.application.vo.ReviewContent;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
