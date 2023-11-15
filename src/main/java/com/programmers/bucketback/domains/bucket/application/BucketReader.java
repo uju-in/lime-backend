@@ -2,7 +2,6 @@ package com.programmers.bucketback.domains.bucket.application;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -35,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class BucketReader {
 
 	private static final int ITEM_IMAGE_LIMIT = 4;
-	private static final int INVENTORY_PROFILE_LIMIT = 3;
+	private static final int BUCKET_PROFILE_LIMIT = 3;
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
 	private final MemberItemReader memberItemReader;
@@ -154,13 +153,13 @@ public class BucketReader {
 	}
 
 	private List<Bucket> selectBucketsByHobby(final List<Bucket> selectedBuckets) {
-		Map<Hobby, List<Bucket>> groupedBuckets = selectedBuckets.stream()
-			.collect(Collectors.groupingBy(Bucket::getHobby));
-
-		return groupedBuckets.values().stream()
-			.flatMap(group -> group.stream()
-				.sorted(Comparator.comparing(Bucket::getModifiedAt).reversed())
-				.limit(INVENTORY_PROFILE_LIMIT))
+		return selectedBuckets.stream()
+			.collect(Collectors.groupingBy(Bucket::getHobby))
+			.values().stream()
+			.map(group -> group.stream()
+				.max(Comparator.comparing(Bucket::getId))
+				.orElse(null))
+			.limit(BUCKET_PROFILE_LIMIT)
 			.toList();
 	}
 
