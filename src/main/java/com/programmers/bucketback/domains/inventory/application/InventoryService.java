@@ -28,7 +28,7 @@ public class InventoryService {
 	private final MemberReader memberReader;
 
 	/** 인벤토리 생성 */
-	public void createInventory(
+	public Long createInventory(
 		final Hobby hobby,
 		final ItemIdRegistry registry
 	) {
@@ -36,7 +36,7 @@ public class InventoryService {
 		Long memberId = MemberUtils.getCurrentMemberId();
 		validateDuplication(hobby, memberId);
 
-		inventoryAppender.append(memberId, hobby, registry);
+		return inventoryAppender.append(memberId, hobby, registry);
 	}
 
 	/** 인벤토리 수정 */

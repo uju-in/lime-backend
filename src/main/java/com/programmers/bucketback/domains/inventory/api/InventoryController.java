@@ -15,6 +15,7 @@ import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryCreateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryUpdateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryCreateResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.application.InventoryService;
@@ -32,10 +33,11 @@ public class InventoryController {
 
 	@Operation(summary = "인벤토리 생성", description = "InventoryCreateRequestDTO 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/inventories")
-	public ResponseEntity<Void> createInventory(@RequestBody @Valid final InventoryCreateRequest request) {
-		inventoryService.createInventory(request.hobby(), request.toRegistry());
+	public ResponseEntity<InventoryCreateResponse> createInventory(
+		@RequestBody @Valid final InventoryCreateRequest request) {
+		Long inventoryId = inventoryService.createInventory(request.hobby(), request.toRegistry());
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(new InventoryCreateResponse(inventoryId));
 	}
 
 	@Operation(summary = "인벤토리 수정", description = "InventoryUpdateRequestDTO 을 이용하여 인벤토리를 업데이트힙니다.")

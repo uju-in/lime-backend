@@ -25,7 +25,7 @@ public class InventoryAppender {
 
 	/** 인벤토리 생성 */
 	@Transactional
-	public void append(
+	public Long append(
 		final Long memberId,
 		final Hobby hobby,
 		final ItemIdRegistry registry
@@ -34,7 +34,7 @@ public class InventoryAppender {
 		Inventory inventory = new Inventory(memberId, hobby);
 		inventoryItems.forEach(inventory::addInventoryItem);
 
-		inventoryRepository.save(inventory);
+		return inventoryRepository.save(inventory).getId();
 	}
 
 	/** 인벤토리 아이템 생성 */
