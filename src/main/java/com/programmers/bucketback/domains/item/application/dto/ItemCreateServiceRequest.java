@@ -1,7 +1,7 @@
 package com.programmers.bucketback.domains.item.application.dto;
 
 import com.programmers.bucketback.domains.common.Hobby;
-import com.programmers.bucketback.domains.item.application.crawling.ItemInfo;
+import com.programmers.bucketback.domains.item.application.crawling.ItemCrawlerInfo;
 
 import lombok.Builder;
 
@@ -16,14 +16,14 @@ public record ItemCreateServiceRequest(
 
 	public static ItemCreateServiceRequest of(
 		final Hobby hobby,
-		final ItemInfo itemInfo
+		final ItemCrawlerInfo itemCrawlerInfo
 	) {
 		return ItemCreateServiceRequest.builder().
 			hobby(hobby).
-			imageUrl(itemInfo.imageUrl()).
-			url(itemInfo.url()).
-			price(itemInfo.price()).
-			itemName(itemInfo.itemName())
+			imageUrl(itemCrawlerInfo.imageUrl()).
+			url(itemCrawlerInfo.url()).
+			price(itemCrawlerInfo.price()).
+			itemName(itemCrawlerInfo.itemName())
 			.build();
 	}
 }

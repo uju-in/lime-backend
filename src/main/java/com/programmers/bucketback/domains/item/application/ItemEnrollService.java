@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
-import com.programmers.bucketback.domains.item.application.crawling.ItemInfo;
+import com.programmers.bucketback.domains.item.application.crawling.ItemCrawlerInfo;
 import com.programmers.bucketback.domains.item.application.crawling.WebCrawler;
 import com.programmers.bucketback.domains.item.application.crawling.WebSite;
 import com.programmers.bucketback.domains.item.application.dto.ItemCreateServiceRequest;
@@ -36,7 +36,7 @@ public class ItemEnrollService {
 
 		// 웹 크롤링을 통한 아이템 정보 가져오기
 		WebCrawler webCrawler = WebSite.selectCrawler(request.itemUrl());
-		ItemInfo itemInfo = webCrawler.extractInfoFromUrl(request.itemUrl());
+		ItemCrawlerInfo itemInfo = webCrawler.extractInfoFromUrl(request.itemUrl());
 
 		// 아이템 등록
 		ItemCreateServiceRequest itemCreateServiceRequest = ItemCreateServiceRequest.of(request.hobby(), itemInfo);
