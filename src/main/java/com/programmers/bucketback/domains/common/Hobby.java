@@ -1,5 +1,8 @@
 package com.programmers.bucketback.domains.common;
 
+import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Hobby {
@@ -16,5 +19,13 @@ public enum Hobby {
 
 	Hobby(final String hobbyValue) {
 		this.hobbyValue = hobbyValue;
+	}
+
+	@JsonCreator
+	public static Hobby fromEventStatus(final String hobbyValue) {
+		return Arrays.stream(values())
+			.filter(type -> type.hobbyValue.equals(hobbyValue))
+			.findAny()
+			.orElse(null);
 	}
 }
