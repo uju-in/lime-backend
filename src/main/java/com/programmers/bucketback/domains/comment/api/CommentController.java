@@ -1,25 +1,18 @@
 package com.programmers.bucketback.domains.comment.api;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.programmers.bucketback.domains.comment.api.dto.request.CommentCreateRequest;
 import com.programmers.bucketback.domains.comment.api.dto.request.CommentModifyRequest;
 import com.programmers.bucketback.domains.comment.api.dto.response.CommentGetCursorResponse;
 import com.programmers.bucketback.domains.comment.application.CommentService;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "comments", description = "댓글 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/feeds/{feedId}/comments")
@@ -27,6 +20,7 @@ public class CommentController {
 
 	private final CommentService commentService;
 
+	@Operation(summary = "댓글 생성", description = "FeedId, CommentCreateRequest 을 이용하여 댓글을 생성힙니다.")
 	@PostMapping
 	public ResponseEntity<Void> createComment(
 		@PathVariable final Long feedId,
@@ -37,6 +31,7 @@ public class CommentController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "댓글 채택", description = "FeedId, CommentId 을 이용하여 댓글을 채택힙니다.")
 	@PostMapping("/{commentId}/adoption")
 	public ResponseEntity<Void> adoptComment(
 		@PathVariable final Long feedId,
