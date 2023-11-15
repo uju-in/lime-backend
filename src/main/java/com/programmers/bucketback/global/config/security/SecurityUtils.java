@@ -25,12 +25,6 @@ public final class SecurityUtils {
 		return Long.valueOf(authentication.getName());
 	}
 
-	public static boolean isLoggedIn() {
-		Authentication authentication = getAuthentication();
-
-		return !isAnonymousMember(authentication);
-	}
-
 	private static Authentication getAuthentication() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
