@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
@@ -31,9 +32,11 @@ public class ItemService {
 	private final ItemFinder itemFinder;
 	private final ItemCursorReader itemCursorReader;
 
-	public void addItem(final MemberItemAddServiceRequest request) {
+	public ItemAddServiceResponse addItem(final MemberItemAddServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		memberItemAppender.addMemberItems(request.itemIds(), memberId);
+		List<Long> memberItemIds = memberItemAppender.addMemberItems(request.itemIds(), memberId);
+
+		return new ItemAddServiceResponse(memberItemIds);
 	}
 
 	public ItemGetServiceResponse getItem(final Long itemId) {

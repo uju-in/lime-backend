@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
+import com.programmers.bucketback.domains.item.api.dto.response.ItemAddResponse;
+import com.programmers.bucketback.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
 import com.programmers.bucketback.domains.item.application.ItemEnrollService;
 import com.programmers.bucketback.domains.item.application.ItemService;
+import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
@@ -36,10 +40,11 @@ public class ItemController {
 	private final ItemService itemService;
 
 	@PostMapping("/enroll")
-	public ResponseEntity<Void> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
-		itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
+	public ResponseEntity<ItemEnrollResponse> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
+		ItemEnrollServiceResponse serviceResponse = itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
+		ItemEnrollResponse response = ItemEnrollResponse.from(serviceResponse);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/myitems")
