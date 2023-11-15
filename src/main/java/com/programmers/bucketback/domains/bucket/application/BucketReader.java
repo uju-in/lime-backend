@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
@@ -17,6 +16,8 @@ import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketItemRepository;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
+import com.programmers.bucketback.domains.common.CursorSummary;
+import com.programmers.bucketback.domains.common.CursorUtils;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
@@ -94,7 +95,7 @@ public class BucketReader {
 	}
 
 	/** 버킷 정보 커서 페이징 조회 */
-	public BucketCursorSummary readByCursor(
+	public CursorSummary readByCursor(
 		final Long memberId,
 		final Hobby hobby,
 		final CursorPageParameters parameters
@@ -108,10 +109,7 @@ public class BucketReader {
 			pageSize
 		);
 
-		String nextCursorId = summaries.size() == 0 ? null : summaries.get(summaries.size() - 1).cursorId();
-		int summaryCount = summaries.size();
-
-		return new BucketCursorSummary(nextCursorId, summaryCount, summaries);
+		return CursorUtils.getCursorSummaries(summaries);
 	}
 
 	/**
