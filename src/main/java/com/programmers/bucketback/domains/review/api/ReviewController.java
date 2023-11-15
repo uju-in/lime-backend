@@ -16,7 +16,7 @@ import com.programmers.bucketback.domains.review.api.dto.request.ReviewCreateReq
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewUpdateRequest;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.bucketback.domains.review.application.ReviewService;
-import com.programmers.bucketback.domains.review.application.dto.GetReviewByCursorServiceResponse;
+import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public class ReviewController {
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
 
-		GetReviewByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
+		ReviewGetByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
 			itemId,
 			request.toParameters()
 		);

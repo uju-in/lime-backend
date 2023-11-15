@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.review.application.dto.GetReviewByCursorServiceResponse;
+import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.review.application.vo.ReviewCursorSummary;
 import com.programmers.bucketback.domains.review.repository.ReviewRepository;
 
@@ -28,7 +28,7 @@ public class ReviewCursorReader {
 		return lastElement.cursorId();
 	}
 
-	public GetReviewByCursorServiceResponse readByCursor(
+	public ReviewGetByCursorServiceResponse readByCursor(
 		final Long itemId,
 		final CursorPageParameters parameters
 	) {
@@ -44,7 +44,7 @@ public class ReviewCursorReader {
 
 		Long reviewCount = reviewRepository.getReviewCount(itemId);
 
-		return new GetReviewByCursorServiceResponse(
+		return new ReviewGetByCursorServiceResponse(
 			reviewCount,
 			nextCursorId,
 			reviewCursorSummaries
