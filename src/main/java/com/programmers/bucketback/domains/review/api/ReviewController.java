@@ -54,13 +54,14 @@ public class ReviewController {
 		@PathVariable final Long itemId,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-
 		ReviewGetByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
 			itemId,
 			request.toParameters()
 		);
 
-		return ResponseEntity.ok(serviceResponse.toReviewGetByCursorResponse());
+		ReviewGetByCursorResponse response = ReviewGetByCursorResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/{reviewId}")
