@@ -38,9 +38,8 @@ public class Feed extends BaseEntity {
 	@Column(name = "member_id")
 	private Long memberId;
 
-	@NotNull
-	@Column(name = "message")
-	private String message;
+	@Embedded
+	private FeedContent content;
 
 	@Embedded
 	private BucketInfo bucketInfo;
@@ -58,12 +57,12 @@ public class Feed extends BaseEntity {
 	public Feed(
 		final Long memberId,
 		final Hobby hobby,
-		final String message,
+		final String content,
 		final String bucketName,
 		final Integer bucketBudget
 	) {
 		this.memberId = memberId;
-		this.message = message;
+		this.content = new FeedContent(content);
 		this.bucketInfo = new BucketInfo(hobby, bucketName, bucketBudget);
 	}
 
@@ -84,8 +83,8 @@ public class Feed extends BaseEntity {
 		feedItem.changeFeed(this);
 	}
 
-	public void modifyFeed(final String message) {
-		this.message = message;
+	public void modifyFeed(final String content) {
+		this.content = new FeedContent(content);
 	}
 
 	public boolean isOwner(final Long memberId) {

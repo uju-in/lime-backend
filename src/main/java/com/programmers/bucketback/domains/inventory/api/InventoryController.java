@@ -15,6 +15,7 @@ import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryCreateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryUpdateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryCreateResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.application.InventoryService;
@@ -32,10 +33,11 @@ public class InventoryController {
 
 	@Operation(summary = "인벤토리 생성", description = "InventoryCreateRequestDTO 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/inventories")
-	public ResponseEntity<Void> createInventory(@RequestBody @Valid final InventoryCreateRequest request) {
-		inventoryService.createInventory(request.toContent());
+	public ResponseEntity<InventoryCreateResponse> createInventory(
+		@RequestBody @Valid final InventoryCreateRequest request) {
+		Long inventoryId = inventoryService.createInventory(request.hobby(), request.toRegistry());
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(new InventoryCreateResponse(inventoryId));
 	}
 
 	@Operation(summary = "인벤토리 수정", description = "InventoryUpdateRequestDTO 을 이용하여 인벤토리를 업데이트힙니다.")
@@ -44,7 +46,7 @@ public class InventoryController {
 		@PathVariable final Long inventoryId,
 		@RequestBody @Valid final InventoryUpdateRequest request
 	) {
-		inventoryService.modifyInventory(inventoryId, request.toContent());
+		inventoryService.modifyInventory(inventoryId, request.toRegistry());
 
 		return ResponseEntity.ok().build();
 	}
@@ -65,7 +67,11 @@ public class InventoryController {
 		@PathVariable final String nickname,
 		@PathVariable final Long inventoryId
 	) {
-		return ResponseEntity.ok(inventoryService.getInventory(inventoryId));
+		InventoryGetResponse response = InventoryGetResponse.from(
+			inventoryService.getInventory(inventoryId)
+		);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "인벤토리 수정을 위한 내가 리뷰한 아이템 조회")
@@ -85,7 +91,9 @@ public class InventoryController {
 	public ResponseEntity<InventoriesGetResponse> getInventories(
 		@PathVariable final String nickname
 	) {
-		InventoriesGetResponse response = inventoryService.getInventories(nickname);
+		InventoriesGetResponse response = InventoriesGetResponse.from(
+			inventoryService.getInventories(nickname)
+		);
 
 		return ResponseEntity.ok(response);
 	}

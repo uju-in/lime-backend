@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.review.application.dto.GetReviewByCursorServiceResponse;
-import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
+import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
+import com.programmers.bucketback.domains.review.application.vo.ReviewContent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,12 +19,13 @@ public class ReviewService {
 	private final ReviewCursorReader reviewCursorReader;
 	private final ReviewRemover reviewRemover;
 
-	public void createReview(
+	public Long createReview(
 		final Long itemId,
 		final ReviewContent reviewContent
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		reviewAppender.append(itemId, memberId, reviewContent);
+
+		return reviewAppender.append(itemId, memberId, reviewContent);
 	}
 
 	public void updateReview(
@@ -38,7 +39,7 @@ public class ReviewService {
 		reviewModifier.modify(reviewId, reviewContent);
 	}
 
-	public GetReviewByCursorServiceResponse getReviewsByCursor(
+	public ReviewGetByCursorServiceResponse getReviewsByCursor(
 		final Long itemId,
 		final CursorPageParameters parameters
 	) {

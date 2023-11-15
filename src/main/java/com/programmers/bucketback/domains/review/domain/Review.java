@@ -1,7 +1,7 @@
 package com.programmers.bucketback.domains.review.domain;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
-import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
+import com.programmers.bucketback.domains.review.application.vo.ReviewContent;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

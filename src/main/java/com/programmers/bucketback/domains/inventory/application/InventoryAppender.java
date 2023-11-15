@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.inventory.application.vo.InventoryCreateContent;
+import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
+import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
@@ -24,21 +25,21 @@ public class InventoryAppender {
 
 	/** 인벤토리 생성 */
 	@Transactional
-	public void append(
+	public Long append(
 		final Long memberId,
-		final InventoryCreateContent content
+		final Hobby hobby,
+		final ItemIdRegistry registry
 	) {
-		List<InventoryItem> inventoryItems = createInventoryItem(content.itemIds());
-		Inventory inventory = new Inventory(memberId, content.hobby());
+		List<InventoryItem> inventoryItems = createInventoryItem(registry);
+		Inventory inventory = new Inventory(memberId, hobby);
 		inventoryItems.forEach(inventory::addInventoryItem);
 
-		inventoryRepository.save(inventory);
+		return inventoryRepository.save(inventory).getId();
 	}
 
 	/** 인벤토리 아이템 생성 */
-	@Transactional
-	public List<InventoryItem> createInventoryItem(final List<Long> itemIds) {
-		return itemIds.stream()
+	public List<InventoryItem> createInventoryItem(final ItemIdRegistry registry) {
+		return registry.itemIds().stream()
 			.map(id -> {
 				Item item = itemReader.read(id);
 				InventoryItem inventoryItem = new InventoryItem(item);

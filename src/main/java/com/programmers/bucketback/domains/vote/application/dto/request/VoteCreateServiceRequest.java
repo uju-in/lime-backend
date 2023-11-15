@@ -1,11 +1,10 @@
 package com.programmers.bucketback.domains.vote.application.dto.request;
 
 import com.programmers.bucketback.domains.common.Hobby;
-
 import lombok.Builder;
 
 @Builder
-public record CreateVoteServiceRequest(
+public record VoteCreateServiceRequest(
 	Hobby hobby,
 	String content,
 	Long item1Id,

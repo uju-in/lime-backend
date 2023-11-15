@@ -3,7 +3,6 @@ package com.programmers.bucketback.domains.feed.application;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.repository.FeedLikeRepository;
 import com.programmers.bucketback.domains.feed.repository.FeedRepository;
@@ -21,8 +20,10 @@ public class FeedRemover {
 	private final FeedReader feedReader;
 
 	@Transactional
-	public void remove(final Long feedId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+	public void remove(
+		final Long memberId,
+		final Long feedId
+	) {
 		Feed feed = feedReader.read(feedId, memberId);
 
 		feedRepository.delete(feed);
@@ -30,12 +31,15 @@ public class FeedRemover {
 
 	/** 피드 좋아요 취소 */
 	@Transactional
-	public void unlike(final Long feedId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+	public void unlike(
+		final Long memberId,
+		final Long feedId
+	) {
 		Feed feed = feedReader.read(feedId);
 
 		if (feedReader.alreadyLiked(memberId, feed)) {
 			feedLikeRepository.deleteByMemberIdAndFeed(memberId, feed);
+			return;
 		}
 
 		throw new BusinessException(ErrorCode.FEED_LIKE_NOT_FOUND);

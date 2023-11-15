@@ -19,15 +19,19 @@ public class BucketModifier {
 
 	private final BucketAppender bucketAppender;
 	private final BucketRemover bucketRemover;
+	private final BucketReader bucketReader;
 	private final BucketRepository bucketRepository;
 
 	/** 버킷 수정 */
 	@Transactional
 	public void modify(
-		final Bucket bucket,
+		final Long memberId,
+		final Long bucketId,
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
+		Bucket bucket = bucketReader.read(bucketId, memberId);
+
 		bucket.removeBucketItems();
 		bucketRemover.removeBucketItems(bucket.getId());
 

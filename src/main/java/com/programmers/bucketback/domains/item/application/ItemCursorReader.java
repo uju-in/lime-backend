@@ -1,8 +1,6 @@
 package com.programmers.bucketback.domains.item.application;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.vo.ItemCursorSummary;
-import com.programmers.bucketback.domains.item.application.vo.ItemSummary;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,33 +17,25 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class ItemCursorReader {
 
+	private static final int DEFAULT_SIZE = 20;
 	private final ItemRepository itemRepository;
 
 	public ItemGetByCursorServiceResponse readByCursor(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
-		final String trimmedKeyword = keyword.trim();
 
-		if (trimmedKeyword.isEmpty()) {
-			return new ItemGetByCursorServiceResponse(null, Collections.emptyList());
-		}
+		int pageSize = getPageSize(parameters);
 
-		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
+		String trimmedKeyword = keyword.trim();
 
-		List<ItemSummary> itemSummaries = itemRepository.findAllByCursor(
+		List<ItemCursorSummary> itemCursorSummaries = itemRepository.findAllByCursor(
 			trimmedKeyword,
 			parameters.cursorId(),
 			pageSize
 		);
 
-		List<String> cursorIds = itemSummaries.stream()
-			.map(this::generateCursorId)
-			.toList();
-
-		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
-
-		List<ItemCursorSummary> itemCursorSummaries = getItemCursorSummaries(itemSummaries, cursorIds);
+		String nextCursorId = getNextCursorId(itemCursorSummaries);
 
 		return new ItemGetByCursorServiceResponse(
 			nextCursorId,
@@ -54,25 +43,24 @@ public class ItemCursorReader {
 		);
 	}
 
-	private List<ItemCursorSummary> getItemCursorSummaries(
-		final List<ItemSummary> itemSummaries,
-		final List<String> cursorIds
-	) {
-		return IntStream.range(0, itemSummaries.size())
-			.mapToObj(idx -> {
-				String cursorId = cursorIds.get(idx);
-				ItemSummary itemSummary = itemSummaries.get(idx);
+	private int getPageSize(final CursorPageParameters parameters) {
+		Integer parameterSize = parameters.size();
 
-				return new ItemCursorSummary(cursorId, itemSummary);
-			}).toList();
+		if (parameterSize == 0) {
+			return DEFAULT_SIZE;
+		}
+
+		return parameterSize;
 	}
 
-	private String generateCursorId(final ItemSummary itemSummary) {
-		return itemSummary.createdAt().toString()
-			.replace("T", "")
-			.replace("-", "")
-			.replace(":", "")
-			.replace(".", "")
-			+ String.format("%08d", itemSummary.id());
+	private String getNextCursorId(final List<ItemCursorSummary> itemCursorSummaries) {
+		int size = itemCursorSummaries.size();
+		if (size == 0) {
+			return null;
+		}
+
+		ItemCursorSummary lastElement = itemCursorSummaries.get(size - 1);
+
+		return lastElement.cursorId();
 	}
 }

@@ -7,7 +7,7 @@ import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServ
 import jakarta.validation.constraints.NotNull;
 
 public record MemberItemAddRequest(
-	@NotNull
+	@NotNull(message = "아이템 목록은 필수 값 입니다.")
 	List<Long> itemIds
 ) {
 	public MemberItemAddServiceRequest toAddMemberItemServiceRequest() {

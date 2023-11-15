@@ -1,11 +1,6 @@
 package com.programmers.bucketback.domains.feed.application;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.programmers.bucketback.domains.feed.application.dto.response.GetFeedServiceResponse;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.bucketback.domains.feed.application.vo.FeedInfo;
 import com.programmers.bucketback.domains.feed.application.vo.FeedItemInfo;
 import com.programmers.bucketback.domains.feed.domain.Feed;
@@ -17,8 +12,11 @@ import com.programmers.bucketback.domains.member.application.vo.MemberInfo;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -51,7 +49,7 @@ public class FeedReader {
 		return feedLikeRepository.existsByMemberIdAndFeed(memberId, feed);
 	}
 
-	public GetFeedServiceResponse readFeed(
+	public FeedGetServiceResponse readFeed(
 		final Long feedId,
 		final Long memberId
 	) {
@@ -66,7 +64,7 @@ public class FeedReader {
 		final List<FeedItem> feedItems = feed.getFeedItems();
 		final List<FeedItemInfo> feedItemInfos = getFeedItemInfos(feedItems);
 
-		return new GetFeedServiceResponse(memberInfo, feedInfo, feedItemInfos);
+		return new FeedGetServiceResponse(memberInfo, feedInfo, feedItemInfos);
 	}
 
 	private Boolean isLiked(
