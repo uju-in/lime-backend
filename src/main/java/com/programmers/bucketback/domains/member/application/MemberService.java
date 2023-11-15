@@ -88,11 +88,6 @@ public class MemberService {
 	}
 
 	private Long getCurrentMemberId() {
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
 		return MemberUtils.getCurrentMemberId();
-
 	}
 }

@@ -66,10 +66,7 @@ public class FeedCursorReader {
 	}
 
 	private Long getLoginMemberId() {
-		Long loginMemberId = null;
-		if (MemberUtils.isLoggedIn()) {
-			loginMemberId = MemberUtils.getCurrentMemberId();
-		}
+		Long loginMemberId = MemberUtils.getCurrentMemberId();
 
 		return loginMemberId;
 	}

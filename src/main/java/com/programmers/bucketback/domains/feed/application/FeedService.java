@@ -69,10 +69,7 @@ public class FeedService {
 
 	/** 피드 상세 조회 **/
 	public GetFeedServiceResponse getFeed(final Long feedId) {
-		Long memberId = null;
-		if (MemberUtils.isLoggedIn()) {
-			memberId = MemberUtils.getCurrentMemberId();
-		}
+		Long memberId = MemberUtils.getCurrentMemberId();
 
 		return feedReader.readFeed(feedId, memberId);
 	}

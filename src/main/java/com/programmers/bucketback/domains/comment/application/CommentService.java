@@ -28,9 +28,6 @@ public class CommentService {
 		final Long feedId,
 		final String content
 	) {
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
 		final Long memberId = MemberUtils.getCurrentMemberId();
 
 		commentAppender.append(feedId, content, memberId);
@@ -71,9 +68,6 @@ public class CommentService {
 		final Long feedId,
 		final Long commentId
 	) {
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
 		final Long memberId = MemberUtils.getCurrentMemberId();
 
 		final Feed feed = feedReader.read(feedId);
