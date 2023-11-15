@@ -1,5 +1,11 @@
 package com.programmers.bucketback.global.error;
 
+import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
+import com.programmers.bucketback.global.error.exception.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -8,13 +14,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.programmers.bucketback.global.error.exception.BusinessException;
-import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.global.error.exception.ErrorCode;
-
-import jakarta.mail.MessagingException;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -29,7 +28,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
-		final MethodArgumentNotValidException e) {
+			final MethodArgumentNotValidException e) {
 		log.error("MethodArgumentNotValidException Exception", e);
 		final BindingResult bindingResult = e.getBindingResult();
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_REQUEST, bindingResult);
@@ -55,6 +54,13 @@ public class GlobalExceptionHandler {
 		log.error("MissingServletRequestParameterException", e);
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.MISSING_PARAMETER);
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(ExpiredJwtException.class)
+	protected ResponseEntity<ErrorResponse> handleJwtException(final ExpiredJwtException e) {
+		log.error("ExpiredJwtException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.EXPIRED_JWT);
+		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}
 
 	@ExceptionHandler(BusinessException.class)
