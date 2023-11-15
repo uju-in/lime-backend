@@ -4,8 +4,6 @@ import com.programmers.bucketback.domains.item.application.dto.ItemEnrollService
 
 public record ItemEnrollResponse(Long itemId) {
 	public static ItemEnrollResponse from(final ItemEnrollServiceResponse response) {
-		return new ItemEnrollResponse(
-			response.itemId()
-		);
+		return new ItemEnrollResponse(response.itemId());
 	}
 }
