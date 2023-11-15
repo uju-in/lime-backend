@@ -24,7 +24,7 @@ public class ItemEnrollService {
 	private final ItemService itemService;
 	private final ItemEnrollValidator itemEnrollValidator;
 
-	public void enrollItem(final ItemEnrollServiceRequest request) {
+	public Long enrollItem(final ItemEnrollServiceRequest request) {
 
 		// 로그인 확인
 		if (!MemberUtils.isLoggedIn()) {
@@ -45,6 +45,8 @@ public class ItemEnrollService {
 		// 아이템 담기
 		MemberItemAddServiceRequest memberItemAddServiceRequest = getAddMemberItemServiceRequest(enrolledItemId);
 		itemService.addItem(memberItemAddServiceRequest);
+
+		return enrolledItemId;
 	}
 
 	private MemberItemAddServiceRequest getAddMemberItemServiceRequest(final Long enrolledItemId) {
