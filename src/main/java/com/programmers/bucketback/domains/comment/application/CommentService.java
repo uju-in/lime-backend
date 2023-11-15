@@ -29,7 +29,6 @@ public class CommentService {
 		final String content
 	) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
-
 		commentAppender.append(feedId, content, memberId);
 	}
 

@@ -27,7 +27,7 @@ public enum ErrorCode {
 	MEMBER_NICKNAME_DUPLICATE("MEMBER_007", "닉네임이 중복되었습니다."),
 	MEMBER_NICKNAME_BAD_LENGTH("MEMBER_008", "닉네임은 3글자에서 25글자 사이여야 합니다."),
 	MEMBER_NICKNAME_BAD_PATTERN("MEMBER_009", "닉네임은 영어 대소문자, 숫자 그리고 언더스코어만 허용합니다."),
-	MEMBER_PASSWORD_BAD_LENGTH("MEMBER_010", "비밀번호는 6글자에서 10글자 사이여야 합니다."),
+	MEMBER_PASSWORD_BAD_LENGTH("MEMBER_010", "비밀번호는 6글자에서 15글자 사이여야 합니다."),
 	MEMBER_PASSWORD_BAD_PATTERN("MEMBER_011", "비밀번호는 영어, 숫자, 특수문자가 최소 1개씩 포함되야합니다."),
 	MEMBER_INTRODUCTION_BAD_LENGTH("MEMBER_012", "자기소개는 최대 300자 입니다."),
 	MEMBER_EMAIL_BAD_PATTERN("MEMBER_013", "이메일 형식이 아닙니다."),
@@ -59,15 +59,18 @@ public enum ErrorCode {
 	BUCKET_EXCEED_BUDGET("BUCKET_003", "버킷 예산을 초과했습니다."),
 	BUCKET_INVALID_NAME("BUCKET_004", "유효하지 않은 길이의 버킷 이름입니다."),
 	BUCKET_INVALID_BUDGET("BUCKET_005", "유호하지 않은 버킷 예산입니다."),
+	BUCKET_ITEM_NOT_REQUESTED("BUCKET_006", "버킷 아이템이 선택되지 않았습니다."),
 
 	// MemberItem
 	MEMBER_ITEM_NOT_FOUND("MEMBER_ITEM_001", "나의 아이템을 찾을 수 없습니다."),
 	MEMBER_NOT_MINE("MEMBER_ITEM_002", "아이템 담기에 없는 아이템 입니다."),
+	MEMBER_ITEM_ALREADY_EXIST("MEMBER_ITEM_003", "이미 존재하는 아이템 입니다."),
 
 	//Inventory
 	INVENTORY_NOT_FOUND("INVENTORY_001", "인벤토리를 찾을 수 없습니다."),
 	INVENTORY_ALREADY_EXIST("INVENTORY_002", "이미 생성된인벤토리가 잇습니다."),
 	INVENTORY_ITEM_NOT_FOUND("INVENTORY_003", "인벤토리의 아이템을 찾을 수 없습니다."),
+	INVENTORY_ITEM_NOT_REQUESTED("INVENTORY_004", "인벤토리의 아이템이 선택되지 않았습니다."),
 
 	//Feed
 	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다."),
@@ -82,8 +85,7 @@ public enum ErrorCode {
 	COMMENT_CONTENT_BAD_LENGTH("COMMENT_005", "댓글 내용은 최대 300자 입니다."),
 
 	// Hobby
-	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다."),
-	;
+	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다.");
 
 	private final String code;
 	private final String message;

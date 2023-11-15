@@ -1,17 +1,15 @@
 package com.programmers.bucketback.domains.member.application;
 
-import org.springframework.stereotype.Service;
-
 import com.programmers.bucketback.domains.common.MemberUtils;
-import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
+import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.application.vo.MyPage;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
-
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class MemberService {
 		memberAppender.append(loginInfo, nickname);
 	}
 
-	public LoginMemberServiceResponse login(final LoginInfo loginInfo) {
+	public MemberLoginServiceResponse login(final LoginInfo loginInfo) {
 		final String email = loginInfo.getEmail();
 		final String rawPassword = loginInfo.getPassword();
 		final Member member = memberReader.readByEmail(email);

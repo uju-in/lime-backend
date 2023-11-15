@@ -2,10 +2,27 @@ package com.programmers.bucketback.domains.inventory.api.dto.response;
 
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 
+import lombok.Builder;
+
+@Builder
 public record InventoryItemGetResponse(
-	/** 사용할만한 개념객체가 더 있으면 사용 */
-	ItemInfo itemInfo,
+	Long id,
+	String name,
+	Integer price,
+	String image,
 	String itemUrl
 ) {
 
+	public static InventoryItemGetResponse of(
+		final ItemInfo itemInfo,
+		final String itemUrl
+	) {
+		return InventoryItemGetResponse.builder()
+			.id(itemInfo.id())
+			.name(itemInfo.name())
+			.price(itemInfo.price())
+			.image(itemInfo.image())
+			.itemUrl(itemUrl)
+			.build();
+	}
 }

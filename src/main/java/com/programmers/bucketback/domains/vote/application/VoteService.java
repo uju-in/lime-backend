@@ -1,20 +1,18 @@
 package com.programmers.bucketback.domains.vote.application;
 
-import org.springframework.stereotype.Service;
-
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VotesGetServiceResponse;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class VoteService {
 	private final VoteManager voteManager;
 	private final VoteRemover voteRemover;
 
-	public Long createVote(final CreateVoteServiceRequest request) {
+	public Long createVote(final VoteCreateServiceRequest request) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteAppender.append(memberId, request);
 
@@ -68,13 +66,14 @@ public class VoteService {
 		voteRemover.remove(vote);
 	}
 
-	public GetVoteServiceResponse getVote(final Long voteId) {
+
+	public VoteGetServiceResponse getVote(final Long voteId) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 
 		return voteReader.read(voteId, memberId);
 	}
 
-	public GetVotesServiceResponse getVotesByCursor(
+	public VotesGetServiceResponse getVotesByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,

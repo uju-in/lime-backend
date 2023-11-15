@@ -62,7 +62,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 								member.nickname.nickname
 							),
 							feedItem.feed.id,
-							feedItem.feed.message,
+							feedItem.feed.content,
 							feedItem.feed.likes.size(),
 							feedItem.feed.comments.size(),
 							feedItem.feed.createdAt,

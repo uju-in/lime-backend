@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewCreateRequest;
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewUpdateRequest;
+import com.programmers.bucketback.domains.review.api.dto.response.ReviewCreateResponse;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.bucketback.domains.review.application.ReviewService;
-import com.programmers.bucketback.domains.review.application.dto.GetReviewByCursorServiceResponse;
+import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,14 @@ public class ReviewController {
 	private final ReviewService reviewService;
 
 	@PostMapping()
-	public ResponseEntity<Void> createReview(
+	public ResponseEntity<ReviewCreateResponse> createReview(
 		@PathVariable final Long itemId,
 		@Valid @RequestBody final ReviewCreateRequest request
 	) {
-		reviewService.createReview(itemId, request.toReviewContent());
+		Long reviewId = reviewService.createReview(itemId, request.toReviewContent());
+		ReviewCreateResponse response = new ReviewCreateResponse(reviewId);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/{reviewId}")
@@ -54,13 +56,14 @@ public class ReviewController {
 		@PathVariable final Long itemId,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-
-		GetReviewByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
+		ReviewGetByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
 			itemId,
 			request.toParameters()
 		);
 
-		return ResponseEntity.ok(serviceResponse.toReviewGetByCursorResponse());
+		ReviewGetByCursorResponse response = ReviewGetByCursorResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/{reviewId}")

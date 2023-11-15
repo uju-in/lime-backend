@@ -1,13 +1,11 @@
 package com.programmers.bucketback.domains.vote.application;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -18,7 +16,7 @@ public class VoteAppender {
 	@Transactional
 	public Vote append(
 		final Long memberId,
-		final CreateVoteServiceRequest request
+		final VoteCreateServiceRequest request
 	) {
 		final Vote vote = Vote.builder()
 			.memberId(memberId)
