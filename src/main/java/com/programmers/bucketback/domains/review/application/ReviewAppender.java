@@ -16,14 +16,15 @@ public class ReviewAppender {
 	private final ReviewRepository reviewRepository;
 
 	@Transactional
-	public void append(
+	public Long append(
 		final Long itemId,
 		final Long memberId,
 		final ReviewContent reviewContent
 	) {
 		Review review = getReview(memberId, reviewContent, itemId);
-
 		reviewRepository.save(review);
+
+		return review.getId();
 	}
 
 	private Review getReview(

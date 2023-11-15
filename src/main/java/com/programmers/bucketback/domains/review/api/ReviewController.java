@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewCreateRequest;
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewUpdateRequest;
+import com.programmers.bucketback.domains.review.api.dto.response.ReviewCreateResponse;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.bucketback.domains.review.application.ReviewService;
+import com.programmers.bucketback.domains.review.application.dto.ReviewCreateServiceResponse;
 import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 
 import jakarta.validation.Valid;
@@ -29,13 +31,14 @@ public class ReviewController {
 	private final ReviewService reviewService;
 
 	@PostMapping()
-	public ResponseEntity<Void> createReview(
+	public ResponseEntity<ReviewCreateResponse> createReview(
 		@PathVariable final Long itemId,
 		@Valid @RequestBody final ReviewCreateRequest request
 	) {
-		reviewService.createReview(itemId, request.toReviewContent());
+		ReviewCreateServiceResponse serviceResponse = reviewService.createReview(itemId, request.toReviewContent());
+		ReviewCreateResponse response = ReviewCreateResponse.from(serviceResponse);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/{reviewId}")
