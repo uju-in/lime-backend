@@ -19,12 +19,13 @@ public class ReviewService {
 	private final ReviewCursorReader reviewCursorReader;
 	private final ReviewRemover reviewRemover;
 
-	public void createReview(
+	public Long createReview(
 		final Long itemId,
 		final ReviewContent reviewContent
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		reviewAppender.append(itemId, memberId, reviewContent);
+
+		return reviewAppender.append(itemId, memberId, reviewContent);
 	}
 
 	public void updateReview(
