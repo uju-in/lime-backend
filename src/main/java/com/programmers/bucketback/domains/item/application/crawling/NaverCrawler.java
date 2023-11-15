@@ -16,29 +16,34 @@ public class NaverCrawler implements WebCrawler {
 
 	@Override
 	public ItemCrawlerInfo extractInfoFromUrl(final String url) {
-		Document document = connectWithHeaders(url);
+		try {
+			Document document = connectWithHeaders(url);
 
-		Elements elements = document.getElementsByClass("_22kNQuEXmb _copyable");
-		if (elements.size() == 0) {
-			throw new BusinessException(ErrorCode.INVALID_REQUEST);
+			Elements elements = document.getElementsByClass("_22kNQuEXmb _copyable");
+			if (elements.size() == 0) {
+				throw new BusinessException(ErrorCode.INVALID_REQUEST);
+			}
+
+			String itemName = elements
+				.get(0)
+				.text();
+			Integer price = Integer.parseInt(document.getElementsByClass("_1LY7DqCnwR")
+				.last()
+				.text()
+				.replace(",", ""));
+			String imgUrl = "https:" + document.select("img[alt=대표이미지]")
+				.first()
+				.attr("src");
+
+			return ItemCrawlerInfo.builder()
+				.itemName(itemName)
+				.price(price)
+				.imageUrl(imgUrl)
+				.url(url)
+				.build();
+		} catch (Exception e) {
+			throw new BusinessException(ErrorCode.CRAWLER_NAVER_BAD_REQUEST);
 		}
 
-		String itemName = elements
-			.get(0)
-			.text();
-		Integer price = Integer.parseInt(document.getElementsByClass("_1LY7DqCnwR")
-			.last()
-			.text()
-			.replace(",", ""));
-		String imgUrl = "https:" + document.select("img[alt=대표이미지]")
-			.first()
-			.attr("src");
-
-		return ItemCrawlerInfo.builder()
-			.itemName(itemName)
-			.price(price)
-			.imageUrl(imgUrl)
-			.url(url)
-			.build();
 	}
 }

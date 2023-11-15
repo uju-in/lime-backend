@@ -85,7 +85,12 @@ public enum ErrorCode {
 	COMMENT_CONTENT_BAD_LENGTH("COMMENT_005", "댓글 내용은 최대 300자 입니다."),
 
 	// Hobby
-	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다.");
+	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다."),
+
+	// Crawler
+	CRAWLER_NAVER_BAD_REQUEST("CRAWLER", "네이버 크롤러에서 파싱할 수 없는 URL 입니다."),
+	CRAWLER_COUPANG_BAD_REQUEST("CRAWLER", "쿠팡 크롤러에서 파싱할 수 없는 URL 입니다."),
+	CRAWLER_DANAWA_BAD_REQUEST("CRAWLER", "다나와 크롤러에서 파싱할 수 없는 URL 입니다.");
 
 	private final String code;
 	private final String message;
