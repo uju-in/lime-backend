@@ -69,6 +69,7 @@ public enum ErrorCode {
 	INVENTORY_NOT_FOUND("INVENTORY_001", "인벤토리를 찾을 수 없습니다."),
 	INVENTORY_ALREADY_EXIST("INVENTORY_002", "이미 생성된인벤토리가 잇습니다."),
 	INVENTORY_ITEM_NOT_FOUND("INVENTORY_003", "인벤토리의 아이템을 찾을 수 없습니다."),
+	INVENTORY_ITEM_NOT_REQUESTED("INVENTORY_004", "인벤토리의 아이템이 선택되지 않았습니다."),
 
 	//Feed
 	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다."),

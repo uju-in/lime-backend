@@ -16,7 +16,7 @@ public class InventoryInfoSummary {
 	private Hobby hobby;
 	private Long inventoryId;
 	private int inventoryTotalPrice;
-	private List<ItemImage> itemImages; //이미지 개수 3개로 제한
+	private List<ItemImage> itemImages;
 
 	public void setItemImages(final List<ItemImage> subList) {
 		this.itemImages = subList;

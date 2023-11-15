@@ -3,7 +3,6 @@ package com.programmers.bucketback.domains.inventory.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.bucketback.domains.common.BaseEntity;
 import com.programmers.bucketback.domains.common.Hobby;
 
@@ -42,7 +41,6 @@ public class Inventory extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
 	private List<InventoryItem> inventoryItems = new ArrayList<>();
 
