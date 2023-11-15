@@ -10,7 +10,6 @@ import com.programmers.bucketback.domains.item.application.crawling.WebCrawler;
 import com.programmers.bucketback.domains.item.application.crawling.WebSite;
 import com.programmers.bucketback.domains.item.application.dto.ItemCreateServiceRequest;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
-import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServiceRequest;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -25,7 +24,7 @@ public class ItemEnrollService {
 	private final ItemService itemService;
 	private final ItemEnrollValidator itemEnrollValidator;
 
-	public ItemEnrollServiceResponse enrollItem(final ItemEnrollServiceRequest request) {
+	public Long enrollItem(final ItemEnrollServiceRequest request) {
 
 		// 로그인 확인
 		if (!MemberUtils.isLoggedIn()) {
@@ -47,7 +46,7 @@ public class ItemEnrollService {
 		MemberItemAddServiceRequest memberItemAddServiceRequest = getAddMemberItemServiceRequest(enrolledItemId);
 		itemService.addItem(memberItemAddServiceRequest);
 
-		return new ItemEnrollServiceResponse(enrolledItemId);
+		return enrolledItemId;
 	}
 
 	private MemberItemAddServiceRequest getAddMemberItemServiceRequest(final Long enrolledItemId) {
