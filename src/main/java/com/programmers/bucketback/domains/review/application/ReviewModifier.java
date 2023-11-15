@@ -3,7 +3,7 @@ package com.programmers.bucketback.domains.review.application;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
+import com.programmers.bucketback.domains.review.application.vo.ReviewContent;
 import com.programmers.bucketback.domains.review.domain.Review;
 
 import lombok.RequiredArgsConstructor;

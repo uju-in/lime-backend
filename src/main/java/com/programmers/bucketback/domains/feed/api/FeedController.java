@@ -3,11 +3,12 @@ package com.programmers.bucketback.domains.feed.api;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.feed.api.request.FeedCreateRequest;
 import com.programmers.bucketback.domains.feed.api.request.FeedUpdateRequest;
+import com.programmers.bucketback.domains.feed.api.response.FeedCreateResponse;
 import com.programmers.bucketback.domains.feed.api.response.FeedGetByCursorResponse;
 import com.programmers.bucketback.domains.feed.api.response.FeedGetResponse;
 import com.programmers.bucketback.domains.feed.application.FeedService;
 import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetByCursorServiceResponse;
-import com.programmers.bucketback.domains.feed.application.dto.response.GetFeedServiceResponse;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,10 @@ public class FeedController {
 
 	@Operation(summary = "피드 생성", description = "FeedCreateRequest 을 이용하여 피드를 생성힙니다.")
 	@PostMapping
-	public ResponseEntity<Void> createFeed(@RequestBody @Valid final FeedCreateRequest request) {
-		feedService.createFeed(request.toContent());
+	public ResponseEntity<FeedCreateResponse> createFeed(@RequestBody @Valid final FeedCreateRequest request) {
+		Long feedId = feedService.createFeed(request.toServiceRequest());
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(new FeedCreateResponse(feedId));
 	}
 
 	@Operation(summary = "피드 수정", description = "FeedUpdateRequest 을 이용하여 피드를 수정힙니다.")
@@ -35,7 +36,7 @@ public class FeedController {
 		@PathVariable final Long feedId,
 		@RequestBody @Valid final FeedUpdateRequest request
 	) {
-		feedService.modifyFeed(feedId, request.toContent());
+		feedService.modifyFeed(feedId, request.toServiceRequest());
 
 		return ResponseEntity.ok().build();
 	}
@@ -81,7 +82,7 @@ public class FeedController {
 	@Operation(summary = "피드 상세 조회", description = "FeedId를 이용하여 피드를 조회합니다.")
 	@GetMapping("/{feedId}")
 	public ResponseEntity<FeedGetResponse> getFeed(@PathVariable final Long feedId) {
-		final GetFeedServiceResponse serviceResponse = feedService.getFeed(feedId);
+		final FeedGetServiceResponse serviceResponse = feedService.getFeed(feedId);
 		final FeedGetResponse response = FeedGetResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);

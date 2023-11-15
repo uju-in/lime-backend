@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.inventory.application;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,12 +11,15 @@ import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
+import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryItemGetResponse;
+import com.programmers.bucketback.domains.inventory.application.dto.InventoryGetServiceResponse;
 import com.programmers.bucketback.domains.inventory.application.vo.InventoryProfile;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryItemRepository;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 import com.programmers.bucketback.domains.item.application.ItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.review.application.ReviewReader;
 import com.programmers.bucketback.domains.review.domain.Review;
@@ -23,9 +27,7 @@ import com.programmers.bucketback.global.error.exception.EntityNotFoundException
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -68,16 +70,29 @@ public class InventoryReader {
 		return inventoryItemRepository.findByInventoryId(inventoryId);
 	}
 
+	/**
+	 * 인벤토링 아이템 상세 조회
+	 */
+	public InventoryGetServiceResponse readDetail(final Long inventoryId) {
+		Inventory inventory = read(inventoryId);
+
+		List<InventoryItemGetResponse> inventoryItemGetResponses = inventory.getInventoryItems().stream()
+			.map(inventoryItem -> itemReader.read(inventoryItem.getItem().getId()))
+			.map(item -> InventoryItemGetResponse.of(ItemInfo.from(item), item.getUrl()))
+			.toList();
+
+		return InventoryGetServiceResponse.of(inventory, inventoryItemGetResponses);
+	}
+
 	/** 인벤토리 목록 조회 */
 	public List<InventoryInfoSummary> readSummary(final Long memberId) {
 		List<InventoryInfoSummary> results = inventoryRepository.findInfoSummaries(memberId);
 
-		for (InventoryInfoSummary result : results) {
-			result.setItemImages(
-				result.getItemImages()
-					.subList(0, Math.min(3, result.getItemImages().size()))
-			);
-		}
+		results.forEach(result ->
+			result.setItemImages(result.getItemImages().stream()
+				.limit(3)
+				.collect(Collectors.toList()))
+		);
 
 		return results;
 	}
@@ -97,7 +112,7 @@ public class InventoryReader {
 
 		List<Review> reviews = reviewReader.readByMemberId(memberId);
 		List<Long> itemIdsFromReview = reviews.stream()
-			.map(review -> review.getItemId())
+			.map(Review::getItemId)
 			.toList();
 
 		List<InventoryReviewItemSummary> summaries = itemReader.readReviewedItem(

@@ -15,6 +15,7 @@ public enum ErrorCode {
 	UNAUTHORIZED("COMMON_005", "로그인이 필요한 기능입니다."),
 	FORBIDDEN("COMMON_006", "권한이 없습니다."),
 	MISSING_PARAMETER("COMMON_007", "필수 파라미터가 있습니다."),
+	EXPIRED_JWT("COMMON_008", "만료된 JWT 토큰입니다."),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -32,9 +33,9 @@ public enum ErrorCode {
 	MEMBER_EMAIL_BAD_PATTERN("MEMBER_013", "이메일 형식이 아닙니다."),
 
 	// Item
-	ITEM_MARKET_NOT_FOUND("ITEM_001", "요청 url에 해당하는 상품을 찾을 수 없습니다."),
-	ITEM_NOT_FOUND("ITEM_002", "해당하는 아이템은 찾을 수 없습니다."),
-	ITEM_URL_DUPLICATED("ITEM_003", "중복되는 ITEM URL 입니다."),
+	ITEM_MARKET_NOT_FOUND("ITEM_001", "지원하지 않는 아이템 URL 입니다."),
+	ITEM_NOT_FOUND("ITEM_002", "요청한 아이템은 찾을 수 없습니다."),
+	ITEM_URL_ALREADY_EXIST("ITEM_003", "이미 존재하는 아이템 URL 입니다."),
 
 	// REVIEW
 	REVIEW_NOT_FOUND("REVIEW_001", "해당하는 리뷰는 찾을 수 없습니다."),
@@ -58,15 +59,18 @@ public enum ErrorCode {
 	BUCKET_EXCEED_BUDGET("BUCKET_003", "버킷 예산을 초과했습니다."),
 	BUCKET_INVALID_NAME("BUCKET_004", "유효하지 않은 길이의 버킷 이름입니다."),
 	BUCKET_INVALID_BUDGET("BUCKET_005", "유호하지 않은 버킷 예산입니다."),
+	BUCKET_ITEM_NOT_REQUESTED("BUCKET_006", "버킷 아이템이 선택되지 않았습니다."),
 
 	// MemberItem
 	MEMBER_ITEM_NOT_FOUND("MEMBER_ITEM_001", "나의 아이템을 찾을 수 없습니다."),
 	MEMBER_NOT_MINE("MEMBER_ITEM_002", "아이템 담기에 없는 아이템 입니다."),
+	MEMBER_ITEM_ALREADY_EXIST("MEMBER_ITEM_003", "이미 존재하는 아이템 입니다."),
 
 	//Inventory
 	INVENTORY_NOT_FOUND("INVENTORY_001", "인벤토리를 찾을 수 없습니다."),
 	INVENTORY_ALREADY_EXIST("INVENTORY_002", "이미 생성된인벤토리가 잇습니다."),
 	INVENTORY_ITEM_NOT_FOUND("INVENTORY_003", "인벤토리의 아이템을 찾을 수 없습니다."),
+	INVENTORY_ITEM_NOT_REQUESTED("INVENTORY_004", "인벤토리의 아이템이 선택되지 않았습니다."),
 
 	//Feed
 	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다."),
@@ -81,8 +85,7 @@ public enum ErrorCode {
 	COMMENT_CONTENT_BAD_LENGTH("COMMENT_005", "댓글 내용은 최대 300자 입니다."),
 
 	// Hobby
-	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다."),
-	;
+	HOBBY_BAD_PARAMETER("HOBBY_001", "잘못된 hobby 파라미터 값입니다.");
 
 	private final String code;
 	private final String message;

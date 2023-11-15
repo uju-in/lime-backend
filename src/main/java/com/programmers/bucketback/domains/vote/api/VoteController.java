@@ -14,6 +14,8 @@ import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteS
 import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VotesGetServiceResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +68,7 @@ public class VoteController {
 	@Operation(summary = "투표 상세 조회", description = "VoteId를 이용하여 투표를 조회합니다.")
 	@GetMapping("/{voteId}")
 	public ResponseEntity<VoteGetResponse> getVote(@PathVariable final Long voteId) {
-		final GetVoteServiceResponse serviceResponse = voteService.getVote(voteId);
+		final VoteGetServiceResponse serviceResponse = voteService.getVote(voteId);
 		final VoteGetResponse response = VoteGetResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
@@ -80,7 +82,7 @@ public class VoteController {
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		final GetVotesServiceResponse serviceResponse = voteService.getVotesByCursor(
+		final VotesGetServiceResponse serviceResponse = voteService.getVotesByCursor(
 			Hobby.from(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),

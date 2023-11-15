@@ -6,7 +6,7 @@ import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckNic
 import com.programmers.bucketback.domains.member.api.dto.response.MemberGetMyPageResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
 import com.programmers.bucketback.domains.member.application.MemberService;
-import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
+import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.application.vo.MyPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +34,7 @@ public class MemberController {
 	@Operation(summary = "로그인", description = "MemberLoginRequest 을 이용하여 로그인을 합니다.")
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody final MemberLoginRequest request) {
-		final LoginMemberServiceResponse serviceResponse = memberService.login(request.toLoginInfo());
+		final MemberLoginServiceResponse serviceResponse = memberService.login(request.toLoginInfo());
 		final MemberLoginResponse response = MemberLoginResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);

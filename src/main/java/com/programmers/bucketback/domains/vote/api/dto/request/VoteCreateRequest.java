@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.vote.api.dto.request;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.vote.application.dto.request.CreateVoteServiceRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -24,8 +25,8 @@ public record VoteCreateRequest(
 	@NotNull(message = "아이템2 ID는 필수 값입니다.")
 	Long item2Id
 ) {
-	public CreateVoteServiceRequest toCreateVoteServiceRequest() {
-		return CreateVoteServiceRequest.builder()
+	public VoteCreateServiceRequest toCreateVoteServiceRequest() {
+		return VoteCreateServiceRequest.builder()
 			.hobby(hobby)
 			.content(content)
 			.item1Id(item1Id)

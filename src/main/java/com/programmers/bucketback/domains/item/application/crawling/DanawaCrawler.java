@@ -11,7 +11,7 @@ public class DanawaCrawler implements WebCrawler {
 	}
 
 	@Override
-	public ItemInfo extractInfoFromUrl(final String url) {
+	public ItemCrawlerInfo extractInfoFromUrl(final String url) {
 		Document document = connectWithHeaders(url);
 
 		String itemName = document.select("span.title")
@@ -24,7 +24,7 @@ public class DanawaCrawler implements WebCrawler {
 		String imgUrl = "https:" + document.getElementById("baseImage")
 			.attr("src");
 
-		return ItemInfo.builder()
+		return ItemCrawlerInfo.builder()
 			.itemName(itemName)
 			.price(price)
 			.imageUrl(imgUrl)

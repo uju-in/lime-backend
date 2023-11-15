@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.item.application;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.item.domain.Item;
@@ -11,13 +11,15 @@ import com.programmers.bucketback.domains.item.repository.MemberItemRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class AddMemberItemService {
+public class MemberItemAppender {
 
 	private final MemberItemRepository memberItemRepository;
 
 	private final ItemReader itemReader;
+
+	private final MemberItemValidator memberItemValidator;
 
 	@Transactional
 	public void addMemberItems(
@@ -33,11 +35,11 @@ public class AddMemberItemService {
 		final Long memberId,
 		final List<Item> items
 	) {
+		memberItemValidator.validateExistMemberItem(memberId, items);
+
 		return items.stream()
-			.map(item ->
-				new MemberItem(
-					memberId, item
-				)
+			.map(
+				item -> new MemberItem(memberId, item)
 			).toList();
 	}
 

@@ -1,12 +1,5 @@
 package com.programmers.bucketback.domains.vote.application;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
@@ -14,19 +7,20 @@ import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
-import com.programmers.bucketback.domains.vote.application.dto.response.VoteCursorSummary;
-import com.programmers.bucketback.domains.vote.application.dto.response.VoteInfo;
-import com.programmers.bucketback.domains.vote.application.dto.response.VoteSummary;
+import com.programmers.bucketback.domains.vote.application.dto.response.*;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.domain.Voter;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -44,7 +38,7 @@ public class VoteReader {
 	}
 
 	@Transactional(readOnly = true)
-	public GetVoteServiceResponse read(
+	public VoteGetServiceResponse read(
 		final Long voteId,
 		final Long memberId
 	) {
@@ -61,7 +55,7 @@ public class VoteReader {
 		final boolean isOwner = isOwner(vote, memberId);
 		final Long selectedItemId = getSelectedItemId(vote, memberId);
 
-		return GetVoteServiceResponse.builder()
+		return VoteGetServiceResponse.builder()
 			.item1Info(item1Info)
 			.item2Info(item2Info)
 			.voteInfo(voteInfo)
@@ -71,7 +65,7 @@ public class VoteReader {
 	}
 
 	@Transactional(readOnly = true)
-	public GetVotesServiceResponse readByCursor(
+	public VotesGetServiceResponse readByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
@@ -79,7 +73,7 @@ public class VoteReader {
 		final Long memberId
 	) {
 		if (memberId == null && statusCondition.isRequiredLogin()) {
-			return new GetVotesServiceResponse(null, Collections.emptyList());
+			return new VotesGetServiceResponse(null, Collections.emptyList());
 		}
 
 		if (sortCondition == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED) {
@@ -100,7 +94,7 @@ public class VoteReader {
 		final List<VoteCursorSummary> voteCursorSummaries = getVoteCursorSummaries(voteSummaries);
 		final String nextCursorId = getNextCursorId(voteSummaries);
 
-		return new GetVotesServiceResponse(nextCursorId, voteCursorSummaries);
+		return new VotesGetServiceResponse(nextCursorId, voteCursorSummaries);
 	}
 
 	private ItemInfo getItemInfo(final Long itemId) {
