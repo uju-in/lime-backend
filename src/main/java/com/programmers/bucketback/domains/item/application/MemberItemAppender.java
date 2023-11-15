@@ -19,6 +19,8 @@ public class MemberItemAppender {
 
 	private final ItemReader itemReader;
 
+	private final MemberItemValidator memberItemValidator;
+
 	@Transactional
 	public void addMemberItems(
 		final List<Long> itemIds,
@@ -33,11 +35,11 @@ public class MemberItemAppender {
 		final Long memberId,
 		final List<Item> items
 	) {
+		memberItemValidator.validateExistMemberItem(memberId, items);
+
 		return items.stream()
-			.map(item ->
-				new MemberItem(
-					memberId, item
-				)
+			.map(
+				item -> new MemberItem(memberId, item)
 			).toList();
 	}
 
