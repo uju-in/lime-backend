@@ -23,6 +23,7 @@ public record FeedCursorSummary(
 			.cursorId(cursorId)
 			.memberInfo(memberInfo)
 			.feedId(feedId)
+			.content(content)
 			.likeCount(likeCount)
 			.commentCount(commentCount)
 			.createdAt(createdAt)
