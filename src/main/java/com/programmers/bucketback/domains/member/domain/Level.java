@@ -16,7 +16,7 @@ public enum Level {
     LEVEL5(140),
     LEVEL6(200),
     LEVEL7(270),
-    LEVEL8( 350),
+    LEVEL8(350),
     LEVEL9(440),
     LEVEL10(540),
     ;
