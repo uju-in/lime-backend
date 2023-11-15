@@ -34,7 +34,7 @@ public class FeedCursorReader {
 	) {
 		int pageSize = getPageSizeByParameter(parameters);
 		Long myPageMemberId = getMemberIdByNickname(nickname);
-		Long loginMemberId = getLoginMemberId();
+		Long loginMemberId = MemberUtils.getCurrentMemberId();
 		Hobby hobby = getHobbyByName(hobbyName);
 
 		List<FeedCursorSummary> feedCursorSummaries = feedRepository.findAllByCursor(
@@ -63,12 +63,6 @@ public class FeedCursorReader {
 			nextCursorId,
 			feedCursorSummaryLikes
 		);
-	}
-
-	private Long getLoginMemberId() {
-		Long loginMemberId = MemberUtils.getCurrentMemberId();
-
-		return loginMemberId;
 	}
 
 	private Hobby getHobbyByName(final String hobbyName) {

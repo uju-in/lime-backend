@@ -48,7 +48,7 @@ public class MemberService {
 	}
 
 	public void deleteMember() {
-		final Long memberId = getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
 
 		memberRemover.remove(memberId);
 	}
@@ -57,14 +57,14 @@ public class MemberService {
 		final String nickname,
 		final String introduction
 	) {
-		final Long memberId = getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
 		memberManager.checkNicknameDuplication(nickname);
 
 		memberModifier.modifyProfile(memberId, nickname, introduction);
 	}
 
 	public void updatePassword(final String password) {
-		final Long memberId = getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
 
 		memberModifier.modifyPassword(memberId, password);
 	}
@@ -85,9 +85,5 @@ public class MemberService {
 
 	public MyPage getMyPage(final String nickname) {
 		return memberReader.readMyPage(nickname);
-	}
-
-	private Long getCurrentMemberId() {
-		return MemberUtils.getCurrentMemberId();
 	}
 }
