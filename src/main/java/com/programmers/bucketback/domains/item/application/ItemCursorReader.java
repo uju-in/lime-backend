@@ -1,12 +1,14 @@
 package com.programmers.bucketback.domains.item.application;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.item.application.dto.GetItemByCursorServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.vo.ItemCursorSummary;
 import com.programmers.bucketback.domains.item.application.vo.ItemSummary;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
@@ -15,18 +17,25 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ItemCursorReader {
 
 	private final ItemRepository itemRepository;
 
-	public GetItemByCursorServiceResponse readByCursor(
+	public ItemGetByCursorServiceResponse readByCursor(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
+		final String trimmedKeyword = keyword.trim();
+
+		if (trimmedKeyword.isEmpty()) {
+			return new ItemGetByCursorServiceResponse(null, Collections.emptyList());
+		}
+
 		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
 
 		List<ItemSummary> itemSummaries = itemRepository.findAllByCursor(
-			keyword,
+			trimmedKeyword,
 			parameters.cursorId(),
 			pageSize
 		);
@@ -39,7 +48,7 @@ public class ItemCursorReader {
 
 		List<ItemCursorSummary> itemCursorSummaries = getItemCursorSummaries(itemSummaries, cursorIds);
 
-		return new GetItemByCursorServiceResponse(
+		return new ItemGetByCursorServiceResponse(
 			nextCursorId,
 			itemCursorSummaries
 		);

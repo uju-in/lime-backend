@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.item.application;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.inventory.application.InventoryReviewItemSummary;
@@ -13,7 +13,7 @@ import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ItemReader {
