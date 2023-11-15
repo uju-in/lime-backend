@@ -17,7 +17,6 @@ import com.programmers.bucketback.domains.review.api.dto.request.ReviewUpdateReq
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewCreateResponse;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.bucketback.domains.review.application.ReviewService;
-import com.programmers.bucketback.domains.review.application.dto.ReviewCreateServiceResponse;
 import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 
 import jakarta.validation.Valid;
@@ -35,8 +34,8 @@ public class ReviewController {
 		@PathVariable final Long itemId,
 		@Valid @RequestBody final ReviewCreateRequest request
 	) {
-		ReviewCreateServiceResponse serviceResponse = reviewService.createReview(itemId, request.toReviewContent());
-		ReviewCreateResponse response = ReviewCreateResponse.from(serviceResponse);
+		Long reviewId = reviewService.createReview(itemId, request.toReviewContent());
+		ReviewCreateResponse response = new ReviewCreateResponse(reviewId);
 
 		return ResponseEntity.ok(response);
 	}

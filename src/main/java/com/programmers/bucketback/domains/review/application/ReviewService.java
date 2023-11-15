@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.review.application.dto.ReviewCreateServiceResponse;
 import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.review.application.vo.ReviewContent;
 
@@ -20,14 +19,13 @@ public class ReviewService {
 	private final ReviewCursorReader reviewCursorReader;
 	private final ReviewRemover reviewRemover;
 
-	public ReviewCreateServiceResponse createReview(
+	public Long createReview(
 		final Long itemId,
 		final ReviewContent reviewContent
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		Long reviewId = reviewAppender.append(itemId, memberId, reviewContent);
 
-		return new ReviewCreateServiceResponse(reviewId);
+		return reviewAppender.append(itemId, memberId, reviewContent);
 	}
 
 	public void updateReview(
