@@ -1,24 +1,19 @@
 package com.programmers.bucketback.domains.comment.repository;
 
-import static com.programmers.bucketback.domains.comment.domain.QComment.*;
-import static com.programmers.bucketback.domains.member.domain.QMember.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.programmers.bucketback.domains.member.application.vo.MemberInfo;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringExpression;
-import com.querydsl.core.types.dsl.StringExpressions;
-import com.querydsl.core.types.dsl.StringTemplate;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.programmers.bucketback.domains.comment.domain.QComment.comment;
+import static com.programmers.bucketback.domains.member.domain.QMember.member;
 
 @RequiredArgsConstructor
 public class CommentRepositoryForCursorImpl implements CommentRepositoryForCursor {
@@ -40,12 +35,12 @@ public class CommentRepositoryForCursorImpl implements CommentRepositoryForCurso
 					Projections.constructor(
 						MemberInfo.class,
 						member.id,
-						member.nickname,
-						member.introduction,//프로필이미지 대신 임시로 사용 : 프로필 이미지 필드 생기면 추가
+						member.nickname.nickname,
+						member.introduction.introduction,//프로필이미지 대신 임시로 사용 : 프로필 이미지 필드 생기면 추가
 						member.levelPoint
 					),
 					comment.id,
-					comment.content,
+					comment.content.content,
 					comment.adoption,
 					comment.createdAt
 				)
