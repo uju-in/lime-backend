@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.review.application.dto;
+package com.programmers.bucketback.domains.review.application.vo;
 
 public record ReviewContent(
 	Integer rating,
