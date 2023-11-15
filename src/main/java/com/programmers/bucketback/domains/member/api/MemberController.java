@@ -1,31 +1,17 @@
 package com.programmers.bucketback.domains.member.api;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.programmers.bucketback.domains.member.api.dto.request.MemberCheckEmailRequest;
-import com.programmers.bucketback.domains.member.api.dto.request.MemberCheckNicknameRequest;
-import com.programmers.bucketback.domains.member.api.dto.request.MemberLoginRequest;
-import com.programmers.bucketback.domains.member.api.dto.request.MemberSignupRequest;
-import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdatePasswordRequest;
-import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdateProfileRequest;
+import com.programmers.bucketback.domains.member.api.dto.request.*;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckEmailResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckNicknameResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberGetMyPageResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
 import com.programmers.bucketback.domains.member.application.MemberService;
-import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
+import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.application.vo.MyPage;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,7 +29,7 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody final MemberLoginRequest request) {
-		final LoginMemberServiceResponse serviceResponse = memberService.login(request.toLoginInfo());
+		final MemberLoginServiceResponse serviceResponse = memberService.login(request.toLoginInfo());
 		final MemberLoginResponse response = MemberLoginResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);

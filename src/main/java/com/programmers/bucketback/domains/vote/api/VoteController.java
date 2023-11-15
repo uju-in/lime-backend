@@ -1,16 +1,5 @@
 package com.programmers.bucketback.domains.vote.api;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest;
@@ -21,11 +10,12 @@ import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
-
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VotesGetServiceResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,7 +58,7 @@ public class VoteController {
 
 	@GetMapping("/{voteId}")
 	public ResponseEntity<VoteGetResponse> getVote(@PathVariable final Long voteId) {
-		final GetVoteServiceResponse serviceResponse = voteService.getVote(voteId);
+		final VoteGetServiceResponse serviceResponse = voteService.getVote(voteId);
 		final VoteGetResponse response = VoteGetResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
@@ -81,7 +71,7 @@ public class VoteController {
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		final GetVotesServiceResponse serviceResponse = voteService.getVotesByCursor(
+		final VotesGetServiceResponse serviceResponse = voteService.getVotesByCursor(
 			Hobby.from(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
