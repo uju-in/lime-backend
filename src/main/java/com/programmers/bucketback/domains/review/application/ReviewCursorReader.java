@@ -15,24 +15,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewCursorReader {
 
+	private final static int defaultPageSize = 20;
 	private final ReviewRepository reviewRepository;
-
-	private static String getNextCursorId(final List<ReviewCursorSummary> reviewCursorSummaries) {
-		int reviewCursorSummariesSize = reviewCursorSummaries.size();
-		if (reviewCursorSummariesSize == 0) {
-			return null;
-		}
-
-		ReviewCursorSummary lastElement = reviewCursorSummaries.get(reviewCursorSummariesSize - 1);
-
-		return lastElement.cursorId();
-	}
 
 	public ReviewGetByCursorServiceResponse readByCursor(
 		final Long itemId,
 		final CursorPageParameters parameters
 	) {
-		int pageSize = parameters.size() == null ? 20 : parameters.size();
+		int pageSize = getPageSize(parameters);
 
 		List<ReviewCursorSummary> reviewCursorSummaries = reviewRepository.findAllByCursor(
 			itemId,
@@ -49,5 +39,26 @@ public class ReviewCursorReader {
 			nextCursorId,
 			reviewCursorSummaries
 		);
+	}
+
+	private int getPageSize(final CursorPageParameters parameters) {
+		Integer parametersSize = parameters.size();
+
+		if (parametersSize == null) {
+			return defaultPageSize;
+		}
+
+		return parametersSize;
+	}
+
+	private String getNextCursorId(final List<ReviewCursorSummary> reviewCursorSummaries) {
+		int reviewCursorSummariesSize = reviewCursorSummaries.size();
+		if (reviewCursorSummariesSize == 0) {
+			return null;
+		}
+
+		ReviewCursorSummary lastElement = reviewCursorSummaries.get(reviewCursorSummariesSize - 1);
+
+		return lastElement.cursorId();
 	}
 }
