@@ -48,10 +48,11 @@ public class ItemController {
 	}
 
 	@PostMapping("/myitems")
-	public ResponseEntity<Void> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
-		itemService.addItem(request.toAddMemberItemServiceRequest());
+	public ResponseEntity<ItemAddResponse> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
+		ItemAddServiceResponse serviceResponse = itemService.addItem(request.toAddMemberItemServiceRequest());
+		ItemAddResponse response = ItemAddResponse.from(serviceResponse);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{itemId}")
