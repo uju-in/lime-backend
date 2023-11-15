@@ -8,9 +8,9 @@ import jakarta.validation.constraints.NotNull;
 
 public record ReviewUpdateRequest(
 
-	@NotNull
-	@Min(1)
-	@Max(5)
+	@NotNull(message = "리뷰 평점은 필수 값입니다.")
+	@Min(value = 1, message = "리뷰 평점은 최소 1점 입니다.")
+	@Max(value = 5, message = "리뷰 평점은 최대 5점 입니다.")
 	Integer rating,
 
 	String content
