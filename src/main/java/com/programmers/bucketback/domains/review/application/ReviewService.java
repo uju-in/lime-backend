@@ -1,13 +1,12 @@
 package com.programmers.bucketback.domains.review.application;
 
-import org.springframework.stereotype.Service;
-
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.review.application.dto.GetReviewByCursorServiceResponse;
 import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
-
+import com.programmers.bucketback.global.level.PayPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +18,15 @@ public class ReviewService {
 	private final ReviewCursorReader reviewCursorReader;
 	private final ReviewRemover reviewRemover;
 
-	public void createReview(
+	@PayPoint(15)
+	public Long createReview(
 		final Long itemId,
 		final ReviewContent reviewContent
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 		reviewAppender.append(itemId, memberId, reviewContent);
+
+		return memberId;
 	}
 
 	public void updateReview(
