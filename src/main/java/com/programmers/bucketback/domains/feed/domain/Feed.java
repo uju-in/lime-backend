@@ -12,8 +12,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,36 +28,31 @@ import lombok.NoArgsConstructor;
 @Table(name = "feeds")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed extends BaseEntity {
-  
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-  
+
 	@NotNull
 	@Column(name = "member_id")
 	private Long memberId;
-  
-	@NotNull
-	@Column(name = "hobby")
-	@Enumerated(EnumType.STRING)
-	private Hobby hobby;
-  
+
 	@NotNull
 	@Column(name = "message")
 	private String message;
-  
+
 	@Embedded
 	private BucketInfo bucketInfo;
-  
+
 	@OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
-	private final List<FeedItem> feedItems = new ArrayList<>();
-  
+	private List<FeedItem> feedItems = new ArrayList<>();
+
 	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
-	private final List<Comment> comments = new ArrayList<>();
-	
-  @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
-	private final List<FeedLike> likes = new ArrayList<>();
+	private List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+	private List<FeedLike> likes = new ArrayList<>();
 
 	@Builder
 	public Feed(
@@ -70,9 +63,20 @@ public class Feed extends BaseEntity {
 		final Integer bucketBudget
 	) {
 		this.memberId = memberId;
-		this.hobby = hobby;
 		this.message = message;
-		this.bucketInfo = new BucketInfo(bucketName, bucketBudget);
+		this.bucketInfo = new BucketInfo(hobby, bucketName, bucketBudget);
+	}
+
+	public String getName() {
+		return bucketInfo.getName();
+	}
+
+	public Hobby getHobby() {
+		return bucketInfo.getHobby();
+	}
+
+	public Integer getBudget() {
+		return bucketInfo.getBudget();
 	}
 
 	public void addFeedItem(final FeedItem feedItem) {
@@ -86,5 +90,10 @@ public class Feed extends BaseEntity {
 
 	public boolean isOwner(final Long memberId) {
 		return this.memberId.equals(memberId);
+	}
+
+	public boolean hasAdoptedComment() {
+		return this.comments.stream()
+			.anyMatch(Comment::isAdoption);
 	}
 }

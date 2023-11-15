@@ -17,6 +17,7 @@ import com.programmers.bucketback.domains.inventory.application.vo.InventoryUpda
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
+import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -31,6 +32,7 @@ public class InventoryService {
 	private final InventoryModifier inventoryModifier;
 	private final InventoryRemover inventoryRemover;
 	private final ItemReader itemReader;
+	private final MemberReader memberReader;
 
 	/** 인벤토리 생성 */
 	public void createInventory(
@@ -76,7 +78,8 @@ public class InventoryService {
 
 	/** 인벤토리 목록 조회 */
 	public InventoriesGetResponse getInventories(final String nickname) {
-		List<InventoryInfoSummary> inventoryInfoSummaries = inventoryReader.readSummary(nickname);
+		Long memberId = memberReader.readByNickname(nickname).getId();
+		List<InventoryInfoSummary> inventoryInfoSummaries = inventoryReader.readSummary(memberId);
 
 		return InventoriesGetResponse.from(inventoryInfoSummaries);
 	}

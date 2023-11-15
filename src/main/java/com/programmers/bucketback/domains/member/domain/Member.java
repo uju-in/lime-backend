@@ -1,6 +1,11 @@
 package com.programmers.bucketback.domains.member.domain;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
+import com.programmers.bucketback.domains.member.domain.vo.Introduction;
+import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
+import com.programmers.bucketback.domains.member.domain.vo.MemberStatus;
+import com.programmers.bucketback.domains.member.domain.vo.Nickname;
+import com.programmers.bucketback.domains.member.domain.vo.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -31,12 +36,11 @@ public class Member extends BaseEntity {
 	@Embedded
 	private LoginInfo loginInfo;
 
-	@NotNull
-	@Column(name = "nickname")
-	private String nickname;
+	@Embedded
+	private Nickname nickname;
 
-	@Column(name = "introduction")
-	private String introduction;
+	@Embedded
+	private Introduction introduction;
 
 	@NotNull
 	@Column(name = "level_point")
@@ -60,14 +64,22 @@ public class Member extends BaseEntity {
 		@NotNull final Role role
 	) {
 		this.loginInfo = new LoginInfo(email, password);
-		this.nickname = nickname;
+		this.nickname = new Nickname(nickname);
 		this.levelPoint = 0;
 		this.role = role;
 		this.status = MemberStatus.ACTIVE;
 	}
 
+	public static void validatePassword(final String password) {
+		LoginInfo.validatePassword(password);
+	}
+
 	public String getPassword() {
 		return loginInfo.getPassword();
+	}
+
+	public String getNickname() {
+		return nickname.getNickname();
 	}
 
 	public void delete() {
@@ -82,11 +94,11 @@ public class Member extends BaseEntity {
 		final String nickname,
 		final String introduction
 	) {
-		this.nickname = nickname;
-		this.introduction = introduction;
+		this.nickname = new Nickname(nickname);
+		this.introduction = new Introduction(introduction);
 	}
 
-	public void updatePassword(String password) {
+	public void updatePassword(final String password) {
 		this.loginInfo.updatePassword(password);
 	}
 }

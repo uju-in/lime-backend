@@ -1,15 +1,18 @@
 package com.programmers.bucketback.domains.bucket.application;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketProfile;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
@@ -17,7 +20,10 @@ import com.programmers.bucketback.domains.bucket.repository.BucketItemRepository
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
+import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.item.application.MemberItemReader;
+import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
+import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.global.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
 
@@ -28,9 +34,12 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class BucketReader {
 
+	private static final int ITEM_IMAGE_LIMIT = 4;
+	private static final int INVENTORY_PROFILE_LIMIT = 3;
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
 	private final MemberItemReader memberItemReader;
+	private final ItemReader itemReader;
 
 	/** 버킷 정보 조회 */
 	public Bucket read(final Long bucketId) {
@@ -86,53 +95,80 @@ public class BucketReader {
 	}
 
 	/** 버킷 정보 커서 페이징 조회 */
-	public BucketGetByCursorResponse readByCursor(
+	public BucketCursorSummary readByCursor(
 		final Long memberId,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
 
-		List<BucketSummary> bucketSummaries = bucketRepository.findAllByCursor(
+		List<BucketSummary> summaries = bucketRepository.findAllByCursor(
 			memberId,
 			hobby,
 			parameters.cursorId(),
 			pageSize
 		);
 
-		List<String> cursorIds = bucketSummaries.stream()
-			.map(bucketSummary -> generateBucketCursorId(bucketSummary))
+		String nextCursorId = summaries.size() == 0 ? null : summaries.get(summaries.size() - 1).cursorId();
+		int summaryCount = summaries.size();
+
+		return new BucketCursorSummary(nextCursorId, summaryCount, summaries);
+	}
+
+	/**
+	 * 버킷 정보 상세 조회
+	 */
+	public BucketGetServiceResponse readDetail(final Long bucketId) {
+		Bucket bucket = read(bucketId);
+		List<ItemInfo> itemInfos = bucket.getBucketItems().stream()
+			.map(bucketItem -> itemReader.read(bucketItem.getItem().getId()))
+			.map(item -> ItemInfo.from(item))
 			.toList();
 
-		String nextCursorId = cursorIds.size() == 0 ? null : cursorIds.get(cursorIds.size() - 1);
-
-		List<BucketCursorSummary> bucketCursorSummaries = getBucketCursorSummaries(bucketSummaries, cursorIds);
-
-		return new BucketGetByCursorResponse(nextCursorId, bucketCursorSummaries);
+		return new BucketGetServiceResponse(bucket, itemInfos);
 	}
 
-	private List<BucketCursorSummary> getBucketCursorSummaries(
-		final List<BucketSummary> bucketSummaries,
-		final List<String> cursorIds
-	) {
-		List<BucketCursorSummary> bucketCursorSummaries = IntStream.range(0, bucketSummaries.size())
-			.mapToObj(i -> {
-				String cursorId = cursorIds.get(i);
-				BucketSummary bucketSummary = bucketSummaries.get(i);
-
-				return BucketCursorSummary.of(cursorId, bucketSummary);
-			}).toList();
-
-		return bucketCursorSummaries;
+	public List<Bucket> readByMemberId(final Long memberId) {
+		return bucketRepository.findByMemberId(memberId);
 	}
 
-	private String generateBucketCursorId(final BucketSummary bucketSummary) {
-		return bucketSummary.getCreatedAt().toString()
-			.replace("T", "")
-			.replace("-", "")
-			.replace(":", "")
-			.replace(".", "")
-			+ String.format("%08d", bucketSummary.getBucketId());
+	/**
+	 * 마이페이지를 위한 버킷 프로필 조회 (3개)
+	 */
+	public List<BucketProfile> readBucketProfile(final Long memberId) {
+		List<Bucket> buckets = readByMemberId(memberId);
+
+		return selectBucketProfile(buckets);
 	}
 
+	private List<BucketProfile> selectBucketProfile(final List<Bucket> buckets) {
+		List<Bucket> selectedBuckets = selectBucketsByHobby(buckets);
+
+		return selectedBuckets.stream()
+			.map(bucket -> {
+				List<String> itemImages = extractBucketItemImages(bucket);
+
+				return BucketProfile.of(bucket, itemImages);
+			})
+			.toList();
+	}
+
+	private List<Bucket> selectBucketsByHobby(final List<Bucket> selectedBuckets) {
+		Map<Hobby, List<Bucket>> groupedBuckets = selectedBuckets.stream()
+			.collect(Collectors.groupingBy(Bucket::getHobby));
+
+		return groupedBuckets.values().stream()
+			.flatMap(group -> group.stream()
+				.sorted(Comparator.comparing(Bucket::getModifiedAt).reversed())
+				.limit(INVENTORY_PROFILE_LIMIT))
+			.toList();
+	}
+
+	private List<String> extractBucketItemImages(final Bucket bucket) {
+		return bucket.getBucketItems().stream()
+			.limit(ITEM_IMAGE_LIMIT)
+			.map(BucketItem::getItem)
+			.map(Item::getImage)
+			.toList();
+	}
 }

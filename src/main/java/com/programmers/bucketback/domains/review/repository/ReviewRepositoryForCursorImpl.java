@@ -1,25 +1,20 @@
 package com.programmers.bucketback.domains.review.repository;
 
-import static com.programmers.bucketback.domains.member.domain.QMember.*;
-import static com.programmers.bucketback.domains.review.domain.QReview.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.programmers.bucketback.domains.member.application.vo.MemberInfo;
 import com.programmers.bucketback.domains.review.application.vo.ReviewCursorSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringExpression;
-import com.querydsl.core.types.dsl.StringExpressions;
-import com.querydsl.core.types.dsl.StringTemplate;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.programmers.bucketback.domains.member.domain.QMember.member;
+import static com.programmers.bucketback.domains.review.domain.QReview.review;
 
 @RequiredArgsConstructor
 public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor {
@@ -40,7 +35,7 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 					Projections.constructor(
 						MemberInfo.class,
 						member.id,
-						member.nickname
+						member.nickname.nickname
 					),
 					review.id,
 					review.rating,

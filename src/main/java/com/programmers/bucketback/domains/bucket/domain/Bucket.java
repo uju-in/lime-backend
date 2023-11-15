@@ -10,8 +10,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,14 +17,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "buckets")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Bucket extends BaseEntity {
 
 	@Id
@@ -38,27 +35,18 @@ public class Bucket extends BaseEntity {
 	@Column(name = "member_id")
 	private Long memberId;
 
-	@NotNull
-	@Column(name = "hobby")
-	@Enumerated(EnumType.STRING)
-	private Hobby hobby;
-
 	@Embedded
 	private BucketInfo bucketInfo;
 
 	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
 	private List<BucketItem> bucketItems = new ArrayList<>();
 
-	@Builder
 	public Bucket(
-		final Hobby hobby,
-		final Long memberId,
-		final String name,
-		final Integer budget
+		final BucketInfo bucketInfo,
+		final Long memberId
 	) {
-		this.hobby = hobby;
 		this.memberId = memberId;
-		this.bucketInfo = new BucketInfo(name, budget);
+		this.bucketInfo = bucketInfo;
 	}
 
 	public void addBucketItem(final BucketItem bucketItem) {
@@ -66,13 +54,24 @@ public class Bucket extends BaseEntity {
 		bucketItem.changeBucket(this);
 	}
 
+	public String getName() {
+		return bucketInfo.getName();
+	}
+
+	public Hobby getHobby() {
+		return bucketInfo.getHobby();
+	}
+
+	public Integer getBudget() {
+		return bucketInfo.getBudget();
+	}
+
 	public void modifyBucket(
-		final Hobby hobby,
-		final String name,
-		final Integer budget
+		final BucketInfo bucketInfo,
+		final Long memberId
 	) {
-		this.hobby = hobby;
-		this.bucketInfo = new BucketInfo(name, budget);
+		this.memberId = memberId;
+		this.bucketInfo = bucketInfo;
 	}
 
 	public void removeBucketItems() {
