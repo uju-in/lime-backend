@@ -25,7 +25,7 @@ public class BucketAppender {
 
 	/** 버킷 생성 */
 	@Transactional
-	public void append(
+	public Long append(
 		final Long memberId,
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
@@ -35,7 +35,7 @@ public class BucketAppender {
 		Bucket bucket = new Bucket(bucketInfo, memberId);
 		bucketItems.forEach(bucket::addBucketItem);
 
-		bucketRepository.save(bucket);
+		return bucketRepository.save(bucket).getId();
 	}
 
 	/** 버킷 아이템 생성 */

@@ -1,13 +1,5 @@
 package com.programmers.bucketback.domains.feed.repository;
 
-import static com.programmers.bucketback.domains.feed.domain.QFeed.*;
-import static com.programmers.bucketback.domains.feed.domain.QFeedItem.*;
-import static com.programmers.bucketback.domains.member.domain.QMember.*;
-import static com.querydsl.core.group.GroupBy.*;
-
-import java.util.List;
-import java.util.Objects;
-
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.feed.application.FeedSortCondition;
 import com.programmers.bucketback.domains.feed.application.vo.FeedCursorItem;
@@ -17,14 +9,18 @@ import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.core.types.dsl.StringExpression;
-import com.querydsl.core.types.dsl.StringExpressions;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.Objects;
+
+import static com.programmers.bucketback.domains.feed.domain.QFeed.feed;
+import static com.programmers.bucketback.domains.feed.domain.QFeedItem.feedItem;
+import static com.programmers.bucketback.domains.member.domain.QMember.member;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 @RequiredArgsConstructor
 public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
@@ -63,7 +59,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 							Projections.constructor(
 								MemberInfo.class,
 								member.id,
-								member.nickname
+								member.nickname.nickname
 							),
 							feedItem.feed.id,
 							feedItem.feed.content,

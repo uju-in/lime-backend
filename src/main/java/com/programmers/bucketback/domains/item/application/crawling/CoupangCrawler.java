@@ -11,7 +11,7 @@ public class CoupangCrawler implements WebCrawler {
 	}
 
 	@Override
-	public ItemInfo extractInfoFromUrl(final String url) {
+	public ItemCrawlerInfo extractInfoFromUrl(final String url) {
 		Document document = connectWithHeaders(url);
 
 		String itemName = document.getElementsByClass("prod-buy-header__title")
@@ -26,7 +26,7 @@ public class CoupangCrawler implements WebCrawler {
 			.first()
 			.attr("src");
 
-		return ItemInfo.builder()
+		return ItemCrawlerInfo.builder()
 			.itemName(itemName)
 			.price(price)
 			.imageUrl(imgUrl)

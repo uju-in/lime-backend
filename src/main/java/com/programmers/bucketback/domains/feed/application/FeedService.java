@@ -1,15 +1,13 @@
 package com.programmers.bucketback.domains.feed.application;
 
-import org.springframework.stereotype.Service;
-
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.feed.application.dto.response.GetFeedServiceResponse;
 import com.programmers.bucketback.domains.feed.application.vo.FeedCreateServiceRequest;
 import com.programmers.bucketback.domains.feed.application.vo.FeedUpdateServiceRequest;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -74,7 +72,7 @@ public class FeedService {
 	}
 
 	/** 피드 상세 조회 **/
-	public GetFeedServiceResponse getFeed(final Long feedId) {
+	public FeedGetServiceResponse getFeed(final Long feedId) {
 		Long memberId = null;
 		if (MemberUtils.isLoggedIn()) {
 			memberId = MemberUtils.getCurrentMemberId();

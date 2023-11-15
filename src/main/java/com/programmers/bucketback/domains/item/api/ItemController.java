@@ -17,11 +17,11 @@ import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequ
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
-import com.programmers.bucketback.domains.item.application.EnrollItemService;
+import com.programmers.bucketback.domains.item.application.ItemEnrollService;
 import com.programmers.bucketback.domains.item.application.ItemService;
-import com.programmers.bucketback.domains.item.application.dto.GetItemByCursorServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.GetItemNamesServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +31,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/items")
 public class ItemController {
 
-	private final EnrollItemService enrollItemService;
+	private final ItemEnrollService itemEnrollService;
 
 	private final ItemService itemService;
 
 	@PostMapping("/enroll")
 	public ResponseEntity<Void> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
-		enrollItemService.enrollItem(request.toEnrollItemServiceRequest());
+		itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
 
 		return ResponseEntity.ok().build();
 	}
@@ -51,9 +51,10 @@ public class ItemController {
 
 	@GetMapping("/{itemId}")
 	public ResponseEntity<ItemGetResponse> getItem(@PathVariable final Long itemId) {
-		GetItemServiceResponse response = itemService.getItemDetails(itemId);
+		ItemGetServiceResponse serviceResponse = itemService.getItem(itemId);
 
-		return ResponseEntity.ok(response.toItemGetResponse());
+		ItemGetResponse response = ItemGetResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/myitems/{itemId}")
@@ -65,9 +66,10 @@ public class ItemController {
 
 	@GetMapping("/item-names")
 	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
-		GetItemNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
+		ItemGetNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
 
-		return ResponseEntity.ok(serviceResponse.toItemGetNamesResponse());
+		ItemGetNamesResponse response = ItemGetNamesResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/search")
@@ -75,11 +77,12 @@ public class ItemController {
 		@RequestParam final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		GetItemByCursorServiceResponse serviceResponse = itemService.getReviewsByCursor(
+		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
 			request.toParameters()
 		);
 
-		return ResponseEntity.ok(serviceResponse.toItemGetByCursorResponse());
+		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 }

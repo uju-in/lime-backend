@@ -10,15 +10,15 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class EnrollItemValidator {
+public class ItemEnrollValidator {
 
 	private final ItemRepository itemRepository;
 
 	public void validItemURLNotDuplicated(final String itemURL) {
-		boolean isItemURLIsDuplicated = itemRepository.existsItemsByUrl(itemURL);
+		boolean isItemURLIsExist = itemRepository.existsItemsByUrl(itemURL);
 
-		if (isItemURLIsDuplicated) {
-			throw new BusinessException(ErrorCode.ITEM_URL_DUPLICATED);
+		if (isItemURLIsExist) {
+			throw new BusinessException(ErrorCode.ITEM_URL_ALREADY_EXIST);
 		}
 	}
 }

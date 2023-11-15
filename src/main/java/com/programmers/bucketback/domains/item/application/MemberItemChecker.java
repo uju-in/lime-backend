@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.item.application;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.item.domain.Item;
@@ -8,7 +8,7 @@ import com.programmers.bucketback.domains.item.repository.MemberItemRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberItemChecker {

@@ -1,11 +1,13 @@
 package com.programmers.bucketback.domains.common;
 
+import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -41,5 +43,13 @@ public enum Hobby {
 		}
 
 		throw new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER);
+	}
+
+	@JsonCreator
+	public static Hobby fromEventStatus(final String hobbyValue) {
+		return Arrays.stream(values())
+			.filter(type -> type.hobbyValue.equals(hobbyValue))
+			.findAny()
+			.orElse(null);
 	}
 }
