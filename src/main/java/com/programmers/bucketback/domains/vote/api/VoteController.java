@@ -10,8 +10,6 @@ import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVoteServiceResponse;
-import com.programmers.bucketback.domains.vote.application.dto.response.GetVotesServiceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
