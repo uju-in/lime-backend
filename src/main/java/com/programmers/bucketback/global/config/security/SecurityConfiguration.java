@@ -4,9 +4,11 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,7 +36,30 @@ public class SecurityConfiguration {
 			.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
 			.authorizeHttpRequests(authorize ->
 				authorize
-					.anyRequest().permitAll() //refactor
+					.requestMatchers("/api/members/signup").permitAll()
+					.requestMatchers("/api/members/login").permitAll()
+					.requestMatchers("/api/members/check/nickname").permitAll()
+					.requestMatchers("/api/members/check/email").permitAll()
+					.requestMatchers("/api/members/{nickname}").permitAll()
+
+					.requestMatchers(HttpMethod.GET, "/api/votes").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/votes/{voteId}").permitAll()
+
+					.requestMatchers(HttpMethod.GET, "/api/items/{itemId}/reviews").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/items/{itemId}").permitAll()
+					.requestMatchers("/api/items/search").permitAll()
+					.requestMatchers("/api/items/item-names").permitAll()
+
+					.requestMatchers(HttpMethod.GET, "/api/feeds/{feedId}").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/feeds").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/feeds/{feedId}/comments").permitAll()
+
+					.requestMatchers("/api/{nickname}/inventories/**").permitAll()
+					.requestMatchers("/api/{nickname}/buckets/**").permitAll()
+
+					.requestMatchers("/api/hobbies").permitAll()
+
+					.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -60,6 +85,11 @@ public class SecurityConfiguration {
 		source.registerCorsConfiguration("/**", configuration);
 
 		return source;
+	}
+
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return webSecurity -> webSecurity.ignoring().requestMatchers("/swagger-ui.html");
 	}
 
 }
