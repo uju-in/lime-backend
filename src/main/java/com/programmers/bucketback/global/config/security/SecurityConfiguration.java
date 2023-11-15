@@ -89,7 +89,11 @@ public class SecurityConfiguration {
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		return webSecurity -> webSecurity.ignoring().requestMatchers("/swagger-ui/index.html");
+		return webSecurity -> webSecurity.ignoring()
+			.requestMatchers("/swagger-ui/index.html")
+			.requestMatchers("/swagger-ui/index.html#")
+			.requestMatchers("/swagger-ui/index.html#/")
+			.requestMatchers("/");
 	}
 
 }
