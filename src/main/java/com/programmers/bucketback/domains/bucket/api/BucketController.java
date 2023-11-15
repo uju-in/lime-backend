@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
+import com.programmers.bucketback.domains.bucket.api.dto.response.BucketCreateResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCursorResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMemberItemResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
@@ -36,10 +37,10 @@ public class BucketController {
 
 	@Operation(summary = "버킷 생성", description = "BucketCreateRequest 을 이용하여 버킷을 생성힙니다.")
 	@PostMapping("/buckets")
-	public ResponseEntity<Void> createBucket(@RequestBody @Valid final BucketCreateRequest request) {
-		bucketService.createBucket(request.toInfo(), request.toRegistry());
+	public ResponseEntity<BucketCreateResponse> createBucket(@RequestBody @Valid final BucketCreateRequest request) {
+		Long bucketId = bucketService.createBucket(request.toInfo(), request.toRegistry());
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(new BucketCreateResponse(bucketId));
 	}
 
 	@Operation(summary = "버킷 수정", description = "BucketId, BucketUpdateRequest 을 이용하여 버킷을 수정힙니다.")

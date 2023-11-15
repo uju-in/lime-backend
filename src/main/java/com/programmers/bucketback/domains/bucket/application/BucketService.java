@@ -29,7 +29,7 @@ public class BucketService {
 	private final ItemReader itemReader;
 
 	/** 버킷 생성 */
-	public void createBucket(
+	public Long createBucket(
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
@@ -37,7 +37,7 @@ public class BucketService {
 		Long memberId = MemberUtils.getCurrentMemberId();
 		validateExceedBudget(bucketInfo, registry);
 
-		bucketAppender.append(memberId, bucketInfo, registry);
+		return bucketAppender.append(memberId, bucketInfo, registry);
 	}
 
 	/** 버킷 수정 */
