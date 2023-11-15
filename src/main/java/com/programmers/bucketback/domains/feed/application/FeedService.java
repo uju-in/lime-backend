@@ -1,13 +1,15 @@
 package com.programmers.bucketback.domains.feed.application;
 
+import org.springframework.stereotype.Service;
+
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetByCursorServiceResponse;
-import com.programmers.bucketback.domains.feed.application.dto.response.GetFeedServiceResponse;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.bucketback.domains.feed.application.vo.FeedCreateServiceRequest;
 import com.programmers.bucketback.domains.feed.application.vo.FeedUpdateServiceRequest;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
