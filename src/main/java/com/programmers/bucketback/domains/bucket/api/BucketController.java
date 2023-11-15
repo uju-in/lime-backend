@@ -99,7 +99,7 @@ public class BucketController {
 		BucketGetByCursorResponse response = BucketGetByCursorResponse.from(
 			bucketService.getBucketsByCursor(
 				nickname,
-				Hobby.valueOf(hobby.toUpperCase()),
+				Hobby.from(hobby),
 				request.toParameters()
 			));
 
