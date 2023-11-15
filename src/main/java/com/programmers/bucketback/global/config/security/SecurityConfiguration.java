@@ -8,7 +8,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,6 +35,11 @@ public class SecurityConfiguration {
 			.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
 			.authorizeHttpRequests(authorize ->
 				authorize
+					.requestMatchers("/swagger-ui/**").permitAll()
+					.requestMatchers("/swagger-resources/*").permitAll()
+					.requestMatchers("/v3/api-docs/**").permitAll()
+					.requestMatchers("/").permitAll()
+
 					.requestMatchers("/api/members/signup").permitAll()
 					.requestMatchers("/api/members/login").permitAll()
 					.requestMatchers("/api/members/check/nickname").permitAll()
@@ -85,15 +89,6 @@ public class SecurityConfiguration {
 		source.registerCorsConfiguration("/**", configuration);
 
 		return source;
-	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return webSecurity -> webSecurity.ignoring()
-			.requestMatchers("/swagger-ui/index.html")
-			.requestMatchers("/swagger-ui/index.html#")
-			.requestMatchers("/swagger-ui/index.html#/")
-			.requestMatchers("/");
 	}
 
 }
