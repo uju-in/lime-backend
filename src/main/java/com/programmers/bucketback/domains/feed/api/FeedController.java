@@ -79,6 +79,7 @@ public class FeedController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "피드 상세 조회", description = "FeedId를 이용하여 피드를 조회합니다.")
 	@GetMapping("/{feedId}")
 	public ResponseEntity<FeedGetResponse> getFeed(@PathVariable final Long feedId) {
 		final FeedGetServiceResponse serviceResponse = feedService.getFeed(feedId);
