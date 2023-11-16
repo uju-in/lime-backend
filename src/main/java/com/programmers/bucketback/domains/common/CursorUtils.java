@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CursorUtils {
 
-	public static CursorSummary getCursorSummaries(List<? extends CursorIdParser> summaries) {
+	public static <T extends CursorIdParser> CursorSummary<T> getCursorSummaries(final List<T> summaries) {
 		String nextCursorId = summaries.isEmpty() ? null : summaries.get(summaries.size() - 1).cursorId();
 
 		int summaryCount = summaries.size();

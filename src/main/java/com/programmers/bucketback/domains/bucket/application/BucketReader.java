@@ -95,7 +95,7 @@ public class BucketReader {
 	}
 
 	/** 버킷 정보 커서 페이징 조회 */
-	public CursorSummary readByCursor(
+	public CursorSummary<BucketSummary> readByCursor(
 		final Long memberId,
 		final Hobby hobby,
 		final CursorPageParameters parameters

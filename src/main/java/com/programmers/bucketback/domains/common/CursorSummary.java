@@ -2,9 +2,9 @@ package com.programmers.bucketback.domains.common;
 
 import java.util.List;
 
-public record CursorSummary(
+public record CursorSummary<T extends CursorIdParser>(
 	String nextCursorId,
 	int summaryCount,
-	List<? extends CursorIdParser> summaries
+	List<T> summaries
 ) {
 }

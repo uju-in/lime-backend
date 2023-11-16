@@ -9,10 +9,10 @@ public record BucketGetByCursorResponse(
 	String nextCursorId,
 	List<BucketSummary> buckets
 ) {
-	public static BucketGetByCursorResponse from(final CursorSummary summary) {
+	public static BucketGetByCursorResponse from(final CursorSummary<BucketSummary> summary) {
 		return new BucketGetByCursorResponse(
 			summary.nextCursorId(),
-			(List<BucketSummary>)summary.summaries()
+			summary.summaries()
 		);
 	}
 }

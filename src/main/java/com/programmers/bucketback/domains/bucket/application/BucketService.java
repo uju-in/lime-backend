@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.common.CursorSummary;
@@ -84,7 +85,7 @@ public class BucketService {
 	/**
 	 * 버킷 커서 조회
 	 */
-	public CursorSummary getBucketsByCursor(
+	public CursorSummary<BucketSummary> getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters
