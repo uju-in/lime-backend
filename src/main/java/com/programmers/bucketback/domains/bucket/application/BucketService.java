@@ -2,11 +2,12 @@ package com.programmers.bucketback.domains.bucket.application;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
+import com.programmers.bucketback.domains.common.CursorSummary;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
@@ -84,7 +85,7 @@ public class BucketService {
 	/**
 	 * 버킷 커서 조회
 	 */
-	public BucketCursorSummary getBucketsByCursor(
+	public CursorSummary<BucketSummary> getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters
