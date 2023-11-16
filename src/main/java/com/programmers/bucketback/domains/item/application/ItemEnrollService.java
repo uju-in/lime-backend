@@ -4,15 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.item.application.crawling.ItemCrawlerInfo;
 import com.programmers.bucketback.domains.item.application.crawling.WebCrawler;
 import com.programmers.bucketback.domains.item.application.crawling.WebSite;
 import com.programmers.bucketback.domains.item.application.dto.ItemCreateServiceRequest;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
 import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServiceRequest;
-import com.programmers.bucketback.global.error.exception.BusinessException;
-import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,12 +22,6 @@ public class ItemEnrollService {
 	private final ItemEnrollValidator itemEnrollValidator;
 
 	public Long enrollItem(final ItemEnrollServiceRequest request) {
-
-		// 로그인 확인
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.MEMBER_NOT_LOGIN);
-		}
-
 		// 중복 링크 체크
 		itemEnrollValidator.validItemURLNotDuplicated(request.itemUrl());
 

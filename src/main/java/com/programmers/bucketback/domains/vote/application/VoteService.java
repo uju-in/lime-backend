@@ -24,10 +24,6 @@ public class VoteService {
 	private final VoteRemover voteRemover;
 
 	public Long createVote(final VoteCreateServiceRequest request) {
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteAppender.append(memberId, request);
 
@@ -38,10 +34,6 @@ public class VoteService {
 		final Long voteId,
 		final Long itemId
 	) {
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
@@ -57,10 +49,6 @@ public class VoteService {
 	}
 
 	public void cancelVote(final Long voteId) {
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
@@ -68,10 +56,6 @@ public class VoteService {
 	}
 
 	public void deleteVote(final Long voteId) {
-		if (!MemberUtils.isLoggedIn()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
@@ -82,11 +66,9 @@ public class VoteService {
 		voteRemover.remove(vote);
 	}
 
+
 	public VoteGetServiceResponse getVote(final Long voteId) {
-		Long memberId = null;
-		if (MemberUtils.isLoggedIn()) {
-			memberId = MemberUtils.getCurrentMemberId();
-		}
+		Long memberId = MemberUtils.getCurrentMemberId();
 
 		return voteReader.read(voteId, memberId);
 	}
@@ -97,10 +79,7 @@ public class VoteService {
 		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters
 	) {
-		Long memberId = null;
-		if (MemberUtils.isLoggedIn()) {
-			memberId = MemberUtils.getCurrentMemberId();
-		}
+		Long memberId = MemberUtils.getCurrentMemberId();
 
 		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters, memberId);
 	}

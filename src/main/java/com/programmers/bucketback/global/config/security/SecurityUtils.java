@@ -19,16 +19,10 @@ public final class SecurityUtils {
 		Authentication authentication = getAuthentication();
 
 		if (!authentication.isAuthenticated() || isAnonymousMember(authentication)) {
-			throw new BusinessException(ErrorCode.MEMBER_ANONYMOUS);
+			return null;
 		}
 
 		return Long.valueOf(authentication.getName());
-	}
-
-	public static boolean isLoggedIn() {
-		Authentication authentication = getAuthentication();
-
-		return !isAnonymousMember(authentication);
 	}
 
 	private static Authentication getAuthentication() {

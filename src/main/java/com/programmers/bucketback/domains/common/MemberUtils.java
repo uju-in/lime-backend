@@ -11,8 +11,4 @@ public final class MemberUtils {
 	public static Long getCurrentMemberId() {
 		return SecurityUtils.getCurrentMemberId();
 	}
-
-	public static boolean isLoggedIn() {
-		return SecurityUtils.isLoggedIn();
-	}
 }
