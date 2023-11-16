@@ -43,9 +43,7 @@ public class FeedService {
 		final String sortCondition,
 		final CursorPageParameters parameters
 	) {
-		FeedSortCondition feedSortCondition =
-			sortCondition != null ?
-				FeedSortCondition.valueOf(sortCondition) : null;
+		FeedSortCondition feedSortCondition = FeedSortCondition.from(sortCondition);
 
 		return feedCursorReader.getFeedByCursor(
 			hobbyName,

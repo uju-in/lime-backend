@@ -12,7 +12,7 @@ public record FeedCursorSummaryLike(
 	String cursorId,
 	MemberInfo memberInfo,
 	Long feedId,
-	String feedContent,
+	String content,
 	int likeCount,
 	int commentCount,
 	LocalDateTime createdAt,
