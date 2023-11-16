@@ -1,1 +1,6 @@
 rootProject.name = 'bucket-back'
+
+include 'domain'
+include 'common'
+include 'infrastructure'
+include 'api'
