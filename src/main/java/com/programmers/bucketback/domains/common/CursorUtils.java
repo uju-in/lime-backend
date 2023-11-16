@@ -5,7 +5,8 @@ import java.util.List;
 public class CursorUtils {
 
 	public static <T extends CursorIdParser> CursorSummary<T> getCursorSummaries(final List<T> summaries) {
-		String nextCursorId = summaries.isEmpty() ? null : summaries.get(summaries.size() - 1).cursorId();
+		T lastSummary = summaries.isEmpty() ? null : summaries.get(summaries.size() - 1);
+		String nextCursorId = lastSummary.cursorId();
 
 		int summaryCount = summaries.size();
 
