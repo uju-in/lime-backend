@@ -63,7 +63,8 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 							Projections.constructor(
 								MemberInfo.class,
 								member.id,
-								member.nickname.nickname
+								member.nickname.nickname,
+								member.levelPoint
 							),
 							feedItem.feed.id,
 							feedItem.feed.content.content,
