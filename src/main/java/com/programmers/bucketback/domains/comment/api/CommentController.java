@@ -17,9 +17,12 @@ import com.programmers.bucketback.domains.comment.api.dto.response.CommentGetCur
 import com.programmers.bucketback.domains.comment.application.CommentService;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "comments", description = "댓글 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/feeds/{feedId}/comments")
@@ -27,6 +30,7 @@ public class CommentController {
 
 	private final CommentService commentService;
 
+	@Operation(summary = "댓글 생성", description = "FeedId, CommentCreateRequest 을 이용하여 댓글을 생성힙니다.")
 	@PostMapping
 	public ResponseEntity<Void> createComment(
 		@PathVariable final Long feedId,
@@ -37,6 +41,7 @@ public class CommentController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "댓글 채택", description = "FeedId, CommentId 을 이용하여 댓글을 채택힙니다.")
 	@PostMapping("/{commentId}/adoption")
 	public ResponseEntity<Void> adoptComment(
 		@PathVariable final Long feedId,
@@ -47,6 +52,7 @@ public class CommentController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "댓글 수정", description = "feedId, commentId, CommentModifyRequest 을 이용하여 댓글을 수정합니다.")
 	@PutMapping("/{commentId}")
 	public ResponseEntity<Void> modifyComment(
 		@PathVariable final Long feedId,
@@ -58,6 +64,7 @@ public class CommentController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "댓글 삭제", description = "feedId, commentId, CommentModifyRequest 을 이용하여 댓글을 수정합니다.")
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<Void> deleteComment(
 		@PathVariable final Long feedId,
@@ -68,6 +75,7 @@ public class CommentController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "댓글 목록 조회", description = "feedId, CursorRequest을 이용하여 댓글 목록 조회 합니다.")
 	@GetMapping
 	public ResponseEntity<CommentGetCursorResponse> getFeedComments(
 		@PathVariable final Long feedId,

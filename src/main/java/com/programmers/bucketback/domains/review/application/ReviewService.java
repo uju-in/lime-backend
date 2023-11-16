@@ -1,12 +1,14 @@
 package com.programmers.bucketback.domains.review.application;
 
+import org.springframework.stereotype.Service;
+
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.review.application.dto.GetReviewByCursorServiceResponse;
-import com.programmers.bucketback.domains.review.application.dto.ReviewContent;
+import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
+import com.programmers.bucketback.domains.review.application.vo.ReviewContent;
 import com.programmers.bucketback.global.level.PayPoint;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

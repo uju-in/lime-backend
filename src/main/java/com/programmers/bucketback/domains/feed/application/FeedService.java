@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetByCursorServiceResponse;
-import com.programmers.bucketback.domains.feed.application.dto.response.GetFeedServiceResponse;
-import com.programmers.bucketback.domains.feed.application.vo.FeedCreateContent;
-import com.programmers.bucketback.domains.feed.application.vo.FeedUpdateContent;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
+import com.programmers.bucketback.domains.feed.application.vo.FeedCreateServiceRequest;
+import com.programmers.bucketback.domains.feed.application.vo.FeedUpdateServiceRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,16 +22,19 @@ public class FeedService {
 	private final FeedCursorReader feedCursorReader;
 
 	/** 피드 생성 */
-	public void createFeed(final FeedCreateContent content) {
-		feedAppender.append(content);
+	public Long createFeed(final FeedCreateServiceRequest request) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+
+		return feedAppender.append(memberId, request);
 	}
 
 	/** 피드 수정 */
 	public void modifyFeed(
 		final Long feedId,
-		final FeedUpdateContent toContent
+		final FeedUpdateServiceRequest request
 	) {
-		feedModifier.modify(feedId, toContent);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		feedModifier.modify(memberId, feedId, request);
 	}
 
 	public FeedGetByCursorServiceResponse getFeedByCursor(
@@ -40,9 +43,7 @@ public class FeedService {
 		final String sortCondition,
 		final CursorPageParameters parameters
 	) {
-		FeedSortCondition feedSortCondition =
-			sortCondition != null ?
-				FeedSortCondition.valueOf(sortCondition) : null;
+		FeedSortCondition feedSortCondition = FeedSortCondition.from(sortCondition);
 
 		return feedCursorReader.getFeedByCursor(
 			hobbyName,
@@ -54,25 +55,25 @@ public class FeedService {
 
 	/** 피드 삭제 */
 	public void deleteFeed(final Long feedId) {
-		feedRemover.remove(feedId);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		feedRemover.remove(memberId, feedId);
 	}
 
 	/** 피드 좋아요 */
 	public void likeFeed(final Long feedId) {
+		Long memberId = MemberUtils.getCurrentMemberId();
 		feedAppender.like(feedId);
 	}
 
 	/** 피드 좋아요 취소 */
 	public void unLikeFeed(final Long feedId) {
-		feedRemover.unlike(feedId);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		feedRemover.unlike(memberId, feedId);
 	}
 
 	/** 피드 상세 조회 **/
-	public GetFeedServiceResponse getFeed(final Long feedId) {
-		Long memberId = null;
-		if (MemberUtils.isLoggedIn()) {
-			memberId = MemberUtils.getCurrentMemberId();
-		}
+	public FeedGetServiceResponse getFeed(final Long feedId) {
+		Long memberId = MemberUtils.getCurrentMemberId();
 
 		return feedReader.readFeed(feedId, memberId);
 	}

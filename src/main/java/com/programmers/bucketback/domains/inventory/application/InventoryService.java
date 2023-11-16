@@ -3,20 +3,14 @@ package com.programmers.bucketback.domains.inventory.application;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
+import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
-import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryInfoSummary;
-import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryItemGetResponse;
-import com.programmers.bucketback.domains.inventory.application.vo.InventoryCreateContent;
-import com.programmers.bucketback.domains.inventory.application.vo.InventoryUpdateContent;
-import com.programmers.bucketback.domains.inventory.domain.Inventory;
-import com.programmers.bucketback.domains.item.application.ItemReader;
-import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
+import com.programmers.bucketback.domains.inventory.application.dto.InventoryGetServiceResponse;
 import com.programmers.bucketback.domains.member.application.MemberReader;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
@@ -31,57 +25,51 @@ public class InventoryService {
 	private final InventoryReader inventoryReader;
 	private final InventoryModifier inventoryModifier;
 	private final InventoryRemover inventoryRemover;
-	private final ItemReader itemReader;
 	private final MemberReader memberReader;
 
 	/** 인벤토리 생성 */
-	public void createInventory(
-		final InventoryCreateContent content
+	public Long createInventory(
+		final Hobby hobby,
+		final ItemIdRegistry registry
 	) {
-		//취미별로 중복되면 안됨(이미 생성된 인벤토리가 있는지 확인)
+		validateEmptyRegistry(registry);
 		Long memberId = MemberUtils.getCurrentMemberId();
-		validateDuplication(content, memberId);
+		validateDuplication(hobby, memberId);
 
-		inventoryAppender.append(memberId, content);
+		return inventoryAppender.append(memberId, hobby, registry);
 	}
 
 	/** 인벤토리 수정 */
-	@Transactional
 	public void modifyInventory(
 		final Long inventoryId,
-		final InventoryUpdateContent content
+		final ItemIdRegistry registry
 	) {
-		//취미별로 중복되면 안됨(이미 생성된 인벤토리가 있는지 확인)
+		validateEmptyRegistry(registry);
 		Long memberId = MemberUtils.getCurrentMemberId();
-		Inventory inventory = inventoryReader.read(inventoryId, memberId);
 
-		inventoryModifier.modify(inventory, content);
+		inventoryModifier.modify(memberId, inventoryId, registry);
 	}
 
 	/** 인벤토리 삭제 */
 	public void deleteInventory(final Long inventoryId) {
-		inventoryRemover.remove(inventoryId);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		inventoryRemover.remove(inventoryId, memberId);
 	}
 
-	/** 인벤토리 상세 조회 */
-	@Transactional(readOnly = true)
-	public InventoryGetResponse getInventory(final Long inventoryId) {
-		Inventory inventory = inventoryReader.read(inventoryId);
-
-		List<InventoryItemGetResponse> inventoryItemGetResponses = inventory.getInventoryItems().stream()
-			.map(inventoryItem -> itemReader.read(inventoryItem.getItem().getId()))
-			.map(item -> new InventoryItemGetResponse(ItemInfo.from(item), item.getUrl()))
-			.toList();
-
-		return InventoryGetResponse.of(inventory, inventoryItemGetResponses);
+	/**
+	 * 인벤토리 상세 조회
+	 */
+	public InventoryGetServiceResponse getInventory(final Long inventoryId) {
+		return inventoryReader.readDetail(inventoryId);
 	}
 
-	/** 인벤토리 목록 조회 */
-	public InventoriesGetResponse getInventories(final String nickname) {
+	/**
+	 * 인벤토리 목록 조회
+	 */
+	public List<InventoryInfoSummary> getInventories(final String nickname) {
 		Long memberId = memberReader.readByNickname(nickname).getId();
-		List<InventoryInfoSummary> inventoryInfoSummaries = inventoryReader.readSummary(memberId);
 
-		return InventoriesGetResponse.from(inventoryInfoSummaries);
+		return inventoryReader.readSummary(memberId);
 	}
 
 	/** 인벤토리  수정을 위한 내가 리뷰한 아이템 목록 조회  */
@@ -96,11 +84,17 @@ public class InventoryService {
 	}
 
 	private void validateDuplication(
-		final InventoryCreateContent content,
+		final Hobby hobby,
 		final Long memberId
 	) {
-		if (inventoryReader.isCreated(content.hobby(), memberId)) {
+		if (inventoryReader.isCreated(hobby, memberId)) {
 			throw new BusinessException(ErrorCode.INVENTORY_ALREADY_EXIST);
+		}
+	}
+
+	private void validateEmptyRegistry(final ItemIdRegistry registry) {
+		if (registry.itemIds().isEmpty()) {
+			throw new BusinessException(ErrorCode.INVENTORY_ITEM_NOT_REQUESTED);
 		}
 	}
 

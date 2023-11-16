@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.feed.domain.Feed;
+import com.programmers.bucketback.domains.feed.domain.FeedContent;
 
 import lombok.Builder;
 
@@ -12,7 +13,7 @@ import lombok.Builder;
 public record FeedInfo(
 	Long id,
 	Hobby hobby,
-	String message,
+	FeedContent content,
 	String bucketName,
 	Integer bucketBudget,
 	LocalDateTime createdAt,
@@ -29,7 +30,7 @@ public record FeedInfo(
 		return FeedInfo.builder()
 			.id(feed.getId())
 			.hobby(feed.getHobby())
-			.message(feed.getMessage())
+			.content(feed.getContent())
 			.bucketName(feed.getName())
 			.bucketBudget(feed.getBudget())
 			.createdAt(feed.getCreatedAt())

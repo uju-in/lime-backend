@@ -14,48 +14,61 @@ import org.springframework.web.bind.annotation.RestController;
 import com.programmers.bucketback.domains.common.vo.CursorRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
+import com.programmers.bucketback.domains.item.api.dto.response.ItemAddResponse;
+import com.programmers.bucketback.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
-import com.programmers.bucketback.domains.item.application.EnrollItemService;
+import com.programmers.bucketback.domains.item.application.ItemEnrollService;
 import com.programmers.bucketback.domains.item.application.ItemService;
-import com.programmers.bucketback.domains.item.application.dto.GetItemByCursorServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.GetItemNamesServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "items", description = "아이템 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/items")
 public class ItemController {
 
-	private final EnrollItemService enrollItemService;
+	private final ItemEnrollService itemEnrollService;
 
 	private final ItemService itemService;
 
+	@Operation(summary = "아이템 등록", description = "ItemEnrollRequest 을 이용하여 아이템을 등록합니다.")
 	@PostMapping("/enroll")
-	public ResponseEntity<Void> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
-		enrollItemService.enrollItem(request.toEnrollItemServiceRequest());
+	public ResponseEntity<ItemEnrollResponse> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
+		Long enrolledItemId = itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
+		ItemEnrollResponse response = new ItemEnrollResponse(enrolledItemId);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "아이템 담기", description = "MemberItemAddRequest을 이용하여 사용자에 아이템을 담기 합니다.")
 	@PostMapping("/myitems")
-	public ResponseEntity<Void> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
-		itemService.addItem(request.toAddMemberItemServiceRequest());
+	public ResponseEntity<ItemAddResponse> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
+		ItemAddServiceResponse serviceResponse = itemService.addItem(request.toAddMemberItemServiceRequest());
+		ItemAddResponse response = ItemAddResponse.from(serviceResponse);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "아이템 상세 조회", description = "itemId을 이용하여 아이템을 상세 조회 합니다.")
 	@GetMapping("/{itemId}")
 	public ResponseEntity<ItemGetResponse> getItem(@PathVariable final Long itemId) {
-		GetItemServiceResponse response = itemService.getItemDetails(itemId);
+		ItemGetServiceResponse serviceResponse = itemService.getItem(itemId);
 
-		return ResponseEntity.ok(response.toItemGetResponse());
+		ItemGetResponse response = ItemGetResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "나의 아이템 목록에서 삭제", description = "itemId을 이용하여 나의 아이템 목록에서 삭제 합니다.")
 	@DeleteMapping("/myitems/{itemId}")
 	public ResponseEntity<Void> deleteMyItem(@PathVariable final Long itemId) {
 		itemService.removeMemberItem(itemId);
@@ -63,23 +76,27 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "키워드로 아이템 이름 목록 조회", description = "키워드를 이용하여 아이템 이름 목록 조회 합니다")
 	@GetMapping("/item-names")
 	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
-		GetItemNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
+		ItemGetNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
 
-		return ResponseEntity.ok(serviceResponse.toItemGetNamesResponse());
+		ItemGetNamesResponse response = ItemGetNamesResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "아이템 검색 및 목록조회", description = "키워드를 이용하여 아이템 검색 및 목록조회 합니다.")
 	@GetMapping("/search")
 	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
 		@RequestParam final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		GetItemByCursorServiceResponse serviceResponse = itemService.getReviewsByCursor(
+		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
 			request.toParameters()
 		);
 
-		return ResponseEntity.ok(serviceResponse.toItemGetByCursorResponse());
+		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
+		return ResponseEntity.ok(response);
 	}
 }

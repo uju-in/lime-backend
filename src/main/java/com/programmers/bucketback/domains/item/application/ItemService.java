@@ -1,17 +1,17 @@
 package com.programmers.bucketback.domains.item.application;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
-import com.programmers.bucketback.domains.item.application.dto.AddMemberItemServiceRequest;
-import com.programmers.bucketback.domains.item.application.dto.GetItemByCursorServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.GetItemNamesServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.GetItemServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
+import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServiceRequest;
 import com.programmers.bucketback.domains.item.application.vo.ItemInfo;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
@@ -23,34 +23,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ItemService {
 
-	private final AddMemberItemService addMemberItemService;
+	private final MemberItemAppender memberItemAppender;
 	private final MemberItemChecker memberItemChecker;
 	private final ItemReader itemReader;
 	private final ReviewStatistics reviewStatistics;
 	private final MemberItemReader memberItemReader;
 	private final MemberItemRemover memberItemRemover;
 	private final ItemFinder itemFinder;
-	private final ItemMapper itemMapper;
 	private final ItemCursorReader itemCursorReader;
 
-	public void addItem(final AddMemberItemServiceRequest request) {
+	public ItemAddServiceResponse addItem(final MemberItemAddServiceRequest request) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		addMemberItemService.addMemberItems(request.itemIds(), memberId);
+		List<Long> memberItemIds = memberItemAppender.addMemberItems(request.itemIds(), memberId);
+
+		return new ItemAddServiceResponse(memberItemIds);
 	}
 
-	public GetItemServiceResponse getItemDetails(final Long itemId) {
+	public ItemGetServiceResponse getItem(final Long itemId) {
 		boolean isMemberItem = false;
 
 		Item item = itemReader.read(itemId);
-		if (MemberUtils.isLoggedIn()) {
-			Long memberId = MemberUtils.getCurrentMemberId();
-			isMemberItem = memberItemChecker.existMemberItemByMemberId(memberId, item);
-		}
+		Long memberId = MemberUtils.getCurrentMemberId();
+		isMemberItem = memberItemChecker.existMemberItemByMemberId(memberId, item);
 
 		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
-		ItemInfo itemInfo = itemMapper.getItemInfo(item);
+		ItemInfo itemInfo = ItemInfo.from(item);
 
-		return GetItemServiceResponse.builder()
+		return ItemGetServiceResponse.builder()
 			.itemInfo(itemInfo)
 			.isMemberItem(isMemberItem)
 			.itemUrl(item.getUrl())
@@ -64,29 +63,18 @@ public class ItemService {
 		memberItemRemover.remove(memberItem.getId());
 	}
 
-	public GetItemNamesServiceResponse getItemNamesByKeyword(final String keyword) {
-		final String trimedKeyword = keyword.trim();
+	public ItemGetNamesServiceResponse getItemNamesByKeyword(final String keyword) {
+		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(keyword);
 
-		if (trimedKeyword.isEmpty()) {
-			return new GetItemNamesServiceResponse(Collections.emptyList());
-		}
-
-		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(trimedKeyword);
-		return new GetItemNamesServiceResponse(itemNameResults);
+		return new ItemGetNamesServiceResponse(itemNameResults);
 	}
 
-	public GetItemByCursorServiceResponse getReviewsByCursor(
+	public ItemGetByCursorServiceResponse getItemsByCursor(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
-		final String trimedKeyword = keyword.trim();
-
-		if (trimedKeyword.isEmpty()) {
-			return new GetItemByCursorServiceResponse(null, Collections.emptyList());
-		}
-
 		return itemCursorReader.readByCursor(
-			trimedKeyword,
+			keyword,
 			parameters
 		);
 	}

@@ -1,14 +1,12 @@
 package com.programmers.bucketback.domains.member.application;
 
-import org.springframework.stereotype.Component;
-
-import com.programmers.bucketback.domains.member.application.dto.response.LoginMemberServiceResponse;
+import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -17,7 +15,7 @@ public class MemberManager {
 	private final SecurityManager securityManager;
 	private final MemberRepository memberRepository;
 
-	public LoginMemberServiceResponse login(
+	public MemberLoginServiceResponse login(
 		final String rawPassword,
 		final Member member
 	) {
@@ -27,7 +25,7 @@ public class MemberManager {
 		securityManager.authenticate(memberId, rawPassword);
 		final String jwtToken = securityManager.generateToken(member);
 
-		return new LoginMemberServiceResponse(memberId, nickname, jwtToken);
+		return new MemberLoginServiceResponse(memberId, nickname, jwtToken);
 	}
 
 	public void checkNicknameDuplication(final String nickname) {

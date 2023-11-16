@@ -2,17 +2,19 @@ package com.programmers.bucketback.domains.bucket.application;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.domains.bucket.application.vo.BucketCursorSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.application.vo.BucketMemberItemCursorSummary;
+import com.programmers.bucketback.domains.bucket.application.vo.BucketSummary;
 import com.programmers.bucketback.domains.bucket.application.vo.ItemIdRegistry;
-import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
+import com.programmers.bucketback.domains.common.CursorSummary;
 import com.programmers.bucketback.domains.common.Hobby;
 import com.programmers.bucketback.domains.common.MemberUtils;
 import com.programmers.bucketback.domains.common.vo.CursorPageParameters;
 import com.programmers.bucketback.domains.item.application.ItemReader;
 import com.programmers.bucketback.domains.member.application.MemberReader;
+import com.programmers.bucketback.global.error.exception.BusinessException;
+import com.programmers.bucketback.global.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,14 +30,15 @@ public class BucketService {
 	private final ItemReader itemReader;
 
 	/** 버킷 생성 */
-	public void createBucket(
+	public Long createBucket(
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
+		validateEmptyRegistry(registry);
 		Long memberId = MemberUtils.getCurrentMemberId();
 		validateExceedBudget(bucketInfo, registry);
 
-		bucketAppender.append(memberId, bucketInfo, registry);
+		return bucketAppender.append(memberId, bucketInfo, registry);
 	}
 
 	/** 버킷 수정 */
@@ -44,12 +47,11 @@ public class BucketService {
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
+		validateEmptyRegistry(registry);
 		validateExceedBudget(bucketInfo, registry);
 
 		Long memberId = MemberUtils.getCurrentMemberId();
-		Bucket bucket = bucketReader.read(bucketId, memberId);
-
-		bucketModifier.modify(bucket, bucketInfo, registry);
+		bucketModifier.modify(memberId, bucketId, bucketInfo, registry);
 	}
 
 	/** 버킷 삭제 */
@@ -83,7 +85,7 @@ public class BucketService {
 	/**
 	 * 버킷 커서 조회
 	 */
-	public BucketCursorSummary getBucketsByCursor(
+	public CursorSummary<BucketSummary> getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters
@@ -103,6 +105,12 @@ public class BucketService {
 				.reduce(0, Integer::sum);
 
 			bucketInfo.validateBucketBudget(totalPrice, bucketInfo.getBudget());
+		}
+	}
+
+	private void validateEmptyRegistry(final ItemIdRegistry registry) {
+		if (registry.itemIds().isEmpty()) {
+			throw new BusinessException(ErrorCode.BUCKET_ITEM_NOT_REQUESTED);
 		}
 	}
 
