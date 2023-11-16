@@ -76,6 +76,7 @@ public enum ErrorCode {
 	FEED_NOT_FOUND("FEED_001", "피드를 찾을 수 없습니다."),
 	FEED_ALREADY_LIKED("FEED_002", "이미 좋아요룰 늘렀습니다."),
 	FEED_LIKE_NOT_FOUND("FEED_003", "좋아요한 피드를 찾을 수 없습니다."),
+	FEED_BAD_SORT_CONDITION("FEED_004", "잘못된 피드 정렬 조건 입니다."),
 
 	//Comment
 	COMMENT_NOT_FOUND("COMMENT_001", "피드 댓글을 찾을 수 없습니다."),
