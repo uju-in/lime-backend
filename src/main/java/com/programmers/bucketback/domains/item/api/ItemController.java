@@ -26,9 +26,12 @@ import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorSe
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "items", description = "아이템 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/items")
@@ -38,6 +41,7 @@ public class ItemController {
 
 	private final ItemService itemService;
 
+	@Operation(summary = "아이템 등록", description = "ItemEnrollRequest 을 이용하여 아이템을 등록합니다.")
 	@PostMapping("/enroll")
 	public ResponseEntity<ItemEnrollResponse> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
 		Long enrolledItemId = itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
@@ -46,6 +50,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "아이템 담기", description = "MemberItemAddRequest을 이용하여 사용자에 아이템을 담기 합니다.")
 	@PostMapping("/myitems")
 	public ResponseEntity<ItemAddResponse> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
 		ItemAddServiceResponse serviceResponse = itemService.addItem(request.toAddMemberItemServiceRequest());
@@ -54,6 +59,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "아이템 상세 조회", description = "itemId을 이용하여 아이템을 상세 조회 합니다.")
 	@GetMapping("/{itemId}")
 	public ResponseEntity<ItemGetResponse> getItem(@PathVariable final Long itemId) {
 		ItemGetServiceResponse serviceResponse = itemService.getItem(itemId);
@@ -62,6 +68,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "나의 아이템 목록에서 삭제", description = "itemId을 이용하여 나의 아이템 목록에서 삭제 합니다.")
 	@DeleteMapping("/myitems/{itemId}")
 	public ResponseEntity<Void> deleteMyItem(@PathVariable final Long itemId) {
 		itemService.removeMemberItem(itemId);
@@ -69,6 +76,7 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "키워드로 아이템 이름 목록 조회", description = "키워드를 이용하여 아이템 이름 목록 조회 합니다")
 	@GetMapping("/item-names")
 	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
 		ItemGetNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
@@ -77,6 +85,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "아이템 검색 및 목록조회", description = "키워드를 이용하여 아이템 검색 및 목록조회 합니다.")
 	@GetMapping("/search")
 	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
 		@RequestParam final String keyword,
