@@ -1,7 +1,5 @@
 package com.programmers.bucketback.domains.comment.application;
 
-import org.springframework.stereotype.Service;
-
 import com.programmers.bucketback.domains.comment.api.dto.response.CommentGetCursorResponse;
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.common.MemberUtils;
@@ -10,8 +8,9 @@ import com.programmers.bucketback.domains.feed.application.FeedReader;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.global.error.exception.BusinessException;
 import com.programmers.bucketback.global.error.exception.ErrorCode;
-
+import com.programmers.bucketback.global.level.PayPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +23,15 @@ public class CommentService {
 	private final CommentReader commentReader;
 	private final FeedReader feedReader;
 
-	public void createComment(
+	@PayPoint(5)
+	public Long createComment(
 		final Long feedId,
 		final String content
 	) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
 		commentAppender.append(feedId, content, memberId);
+
+		return memberId;
 	}
 
 	public void modifyComment(
@@ -63,7 +65,8 @@ public class CommentService {
 		return new CommentGetCursorResponse(commentCursorSummary);
 	}
 
-	public void adoptComment(
+	@PayPoint(20)
+	public Long adoptComment(
 		final Long feedId,
 		final Long commentId
 	) {
@@ -84,5 +87,7 @@ public class CommentService {
 		}
 
 		commentModifier.adopt(comment);
+
+		return comment.getMemberId();
 	}
 }

@@ -1,21 +1,8 @@
 package com.programmers.bucketback.domains.member.domain;
 
 import com.programmers.bucketback.domains.common.BaseEntity;
-import com.programmers.bucketback.domains.member.domain.vo.Introduction;
-import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
-import com.programmers.bucketback.domains.member.domain.vo.MemberStatus;
-import com.programmers.bucketback.domains.member.domain.vo.Nickname;
-import com.programmers.bucketback.domains.member.domain.vo.Role;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.programmers.bucketback.domains.member.domain.vo.*;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -100,5 +87,13 @@ public class Member extends BaseEntity {
 
 	public void updatePassword(final String password) {
 		this.loginInfo.updatePassword(password);
+	}
+
+	public int getLevel() {
+		return Level.from(this.levelPoint);
+	}
+
+	public void earnPoint(final int point) {
+		this.levelPoint += point;
 	}
 }
