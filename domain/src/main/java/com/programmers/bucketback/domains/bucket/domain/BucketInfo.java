@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.bucket.domain;
 
+import java.util.Objects;
+
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.error.exception.BusinessException;
 import com.programmers.bucketback.error.exception.ErrorCode;
@@ -8,7 +10,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,16 +23,13 @@ public class BucketInfo {
 	private static final int MAX_BUCKET_NAME_LENGTH = 25;
 	private static final int MIN_BUDGET = 0;
 
-	@NotNull
 	@Column(name = "hobby")
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
 
-	@NotNull
 	@Column(name = "name")
 	private String name;
 
-	@NotNull
 	@Column(name = "budget")
 	private Integer budget;
 
@@ -42,9 +40,9 @@ public class BucketInfo {
 	) {
 		validateBucketName(name);
 		validateBucketBudget(budget);
-		this.hobby = hobby;
-		this.name = name;
-		this.budget = budget;
+		this.hobby = Objects.requireNonNull(hobby);
+		this.name = Objects.requireNonNull(name);
+		this.budget = Objects.requireNonNull(budget);
 	}
 
 	public void validateBucketName(final String name) {
