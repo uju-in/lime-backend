@@ -120,7 +120,7 @@ public class BucketReader {
 			.map(item -> ItemInfo.from(item))
 			.toList();
 
-		return new BucketGetServiceResponse(bucket, itemInfos);
+		return BucketGetServiceResponse.of(bucket, itemInfos);
 	}
 
 	/** 마이페이지를 위한 버킷 프로필 조회 (3개) */
