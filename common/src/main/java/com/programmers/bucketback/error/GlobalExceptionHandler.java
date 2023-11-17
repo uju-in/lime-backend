@@ -23,9 +23,13 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<ErrorResponse> handleException(final Exception e) {
-		log.error("UnExpected Exception", e);
-		final ErrorResponse response = ErrorResponse.from(ErrorCode.INTERNAL_SERVER_ERROR);
-		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		log.error("Error occurred", e);
+		final ErrorCode errorCode = ErrorCode.from(e.getMessage());
+		final ErrorResponse response = ErrorResponse.from(errorCode);
+		if (errorCode == ErrorCode.INTERNAL_SERVER_ERROR) {
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
