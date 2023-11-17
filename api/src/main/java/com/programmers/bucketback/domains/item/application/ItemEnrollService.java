@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.crawling.ItemCrawlerInfo;
+import com.programmers.bucketback.crawling.ItemCrawlerResult;
 import com.programmers.bucketback.crawling.WebCrawler;
 import com.programmers.bucketback.crawling.WebSite;
-import com.programmers.bucketback.domains.item.application.dto.ItemCreateServiceRequest;
+import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
-import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServiceRequest;
 import com.programmers.bucketback.domains.item.implementation.ItemAppender;
+import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,22 +28,31 @@ public class ItemEnrollService {
 
 		// 웹 크롤링을 통한 아이템 정보 가져오기
 		WebCrawler webCrawler = WebSite.selectCrawler(request.itemUrl());
-		ItemCrawlerInfo itemInfo = webCrawler.extractInfoFromUrl(request.itemUrl());
+		ItemCrawlerResult itemCrawlerResult = webCrawler.extractInfoFromUrl(request.itemUrl());
+		ItemCrawlerInfo itemCrawlerInfo = itemCrawlerResultToInfo(itemCrawlerResult);
 
 		// 아이템 등록
-		ItemCreateServiceRequest itemCreateServiceRequest = ItemCreateServiceRequest.of(request.hobby(), itemInfo);
-		Long enrolledItemId = itemAppender.append(itemCreateServiceRequest);
+		Long enrolledItemId = itemAppender.append(request.hobby(), itemCrawlerInfo);
 
 		// 아이템 담기
-		MemberItemAddServiceRequest memberItemAddServiceRequest = getAddMemberItemServiceRequest(enrolledItemId);
-		itemService.addItem(memberItemAddServiceRequest);
+		ItemIdRegistry itemIdRegistry = getItemIdRegistry(enrolledItemId);
+		itemService.addItem(itemIdRegistry);
 
 		return enrolledItemId;
 	}
 
-	private MemberItemAddServiceRequest getAddMemberItemServiceRequest(final Long enrolledItemId) {
+	private ItemCrawlerInfo itemCrawlerResultToInfo(final ItemCrawlerResult itemCrawlerResult) {
+		return ItemCrawlerInfo.builder()
+			.itemName(itemCrawlerResult.itemName())
+			.price(itemCrawlerResult.price())
+			.itemName(itemCrawlerResult.itemName())
+			.imageUrl(itemCrawlerResult.imageUrl())
+			.build();
+	}
+
+	private ItemIdRegistry getItemIdRegistry(final Long enrolledItemId) {
 		List<Long> ids = List.of(enrolledItemId);
 
-		return new MemberItemAddServiceRequest(ids);
+		return new ItemIdRegistry(ids);
 	}
 }

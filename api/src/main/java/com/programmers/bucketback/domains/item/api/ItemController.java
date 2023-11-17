@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.common.cursor.CursorRequest;
+import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemAddResponse;
@@ -22,9 +23,9 @@ import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
 import com.programmers.bucketback.domains.item.application.ItemEnrollService;
 import com.programmers.bucketback.domains.item.application.ItemService;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
+import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -91,12 +92,12 @@ public class ItemController {
 		@RequestParam final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
+		CursorSummary<ItemCursorSummary> cursorSummary = itemService.getItemsByCursor(
 			keyword,
 			request.toParameters()
 		);
+		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(cursorSummary);
 
-		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
 		return ResponseEntity.ok(response);
 	}
 }

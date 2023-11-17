@@ -15,7 +15,7 @@ public class NaverCrawler implements WebCrawler {
 	}
 
 	@Override
-	public ItemCrawlerInfo extractInfoFromUrl(final String url) {
+	public ItemCrawlerResult extractInfoFromUrl(final String url) {
 		try {
 			Document document = connectWithHeaders(url);
 
@@ -35,7 +35,7 @@ public class NaverCrawler implements WebCrawler {
 				.first()
 				.attr("src");
 
-			return ItemCrawlerInfo.builder()
+			return ItemCrawlerResult.builder()
 				.itemName(itemName)
 				.price(price)
 				.imageUrl(imgUrl)
