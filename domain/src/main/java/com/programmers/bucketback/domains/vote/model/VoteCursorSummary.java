@@ -1,7 +1,9 @@
-package com.programmers.bucketback.domains.vote.model.response;
+package com.programmers.bucketback.domains.vote.model;
 
-import com.programmers.bucketback.domains.item.model.ItemInfo;
+import com.programmers.bucketback.common.cursor.CursorIdParser;
 import com.programmers.bucketback.domains.item.domain.Item;
+import com.programmers.bucketback.domains.item.model.ItemInfo;
+import com.programmers.bucketback.domains.vote.model.response.VoteInfo;
 
 import lombok.Builder;
 
@@ -11,7 +13,7 @@ public record VoteCursorSummary(
 	ItemInfo item1Info,
 	ItemInfo item2Info,
 	String cursorId
-) {
+) implements CursorIdParser {
 	public static VoteCursorSummary of(
 		final VoteSummary voteSummary,
 		final Item item1,

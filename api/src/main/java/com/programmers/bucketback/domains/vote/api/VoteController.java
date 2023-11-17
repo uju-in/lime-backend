@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorRequest;
+import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByCursorResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
+import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
 import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.response.VoteGetServiceResponse;
-import com.programmers.bucketback.domains.vote.model.response.VotesGetServiceResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -90,13 +91,13 @@ public class VoteController {
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		final VotesGetServiceResponse serviceResponse = voteService.getVotesByCursor(
+		CursorSummary<VoteCursorSummary> cursorSummary = voteService.getVotesByCursor(
 			Hobby.from(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
 			request.toParameters()
 		);
-		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(serviceResponse);
+		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(cursorSummary);
 
 		return ResponseEntity.ok(response);
 	}

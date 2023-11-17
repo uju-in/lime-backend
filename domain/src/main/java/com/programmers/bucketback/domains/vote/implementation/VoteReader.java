@@ -1,6 +1,5 @@
 package com.programmers.bucketback.domains.vote.implementation;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,18 +8,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.cursor.CursorUtils;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.domain.Voter;
+import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
+import com.programmers.bucketback.domains.vote.model.VoteSummary;
 import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.model.response.VoteCursorSummary;
 import com.programmers.bucketback.domains.vote.model.response.VoteGetServiceResponse;
 import com.programmers.bucketback.domains.vote.model.response.VoteInfo;
-import com.programmers.bucketback.domains.vote.model.response.VoteSummary;
-import com.programmers.bucketback.domains.vote.model.response.VotesGetServiceResponse;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
 import com.programmers.bucketback.error.exception.BusinessException;
 import com.programmers.bucketback.error.exception.EntityNotFoundException;
@@ -71,18 +71,18 @@ public class VoteReader {
 	}
 
 	@Transactional(readOnly = true)
-	public VotesGetServiceResponse readByCursor(
+	public CursorSummary<VoteCursorSummary> readByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters,
 		final Long memberId
 	) {
-		if (memberId == null && statusCondition.isRequiredLogin()) {
-			return new VotesGetServiceResponse(null, Collections.emptyList());
+		if (memberId == null && statusCondition.isRequiredLogin()) { // 서비스로 빼기
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
 		}
 
-		if (sortCondition == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED) {
+		if (sortCondition == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED) { // 서비스로 빼기
 			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
 		}
 
@@ -98,9 +98,8 @@ public class VoteReader {
 		);
 
 		final List<VoteCursorSummary> voteCursorSummaries = getVoteCursorSummaries(voteSummaries);
-		final String nextCursorId = getNextCursorId(voteSummaries);
 
-		return new VotesGetServiceResponse(nextCursorId, voteCursorSummaries);
+		return CursorUtils.getCursorSummaries(voteCursorSummaries);
 	}
 
 	private ItemInfo getItemInfo(final Long itemId) {
@@ -137,10 +136,5 @@ public class VoteReader {
 				return VoteCursorSummary.of(voteSummary, item1, item2);
 			})
 			.toList();
-	}
-
-	private String getNextCursorId(final List<VoteSummary> voteSummaries) {
-		final int votesSize = voteSummaries.size();
-		return votesSize == 0 ? null : voteSummaries.get(votesSize - 1).cursorId();
 	}
 }
