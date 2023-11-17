@@ -83,11 +83,7 @@ public class MemberService {
 	public String checkEmail(final String email) {
 		memberChecker.checkEmailDuplication(email);
 
-		try {
-			return emailSender.send(email);
-		} catch (final MessagingException e) {
-			throw new BusinessException(ErrorCode.MAIL_SEND_FAIL);
-		}
+		return emailSender.send(email);
 	}
 
 	public MyPage getMyPage(final String nickname) {
