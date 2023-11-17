@@ -42,7 +42,7 @@ public class BucketInfo {
 		validateBucketBudget(budget);
 		this.hobby = Objects.requireNonNull(hobby);
 		this.name = Objects.requireNonNull(name);
-		this.budget = Objects.requireNonNull(budget);
+		this.budget = budget;
 	}
 
 	public void validateBucketName(final String name) {
