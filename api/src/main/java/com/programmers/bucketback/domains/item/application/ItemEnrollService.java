@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.crawling.ItemCrawlerInfo;
-import com.programmers.bucketback.crawling.WebCrawler;
-import com.programmers.bucketback.crawling.WebSite;
-import com.programmers.bucketback.domains.item.application.dto.ItemCreateServiceRequest;
+import com.programmers.bucketback.domains.item.application.crawling.WebCrawler;
+import com.programmers.bucketback.domains.item.application.crawling.WebSite;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
 import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServiceRequest;
 import com.programmers.bucketback.domains.item.implementation.ItemAppender;
+import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,11 +27,10 @@ public class ItemEnrollService {
 
 		// 웹 크롤링을 통한 아이템 정보 가져오기
 		WebCrawler webCrawler = WebSite.selectCrawler(request.itemUrl());
-		ItemCrawlerInfo itemInfo = webCrawler.extractInfoFromUrl(request.itemUrl());
+		ItemCrawlerInfo itemCrawlerInfo = webCrawler.extractInfoFromUrl(request.itemUrl());
 
 		// 아이템 등록
-		ItemCreateServiceRequest itemCreateServiceRequest = ItemCreateServiceRequest.of(request.hobby(), itemInfo);
-		Long enrolledItemId = itemAppender.append(itemCreateServiceRequest);
+		Long enrolledItemId = itemAppender.append(request.hobby(), itemCrawlerInfo);
 
 		// 아이템 담기
 		MemberItemAddServiceRequest memberItemAddServiceRequest = getAddMemberItemServiceRequest(enrolledItemId);

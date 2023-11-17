@@ -22,6 +22,9 @@ dependencies {
     implementation project(path: ':common')
     implementation project(path: ':infrastructure')
 
+    //crawling
+    implementation 'org.jsoup:jsoup:1.16.2'
+    
     //swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 

@@ -1,8 +1,9 @@
-package com.programmers.bucketback.crawling;
+package com.programmers.bucketback.domains.item.application.crawling;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 import com.programmers.bucketback.error.exception.BusinessException;
 import com.programmers.bucketback.error.exception.ErrorCode;
 

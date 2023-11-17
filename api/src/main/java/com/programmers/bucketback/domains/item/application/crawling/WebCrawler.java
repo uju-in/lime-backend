@@ -1,10 +1,12 @@
-package com.programmers.bucketback.crawling;
+package com.programmers.bucketback.domains.item.application.crawling;
 
 import java.io.IOException;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 public interface WebCrawler {
 
