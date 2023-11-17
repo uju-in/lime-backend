@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.item.domain;
 
+import java.util.Objects;
+
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.domains.BaseEntity;
 
@@ -11,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,39 +29,34 @@ public class Item extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
 	@Column(name = "hobby")
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
 
-	@NotNull
 	@Column(name = "name")
 	private String name;
 
-	@NotNull
 	@Column(name = "price")
 	private Integer price;
 
-	@NotNull
 	@Column(name = "url")
 	private String url;
 
-	@NotNull
 	@Column(name = "image")
 	private String image;
 
 	@Builder
 	public Item(
-		@NotNull final Hobby hobby,
-		@NotNull final String name,
-		@NotNull final Integer price,
-		@NotNull final String url,
-		@NotNull final String image
+		final Hobby hobby,
+		final String name,
+		final Integer price,
+		final String url,
+		final String image
 	) {
-		this.hobby = hobby;
-		this.name = name;
-		this.price = price;
-		this.url = url;
-		this.image = image;
+		this.hobby = Objects.requireNonNull(hobby);
+		this.name = Objects.requireNonNull(name);
+		this.price = Objects.requireNonNull(price);
+		this.url = Objects.requireNonNull(url);
+		this.image = Objects.requireNonNull(image);
 	}
 }
