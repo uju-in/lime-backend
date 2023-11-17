@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.review.domain;
 
+import java.util.Objects;
+
 import com.programmers.bucketback.domains.BaseEntity;
 import com.programmers.bucketback.domains.review.model.ReviewContent;
 
@@ -28,18 +30,18 @@ public class Review extends BaseEntity {
 	private Long id;
 
 	@NotNull
-	@JoinColumn(name = "items_id")
+	@JoinColumn(name = "items_id", nullable = false)
 	private Long itemId;
 
 	@NotNull
-	@Column(name = "members_id")
+	@Column(name = "members_id", nullable = false)
 	private Long memberId;
 
-	@Column(name = "content")
+	@Column(name = "content", nullable = false)
 	private String content;
 
 	@NotNull
-	@Column(name = "rating")
+	@Column(name = "rating", nullable = false)
 	private Integer rating;
 
 	@Builder
@@ -49,10 +51,10 @@ public class Review extends BaseEntity {
 		@NotNull final String content,
 		@NotNull final Integer rating
 	) {
-		this.itemId = itemId;
-		this.memberId = memberId;
-		this.content = content;
-		this.rating = rating;
+		this.itemId = Objects.requireNonNull(itemId);
+		this.memberId = Objects.requireNonNull(memberId);
+		this.content = Objects.requireNonNull(content);
+		this.rating = Objects.requireNonNull(rating);
 	}
 
 	public void changeReviewContent(final ReviewContent reviewContent) {
