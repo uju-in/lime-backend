@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.vote.model.response;
+package com.programmers.bucketback.domains.vote.model;
 
 import java.time.LocalDateTime;
 

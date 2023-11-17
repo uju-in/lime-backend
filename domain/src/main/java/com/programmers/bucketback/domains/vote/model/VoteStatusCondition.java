@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.vote.model.request;
+package com.programmers.bucketback.domains.vote.model;
 
 import java.util.Collections;
 import java.util.Map;
