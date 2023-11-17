@@ -16,7 +16,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,26 +41,23 @@ public class Member extends BaseEntity {
 	@Embedded
 	private Introduction introduction;
 
-	@NotNull
-	@Column(name = "level_point")
+	@Column(name = "level_point", nullable = false)
 	private Integer levelPoint;
 
-	@NotNull
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role")
+	@Column(name = "role", nullable = false)
 	private Role role;
 
-	@NotNull
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status")
+	@Column(name = "status", nullable = false)
 	private MemberStatus status;
 
 	@Builder
 	private Member(
-		@NotNull final String email,
-		@NotNull final String password,
-		@NotNull final String nickname,
-		@NotNull final Role role
+		final String email,
+		final String password,
+		final String nickname,
+		final Role role
 	) {
 		this.loginInfo = new LoginInfo(email, password);
 		this.nickname = new Nickname(nickname);
