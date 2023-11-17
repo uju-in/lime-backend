@@ -80,10 +80,14 @@ public class InventoryController {
 		@PathVariable final Long inventoryId,
 		@ModelAttribute("request") @Valid final CursorRequest cursorRequest
 	) {
-		InventoryGetReviewedItemResponse inventoryGetReviewedItemResponse =
-			inventoryService.getReviewedItemsForModify(inventoryId, cursorRequest.toParameters());
 
-		return ResponseEntity.ok(inventoryGetReviewedItemResponse);
+		InventoryGetReviewedItemResponse response = InventoryGetReviewedItemResponse.from(
+			inventoryService.getReviewedItemsForModify(
+				inventoryId, cursorRequest.toParameters()
+			)
+		);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "인벤토리 목록 조회", description = "닉네임으로 유저의 인벤토리 목록을 조회한다.")
