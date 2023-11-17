@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.bucket.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.domains.BaseEntity;
@@ -15,7 +16,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,17 +26,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Bucket extends BaseEntity {
 
-	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
-	private final List<BucketItem> bucketItems = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	@NotNull
+
 	@Column(name = "member_id")
 	private Long memberId;
+
 	@Embedded
 	private BucketInfo bucketInfo;
+
+	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
+	private List<BucketItem> bucketItems = new ArrayList<>();
 
 	public Bucket(
 		final BucketInfo bucketInfo,
@@ -67,7 +69,7 @@ public class Bucket extends BaseEntity {
 		final BucketInfo bucketInfo,
 		final Long memberId
 	) {
-		this.memberId = memberId;
+		this.memberId = Objects.requireNonNull(memberId);
 		this.bucketInfo = bucketInfo;
 	}
 
