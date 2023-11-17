@@ -1,11 +1,12 @@
 package com.programmers.bucketback.domains.vote.domain.vo;
 
+import java.util.Objects;
+
 import com.programmers.bucketback.error.exception.BusinessException;
 import com.programmers.bucketback.error.exception.ErrorCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +18,12 @@ public class Content {
 
 	public static final int MAX_CONTENT_LENGTH = 1000;
 
-	@NotNull
-	@Column(name = "content", length = MAX_CONTENT_LENGTH)
+	@Column(name = "content", nullable = false, length = MAX_CONTENT_LENGTH)
 	private String content;
 
-	public Content(@NotNull final String content) {
+	public Content(final String content) {
 		validate(content);
-		this.content = content;
+		this.content = Objects.requireNonNull(content);
 	}
 
 	private void validate(final String content) {

@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.vote.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.domains.BaseEntity;
@@ -19,7 +20,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,40 +37,34 @@ public class Vote extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	@NotNull
-	@Column(name = "member_id")
+	@Column(name = "member_id", nullable = false)
 	private Long memberId;
-	@NotNull
-	@Column(name = "item1_id")
+	@Column(name = "item1_id", nullable = false)
 	private Long item1Id;
-	@NotNull
-	@Column(name = "item2_id")
+	@Column(name = "item2_id", nullable = false)
 	private Long item2Id;
-	@NotNull
-	@Column(name = "hobby")
+	@Column(name = "hobby", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
 	@Embedded
 	private Content content;
-	@NotNull
-	@Column(name = "start_time")
+	@Column(name = "start_time", nullable = false)
 	private LocalDateTime startTime;
-	@NotNull
-	@Column(name = "end_time")
+	@Column(name = "end_time", nullable = false)
 	private LocalDateTime endTime;
 
 	@Builder
 	private Vote(
-		@NotNull final Long memberId,
-		@NotNull final Long item1Id,
-		@NotNull final Long item2Id,
-		@NotNull final Hobby hobby,
-		@NotNull final String content
+		final Long memberId,
+		final Long item1Id,
+		final Long item2Id,
+		final Hobby hobby,
+		final String content
 	) {
-		this.memberId = memberId;
-		this.item1Id = item1Id;
-		this.item2Id = item2Id;
-		this.hobby = hobby;
+		this.memberId = Objects.requireNonNull(memberId);
+		this.item1Id = Objects.requireNonNull(item1Id);
+		this.item2Id = Objects.requireNonNull(item2Id);
+		this.hobby = Objects.requireNonNull(hobby);
 		this.content = new Content(content);
 		this.startTime = LocalDateTime.now();
 		this.endTime = startTime.plusDays(1);
