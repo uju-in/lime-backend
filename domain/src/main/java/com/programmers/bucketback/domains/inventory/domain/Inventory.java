@@ -27,17 +27,20 @@ import lombok.NoArgsConstructor;
 @Table(name = "inventories")
 public class Inventory extends BaseEntity {
 
-	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-	private final List<InventoryItem> inventoryItems = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	@Column(name = "member_id")
+
+	@Column(name = "member_id", nullable = false)
 	private Long memberId;
-	@Column(name = "hobby")
+
+	@Column(name = "hobby", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
+
+	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
+	private List<InventoryItem> inventoryItems = new ArrayList<>();
 
 	public Inventory(
 		final Long memberId,
