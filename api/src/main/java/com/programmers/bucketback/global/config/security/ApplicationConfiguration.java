@@ -7,12 +7,11 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.programmers.bucketback.domains.member.domain.Member;
-import com.programmers.bucketback.domains.member.repository.MemberRepository;
+import com.programmers.bucketback.domains.member.implementation.MemberReader;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,13 +19,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
 
-	private final MemberRepository memberRepository;
+	private final MemberReader memberReader;
 
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return username -> {
-			Member member = memberRepository.findById(Long.valueOf(username))
-				.orElseThrow(() -> new UsernameNotFoundException("User not found."));
+			Member member = memberReader.read(Long.valueOf(username));
+
 			return new MemberSecurity(member);
 		};
 	}

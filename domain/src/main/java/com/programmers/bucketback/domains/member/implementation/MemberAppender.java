@@ -4,6 +4,7 @@ package com.programmers.bucketback.domains.member.implementation;
 
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,4 +34,10 @@ public class MemberAppender {
 	//
 	// 	memberRepository.save(member);
 	// }
+
+	public void append(
+		final Member member
+	) {
+		memberRepository.save(member);
+	}
 }
