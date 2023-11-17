@@ -26,9 +26,11 @@ public class GlobalExceptionHandler {
 		log.error("Error occurred", e);
 		final ErrorCode errorCode = ErrorCode.from(e.getMessage());
 		final ErrorResponse response = ErrorResponse.from(errorCode);
+
 		if (errorCode == ErrorCode.INTERNAL_SERVER_ERROR) {
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -38,6 +40,7 @@ public class GlobalExceptionHandler {
 		log.error("MethodArgumentNotValidException Exception", e);
 		final BindingResult bindingResult = e.getBindingResult();
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_REQUEST, bindingResult);
+
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -45,6 +48,7 @@ public class GlobalExceptionHandler {
 	protected ResponseEntity<ErrorResponse> handleBadCredentialsException(final BadCredentialsException e) {
 		log.error("BadCredentialsException", e);
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.MEMBER_LOGIN_FAIL);
+
 		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}
 
@@ -52,6 +56,7 @@ public class GlobalExceptionHandler {
 	protected ResponseEntity<ErrorResponse> handleMessagingException(final MessagingException e) {
 		log.error("MessagingException", e);
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.MAIL_SEND_FAIL);
+
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -60,6 +65,7 @@ public class GlobalExceptionHandler {
 		final MissingServletRequestParameterException e) {
 		log.error("MissingServletRequestParameterException", e);
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.MISSING_PARAMETER);
+
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -67,6 +73,7 @@ public class GlobalExceptionHandler {
 	protected ResponseEntity<ErrorResponse> handleJwtException(final ExpiredJwtException e) {
 		log.error("ExpiredJwtException", e);
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.EXPIRED_JWT);
+
 		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}
 
@@ -74,6 +81,7 @@ public class GlobalExceptionHandler {
 	protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
 		log.error("BusinessException", e);
 		final ErrorResponse response = ErrorResponse.from(e.getErrorCode());
+
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -81,6 +89,7 @@ public class GlobalExceptionHandler {
 	protected ResponseEntity<ErrorResponse> handleEntityNotFoundException(final EntityNotFoundException e) {
 		log.error("EntityNotFoundException", e);
 		final ErrorResponse response = ErrorResponse.from(e.getErrorCode());
+
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
 }
