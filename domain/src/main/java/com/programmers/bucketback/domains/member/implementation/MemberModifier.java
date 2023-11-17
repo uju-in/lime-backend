@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberModifier {
 
 	private final MemberReader memberReader;
-	// private final PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public void modifyProfile(
@@ -25,15 +24,12 @@ public class MemberModifier {
 		member.updateProfile(nickname, introduction);
 	}
 
-	// @Transactional
-	// public void modifyPassword(
-	// 	final Long memberId,
-	// 	final String password
-	// ) {
-	// 	final Member member = memberReader.read(memberId);
-	// 	Member.validatePassword(password);
-	// 	final String encodedPassword = passwordEncoder.encode(password);
-	//
-	// 	member.updatePassword(encodedPassword);
-	// }
+	@Transactional
+	public void modifyPassword(
+		final Long memberId,
+		final String encodedPassword
+	) {
+		final Member member = memberReader.read(memberId);
+		member.updatePassword(encodedPassword);
+	}
 }

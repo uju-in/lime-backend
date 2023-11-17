@@ -1,11 +1,10 @@
-package com.programmers.bucketback.domains.member.application;
+package com.programmers.bucketback.global.config.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.member.domain.Member;
-import com.programmers.bucketback.global.config.security.MemberSecurity;
 import com.programmers.bucketback.global.config.security.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;

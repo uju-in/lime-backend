@@ -10,23 +10,9 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class MemberManager {
+public class MemberChecker {
 
-	// private final SecurityManager securityManager;
 	private final MemberRepository memberRepository;
-
-	// public MemberLoginServiceResponse login(
-	// 	final String rawPassword,
-	// 	final Member member
-	// ) {
-	// 	final Long memberId = member.getId();
-	// 	final String nickname = member.getNickname();
-	//
-	// 	securityManager.authenticate(memberId, rawPassword);
-	// 	final String jwtToken = securityManager.generateToken(member);
-	//
-	// 	return new MemberLoginServiceResponse(memberId, nickname, jwtToken);
-	// }
 
 	public void checkNicknameDuplication(final String nickname) {
 		if (memberRepository.existsByNicknameNickname(nickname)) {
