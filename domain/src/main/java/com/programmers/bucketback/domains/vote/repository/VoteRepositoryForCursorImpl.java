@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.bucketback.Hobby;
-import com.programmers.bucketback.domains.vote.model.VoteSummary;
+import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
 import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.response.VoteInfo;
@@ -29,7 +29,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<VoteSummary> findAllByCursor(
+	public List<VoteCursorSummary> findAllByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
@@ -38,7 +38,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		final int pageSize
 	) {
 		return jpaQueryFactory
-			.select(Projections.constructor(VoteSummary.class,
+			.select(Projections.constructor(VoteCursorSummary.class,
 				Projections.constructor(VoteInfo.class,
 					vote.id,
 					vote.content.content,

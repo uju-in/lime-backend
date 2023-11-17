@@ -21,7 +21,7 @@ import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByCursorR
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
-import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
+import com.programmers.bucketback.domains.vote.model.VoteSummary;
 import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
 
@@ -91,7 +91,7 @@ public class VoteController {
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		CursorSummary<VoteCursorSummary> cursorSummary = voteService.getVotesByCursor(
+		CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
 			Hobby.from(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),

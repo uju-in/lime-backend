@@ -12,7 +12,7 @@ import com.programmers.bucketback.domains.vote.implementation.VoteAppender;
 import com.programmers.bucketback.domains.vote.implementation.VoteManager;
 import com.programmers.bucketback.domains.vote.implementation.VoteReader;
 import com.programmers.bucketback.domains.vote.implementation.VoteRemover;
-import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
+import com.programmers.bucketback.domains.vote.model.VoteSummary;
 import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
 import com.programmers.bucketback.error.exception.BusinessException;
@@ -74,12 +74,12 @@ public class VoteService {
 
 	public VoteGetServiceResponse getVote(final Long voteId) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		VoteCursorSummary summary = voteReader.read(voteId, memberId);
+		VoteSummary summary = voteReader.read(voteId, memberId);
 
 		return VoteGetServiceResponse.from(summary);
 	}
 
-	public CursorSummary<VoteCursorSummary> getVotesByCursor(
+	public CursorSummary<VoteSummary> getVotesByCursor(
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
