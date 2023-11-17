@@ -21,9 +21,9 @@ import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByCursorR
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
+import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
+import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.VoteSummary;
-import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
-import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

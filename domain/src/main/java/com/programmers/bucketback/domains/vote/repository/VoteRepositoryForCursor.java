@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
-import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
-import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
+import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
+import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
 
 public interface VoteRepositoryForCursor {
 	List<VoteCursorSummary> findAllByCursor(
