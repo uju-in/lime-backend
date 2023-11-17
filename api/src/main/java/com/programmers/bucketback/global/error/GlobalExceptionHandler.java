@@ -14,7 +14,6 @@ import com.programmers.bucketback.error.exception.EntityNotFoundException;
 import com.programmers.bucketback.error.exception.ErrorCode;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -50,14 +49,6 @@ public class GlobalExceptionHandler {
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.MEMBER_LOGIN_FAIL);
 
 		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-	}
-
-	@ExceptionHandler(MessagingException.class)
-	protected ResponseEntity<ErrorResponse> handleMessagingException(final MessagingException e) {
-		log.error("MessagingException", e);
-		final ErrorResponse response = ErrorResponse.from(ErrorCode.MAIL_SEND_FAIL);
-
-		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
