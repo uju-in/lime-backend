@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
-import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServiceRequest;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.item.implementation.ItemCursorReader;
@@ -40,9 +40,9 @@ public class ItemService {
 	private final ItemFinder itemFinder;
 	private final ItemCursorReader itemCursorReader;
 
-	public ItemAddServiceResponse addItem(final MemberItemAddServiceRequest request) {
+	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		List<Long> memberItemIds = memberItemAppender.addMemberItems(request.itemIds(), memberId);
+		List<Long> memberItemIds = memberItemAppender.addMemberItems(itemIdRegistry.itemIds(), memberId);
 
 		return new ItemAddServiceResponse(memberItemIds);
 	}

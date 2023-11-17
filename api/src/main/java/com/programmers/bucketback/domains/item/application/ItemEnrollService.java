@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.application.crawling.WebCrawler;
 import com.programmers.bucketback.domains.item.application.crawling.WebSite;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
-import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServiceRequest;
 import com.programmers.bucketback.domains.item.implementation.ItemAppender;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
@@ -33,15 +33,15 @@ public class ItemEnrollService {
 		Long enrolledItemId = itemAppender.append(request.hobby(), itemCrawlerInfo);
 
 		// 아이템 담기
-		MemberItemAddServiceRequest memberItemAddServiceRequest = getAddMemberItemServiceRequest(enrolledItemId);
-		itemService.addItem(memberItemAddServiceRequest);
+		ItemIdRegistry itemIdRegistry = getItemIdRegistry(enrolledItemId);
+		itemService.addItem(itemIdRegistry);
 
 		return enrolledItemId;
 	}
 
-	private MemberItemAddServiceRequest getAddMemberItemServiceRequest(final Long enrolledItemId) {
+	private ItemIdRegistry getItemIdRegistry(final Long enrolledItemId) {
 		List<Long> ids = List.of(enrolledItemId);
 
-		return new MemberItemAddServiceRequest(ids);
+		return new ItemIdRegistry(ids);
 	}
 }
