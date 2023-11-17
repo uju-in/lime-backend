@@ -1,7 +1,7 @@
 package com.programmers.bucketback.domains.vote.api.dto.request;
 
 import com.programmers.bucketback.Hobby;
-import com.programmers.bucketback.domains.vote.model.request.VoteCreateServiceRequest;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

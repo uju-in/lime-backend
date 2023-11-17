@@ -11,7 +11,7 @@ import com.programmers.bucketback.domains.bucket.implementation.BucketModifier;
 import com.programmers.bucketback.domains.bucket.implementation.BucketReader;
 import com.programmers.bucketback.domains.bucket.implementation.BucketRemover;
 import com.programmers.bucketback.domains.bucket.model.BucketGetServiceResponse;
-import com.programmers.bucketback.domains.bucket.model.BucketMemberItemCursorSummary;
+import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.bucket.model.BucketSummary;
 import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
@@ -67,16 +67,13 @@ public class BucketService {
 	/**
 	 * 버킷 수정을 위한 멤버 아이템 목록 조회
 	 */
-	public BucketMemberItemCursorSummary getMemberItemsForModify(
+	public CursorSummary<BucketMemberItemSummary> getMemberItemsForModify(
 		final Long bucketId,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 
-		BucketMemberItemCursorSummary bucketMemberItemCursorSummary =
-			bucketReader.readByMemberItems(bucketId, memberId, parameters);
-
-		return bucketMemberItemCursorSummary;
+		return bucketReader.readByMemberItems(bucketId, memberId, parameters);
 	}
 
 	/**

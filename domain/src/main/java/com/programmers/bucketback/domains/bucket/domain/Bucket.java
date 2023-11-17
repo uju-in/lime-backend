@@ -31,7 +31,7 @@ public class Bucket extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "member_id")
+	@Column(name = "member_id", nullable = false)
 	private Long memberId;
 
 	@Embedded

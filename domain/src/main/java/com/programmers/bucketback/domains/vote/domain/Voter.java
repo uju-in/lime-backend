@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.vote.domain;
 
+import java.util.Objects;
+
 import com.programmers.bucketback.domains.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -11,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,27 +28,24 @@ public class Voter extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "vote_id")
+	@JoinColumn(name = "vote_id", nullable = false)
 	private Vote vote;
 
-	@NotNull
-	@Column(name = "member_id")
+	@Column(name = "member_id", nullable = false)
 	private Long memberId;
 
-	@NotNull
-	@Column(name = "item_id")
+	@Column(name = "item_id", nullable = false)
 	private Long itemId;
 
 	public Voter(
-		@NotNull final Vote vote,
-		@NotNull final Long memberId,
-		@NotNull final Long itemId
+		final Vote vote,
+		final Long memberId,
+		final Long itemId
 	) {
-		this.vote = vote;
-		this.memberId = memberId;
-		this.itemId = itemId;
+		this.vote = Objects.requireNonNull(vote);
+		this.memberId = Objects.requireNonNull(memberId);
+		this.itemId = Objects.requireNonNull(itemId);
 	}
 
 	public void participate(final Long itemId) {
