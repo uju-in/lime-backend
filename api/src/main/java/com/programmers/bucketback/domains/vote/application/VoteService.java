@@ -4,16 +4,16 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
+import com.programmers.bucketback.domains.vote.application.dto.response.VotesGetServiceResponse;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.implementation.VoteAppender;
 import com.programmers.bucketback.domains.vote.implementation.VoteManager;
 import com.programmers.bucketback.domains.vote.implementation.VoteReader;
 import com.programmers.bucketback.domains.vote.implementation.VoteRemover;
-import com.programmers.bucketback.domains.vote.model.request.VoteCreateServiceRequest;
 import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.model.response.VoteGetServiceResponse;
-import com.programmers.bucketback.domains.vote.model.response.VotesGetServiceResponse;
 import com.programmers.bucketback.error.exception.BusinessException;
 import com.programmers.bucketback.error.exception.ErrorCode;
 import com.programmers.bucketback.global.util.MemberUtils;
@@ -31,9 +31,8 @@ public class VoteService {
 
 	public Long createVote(final VoteCreateServiceRequest request) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
-		final Vote vote = voteAppender.append(memberId, request);
 
-		return vote.getId();
+		return voteAppender.append(memberId, request.toImplRequest());
 	}
 
 	public void participateVote(

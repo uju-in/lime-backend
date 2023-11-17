@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.vote.domain.Vote;
-import com.programmers.bucketback.domains.vote.model.request.VoteCreateServiceRequest;
+import com.programmers.bucketback.domains.vote.model.VoteCreateImplRequest;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ public class VoteAppender {
 	private final VoteRepository voteRepository;
 
 	@Transactional
-	public Vote append(
+	public Long append(
 		final Long memberId,
-		final VoteCreateServiceRequest request
+		final VoteCreateImplRequest request
 	) {
 		final Vote vote = Vote.builder()
 			.memberId(memberId)
@@ -28,6 +28,8 @@ public class VoteAppender {
 			.content(request.content())
 			.build();
 
-		return voteRepository.save(vote);
+		final Vote savedVote = voteRepository.save(vote);
+
+		return savedVote.getId();
 	}
 }
