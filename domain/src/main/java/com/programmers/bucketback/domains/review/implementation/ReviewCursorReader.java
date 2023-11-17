@@ -31,9 +31,7 @@ public class ReviewCursorReader {
 			pageSize
 		);
 
-		return CursorUtils.getCursorSummaries(
-			reviewCursorSummaries
-		);
+		return CursorUtils.getCursorSummaries(reviewCursorSummaries);
 	}
 
 	private int getPageSize(final CursorPageParameters parameters) {
