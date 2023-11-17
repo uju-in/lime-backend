@@ -12,7 +12,6 @@ public record InventoryItemGetResponse(
 	String image,
 	String itemUrl
 ) {
-
 	public static InventoryItemGetResponse of(
 		final ItemInfo itemInfo,
 		final String itemUrl

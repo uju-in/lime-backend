@@ -6,15 +6,15 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
-import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.implementation.InventoryAppender;
 import com.programmers.bucketback.domains.inventory.implementation.InventoryModifier;
 import com.programmers.bucketback.domains.inventory.implementation.InventoryReader;
 import com.programmers.bucketback.domains.inventory.implementation.InventoryRemover;
-import com.programmers.bucketback.domains.inventory.model.InventorReviewedItemCursorSummary;
 import com.programmers.bucketback.domains.inventory.model.InventoryGetServiceResponse;
 import com.programmers.bucketback.domains.inventory.model.InventoryInfoSummary;
+import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.bucketback.domains.member.implementation.MemberReader;
 import com.programmers.bucketback.error.exception.BusinessException;
 import com.programmers.bucketback.error.exception.ErrorCode;
@@ -77,16 +77,16 @@ public class InventoryService {
 		return inventoryReader.readSummary(memberId);
 	}
 
-	/** 인벤토리  수정을 위한 내가 리뷰한 아이템 목록 조회  */
-	public InventoryGetReviewedItemResponse getReviewedItemsForModify(
+	/**
+	 * 인벤토리  수정을 위한 내가 리뷰한 아이템 목록 조회
+	 */
+	public CursorSummary<InventoryReviewItemSummary> getReviewedItemsForModify(
 		final Long inventoryId,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		InventorReviewedItemCursorSummary inventorReviewedItemCursorSummary =
-			inventoryReader.readReviewedItem(memberId, inventoryId, parameters);
 
-		return new InventoryGetReviewedItemResponse(inventorReviewedItemCursorSummary);
+		return inventoryReader.readReviewedItem(memberId, inventoryId, parameters);
 	}
 
 	private void validateDuplication(

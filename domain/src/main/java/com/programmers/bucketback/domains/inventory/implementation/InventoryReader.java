@@ -9,9 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.cursor.CursorUtils;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
-import com.programmers.bucketback.domains.inventory.model.InventorReviewedItemCursorSummary;
 import com.programmers.bucketback.domains.inventory.model.InventoryGetServiceResponse;
 import com.programmers.bucketback.domains.inventory.model.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.model.InventoryItemGetResponse;
@@ -99,7 +100,7 @@ public class InventoryReader {
 	}
 
 	/** 내가 리뷰한 아이템 목록 조회 */
-	public InventorReviewedItemCursorSummary readReviewedItem(
+	public CursorSummary<InventoryReviewItemSummary> readReviewedItem(
 		final Long memberId,
 		final Long inventoryId,
 		final CursorPageParameters parameters
@@ -123,10 +124,7 @@ public class InventoryReader {
 			pageSize
 		);
 
-		String nextCursorId = summaries.size() == 0 ? null : summaries.get(summaries.size() - 1).cursorId();
-		int summaryCount = summaries.size();
-
-		return new InventorReviewedItemCursorSummary(nextCursorId, summaryCount, summaries);
+		return CursorUtils.getCursorSummaries(summaries);
 	}
 
 	/** 마이페이지를 위한 인벤토리 프로필 조회(3개) */
