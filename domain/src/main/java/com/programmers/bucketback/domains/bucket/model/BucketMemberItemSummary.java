@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.bucket.model;
 
 import java.time.LocalDateTime;
 
+import com.programmers.bucketback.common.cursor.CursorIdParser;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 
 public record BucketMemberItemSummary(
@@ -9,5 +10,9 @@ public record BucketMemberItemSummary(
 	boolean isSelected,
 	LocalDateTime createdAt,
 	ItemInfo itemInfo
-) {
+) implements CursorIdParser {
+	@Override
+	public String cursorId() {
+		return cursorId;
+	}
 }

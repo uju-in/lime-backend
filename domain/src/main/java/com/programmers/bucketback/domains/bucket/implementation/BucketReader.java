@@ -14,7 +14,6 @@ import com.programmers.bucketback.common.cursor.CursorUtils;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.model.BucketGetServiceResponse;
-import com.programmers.bucketback.domains.bucket.model.BucketMemberItemCursorSummary;
 import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.bucket.model.BucketProfile;
 import com.programmers.bucketback.domains.bucket.model.BucketSummary;
@@ -65,7 +64,7 @@ public class BucketReader {
 	}
 
 	/** 버킷 수정을 위한 MemberItem 커서 조회 */
-	public BucketMemberItemCursorSummary readByMemberItems(
+	public CursorSummary<BucketMemberItemSummary> readByMemberItems(
 		final Long bucketId,
 		final Long memberId,
 		final CursorPageParameters parameters
@@ -88,10 +87,7 @@ public class BucketReader {
 			pageSize
 		);
 
-		String nextCursorId = summaries.size() == 0 ? null : summaries.get(summaries.size() - 1).cursorId();
-		int summaryCount = summaries.size();
-
-		return new BucketMemberItemCursorSummary(nextCursorId, summaryCount, summaries);
+		return CursorUtils.getCursorSummaries(summaries);
 	}
 
 	/** 버킷 정보 커서 페이징 조회 */
