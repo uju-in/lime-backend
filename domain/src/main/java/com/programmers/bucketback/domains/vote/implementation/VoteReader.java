@@ -19,7 +19,6 @@ import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
 import com.programmers.bucketback.domains.vote.model.VoteSummary;
 import com.programmers.bucketback.domains.vote.model.request.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.request.VoteStatusCondition;
-import com.programmers.bucketback.domains.vote.model.response.VoteGetServiceResponse;
 import com.programmers.bucketback.domains.vote.model.response.VoteInfo;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
 import com.programmers.bucketback.error.exception.BusinessException;
@@ -44,7 +43,7 @@ public class VoteReader {
 	}
 
 	@Transactional(readOnly = true)
-	public VoteGetServiceResponse read(
+	public VoteCursorSummary read(
 		final Long voteId,
 		final Long memberId
 	) {
@@ -61,7 +60,7 @@ public class VoteReader {
 		final boolean isOwner = isOwner(vote, memberId);
 		final Long selectedItemId = getSelectedItemId(vote, memberId);
 
-		return VoteGetServiceResponse.builder()
+		return VoteCursorSummary.builder()
 			.item1Info(item1Info)
 			.item2Info(item2Info)
 			.voteInfo(voteInfo)
