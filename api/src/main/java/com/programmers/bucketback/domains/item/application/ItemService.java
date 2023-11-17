@@ -10,7 +10,6 @@ import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.item.implementation.ItemCursorReader;
@@ -72,9 +71,9 @@ public class ItemService {
 	}
 
 	public ItemGetNamesServiceResponse getItemNamesByKeyword(final String keyword) {
-		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(keyword);
+		List<ItemInfo> itemNameGetResults = itemFinder.getItemNamesByKeyword(keyword);
 
-		return new ItemGetNamesServiceResponse(itemNameResults);
+		return new ItemGetNamesServiceResponse(itemNameGetResults);
 	}
 
 	public CursorSummary<ItemCursorSummary> getItemsByCursor(
