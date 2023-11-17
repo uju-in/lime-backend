@@ -29,20 +29,20 @@ public class Item extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "hobby")
+	@Column(name = "hobby", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "price")
+	@Column(name = "price", nullable = false)
 	private Integer price;
 
-	@Column(name = "url")
+	@Column(name = "url", nullable = false)
 	private String url;
 
-	@Column(name = "image")
+	@Column(name = "image", nullable = false)
 	private String image;
 
 	@Builder

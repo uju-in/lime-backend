@@ -28,11 +28,11 @@ public class MemberItem extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "member_id")
+	@Column(name = "member_id", nullable = false)
 	private Long memberId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "item_id")
+	@JoinColumn(name = "item_id", nullable = false)
 	private Item item;
 
 	public MemberItem(
