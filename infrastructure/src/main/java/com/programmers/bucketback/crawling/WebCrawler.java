@@ -1,12 +1,10 @@
-package com.programmers.bucketback.domains.item.application.crawling;
+package com.programmers.bucketback.crawling;
 
 import java.io.IOException;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
-import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 public interface WebCrawler {
 
@@ -36,5 +34,5 @@ public interface WebCrawler {
 
 	}
 
-	ItemCrawlerInfo extractInfoFromUrl(final String url);
+	ItemCrawlerResult extractInfoFromUrl(final String url);
 }

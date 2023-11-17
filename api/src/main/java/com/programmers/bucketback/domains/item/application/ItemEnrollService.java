@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.crawling.ItemCrawlerResult;
+import com.programmers.bucketback.crawling.WebCrawler;
+import com.programmers.bucketback.crawling.WebSite;
 import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
-import com.programmers.bucketback.domains.item.application.crawling.WebCrawler;
-import com.programmers.bucketback.domains.item.application.crawling.WebSite;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
 import com.programmers.bucketback.domains.item.implementation.ItemAppender;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
@@ -27,7 +28,8 @@ public class ItemEnrollService {
 
 		// 웹 크롤링을 통한 아이템 정보 가져오기
 		WebCrawler webCrawler = WebSite.selectCrawler(request.itemUrl());
-		ItemCrawlerInfo itemCrawlerInfo = webCrawler.extractInfoFromUrl(request.itemUrl());
+		ItemCrawlerResult itemCrawlerResult = webCrawler.extractInfoFromUrl(request.itemUrl());
+		ItemCrawlerInfo itemCrawlerInfo = itemCrawlerResultToInfo(itemCrawlerResult);
 
 		// 아이템 등록
 		Long enrolledItemId = itemAppender.append(request.hobby(), itemCrawlerInfo);
@@ -37,6 +39,15 @@ public class ItemEnrollService {
 		itemService.addItem(itemIdRegistry);
 
 		return enrolledItemId;
+	}
+
+	private ItemCrawlerInfo itemCrawlerResultToInfo(final ItemCrawlerResult itemCrawlerResult) {
+		return ItemCrawlerInfo.builder()
+			.itemName(itemCrawlerResult.itemName())
+			.price(itemCrawlerResult.price())
+			.itemName(itemCrawlerResult.itemName())
+			.imageUrl(itemCrawlerResult.imageUrl())
+			.build();
 	}
 
 	private ItemIdRegistry getItemIdRegistry(final Long enrolledItemId) {

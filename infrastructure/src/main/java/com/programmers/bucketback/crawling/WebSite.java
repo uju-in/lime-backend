@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.item.application.crawling;
+package com.programmers.bucketback.crawling;
 
 import java.util.function.Function;
 

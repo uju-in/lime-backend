@@ -1,9 +1,8 @@
-package com.programmers.bucketback.domains.item.application.crawling;
+package com.programmers.bucketback.crawling;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 import com.programmers.bucketback.error.exception.BusinessException;
 import com.programmers.bucketback.error.exception.ErrorCode;
 
@@ -16,7 +15,7 @@ public class NaverCrawler implements WebCrawler {
 	}
 
 	@Override
-	public ItemCrawlerInfo extractInfoFromUrl(final String url) {
+	public ItemCrawlerResult extractInfoFromUrl(final String url) {
 		try {
 			Document document = connectWithHeaders(url);
 
@@ -36,7 +35,7 @@ public class NaverCrawler implements WebCrawler {
 				.first()
 				.attr("src");
 
-			return ItemCrawlerInfo.builder()
+			return ItemCrawlerResult.builder()
 				.itemName(itemName)
 				.price(price)
 				.imageUrl(imgUrl)

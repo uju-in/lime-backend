@@ -4,7 +4,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
     implementation project(':common')
-
+    
+    //crawling
+    implementation 'org.jsoup:jsoup:1.16.2'
 }
 
 bootJar {
