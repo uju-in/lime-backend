@@ -20,9 +20,14 @@ public class EmailSender {
 	@Value("${spring.mail.username}")
 	private String fromEmail;
 
-	public String send(final String email) throws MessagingException {
+	public String send(final String email) {
 		final String code = createCode();
-		final MimeMessage message = createMessage(email, code);
+		final MimeMessage message;
+		try {
+			message = createMessage(email, code);
+		} catch (MessagingException e) {
+			throw new RuntimeException("이메일 인증코드 전송이 실패했습니다.");
+		}
 		javaMailSender.send(message);
 
 		return code;

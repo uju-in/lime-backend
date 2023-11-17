@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.member.domain.vo;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.programmers.bucketback.error.exception.BusinessException;
@@ -7,7 +8,6 @@ import com.programmers.bucketback.error.exception.ErrorCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,13 +21,12 @@ public class Nickname {
 	public static final int MAX_NICKNAME_LENGTH = 25;
 	public static final Pattern NICKNAME_PATTERN = Pattern.compile("^[A-Za-z0-9_]+$");
 
-	@NotNull
-	@Column(name = "nickname", length = MAX_NICKNAME_LENGTH)
+	@Column(name = "nickname", nullable = false, length = MAX_NICKNAME_LENGTH)
 	private String nickname;
 
-	public Nickname(@NotNull final String nickname) {
+	public Nickname(final String nickname) {
 		validate(nickname);
-		this.nickname = nickname;
+		this.nickname = Objects.requireNonNull(nickname);
 	}
 
 	private void validate(final String nickname) {
