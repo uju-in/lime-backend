@@ -1,4 +1,4 @@
-package com.programmers.bucketback.error;
+package com.programmers.bucketback.global.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

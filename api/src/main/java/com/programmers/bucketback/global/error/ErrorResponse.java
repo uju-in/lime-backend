@@ -1,4 +1,4 @@
-package com.programmers.bucketback.error;
+package com.programmers.bucketback.global.error;
 
 import java.util.List;
 import java.util.stream.Collectors;
