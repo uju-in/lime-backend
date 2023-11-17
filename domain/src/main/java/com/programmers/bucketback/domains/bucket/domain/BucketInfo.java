@@ -23,11 +23,11 @@ public class BucketInfo {
 	private static final int MAX_BUCKET_NAME_LENGTH = 25;
 	private static final int MIN_BUDGET = 0;
 
-	@Column(name = "hobby")
+	@Column(name = "hobby", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
 	@Column(name = "budget")
