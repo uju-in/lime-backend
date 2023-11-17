@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.review.domain.Review;
 import com.programmers.bucketback.domains.review.repository.ReviewRepository;
-import com.programmers.bucketback.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.EntityNotFoundException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

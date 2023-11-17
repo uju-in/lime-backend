@@ -15,8 +15,8 @@ import com.programmers.bucketback.domains.vote.implementation.VoteRemover;
 import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.VoteSummary;
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.util.MemberUtils;
 
 import lombok.RequiredArgsConstructor;

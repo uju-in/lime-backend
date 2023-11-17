@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.repository.MemberItemRepository;
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

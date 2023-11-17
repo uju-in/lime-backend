@@ -9,8 +9,8 @@ import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.item.repository.MemberItemRepository;
-import com.programmers.bucketback.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.EntityNotFoundException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

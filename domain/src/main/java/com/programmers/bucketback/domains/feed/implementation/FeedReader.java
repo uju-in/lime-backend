@@ -15,8 +15,8 @@ import com.programmers.bucketback.domains.feed.repository.FeedRepository;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.implementation.MemberReader;
 import com.programmers.bucketback.domains.member.model.MemberInfo;
-import com.programmers.bucketback.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.EntityNotFoundException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

@@ -16,8 +16,8 @@ import com.programmers.bucketback.domains.feed.repository.FeedLikeRepository;
 import com.programmers.bucketback.domains.feed.repository.FeedRepository;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

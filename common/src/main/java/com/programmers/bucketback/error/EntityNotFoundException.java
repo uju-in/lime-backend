@@ -1,4 +1,4 @@
-package com.programmers.bucketback.error.exception;
+package com.programmers.bucketback.error;
 
 public class EntityNotFoundException extends BusinessException {
 	public EntityNotFoundException(final ErrorCode errorCode) {

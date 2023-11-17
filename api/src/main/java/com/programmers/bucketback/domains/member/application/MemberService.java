@@ -11,8 +11,8 @@ import com.programmers.bucketback.domains.member.implementation.MemberModifier;
 import com.programmers.bucketback.domains.member.implementation.MemberReader;
 import com.programmers.bucketback.domains.member.implementation.MemberRemover;
 import com.programmers.bucketback.domains.member.model.MyPage;
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.util.MemberUtils;
 import com.programmers.bucketback.mail.EmailSender;
 

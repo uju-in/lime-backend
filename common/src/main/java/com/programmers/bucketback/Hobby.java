@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

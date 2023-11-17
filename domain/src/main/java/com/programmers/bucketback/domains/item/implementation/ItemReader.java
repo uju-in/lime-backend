@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
-import com.programmers.bucketback.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.EntityNotFoundException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

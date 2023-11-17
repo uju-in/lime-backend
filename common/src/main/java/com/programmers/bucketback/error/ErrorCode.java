@@ -1,4 +1,4 @@
-package com.programmers.bucketback.error.exception;
+package com.programmers.bucketback.error;
 
 import java.util.Collections;
 import java.util.Map;

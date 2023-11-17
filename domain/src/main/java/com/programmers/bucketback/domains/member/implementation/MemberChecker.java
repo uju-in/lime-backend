@@ -3,8 +3,8 @@ package com.programmers.bucketback.domains.member.implementation;
 import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.member.repository.MemberRepository;
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
