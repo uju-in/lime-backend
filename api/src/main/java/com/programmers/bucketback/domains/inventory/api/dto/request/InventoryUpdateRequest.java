@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.inventory.api.dto.request;
 
 import java.util.List;
 
-import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.ItemIdRegistry;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;

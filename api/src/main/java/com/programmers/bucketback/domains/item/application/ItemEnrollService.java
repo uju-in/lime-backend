@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.crawling.ItemCrawlerResult;
 import com.programmers.bucketback.crawling.WebCrawler;
 import com.programmers.bucketback.crawling.WebSite;
-import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
 import com.programmers.bucketback.domains.item.implementation.ItemAppender;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;

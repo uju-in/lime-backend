@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
-import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;

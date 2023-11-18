@@ -3,8 +3,8 @@ package com.programmers.bucketback.domains.bucket.api.dto.request;
 import java.util.List;
 
 import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
-import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.global.annotation.Enum;
 
 import io.swagger.v3.oas.annotations.media.Schema;

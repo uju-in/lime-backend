@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
-import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;

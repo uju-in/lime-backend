@@ -1,4 +1,4 @@
-package com.programmers.bucketback.domains.bucket.model;
+package com.programmers.bucketback.common.model;
 
 import java.util.List;
 

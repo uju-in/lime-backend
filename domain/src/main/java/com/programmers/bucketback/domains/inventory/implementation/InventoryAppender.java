@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.Hobby;
-import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
