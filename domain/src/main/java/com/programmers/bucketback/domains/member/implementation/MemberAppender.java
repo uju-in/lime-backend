@@ -15,6 +15,12 @@ public class MemberAppender {
 	private final MemberRepository memberRepository;
 
 	public void append(
+		final Member member
+	) {
+  		memberRepository.save(member);
+	}
+
+	public void append(
 		final String email,
 		final String encodedPassword,
 		final String nickname

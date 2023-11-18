@@ -10,6 +10,6 @@ public class CursorUtils {
 
 		int summaryCount = summaries.size();
 
-		return new CursorSummary(nextCursorId, summaryCount, summaries);
+		return new CursorSummary<T>(nextCursorId, summaryCount, summaries);
 	}
 }

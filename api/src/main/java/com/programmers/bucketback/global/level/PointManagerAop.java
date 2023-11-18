@@ -9,8 +9,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.member.domain.Member;
+import com.programmers.bucketback.domains.member.implementation.MemberAppender;
 import com.programmers.bucketback.domains.member.implementation.MemberReader;
-import com.programmers.bucketback.domains.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class PointManagerAop {
 
 	private final MemberReader memberReader;
-	private final MemberRepository memberRepository;
+	private final MemberAppender memberAppender;
 
 	@AfterReturning(value = "@annotation(com.programmers.bucketback.global.level.PayPoint)", returning = "memberId")
 	public void payPoint(
@@ -30,7 +30,7 @@ public class PointManagerAop {
 		final int point = getPoint(joinPoint);
 		final Member member = memberReader.read(memberId);
 		member.earnPoint(point);
-		memberRepository.save(member);
+		memberAppender.append(member);
 	}
 
 	private int getPoint(final JoinPoint joinPoint) {
