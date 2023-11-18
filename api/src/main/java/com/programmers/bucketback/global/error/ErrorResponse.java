@@ -1,4 +1,4 @@
-package com.programmers.bucketback.error;
+package com.programmers.bucketback.global.error;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.AccessLevel;
 import lombok.Getter;

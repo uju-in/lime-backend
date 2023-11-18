@@ -16,8 +16,8 @@ import com.programmers.bucketback.domains.inventory.model.InventoryGetServiceRes
 import com.programmers.bucketback.domains.inventory.model.InventoryInfoSummary;
 import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.bucketback.domains.member.implementation.MemberReader;
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.util.MemberUtils;
 
 import lombok.RequiredArgsConstructor;

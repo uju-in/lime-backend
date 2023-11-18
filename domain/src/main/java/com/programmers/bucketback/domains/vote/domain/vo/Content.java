@@ -2,8 +2,8 @@ package com.programmers.bucketback.domains.vote.domain.vo;
 
 import java.util.Objects;
 
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

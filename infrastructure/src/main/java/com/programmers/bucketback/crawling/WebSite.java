@@ -2,9 +2,6 @@ package com.programmers.bucketback.crawling;
 
 import java.util.function.Function;
 
-import com.programmers.bucketback.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.error.exception.ErrorCode;
-
 public enum WebSite {
 
 	NAVER("naver", NaverCrawler::new),
@@ -29,6 +26,6 @@ public enum WebSite {
 				return site.marketFactory.apply(url);
 			}
 		}
-		throw new EntityNotFoundException(ErrorCode.ITEM_MARKET_NOT_FOUND); // 정해진 웹사이트에 해당하는 정보가 아닌경우
+		throw new RuntimeException("지원하지 않는 아이템 URL 입니다."); // 정해진 웹사이트에 해당하는 정보가 아닌 경우
 	}
 }

@@ -2,9 +2,6 @@ package com.programmers.bucketback.crawling;
 
 import org.jsoup.nodes.Document;
 
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
-
 public class DanawaCrawler implements WebCrawler {
 
 	private final String url;
@@ -35,7 +32,7 @@ public class DanawaCrawler implements WebCrawler {
 				.url(url)
 				.build();
 		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.CRAWLER_DANAWA_BAD_REQUEST);
+			throw new RuntimeException("다나와 크롤러에서 파싱할 수 없는 URL 입니다.");
 		}
 	}
 

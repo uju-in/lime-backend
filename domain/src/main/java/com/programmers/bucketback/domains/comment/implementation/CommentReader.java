@@ -10,8 +10,8 @@ import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.model.CommentCursorSummary;
 import com.programmers.bucketback.domains.comment.repository.CommentRepository;
 import com.programmers.bucketback.domains.comment.repository.CommentSummary;
-import com.programmers.bucketback.error.exception.EntityNotFoundException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.EntityNotFoundException;
+import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

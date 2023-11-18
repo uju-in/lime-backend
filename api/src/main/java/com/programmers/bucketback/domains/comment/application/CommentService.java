@@ -12,8 +12,8 @@ import com.programmers.bucketback.domains.comment.implementation.CommentReader;
 import com.programmers.bucketback.domains.comment.implementation.CommentRemover;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.implementation.FeedReader;
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.level.PayPoint;
 import com.programmers.bucketback.global.util.MemberUtils;
 

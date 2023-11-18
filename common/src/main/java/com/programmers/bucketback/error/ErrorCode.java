@@ -1,4 +1,10 @@
-package com.programmers.bucketback.error.exception;
+package com.programmers.bucketback.error;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -93,6 +99,21 @@ public enum ErrorCode {
 	CRAWLER_COUPANG_BAD_REQUEST("CRAWLER", "쿠팡 크롤러에서 파싱할 수 없는 URL 입니다."),
 	CRAWLER_DANAWA_BAD_REQUEST("CRAWLER", "다나와 크롤러에서 파싱할 수 없는 URL 입니다.");
 
+	private static final Map<String, ErrorCode> ERROR_CODE_MAP;
+
+	static {
+		ERROR_CODE_MAP = Collections.unmodifiableMap(Stream.of(values())
+			.collect(Collectors.toMap(ErrorCode::getMessage, Function.identity())));
+	}
+
 	private final String code;
 	private final String message;
+
+	public static ErrorCode from(final String message) {
+		if (ERROR_CODE_MAP.containsKey(message)) {
+			return ERROR_CODE_MAP.get(message);
+		}
+
+		return ErrorCode.INTERNAL_SERVER_ERROR;
+	}
 }

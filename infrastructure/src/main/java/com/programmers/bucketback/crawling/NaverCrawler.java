@@ -3,9 +3,6 @@ package com.programmers.bucketback.crawling;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import com.programmers.bucketback.error.exception.BusinessException;
-import com.programmers.bucketback.error.exception.ErrorCode;
-
 public class NaverCrawler implements WebCrawler {
 
 	private final String url;
@@ -21,7 +18,7 @@ public class NaverCrawler implements WebCrawler {
 
 			Elements elements = document.getElementsByClass("_22kNQuEXmb _copyable");
 			if (elements.size() == 0) {
-				throw new BusinessException(ErrorCode.INVALID_REQUEST);
+				throw new RuntimeException("유효하지 않은 요청입니다.");
 			}
 
 			String itemName = elements
@@ -42,7 +39,7 @@ public class NaverCrawler implements WebCrawler {
 				.url(url)
 				.build();
 		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.CRAWLER_NAVER_BAD_REQUEST);
+			throw new RuntimeException("네이버 크롤러에서 파싱할 수 없는 URL 입니다.");
 		}
 
 	}
