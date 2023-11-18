@@ -84,7 +84,7 @@ public class FeedService {
 	/** 피드 상세 조회 **/
 	public FeedGetServiceResponse getFeed(final Long feedId) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		final FeedDetail detail = feedReader.readFeed(feedId, memberId);
+		final FeedDetail detail = feedReader.readDetail(feedId, memberId);
 
 		return FeedGetServiceResponse.from(detail);
 	}

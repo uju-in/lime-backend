@@ -51,7 +51,7 @@ public class FeedReader {
 		return feedLikeRepository.existsByMemberIdAndFeed(memberId, feed);
 	}
 
-	public FeedDetail readFeed(
+	public FeedDetail readDetail(
 		final Long feedId,
 		final Long memberId
 	) {
