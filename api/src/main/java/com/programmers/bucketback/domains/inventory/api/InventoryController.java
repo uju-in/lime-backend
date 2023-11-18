@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.common.cursor.CursorRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryCreateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryUpdateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
@@ -19,6 +18,7 @@ import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryCr
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetResponse;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoryGetReviewedItemResponse;
 import com.programmers.bucketback.domains.inventory.application.InventoryService;
+import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

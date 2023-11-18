@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.Hobby;
-import com.programmers.bucketback.common.cursor.CursorRequest;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRequest;
@@ -24,6 +23,7 @@ import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetS
 import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.VoteSummary;
+import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

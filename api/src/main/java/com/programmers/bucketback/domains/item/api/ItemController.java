@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.common.cursor.CursorRequest;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
@@ -26,6 +25,7 @@ import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceRes
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
+import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

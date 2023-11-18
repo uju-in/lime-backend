@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.Hobby;
-import com.programmers.bucketback.common.cursor.CursorRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketCreateResponse;
@@ -21,6 +20,7 @@ import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetByCur
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetMemberItemResponse;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketGetResponse;
 import com.programmers.bucketback.domains.bucket.application.BucketService;
+import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

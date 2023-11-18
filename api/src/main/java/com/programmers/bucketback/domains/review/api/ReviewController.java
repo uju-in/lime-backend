@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.common.cursor.CursorRequest;
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewCreateRequest;
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewUpdateRequest;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.bucketback.domains.review.application.ReviewService;
 import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
+import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

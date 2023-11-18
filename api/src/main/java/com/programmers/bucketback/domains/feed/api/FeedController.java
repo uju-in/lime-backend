@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.common.cursor.CursorRequest;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.feed.api.request.FeedCreateRequest;
 import com.programmers.bucketback.domains.feed.api.request.FeedUpdateRequest;
@@ -22,6 +21,7 @@ import com.programmers.bucketback.domains.feed.api.response.FeedGetResponse;
 import com.programmers.bucketback.domains.feed.application.FeedService;
 import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
+import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
