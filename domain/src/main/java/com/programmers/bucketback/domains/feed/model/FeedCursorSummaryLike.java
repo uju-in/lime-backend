@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.feed.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.programmers.bucketback.common.cursor.CursorIdParser;
 import com.programmers.bucketback.domains.member.model.MemberInfo;
 
 import lombok.Builder;
@@ -18,5 +19,5 @@ public record FeedCursorSummaryLike(
 	LocalDateTime createdAt,
 	List<FeedCursorItem> feedItems,
 	boolean isLike
-) {
+) implements CursorIdParser {
 }

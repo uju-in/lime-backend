@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.feed.api.response;
 
 import java.util.List;
 
-import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetByCursorServiceResponse;
+import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 
 public record FeedGetByCursorResponse(
@@ -10,10 +10,10 @@ public record FeedGetByCursorResponse(
 
 	List<FeedCursorSummaryLike> feeds
 ) {
-	public static FeedGetByCursorResponse from(final FeedGetByCursorServiceResponse response) {
+	public static FeedGetByCursorResponse from(final CursorSummary<FeedCursorSummaryLike> cursorSummary) {
 		return new FeedGetByCursorResponse(
-			response.nextCursorId(),
-			response.feeds()
+			cursorSummary.nextCursorId(),
+			cursorSummary.summaries()
 		);
 	}
 }
