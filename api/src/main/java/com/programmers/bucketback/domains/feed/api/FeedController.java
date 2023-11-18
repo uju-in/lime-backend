@@ -18,7 +18,9 @@ import com.programmers.bucketback.domains.feed.api.request.FeedCreateRequest;
 import com.programmers.bucketback.domains.feed.api.request.FeedUpdateRequest;
 import com.programmers.bucketback.domains.feed.api.response.FeedCreateResponse;
 import com.programmers.bucketback.domains.feed.api.response.FeedGetByCursorResponse;
+import com.programmers.bucketback.domains.feed.api.response.FeedGetResponse;
 import com.programmers.bucketback.domains.feed.application.FeedService;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -94,12 +96,12 @@ public class FeedController {
 		return ResponseEntity.ok(response);
 	}
 
-	// @Operation(summary = "피드 상세 조회", description = "FeedId를 이용하여 피드를 조회합니다.")
-	// @GetMapping("/{feedId}")
-	// public ResponseEntity<FeedGetResponse> getFeed(@PathVariable final Long feedId) {
-	// 	final FeedGetServiceResponse serviceResponse = feedService.getFeed(feedId);
-	// 	final FeedGetResponse response = FeedGetResponse.from(serviceResponse);
-	//
-	// 	return ResponseEntity.ok(response);
-	// }
+	@Operation(summary = "피드 상세 조회", description = "FeedId를 이용하여 피드를 조회합니다.")
+	@GetMapping("/{feedId}")
+	public ResponseEntity<FeedGetResponse> getFeed(@PathVariable final Long feedId) {
+		final FeedGetServiceResponse serviceResponse = feedService.getFeed(feedId);
+		final FeedGetResponse response = FeedGetResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
+	}
 }

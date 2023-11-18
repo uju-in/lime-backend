@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.domain.FeedItem;
-import com.programmers.bucketback.domains.feed.model.FeedGetServiceResponse;
+import com.programmers.bucketback.domains.feed.model.FeedDetail;
 import com.programmers.bucketback.domains.feed.model.FeedInfo;
 import com.programmers.bucketback.domains.feed.model.FeedItemInfo;
 import com.programmers.bucketback.domains.feed.repository.FeedLikeRepository;
@@ -51,7 +51,7 @@ public class FeedReader {
 		return feedLikeRepository.existsByMemberIdAndFeed(memberId, feed);
 	}
 
-	public FeedGetServiceResponse readFeed(
+	public FeedDetail readFeed(
 		final Long feedId,
 		final Long memberId
 	) {
@@ -66,7 +66,7 @@ public class FeedReader {
 		final List<FeedItem> feedItems = feed.getFeedItems();
 		final List<FeedItemInfo> feedItemInfos = getFeedItemInfos(feedItems);
 
-		return new FeedGetServiceResponse(memberInfo, feedInfo, feedItemInfos);
+		return new FeedDetail(memberInfo, feedInfo, feedItemInfos);
 	}
 
 	private Boolean isLiked(

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.bucketback.domains.feed.implementation.FeedAppender;
 import com.programmers.bucketback.domains.feed.implementation.FeedCursorReader;
 import com.programmers.bucketback.domains.feed.implementation.FeedModifier;
@@ -11,6 +12,7 @@ import com.programmers.bucketback.domains.feed.implementation.FeedReader;
 import com.programmers.bucketback.domains.feed.implementation.FeedRemover;
 import com.programmers.bucketback.domains.feed.model.FeedCreateServiceRequest;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
+import com.programmers.bucketback.domains.feed.model.FeedDetail;
 import com.programmers.bucketback.domains.feed.model.FeedSortCondition;
 import com.programmers.bucketback.domains.feed.model.FeedUpdateServiceRequest;
 import com.programmers.bucketback.global.util.MemberUtils;
@@ -80,9 +82,10 @@ public class FeedService {
 	}
 
 	/** 피드 상세 조회 **/
-	// public FeedGetServiceResponse getFeed(final Long feedId) {
-	// 	Long memberId = MemberUtils.getCurrentMemberId();
-	//
-	// 	return feedReader.readFeed(feedId, memberId);
-	// }
+	public FeedGetServiceResponse getFeed(final Long feedId) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+		final FeedDetail detail = feedReader.readFeed(feedId, memberId);
+
+		return FeedGetServiceResponse.from(detail);
+	}
 }
