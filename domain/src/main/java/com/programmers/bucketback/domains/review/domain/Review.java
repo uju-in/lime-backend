@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,27 +28,24 @@ public class Review extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
 	@JoinColumn(name = "items_id", nullable = false)
 	private Long itemId;
 
-	@NotNull
 	@Column(name = "members_id", nullable = false)
 	private Long memberId;
 
 	@Column(name = "content", nullable = false)
 	private String content;
 
-	@NotNull
 	@Column(name = "rating", nullable = false)
 	private Integer rating;
 
 	@Builder
 	public Review(
-		@NotNull final Long itemId,
-		@NotNull final Long memberId,
-		@NotNull final String content,
-		@NotNull final Integer rating
+		final Long itemId,
+		final Long memberId,
+		final String content,
+		final Integer rating
 	) {
 		this.itemId = Objects.requireNonNull(itemId);
 		this.memberId = Objects.requireNonNull(memberId);
