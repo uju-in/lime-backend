@@ -46,7 +46,7 @@ public class BucketInfo {
 	}
 
 	public void validateBucketName(final String name) {
-		if (name.length() < MIN_BUCKET_NAME_LENGTH ||
+		if (name != null || name.length() < MIN_BUCKET_NAME_LENGTH ||
 			name.length() > MAX_BUCKET_NAME_LENGTH) {
 			throw new BusinessException(ErrorCode.BUCKET_INVALID_NAME);
 		}

@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.comment.domain;
 
+import java.util.Objects;
+
 import com.programmers.bucketback.domains.BaseEntity;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.vote.domain.vo.Content;
@@ -14,7 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,29 +31,26 @@ public class Comment extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "feed_id")
 	private Feed feed;
 
-	@NotNull
-	@Column(name = "member_id")
+	@Column(name = "member_id", nullable = false)
 	private Long memberId;
 
 	@Embedded
 	private Content content;
 
-	@NotNull
-	@Column(name = "adoption", columnDefinition = "TINYINT(1)")
+	@Column(name = "adoption", columnDefinition = "TINYINT(1)", nullable = false)
 	private boolean adoption;
 
 	public Comment(
-		@NotNull final Feed feed,
-		@NotNull final Long memberId,
-		@NotNull final String content
+		final Feed feed,
+		final Long memberId,
+		final String content
 	) {
-		this.feed = feed;
-		this.memberId = memberId;
+		this.feed = Objects.requireNonNull(feed);
+		this.memberId = Objects.requireNonNull(memberId);
 		this.content = new Content(content);
 		this.adoption = false;
 	}
