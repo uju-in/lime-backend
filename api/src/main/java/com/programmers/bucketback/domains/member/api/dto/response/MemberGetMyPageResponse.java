@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.member.api.dto.response;
 
 import java.util.List;
 
-import com.programmers.bucketback.domains.bucket.application.model.BucketProfile;
+import com.programmers.bucketback.domains.bucket.model.BucketProfile;
 import com.programmers.bucketback.domains.inventory.model.InventoryProfile;
 import com.programmers.bucketback.domains.member.model.MemberProfile;
 import com.programmers.bucketback.domains.member.model.MyPage;

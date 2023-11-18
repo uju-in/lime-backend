@@ -4,12 +4,12 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.domains.comment.api.dto.response.CommentGetCursorResponse;
-import com.programmers.bucketback.domains.comment.application.model.CommentCursorSummary;
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.implementation.CommentAppender;
 import com.programmers.bucketback.domains.comment.implementation.CommentModifier;
 import com.programmers.bucketback.domains.comment.implementation.CommentReader;
 import com.programmers.bucketback.domains.comment.implementation.CommentRemover;
+import com.programmers.bucketback.domains.comment.model.CommentCursorSummary;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.implementation.FeedReader;
 import com.programmers.bucketback.error.BusinessException;
