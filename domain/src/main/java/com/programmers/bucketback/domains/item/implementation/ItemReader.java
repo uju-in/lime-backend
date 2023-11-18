@@ -38,4 +38,8 @@ public class ItemReader {
 			pageSize
 		);
 	}
+
+	public boolean existsItemsByUrl(final String itemURL) {
+		return itemRepository.existsItemsByUrl(itemURL);
+	}
 }
