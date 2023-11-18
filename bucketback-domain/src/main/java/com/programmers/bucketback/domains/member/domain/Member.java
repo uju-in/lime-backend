@@ -41,6 +41,9 @@ public class Member extends BaseEntity {
 	@Embedded
 	private Introduction introduction;
 
+	@Column(name = "profile_image")
+	private String profileImage;
+
 	@Column(name = "level_point", nullable = false)
 	private Integer levelPoint;
 
@@ -104,5 +107,9 @@ public class Member extends BaseEntity {
 
 	public void earnPoint(final int point) {
 		this.levelPoint += point;
+	}
+
+	public void updateProfileImage(final String profileImage) {
+		this.profileImage = profileImage;
 	}
 }
