@@ -31,11 +31,13 @@ jobs:
           mkdir -p bucketback-api/src/main/resources
           echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > bucketback-api/src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_API_YML }}" | base64 --decode > bucketback-api/src/main/resources/application-api.yml
+          find bucketback-api/src
           mkdir -p bucketback-domain/src/main/resources
           echo "${{ secrets.APPLICATION_DOMAIN_YML }}" | base64 --decode > bucketback-domain/src/main/resources/application-domain.yml
+          find bucketback-domain/src
           mkdir -p bucketback-infrastructure/src/main/resources
           echo "${{ secrets.APPLICATION_INFRA_YML }}" | base64 --decode > bucketback-infrastructure/src/main/resources/application-infra.yml
-          find src
+          find bucketback-infrastructure/src
 
       - name: Build and Test
         run: ./gradlew build test
