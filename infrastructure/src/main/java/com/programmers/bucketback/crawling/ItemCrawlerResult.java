@@ -3,7 +3,7 @@ package com.programmers.bucketback.crawling;
 import lombok.Builder;
 
 @Builder
-public record ItemCrawlerInfo(
+public record ItemCrawlerResult(
 	String itemName,
 	Integer price,
 	String imageUrl,

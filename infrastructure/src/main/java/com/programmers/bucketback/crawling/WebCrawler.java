@@ -34,5 +34,5 @@ public interface WebCrawler {
 
 	}
 
-	ItemCrawlerInfo extractInfoFromUrl(final String url);
+	ItemCrawlerResult extractInfoFromUrl(final String url);
 }

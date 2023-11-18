@@ -5,12 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.domains.bucket.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
-import com.programmers.bucketback.domains.item.application.dto.ItemNameGetResult;
-import com.programmers.bucketback.domains.item.application.dto.MemberItemAddServiceRequest;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.item.implementation.ItemCursorReader;
@@ -20,6 +19,7 @@ import com.programmers.bucketback.domains.item.implementation.MemberItemAppender
 import com.programmers.bucketback.domains.item.implementation.MemberItemChecker;
 import com.programmers.bucketback.domains.item.implementation.MemberItemReader;
 import com.programmers.bucketback.domains.item.implementation.MemberItemRemover;
+import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.review.implementation.ReviewStatistics;
 import com.programmers.bucketback.global.util.MemberUtils;
@@ -39,9 +39,9 @@ public class ItemService {
 	private final ItemFinder itemFinder;
 	private final ItemCursorReader itemCursorReader;
 
-	public ItemAddServiceResponse addItem(final MemberItemAddServiceRequest request) {
+	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
 		Long memberId = MemberUtils.getCurrentMemberId();
-		List<Long> memberItemIds = memberItemAppender.addMemberItems(request.itemIds(), memberId);
+		List<Long> memberItemIds = memberItemAppender.addMemberItems(itemIdRegistry.itemIds(), memberId);
 
 		return new ItemAddServiceResponse(memberItemIds);
 	}
@@ -71,12 +71,12 @@ public class ItemService {
 	}
 
 	public ItemGetNamesServiceResponse getItemNamesByKeyword(final String keyword) {
-		List<ItemNameGetResult> itemNameResults = itemFinder.getItemNamesByKeyword(keyword);
+		List<ItemInfo> itemNameGetResults = itemFinder.getItemNamesByKeyword(keyword);
 
-		return new ItemGetNamesServiceResponse(itemNameResults);
+		return new ItemGetNamesServiceResponse(itemNameGetResults);
 	}
 
-	public ItemGetByCursorServiceResponse getItemsByCursor(
+	public CursorSummary<ItemCursorSummary> getItemsByCursor(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {

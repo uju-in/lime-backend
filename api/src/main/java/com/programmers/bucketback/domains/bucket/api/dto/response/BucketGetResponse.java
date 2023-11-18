@@ -23,11 +23,11 @@ public record BucketGetResponse(
 ) {
 	public static BucketGetResponse from(final BucketGetServiceResponse response) {
 		return BucketGetResponse.builder()
-			.hobby(response.bucket().getHobby())
-			.name(response.bucket().getName())
-			.budget(response.bucket().getBudget())
-			.memberId(response.bucket().getMemberId())
-			.bucketId(response.bucket().getId())
+			.hobby(response.hobby())
+			.name(response.name())
+			.budget(response.budget())
+			.memberId(response.memberId())
+			.bucketId(response.bucketId())
 			.itemInfos(response.itemInfos())
 			.build();
 	}

@@ -1,13 +1,12 @@
 dependencies {
     // component를 대체할 의존성 붙여 두기
-    //crawling
-    implementation 'org.jsoup:jsoup:1.16.2'
-
     // mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
     implementation project(':common')
-
+    
+    //crawling
+    implementation 'org.jsoup:jsoup:1.16.2'
 }
 
 bootJar {

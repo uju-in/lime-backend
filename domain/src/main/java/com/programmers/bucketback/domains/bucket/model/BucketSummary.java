@@ -13,9 +13,4 @@ public record BucketSummary(
 	LocalDateTime createdAt,
 	List<ItemImage> itemImages
 ) implements CursorIdParser {
-
-	@Override
-	public String cursorId() {
-		return cursorId;
-	}
 }

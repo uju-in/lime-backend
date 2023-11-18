@@ -9,6 +9,10 @@ public record ItemGetNamesResponse(
 	List<ItemNameGetResult> itemNameGetResults
 ) {
 	public static ItemGetNamesResponse from(final ItemGetNamesServiceResponse response) {
-		return new ItemGetNamesResponse(response.itemNameGetResults());
+		List<ItemNameGetResult> itemNameGetResults = response.itemNameGetResults().stream()
+			.map(ItemNameGetResult::from)
+			.toList();
+
+		return new ItemGetNamesResponse(itemNameGetResults);
 	}
 }

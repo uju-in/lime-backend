@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.item.domain.Item;
-import com.programmers.bucketback.domains.item.model.ItemNameGetResult;
+import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ItemFinder {
 
 	private final ItemRepository itemRepository;
 
-	public List<ItemNameGetResult> getItemNamesByKeyword(final String keyword) {
+	public List<ItemInfo> getItemNamesByKeyword(final String keyword) {
 		final String trimmedKeyword = keyword.trim();
 
 		if (trimmedKeyword.isEmpty()) {
@@ -29,7 +29,11 @@ public class ItemFinder {
 		List<Item> items = itemRepository.findItemsByNameContains(trimmedKeyword);
 
 		return items.stream()
-			.map(ItemNameGetResult::from)
-			.toList();
+			.map(item -> new ItemInfo(
+				item.getId(),
+				item.getName(),
+				item.getPrice(),
+				item.getImage())
+			).toList();
 	}
 }

@@ -6,9 +6,10 @@ import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.cursor.CursorUtils;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummary;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
-import com.programmers.bucketback.domains.feed.model.FeedGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.feed.model.FeedSortCondition;
 import com.programmers.bucketback.domains.feed.repository.FeedLikeRepository;
 import com.programmers.bucketback.domains.feed.repository.FeedRepository;
@@ -26,7 +27,7 @@ public class FeedCursorReader {
 	private final FeedLikeRepository feedLikeRepository;
 	private final FeedReader feedReader;
 
-	public FeedGetByCursorServiceResponse getFeedByCursor(
+	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
 		final String hobbyName,
 		final String nickname,
 		final Long loginMemberId,
@@ -57,12 +58,7 @@ public class FeedCursorReader {
 			}
 		).toList();
 
-		String nextCursorId = getNextCursorId(feedCursorSummaryLikes);
-
-		return new FeedGetByCursorServiceResponse(
-			nextCursorId,
-			feedCursorSummaryLikes
-		);
+		return CursorUtils.getCursorSummaries(feedCursorSummaryLikes);
 	}
 
 	private Hobby getHobbyByName(final String hobbyName) {
@@ -100,17 +96,5 @@ public class FeedCursorReader {
 		Member foundMember = memberReader.readByNickname(trimNickName);
 
 		return foundMember.getId();
-	}
-
-	private String getNextCursorId(final List<FeedCursorSummaryLike> feedCursorSummaryLikes) {
-		int feedCursorSummaryLikeSize = feedCursorSummaryLikes.size();
-
-		if (feedCursorSummaryLikeSize == 0) {
-			return null;
-		}
-
-		FeedCursorSummaryLike lastElement = feedCursorSummaryLikes.get(feedCursorSummaryLikeSize - 1);
-
-		return lastElement.cursorId();
 	}
 }

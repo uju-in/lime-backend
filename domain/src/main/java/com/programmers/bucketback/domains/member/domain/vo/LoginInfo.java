@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.member.domain.vo;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.programmers.bucketback.error.exception.BusinessException;
@@ -7,7 +8,6 @@ import com.programmers.bucketback.error.exception.ErrorCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,12 +24,10 @@ public class LoginInfo {
 	public static final Pattern PASSWORD_PATTERN = Pattern.compile(
 		"^(?=.*[!@#\\$%\\^&*\\(\\)\\-_+=\\[\\]{};:'\",.<>?/`~])(?=.*[A-Za-z])(?=.*\\d).*$");
 
-	@NotNull
-	@Column(name = "email")
+	@Column(name = "email", nullable = false)
 	private String email;
 
-	@NotNull
-	@Column(name = "password")
+	@Column(name = "password", nullable = false)
 	private String password;
 
 	public LoginInfo(
@@ -37,8 +35,8 @@ public class LoginInfo {
 		final String password
 	) {
 		validateEmail(email);
-		this.email = email;
-		this.password = password;
+		this.email = Objects.requireNonNull(email);
+		this.password = Objects.requireNonNull(password);
 	}
 
 	public static void validatePassword(final String password) {

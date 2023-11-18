@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.domains.review.domain.Review;
 import com.programmers.bucketback.domains.review.implementation.ReviewReader;
-import com.programmers.bucketback.global.error.exception.BusinessException;
-import com.programmers.bucketback.global.error.exception.ErrorCode;
+import com.programmers.bucketback.error.exception.BusinessException;
+import com.programmers.bucketback.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

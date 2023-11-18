@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.review.model;
 
 import java.time.LocalDateTime;
 
+import com.programmers.bucketback.common.cursor.CursorIdParser;
 import com.programmers.bucketback.domains.member.model.MemberInfo;
 
 import lombok.Builder;
@@ -21,5 +22,5 @@ public record ReviewCursorSummary(
 	LocalDateTime createdAt,
 
 	LocalDateTime updatedAt
-) {
+) implements CursorIdParser {
 }

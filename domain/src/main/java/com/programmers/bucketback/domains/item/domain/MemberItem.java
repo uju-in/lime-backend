@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.item.domain;
 
+import java.util.Objects;
+
 import com.programmers.bucketback.domains.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -11,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,19 +28,18 @@ public class MemberItem extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
-	@Column(name = "member_id")
+	@Column(name = "member_id", nullable = false)
 	private Long memberId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "item_id")
+	@JoinColumn(name = "item_id", nullable = false)
 	private Item item;
 
 	public MemberItem(
-		@NotNull final Long memberId,
+		final Long memberId,
 		final Item item
 	) {
-		this.memberId = memberId;
-		this.item = item;
+		this.memberId = Objects.requireNonNull(memberId);
+		this.item = Objects.requireNonNull(item);
 	}
 }

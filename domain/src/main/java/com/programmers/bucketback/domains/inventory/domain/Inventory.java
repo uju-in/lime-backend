@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.inventory.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.domains.BaseEntity;
@@ -16,7 +17,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,24 +32,22 @@ public class Inventory extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
-	@Column(name = "member_id")
+	@Column(name = "member_id", nullable = false)
 	private Long memberId;
 
-	@NotNull
-	@Column(name = "hobby")
+	@Column(name = "hobby", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
 
 	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-	private final List<InventoryItem> inventoryItems = new ArrayList<>();
+	private List<InventoryItem> inventoryItems = new ArrayList<>();
 
 	public Inventory(
-		@NotNull final Long memberId,
-		@NotNull final Hobby hobby
+		final Long memberId,
+		final Hobby hobby
 	) {
-		this.memberId = memberId;
-		this.hobby = hobby;
+		this.memberId = Objects.requireNonNull(memberId);
+		this.hobby = Objects.requireNonNull(hobby);
 	}
 
 	public void addInventoryItem(final InventoryItem inventoryItem) {
