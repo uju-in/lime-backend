@@ -32,4 +32,13 @@ public class MemberModifier {
 		final Member member = memberReader.read(memberId);
 		member.updatePassword(encodedPassword);
 	}
+
+	@Transactional
+	public void modifyProfileImage(
+		final Long memberId,
+		final String profileImage
+	) {
+		final Member member = memberReader.read(memberId);
+		member.updateProfileImage(profileImage);
+	}
 }

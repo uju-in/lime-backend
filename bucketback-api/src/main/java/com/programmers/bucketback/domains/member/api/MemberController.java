@@ -1,6 +1,26 @@
 package com.programmers.bucketback.domains.member.api;
 
-import com.programmers.bucketback.domains.member.api.dto.request.*;
+import java.io.IOException;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.programmers.bucketback.domains.member.api.dto.request.MemberCheckEmailRequest;
+import com.programmers.bucketback.domains.member.api.dto.request.MemberCheckNicknameRequest;
+import com.programmers.bucketback.domains.member.api.dto.request.MemberLoginRequest;
+import com.programmers.bucketback.domains.member.api.dto.request.MemberSignupRequest;
+import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdatePasswordRequest;
+import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdateProfileRequest;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckEmailResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckNicknameResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberGetMyPageResponse;
@@ -8,12 +28,11 @@ import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginRes
 import com.programmers.bucketback.domains.member.application.MemberService;
 import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.model.MyPage;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "members", description = "회원 API")
 @RestController
@@ -94,5 +113,13 @@ public class MemberController {
 		MemberGetMyPageResponse response = MemberGetMyPageResponse.from(myPage);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@PutMapping("/profile/image")
+	@ResponseBody
+	public ResponseEntity<Void> upload(@RequestParam("image") final MultipartFile multipartFile) throws IOException {
+		memberService.updateProfileImage(multipartFile, "bucketback-static");
+
+		return ResponseEntity.ok().build();
 	}
 }

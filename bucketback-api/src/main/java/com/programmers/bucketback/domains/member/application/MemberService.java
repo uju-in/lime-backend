@@ -1,6 +1,9 @@
 package com.programmers.bucketback.domains.member.application;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.domain.Member;
@@ -15,6 +18,7 @@ import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.util.MemberUtils;
 import com.programmers.bucketback.mail.EmailSender;
+import com.programmers.bucketback.s3.S3Manager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +33,7 @@ public class MemberService {
 	private final MemberSecurityManager memberSecurityManager;
 	private final MemberChecker memberChecker;
 	private final EmailSender emailSender;
+	private final S3Manager s3Manager;
 
 	public void signup(
 		final LoginInfo loginInfo,
@@ -88,5 +93,17 @@ public class MemberService {
 
 	public MyPage getMyPage(final String nickname) {
 		return memberReader.readMyPage(nickname);
+	}
+
+	public void updateProfileImage(
+		final MultipartFile multipartFile,
+		final String directory
+	) throws IOException {
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final String profileImage = memberId + ".png";
+
+		s3Manager.deleteFile(profileImage, directory);
+		s3Manager.uploadFile(multipartFile, directory, profileImage);
+		memberModifier.modifyProfileImage(memberId, profileImage);
 	}
 }
