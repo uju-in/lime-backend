@@ -8,7 +8,7 @@ import static com.querydsl.core.group.GroupBy.*;
 import java.util.List;
 import java.util.Objects;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.feed.model.FeedCursorItem;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummary;
 import com.programmers.bucketback.domains.feed.model.FeedSortCondition;

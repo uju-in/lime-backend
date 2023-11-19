@@ -3,7 +3,7 @@ package com.programmers.bucketback.domains.bucket.api.dto.response;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.bucket.model.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 

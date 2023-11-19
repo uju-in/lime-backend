@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.BaseEntity;
 
 import jakarta.persistence.CascadeType;
@@ -27,20 +27,17 @@ import lombok.NoArgsConstructor;
 @Table(name = "inventories")
 public class Inventory extends BaseEntity {
 
+	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
+	private final List<InventoryItem> inventoryItems = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-
 	@Column(name = "member_id", nullable = false)
 	private Long memberId;
-
 	@Column(name = "hobby", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
-
-	@OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-	private List<InventoryItem> inventoryItems = new ArrayList<>();
 
 	public Inventory(
 		final Long memberId,

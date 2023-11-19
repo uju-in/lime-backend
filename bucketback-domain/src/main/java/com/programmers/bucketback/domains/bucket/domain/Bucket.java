@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.BaseEntity;
 
 import jakarta.persistence.CascadeType;
@@ -26,19 +26,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Bucket extends BaseEntity {
 
+	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
+	private final List<BucketItem> bucketItems = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-
 	@Column(name = "member_id", nullable = false)
 	private Long memberId;
-
 	@Embedded
 	private BucketInfo bucketInfo;
-
-	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
-	private List<BucketItem> bucketItems = new ArrayList<>();
 
 	public Bucket(
 		final BucketInfo bucketInfo,

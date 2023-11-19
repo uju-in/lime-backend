@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.item.api.dto.request;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
 import com.programmers.bucketback.global.annotation.Enum;
 

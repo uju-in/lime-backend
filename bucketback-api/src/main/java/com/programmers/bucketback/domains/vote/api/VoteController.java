@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateResponse;

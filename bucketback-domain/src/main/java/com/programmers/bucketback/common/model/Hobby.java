@@ -1,4 +1,4 @@
-package com.programmers.bucketback;
+package com.programmers.bucketback.common.model;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,8 +7,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
 
@@ -33,7 +31,6 @@ public enum Hobby {
 			.collect(Collectors.toMap(Hobby::getName, Function.identity())));
 	}
 
-	@JsonValue
 	private final String hobbyValue;
 	private final String name;
 
@@ -45,11 +42,10 @@ public enum Hobby {
 		throw new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER);
 	}
 
-	@JsonCreator
 	public static Hobby fromEventStatus(final String hobbyValue) {
 		return Arrays.stream(values())
 			.filter(type -> type.hobbyValue.equals(hobbyValue))
 			.findAny()
-			.orElse(null);
+			.orElseThrow(() -> new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER));
 	}
 }

@@ -2,9 +2,9 @@ package com.programmers.bucketback.domains.vote.application;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
 import com.programmers.bucketback.domains.vote.domain.Vote;

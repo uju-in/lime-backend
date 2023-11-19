@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.item.implementation;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;

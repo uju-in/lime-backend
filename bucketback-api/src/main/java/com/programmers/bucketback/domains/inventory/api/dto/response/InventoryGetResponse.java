@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.inventory.api.dto.response;
 
 import java.util.List;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.inventory.model.InventoryGetServiceResponse;
 
 import lombok.Builder;

@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.inventory.api.dto.request;
 
 import java.util.List;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.global.annotation.Enum;
 
