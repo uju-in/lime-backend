@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.programmers.bucketback.domains.member.application.dto.response.MemberCheckJwtServiceResponse;
 import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.domain.vo.LoginInfo;
@@ -34,6 +35,10 @@ public class MemberService {
 	private final MemberChecker memberChecker;
 	private final EmailSender emailSender;
 	private final S3Manager s3Manager;
+
+	public MemberCheckJwtServiceResponse checkJwtToken() {
+		return memberSecurityManager.checkJwtToken();
+	}
 
 	public void signup(
 		final LoginInfo loginInfo,

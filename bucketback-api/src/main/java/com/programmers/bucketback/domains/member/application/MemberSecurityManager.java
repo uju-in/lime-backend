@@ -3,9 +3,12 @@ package com.programmers.bucketback.domains.member.application;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.programmers.bucketback.domains.member.application.dto.response.MemberCheckJwtServiceResponse;
 import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.domain.Member;
+import com.programmers.bucketback.domains.member.implementation.MemberReader;
 import com.programmers.bucketback.global.config.security.SecurityManager;
+import com.programmers.bucketback.global.util.MemberUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +18,14 @@ public class MemberSecurityManager {
 
 	private final SecurityManager securityManager;
 	private final PasswordEncoder passwordEncoder;
+	private final MemberReader memberReader;
+
+	public MemberCheckJwtServiceResponse checkJwtToken() {
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Member member = memberReader.read(memberId);
+
+		return new MemberCheckJwtServiceResponse(memberId, member.getNickname());
+	}
 
 	public MemberLoginServiceResponse login(
 		final String rawPassword,
