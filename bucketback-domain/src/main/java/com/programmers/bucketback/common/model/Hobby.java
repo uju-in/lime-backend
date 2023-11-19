@@ -1,6 +1,5 @@
 package com.programmers.bucketback.common.model;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
@@ -24,28 +23,34 @@ public enum Hobby {
 	KEYBOARD("키보드", "keyboard"),
 	SWIMMING("수영", "swimming");
 
-	private static final Map<String, Hobby> HOBBY_MAP;
+	private static final Map<String, Hobby> HOBBY_NAME_MAP;
+
+	private static final Map<String, Hobby> HOBBY_VALUE_MAP;
 
 	static {
-		HOBBY_MAP = Collections.unmodifiableMap(Stream.of(values())
+		HOBBY_NAME_MAP = Collections.unmodifiableMap(Stream.of(values())
 			.collect(Collectors.toMap(Hobby::getName, Function.identity())));
+
+		HOBBY_VALUE_MAP = Collections.unmodifiableMap(Stream.of(values())
+			.collect(Collectors.toMap(Hobby::getHobbyValue, Function.identity())));
 	}
 
 	private final String hobbyValue;
 	private final String name;
 
 	public static Hobby from(final String name) {
-		if (HOBBY_MAP.containsKey(name)) {
-			return HOBBY_MAP.get(name);
+		if (HOBBY_NAME_MAP.containsKey(name)) {
+			return HOBBY_NAME_MAP.get(name);
 		}
 
 		throw new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER);
 	}
 
-	public static Hobby fromEventStatus(final String hobbyValue) {
-		return Arrays.stream(values())
-			.filter(type -> type.hobbyValue.equals(hobbyValue))
-			.findAny()
-			.orElseThrow(() -> new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER));
+	public static Hobby fromHobbyValue(final String hobbyValue) {
+		if (HOBBY_VALUE_MAP.containsKey(hobbyValue)) {
+			return HOBBY_VALUE_MAP.get(hobbyValue);
+		}
+
+		throw new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER);
 	}
 }
