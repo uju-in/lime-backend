@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 public record VoteCreateRequest(
 	@Schema(description = "취미", example = "농구")
 	@NotNull(message = "취미는 필수 값입니다.")
-	Hobby hobby,
+	String hobbyValue,
 
 	@Schema(description = "투표 내용", example = "어떤 농구화가 더 이쁜가?")
 	@Size(max = 1000, message = "투표 내용은 최대 1000자 입니다.")
@@ -26,6 +26,8 @@ public record VoteCreateRequest(
 	Long item2Id
 ) {
 	public VoteCreateServiceRequest toCreateVoteServiceRequest() {
+		Hobby hobby = Hobby.fromHobbyValue(hobbyValue);
+
 		return VoteCreateServiceRequest.builder()
 			.hobby(hobby)
 			.content(content)

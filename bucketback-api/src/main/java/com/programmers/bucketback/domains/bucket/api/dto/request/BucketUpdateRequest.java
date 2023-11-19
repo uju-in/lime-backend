@@ -5,7 +5,6 @@ import java.util.List;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
-import com.programmers.bucketback.global.annotation.Enum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -17,8 +16,7 @@ public record BucketUpdateRequest(
 
 	@Schema(description = "취미", example = "농구")
 	@NotNull(message = "취미를 입력하세요")
-	@Enum
-	Hobby hobby,
+	String hobbyValue,
 
 	@Schema(description = "버킷 이름", example = "유러피안 농구")
 	@NotNull(message = "버킷 이름을 입력하세요")
@@ -35,6 +33,8 @@ public record BucketUpdateRequest(
 ) {
 
 	public BucketInfo toInfo() {
+		Hobby hobby = Hobby.fromHobbyValue(hobbyValue);
+
 		return new BucketInfo(hobby, name, budget);
 	}
 
