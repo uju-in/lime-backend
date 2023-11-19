@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.feed.api.request.FeedCreateRequest;
 import com.programmers.bucketback.domains.feed.api.request.FeedUpdateRequest;
 import com.programmers.bucketback.domains.feed.api.response.FeedCreateResponse;
@@ -85,8 +86,10 @@ public class FeedController {
 		@RequestParam(required = false) final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
+		Hobby hobby = Hobby.fromName(hobbyName);
+
 		CursorSummary<FeedCursorSummaryLike> cursorSummary = feedService.getFeedByCursor(
-			hobbyName,
+			hobby,
 			nickname,
 			sortCondition,
 			request.toParameters()
