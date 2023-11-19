@@ -38,9 +38,10 @@ public enum Hobby {
 	private final String hobbyValue;
 	private final String name;
 
-	public static Hobby from(final String name) {
-		if (HOBBY_NAME_MAP.containsKey(name)) {
-			return HOBBY_NAME_MAP.get(name);
+	public static Hobby fromName(final String name) {
+		String nameLowerCase = name.toLowerCase();
+		if (HOBBY_NAME_MAP.containsKey(nameLowerCase)) {
+			return HOBBY_NAME_MAP.get(nameLowerCase);
 		}
 
 		throw new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER);

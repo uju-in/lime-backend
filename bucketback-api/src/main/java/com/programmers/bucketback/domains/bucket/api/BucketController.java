@@ -100,7 +100,7 @@ public class BucketController {
 		BucketGetByCursorResponse response = BucketGetByCursorResponse.from(
 			bucketService.getBucketsByCursor(
 				nickname,
-				Hobby.from(hobby),
+				Hobby.fromName(hobby),
 				request.toParameters()
 			));
 
