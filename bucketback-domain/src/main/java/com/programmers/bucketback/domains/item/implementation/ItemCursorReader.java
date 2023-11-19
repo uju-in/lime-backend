@@ -42,7 +42,7 @@ public class ItemCursorReader {
 	private int getPageSize(final CursorPageParameters parameters) {
 		Integer parameterSize = parameters.size();
 
-		if (parameterSize == 0) {
+		if (parameterSize == null) {
 			return DEFAULT_SIZE;
 		}
 
