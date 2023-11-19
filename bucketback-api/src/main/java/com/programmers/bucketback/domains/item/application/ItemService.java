@@ -21,6 +21,7 @@ import com.programmers.bucketback.domains.item.implementation.MemberItemReader;
 import com.programmers.bucketback.domains.item.implementation.MemberItemRemover;
 import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
+import com.programmers.bucketback.domains.item.model.MemberItemSummary;
 import com.programmers.bucketback.domains.review.implementation.ReviewStatistics;
 import com.programmers.bucketback.global.util.MemberUtils;
 
@@ -82,6 +83,15 @@ public class ItemService {
 	) {
 		return itemCursorReader.readByCursor(
 			keyword,
+			parameters
+		);
+	}
+
+	public CursorSummary<MemberItemSummary> getMemberItemsByCursor(final CursorPageParameters parameters) {
+		Long memberId = MemberUtils.getCurrentMemberId();
+
+		return memberItemReader.readMemberItem(
+			memberId,
 			parameters
 		);
 	}
