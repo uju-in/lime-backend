@@ -22,10 +22,12 @@ import com.programmers.bucketback.domains.member.api.dto.request.MemberSignupReq
 import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdatePasswordRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdateProfileRequest;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckEmailResponse;
+import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckJwtResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckNicknameResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberGetMyPageResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberLoginResponse;
 import com.programmers.bucketback.domains.member.application.MemberService;
+import com.programmers.bucketback.domains.member.application.dto.response.MemberCheckJwtServiceResponse;
 import com.programmers.bucketback.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.bucketback.domains.member.model.MyPage;
 
@@ -41,6 +43,15 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService memberService;
+
+	@Operation(summary = "JWT 토큰 유효성 체크")
+	@GetMapping("/check/jwt")
+	public ResponseEntity<MemberCheckJwtResponse> checkJwtToken() {
+		final MemberCheckJwtServiceResponse serviceResponse = memberService.checkJwtToken();
+		final MemberCheckJwtResponse response = MemberCheckJwtResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
+	}
 
 	@Operation(summary = "회원가입", description = "MemberSignupRequest 을 이용하여 회원가입을 합니다.")
 	@PostMapping("/signup")
