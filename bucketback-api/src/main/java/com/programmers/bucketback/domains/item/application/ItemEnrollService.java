@@ -47,6 +47,7 @@ public class ItemEnrollService {
 			.price(itemCrawlerResult.price())
 			.itemName(itemCrawlerResult.itemName())
 			.imageUrl(itemCrawlerResult.imageUrl())
+			.url(itemCrawlerResult.url())
 			.build();
 	}
 
