@@ -7,7 +7,7 @@ import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSum
 
 public record InventoryGetReviewedItemResponse(
 	String nextCursorId,
-	int summaryCount,
+	int totalCount,
 	List<InventoryReviewItemSummary> reviewedItems
 ) {
 	public static InventoryGetReviewedItemResponse from(
