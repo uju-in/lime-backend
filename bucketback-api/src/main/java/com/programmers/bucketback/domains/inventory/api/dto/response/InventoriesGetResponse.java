@@ -5,8 +5,8 @@ import java.util.List;
 import com.programmers.bucketback.domains.inventory.model.InventoryInfoSummary;
 
 public record InventoriesGetResponse(
-	int inventoryCount,
-	List<InventoryInfoSummary> inventoryInfoSummaries
+	int totalCount,
+	List<InventoryInfoSummary> inventoryInfos
 ) {
 	public static InventoriesGetResponse from(final List<InventoryInfoSummary> inventoryInfoSummaries) {
 		return new InventoriesGetResponse(inventoryInfoSummaries.size(), inventoryInfoSummaries);
