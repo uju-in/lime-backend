@@ -7,7 +7,7 @@ import com.programmers.bucketback.domains.item.model.MemberItemSummary;
 
 public record MemberItemGetByCursorResponse(
 	String nextCursorId,
-	int summaryCount,
+	int totalCount,
 	List<MemberItemSummary> summaries
 ) {
 	public static MemberItemGetByCursorResponse from(final CursorSummary<MemberItemSummary> summary) {

@@ -7,16 +7,16 @@ import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCurs
 import com.programmers.bucketback.domains.review.model.ReviewCursorSummary;
 
 public record ReviewGetByCursorResponse(
-	Long reviewCount,
 	String nextCursorId,
+	Long totalCount,
 	List<ReviewCursorSummary> reviews
 ) {
 	public static ReviewGetByCursorResponse from(final ReviewGetByCursorServiceResponse response) {
 		CursorSummary<ReviewCursorSummary> cursorSummary = response.cursorSummary();
 
 		return new ReviewGetByCursorResponse(
-			response.reviewCount(),
 			cursorSummary.nextCursorId(),
+			response.reviewCount(),
 			cursorSummary.summaries()
 		);
 	}
