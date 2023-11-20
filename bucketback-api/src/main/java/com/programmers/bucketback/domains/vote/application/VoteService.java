@@ -73,8 +73,8 @@ public class VoteService {
 	}
 
 	public VoteGetServiceResponse getVote(final Long voteId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
-		VoteSummary summary = voteReader.read(voteId, memberId);
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final VoteSummary summary = voteReader.read(voteId, memberId);
 
 		return VoteGetServiceResponse.from(summary);
 	}
@@ -85,7 +85,7 @@ public class VoteService {
 		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
 
 		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters, memberId);
 	}
