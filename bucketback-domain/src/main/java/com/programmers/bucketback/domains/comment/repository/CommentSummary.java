@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.comment.repository;
 
 import java.time.LocalDateTime;
 
+import com.programmers.bucketback.common.cursor.CursorIdParser;
 import com.programmers.bucketback.domains.member.model.MemberInfo;
 
 public record CommentSummary(
@@ -11,5 +12,5 @@ public record CommentSummary(
 	String content,
 	boolean isAdopted,
 	LocalDateTime createdAt
-) {
+) implements CursorIdParser {
 }

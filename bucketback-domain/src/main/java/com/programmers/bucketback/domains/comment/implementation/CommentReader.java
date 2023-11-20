@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.cursor.CursorUtils;
 import com.programmers.bucketback.domains.comment.domain.Comment;
-import com.programmers.bucketback.domains.comment.model.CommentCursorSummary;
 import com.programmers.bucketback.domains.comment.repository.CommentRepository;
 import com.programmers.bucketback.domains.comment.repository.CommentSummary;
 import com.programmers.bucketback.error.EntityNotFoundException;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentReader {
 
+	private static final int DEFAULT_PAGING_SIZE = 20;
 	private final CommentRepository commentRepository;
 
 	@Transactional(readOnly = true)
@@ -27,12 +29,12 @@ public class CommentReader {
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 	}
 
-	public CommentCursorSummary readByCursor(
+	public CursorSummary<CommentSummary> readByCursor(
 		final Long feedId,
 		final Long memberId,
 		final CursorPageParameters parameters
 	) {
-		int pageSize = parameters.size() == null ? 20 : parameters.size();
+		int pageSize = getPageSize(parameters);
 
 		List<CommentSummary> summaries = commentRepository.findByCursor(
 			feedId,
@@ -41,9 +43,11 @@ public class CommentReader {
 			pageSize
 		);
 
-		String nextCursorId = summaries.size() == 0 ? null : summaries.get(summaries.size() - 1).cursorId();
-		int summaryCount = summaries.size();
+		return CursorUtils.getCursorSummaries(summaries);
+	}
 
-		return new CommentCursorSummary(nextCursorId, summaryCount, summaries);
+	private int getPageSize(final CursorPageParameters parameters) {
+		int pageSize = parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
+		return pageSize;
 	}
 }
