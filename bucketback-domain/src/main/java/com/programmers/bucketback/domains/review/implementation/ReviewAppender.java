@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.review.implementation;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.bucketback.domains.review.domain.Review;
 import com.programmers.bucketback.domains.review.model.ReviewContent;
@@ -15,7 +14,6 @@ public class ReviewAppender {
 
 	private final ReviewRepository reviewRepository;
 
-	@Transactional
 	public Long append(
 		final Long itemId,
 		final Long memberId,
