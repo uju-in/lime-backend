@@ -5,7 +5,7 @@ import static com.programmers.bucketback.domains.vote.domain.QVote.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
 import com.programmers.bucketback.domains.vote.model.VoteInfo;
 import com.programmers.bucketback.domains.vote.model.VoteSortCondition;

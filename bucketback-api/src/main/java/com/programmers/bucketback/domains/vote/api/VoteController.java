@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateResponse;
@@ -92,7 +92,7 @@ public class VoteController {
 		@ModelAttribute @Valid final CursorRequest request
 	) {
 		CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
-			Hobby.from(hobby),
+			Hobby.fromName(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
 			request.toParameters()

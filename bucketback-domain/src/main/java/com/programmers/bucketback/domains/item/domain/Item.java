@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.item.domain;
 
 import java.util.Objects;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.BaseEntity;
 
 import jakarta.persistence.Column;

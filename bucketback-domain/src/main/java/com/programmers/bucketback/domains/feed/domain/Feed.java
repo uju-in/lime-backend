@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.BaseEntity;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.comment.domain.Comment;

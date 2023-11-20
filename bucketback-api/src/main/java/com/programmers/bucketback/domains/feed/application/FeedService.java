@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.bucketback.domains.feed.implementation.FeedAppender;
 import com.programmers.bucketback.domains.feed.implementation.FeedCursorReader;
@@ -46,7 +47,7 @@ public class FeedService {
 	}
 
 	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
-		final String hobbyName,
+		final Hobby hobby,
 		final String nickName,
 		final String sortCondition,
 		final CursorPageParameters parameters
@@ -55,7 +56,7 @@ public class FeedService {
 		Long loginMemberId = MemberUtils.getCurrentMemberId();
 
 		return feedCursorReader.getFeedByCursor(
-			hobbyName,
+			hobby,
 			nickName,
 			loginMemberId,
 			feedSortCondition,

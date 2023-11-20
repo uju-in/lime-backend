@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryCreateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.request.InventoryUpdateRequest;
 import com.programmers.bucketback.domains.inventory.api.dto.response.InventoriesGetResponse;
@@ -35,7 +36,8 @@ public class InventoryController {
 	@PostMapping("/inventories")
 	public ResponseEntity<InventoryCreateResponse> createInventory(
 		@RequestBody @Valid final InventoryCreateRequest request) {
-		Long inventoryId = inventoryService.createInventory(request.hobby(), request.toRegistry());
+		Hobby hobby = Hobby.fromHobbyValue(request.hobbyValue());
+		Long inventoryId = inventoryService.createInventory(hobby, request.toRegistry());
 
 		return ResponseEntity.ok(new InventoryCreateResponse(inventoryId));
 	}

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.hobby.api.dto.response.HobbyGetResponse;
 import com.programmers.bucketback.domains.hobby.api.dto.response.HobbyItem;
 

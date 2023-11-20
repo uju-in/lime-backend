@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long>, InventoryRepositoryForSummary {

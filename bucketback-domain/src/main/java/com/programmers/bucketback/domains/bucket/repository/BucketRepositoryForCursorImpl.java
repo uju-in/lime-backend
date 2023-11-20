@@ -8,7 +8,7 @@ import static com.querydsl.core.group.GroupBy.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.bucket.model.BucketSummary;
 import com.programmers.bucketback.domains.bucket.model.ItemImage;
 import com.querydsl.core.types.ConstantImpl;

@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.Hobby;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.cursor.CursorUtils;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummary;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 import com.programmers.bucketback.domains.feed.model.FeedSortCondition;
@@ -28,7 +28,7 @@ public class FeedCursorReader {
 	private final FeedReader feedReader;
 
 	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
-		final String hobbyName,
+		final Hobby hobby,
 		final String nickname,
 		final Long loginMemberId,
 		final FeedSortCondition sortCondition,
@@ -36,7 +36,6 @@ public class FeedCursorReader {
 	) {
 		int pageSize = getPageSizeByParameter(parameters);
 		Long myPageMemberId = getMemberIdByNickname(nickname);
-		Hobby hobby = getHobbyByName(hobbyName);
 
 		List<FeedCursorSummary> feedCursorSummaries = feedRepository.findAllByCursor(
 			myPageMemberId,
@@ -59,19 +58,6 @@ public class FeedCursorReader {
 		).toList();
 
 		return CursorUtils.getCursorSummaries(feedCursorSummaryLikes);
-	}
-
-	private Hobby getHobbyByName(final String hobbyName) {
-		if (hobbyName == null) {
-			return null;
-		}
-
-		String trimHobbyName = hobbyName.trim();
-		if (trimHobbyName.isEmpty()) {
-			return null;
-		}
-
-		return Hobby.valueOf(trimHobbyName);
 	}
 
 	private int getPageSizeByParameter(final CursorPageParameters parameters) {

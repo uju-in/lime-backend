@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketCreateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.request.BucketUpdateRequest;
 import com.programmers.bucketback.domains.bucket.api.dto.response.BucketCreateResponse;
@@ -100,7 +100,7 @@ public class BucketController {
 		BucketGetByCursorResponse response = BucketGetByCursorResponse.from(
 			bucketService.getBucketsByCursor(
 				nickname,
-				Hobby.from(hobby),
+				Hobby.fromName(hobby),
 				request.toParameters()
 			));
 

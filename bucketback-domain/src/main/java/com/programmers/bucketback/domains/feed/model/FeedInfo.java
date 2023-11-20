@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.feed.model;
 
 import java.time.LocalDateTime;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.domain.FeedContent;
 

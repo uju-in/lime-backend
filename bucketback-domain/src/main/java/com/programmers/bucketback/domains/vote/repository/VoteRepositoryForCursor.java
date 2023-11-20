@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.vote.repository;
 
 import java.util.List;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
 import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;

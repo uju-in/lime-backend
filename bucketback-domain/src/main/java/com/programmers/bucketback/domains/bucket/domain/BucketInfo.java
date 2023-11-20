@@ -2,7 +2,7 @@ package com.programmers.bucketback.domains.bucket.domain;
 
 import java.util.Objects;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
 

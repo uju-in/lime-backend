@@ -1,6 +1,6 @@
 package com.programmers.bucketback.domains.feed.application.dto.request;
 
-import com.programmers.bucketback.Hobby;
+import com.programmers.bucketback.common.model.Hobby;
 
 import lombok.Builder;
 
