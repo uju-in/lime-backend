@@ -87,6 +87,14 @@ public class VoteService {
 	) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
 
+		if (memberId == null && statusCondition.isRequiredLogin()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
+		if (sortCondition == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED) {
+			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
+		}
+
 		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters, memberId);
 	}
 }
