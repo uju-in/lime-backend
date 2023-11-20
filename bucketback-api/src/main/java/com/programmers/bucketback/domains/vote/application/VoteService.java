@@ -91,7 +91,7 @@ public class VoteService {
 			throw new BusinessException(ErrorCode.UNAUTHORIZED);
 		}
 
-		if (sortCondition == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED) {
+		if (sortCondition.isImpossibleSort(statusCondition)) {
 			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
 		}
 
