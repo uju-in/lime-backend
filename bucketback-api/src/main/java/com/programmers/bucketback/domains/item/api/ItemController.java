@@ -19,12 +19,14 @@ import com.programmers.bucketback.domains.item.api.dto.response.ItemEnrollRespon
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
+import com.programmers.bucketback.domains.item.api.dto.response.MemberItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.application.ItemEnrollService;
 import com.programmers.bucketback.domains.item.application.ItemService;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
+import com.programmers.bucketback.domains.item.model.MemberItemSummary;
 import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -97,6 +99,19 @@ public class ItemController {
 			request.toParameters()
 		);
 		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(cursorSummary);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "나의 아이템 목록 조회", description = "나의 아이템 목록을 조회 합니다.")
+	@GetMapping("/myitems")
+	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
+		@ModelAttribute("request") @Valid final CursorRequest request
+	) {
+		CursorSummary<MemberItemSummary> cursorSummary = itemService.getMemberItemsByCursor(
+			request.toParameters()
+		);
+		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(cursorSummary);
 
 		return ResponseEntity.ok(response);
 	}

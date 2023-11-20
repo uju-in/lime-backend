@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
+import com.programmers.bucketback.domains.item.model.MemberItemSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -34,7 +35,6 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 		final String cursorId,
 		final int pageSize
 	) {
-
 		return jpaQueryFactory
 			.selectFrom(item)
 			.join(memberItem).on(item.id.eq(memberItem.item.id))
@@ -57,6 +57,39 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 					)
 				))
 			);
+	}
+
+	@Override
+	public List<MemberItemSummary> findMemberItemsByCursor(
+		final Long memberId,
+		final String cursorId,
+		final int pageSize
+	) {
+		List<Long> itemIdsFromMemberItem = jpaQueryFactory.select(memberItem.item.id)
+			.from(memberItem)
+			.where(memberItem.memberId.eq(memberId))
+			.stream()
+			.toList();
+
+		return jpaQueryFactory
+			.select(
+				Projections.constructor(MemberItemSummary.class,
+					generateMemberItemCursorId(),
+					item.createdAt,
+					Projections.constructor(ItemInfo.class,
+						item.id,
+						item.name,
+						item.price,
+						item.image
+					)
+				)
+			).from(item)
+			.where(
+				cursorIdConditionFromMemberItem(cursorId),
+				item.id.in(itemIdsFromMemberItem)
+			).orderBy(new OrderSpecifier<>(Order.DESC, item.createdAt))
+			.limit(pageSize)
+			.fetch();
 	}
 
 	private BooleanExpression isSelected(final List<Long> itemIdsFromBucketItem) {
