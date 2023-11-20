@@ -22,6 +22,7 @@ public enum ErrorCode {
 	FORBIDDEN("COMMON_006", "권한이 없습니다."),
 	MISSING_PARAMETER("COMMON_007", "필수 파라미터가 있습니다."),
 	EXPIRED_JWT("COMMON_008", "만료된 JWT 토큰입니다."),
+	BAD_SIGNATURE_JWT("COMMON_009", "잘못된 서명의 JWT 토큰입니다."),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
