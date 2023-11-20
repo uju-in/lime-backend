@@ -22,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedCursorReader {
 
+	private static final int DEFAULT_PAGE_SIZE = 20;
+
 	private final FeedRepository feedRepository;
 	private final MemberReader memberReader;
 	private final FeedLikeRepository feedLikeRepository;
@@ -63,7 +65,7 @@ public class FeedCursorReader {
 	private int getPageSizeByParameter(final CursorPageParameters parameters) {
 		Integer pageSize = parameters.size();
 		if (pageSize == null) {
-			return 20;
+			return DEFAULT_PAGE_SIZE;
 		}
 
 		return pageSize;
