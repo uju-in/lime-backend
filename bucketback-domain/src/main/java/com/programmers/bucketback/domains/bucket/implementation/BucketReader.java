@@ -35,6 +35,8 @@ public class BucketReader {
 
 	private static final int ITEM_IMAGE_LIMIT = 4;
 	private static final int BUCKET_PROFILE_LIMIT = 3;
+	private static final int DEFAULT_PAGING_SIZE = 20;
+
 	private final BucketRepository bucketRepository;
 	private final BucketItemRepository bucketItemRepository;
 	private final MemberItemReader memberItemReader;
@@ -73,7 +75,7 @@ public class BucketReader {
 		final Long memberId,
 		final CursorPageParameters parameters
 	) {
-		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
+		int pageSize = getPageSize(parameters);
 
 		Bucket bucket = read(bucketId, memberId);
 		List<Long> itemIdsFromBucketItem = bucket.getBucketItems().stream()
@@ -100,7 +102,7 @@ public class BucketReader {
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
-		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
+		int pageSize = getPageSize(parameters);
 
 		List<BucketSummary> summaries = bucketRepository.findAllByCursor(
 			memberId,
@@ -159,5 +161,10 @@ public class BucketReader {
 			.map(BucketItem::getItem)
 			.map(Item::getImage)
 			.toList();
+	}
+
+	private int getPageSize(final CursorPageParameters parameters) {
+		int pageSize = parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
+		return pageSize;
 	}
 }
