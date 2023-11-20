@@ -20,7 +20,6 @@ public class MemberModifier {
 		final String introduction
 	) {
 		final Member member = memberReader.read(memberId);
-
 		member.updateProfile(nickname, introduction);
 	}
 

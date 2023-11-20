@@ -21,7 +21,6 @@ import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.VoteSummary;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
-import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.EntityNotFoundException;
 import com.programmers.bucketback.error.ErrorCode;
 
@@ -30,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class VoteReader {
+
+	public static final int DEFAULT_PAGING_SIZE = 20;
 
 	private final VoteCounter voteCounter;
 	private final VoteRepository voteRepository;
@@ -57,7 +58,7 @@ public class VoteReader {
 		final int item2Votes = voteCounter.count(vote, item2Id);
 		final VoteInfo voteInfo = VoteInfo.of(vote, item1Votes, item2Votes);
 
-		final boolean isOwner = isOwner(vote, memberId);
+		final boolean isOwner = vote.isOwner(memberId);
 		final Long selectedItemId = getSelectedItemId(vote, memberId);
 
 		return VoteSummary.builder()
@@ -77,16 +78,7 @@ public class VoteReader {
 		final CursorPageParameters parameters,
 		final Long memberId
 	) {
-		if (memberId == null && statusCondition.isRequiredLogin()) { // 서비스로 빼기
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
-		if (sortCondition == VoteSortCondition.POPULARITY
-			&& statusCondition != VoteStatusCondition.COMPLETED) { // 서비스로 빼기
-			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
-		}
-
-		final int pageSize = parameters.size() == null ? 20 : parameters.size();
+		final int pageSize = getPageSize(parameters);
 
 		final List<VoteCursorSummary> voteCursorSummaries = voteRepository.findAllByCursor(
 			hobby,
@@ -102,17 +94,14 @@ public class VoteReader {
 		return CursorUtils.getCursorSummaries(voteSummaries);
 	}
 
+	private int getPageSize(final CursorPageParameters parameters) {
+		return parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
+	}
+
 	private ItemInfo getItemInfo(final Long itemId) {
 		final Item item = itemReader.read(itemId);
 
 		return ItemInfo.from(item);
-	}
-
-	private boolean isOwner(
-		final Vote vote,
-		final Long memberId
-	) {
-		return vote.getMemberId().equals(memberId);
 	}
 
 	private Long getSelectedItemId(
