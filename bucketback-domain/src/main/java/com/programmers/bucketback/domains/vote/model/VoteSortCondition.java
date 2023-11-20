@@ -38,4 +38,8 @@ public enum VoteSortCondition {
 
 		throw new BusinessException(ErrorCode.VOTE_BAD_SORT_CONDITION);
 	}
+
+	public boolean isImpossibleSort(final VoteStatusCondition statusCondition) {
+		return this == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED;
+	}
 }

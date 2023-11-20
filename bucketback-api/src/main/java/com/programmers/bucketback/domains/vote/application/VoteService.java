@@ -73,8 +73,8 @@ public class VoteService {
 	}
 
 	public VoteGetServiceResponse getVote(final Long voteId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
-		VoteSummary summary = voteReader.read(voteId, memberId);
+		final Long memberId = MemberUtils.getCurrentMemberId();
+		final VoteSummary summary = voteReader.read(voteId, memberId);
 
 		return VoteGetServiceResponse.from(summary);
 	}
@@ -85,7 +85,15 @@ public class VoteService {
 		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = MemberUtils.getCurrentMemberId();
+
+		if (memberId == null && statusCondition.isRequiredLogin()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
+		if (sortCondition.isImpossibleSort(statusCondition)) {
+			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
+		}
 
 		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters, memberId);
 	}
