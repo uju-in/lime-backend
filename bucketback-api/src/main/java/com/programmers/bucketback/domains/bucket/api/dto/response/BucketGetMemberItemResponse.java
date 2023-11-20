@@ -7,8 +7,8 @@ import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 
 public record BucketGetMemberItemResponse(
 	String nextCursorId,
-	int summaryCount,
-	List<BucketMemberItemSummary> bucketMemberItems
+	int totalCount,
+	List<BucketMemberItemSummary> memberItems
 ) {
 	public static BucketGetMemberItemResponse from(final CursorSummary<BucketMemberItemSummary> summary) {
 		return new BucketGetMemberItemResponse(
