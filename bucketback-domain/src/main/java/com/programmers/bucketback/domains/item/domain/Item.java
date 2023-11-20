@@ -24,6 +24,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "items")
 public class Item extends BaseEntity {
 
+	private static final int URL_MAX_SIZE = 1000;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -39,7 +41,7 @@ public class Item extends BaseEntity {
 	@Column(name = "price", nullable = false)
 	private Integer price;
 
-	@Column(name = "url", nullable = false)
+	@Column(name = "url", nullable = false, length = URL_MAX_SIZE)
 	private String url;
 
 	@Column(name = "image", nullable = false)
