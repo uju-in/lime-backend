@@ -58,7 +58,7 @@ public class VoteReader {
 		final int item2Votes = voteCounter.count(vote, item2Id);
 		final VoteInfo voteInfo = VoteInfo.of(vote, item1Votes, item2Votes);
 
-		final boolean isOwner = isOwner(vote, memberId);
+		final boolean isOwner = vote.isOwner(memberId);
 		final Long selectedItemId = getSelectedItemId(vote, memberId);
 
 		return VoteSummary.builder()
@@ -102,13 +102,6 @@ public class VoteReader {
 		final Item item = itemReader.read(itemId);
 
 		return ItemInfo.from(item);
-	}
-
-	private boolean isOwner(
-		final Vote vote,
-		final Long memberId
-	) {
-		return vote.getMemberId().equals(memberId);
 	}
 
 	private Long getSelectedItemId(
