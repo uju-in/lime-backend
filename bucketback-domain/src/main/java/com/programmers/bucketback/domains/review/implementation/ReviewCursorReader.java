@@ -16,7 +16,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewCursorReader {
 
-	private final static int defaultPageSize = 20;
+	private final static int DEFAULT_PAGE_SIZE = 20;
+
 	private final ReviewRepository reviewRepository;
 
 	public CursorSummary<ReviewCursorSummary> readByCursor(
@@ -38,7 +39,7 @@ public class ReviewCursorReader {
 		Integer parametersSize = parameters.size();
 
 		if (parametersSize == null) {
-			return defaultPageSize;
+			return DEFAULT_PAGE_SIZE;
 		}
 
 		return parametersSize;
