@@ -4,9 +4,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.programmers.bucketback.error.BusinessException;
-import com.programmers.bucketback.error.ErrorCode;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +25,7 @@ public final class SecurityUtils {
 	private static Authentication getAuthentication() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
-			throw new BusinessException(ErrorCode.SECURITY_CONTEXT_NOT_FOUND);
+			throw new RuntimeException("Security context를 찾을 수 없습니다.");
 		}
 
 		return authentication;
