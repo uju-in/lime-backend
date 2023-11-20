@@ -29,22 +29,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed extends BaseEntity {
 
-	@OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
-	private final List<FeedItem> feedItems = new ArrayList<>();
-	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
-	private final List<Comment> comments = new ArrayList<>();
-	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
-	private final List<FeedLike> likes = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
+
 	@Column(name = "member_id", nullable = false)
 	private Long memberId;
+
 	@Embedded
 	private FeedContent content;
+
 	@Embedded
 	private BucketInfo bucketInfo;
+
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+	private List<FeedLike> likes = new ArrayList<>();
+
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
+	private List<FeedItem> feedItems = new ArrayList<>();
+
+	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+	private List<Comment> comments = new ArrayList<>();
 
 	@Builder
 	public Feed(
@@ -69,6 +75,10 @@ public class Feed extends BaseEntity {
 
 	public Integer getBudget() {
 		return bucketInfo.getBudget();
+	}
+
+	public String getFeedContent() {
+		return content.getContent();
 	}
 
 	public void addFeedItem(final FeedItem feedItem) {
