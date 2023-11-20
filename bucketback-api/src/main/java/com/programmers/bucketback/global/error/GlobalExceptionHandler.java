@@ -14,6 +14,7 @@ import com.programmers.bucketback.error.EntityNotFoundException;
 import com.programmers.bucketback.error.ErrorCode;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -56,6 +57,14 @@ public class GlobalExceptionHandler {
 		final MissingServletRequestParameterException e) {
 		log.error("MissingServletRequestParameterException", e);
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.MISSING_PARAMETER);
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(SignatureException.class)
+	protected ResponseEntity<ErrorResponse> handleSignatureException(final SignatureException e) {
+		log.error("SignatureException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.BAD_SIGNATURE_JWT);
 
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
