@@ -7,6 +7,7 @@ import com.programmers.bucketback.domains.review.model.ReviewCursorSummary;
 public interface ReviewRepositoryForCursor {
 	List<ReviewCursorSummary> findAllByCursor(
 		Long itemId,
+		Long memberId,
 		String cursorId,
 		int pageSize
 	);

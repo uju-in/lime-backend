@@ -19,6 +19,8 @@ public record ReviewCursorSummary(
 
 	String content,
 
+	boolean isReviewed,
+
 	LocalDateTime createdAt,
 
 	LocalDateTime updatedAt

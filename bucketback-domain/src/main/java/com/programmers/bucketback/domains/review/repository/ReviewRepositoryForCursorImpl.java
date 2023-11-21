@@ -29,6 +29,7 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 	@Override
 	public List<ReviewCursorSummary> findAllByCursor(
 		final Long itemId,
+		final Long memberId,
 		final String cursorId,
 		final int pageSize
 	) {
@@ -46,6 +47,7 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 					review.id,
 					review.rating,
 					review.content,
+					memberIdCondition(memberId),
 					review.createdAt,
 					review.modifiedAt
 				)
@@ -73,6 +75,15 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 
 	private OrderSpecifier<LocalDateTime> decrease() {
 		return new OrderSpecifier<>(Order.DESC, review.createdAt);
+	}
+
+	private BooleanExpression memberIdCondition(final Long memberId) {
+		if (memberId == null) {
+			// memberId가 null인 경우(사용자가 로그인 하지 않은 경우) false 반환
+			return Expressions.asBoolean(false).isTrue();
+		}
+
+		return review.memberId.eq(memberId);
 	}
 
 	private BooleanExpression cursorIdCondition(final String cursorId) {

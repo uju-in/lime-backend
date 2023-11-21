@@ -55,7 +55,12 @@ public class ReviewService {
 		final CursorPageParameters parameters
 	) {
 		Long reviewCount = reviewStatistics.getReviewCount(itemId);
-		CursorSummary<ReviewCursorSummary> cursorSummary = reviewCursorReader.readByCursor(itemId, parameters);
+		Long memberId = MemberUtils.getCurrentMemberId();
+		CursorSummary<ReviewCursorSummary> cursorSummary = reviewCursorReader.readByCursor(
+			itemId,
+			memberId,
+			parameters
+		);
 
 		return new ReviewGetByCursorServiceResponse(reviewCount, cursorSummary);
 	}
