@@ -1,6 +1,8 @@
 package com.programmers.bucketback.domains.member.model;
 
+import com.programmers.bucketback.domains.member.domain.Level;
 import com.programmers.bucketback.domains.member.domain.Member;
+
 import lombok.Builder;
 
 @Builder
@@ -13,9 +15,9 @@ public record MemberInfo(
 	public MemberInfo(
 		final Long memberId,
 		final String nickName,
-		final int level
+		final int levelPoint
 	) {
-		this(memberId, nickName, null, level);
+		this(memberId, nickName, null, Level.from(levelPoint));
 	}
 
 	public static MemberInfo from(final Member member) {
