@@ -89,7 +89,7 @@ public class VoteReader {
 			pageSize
 		);
 
-		final List<VoteSummary> voteSummaries = getVoteCursorSummaries(voteCursorSummaries);
+		final List<VoteSummary> voteSummaries = getVoteSummaries(voteCursorSummaries);
 
 		return CursorUtils.getCursorSummaries(voteSummaries);
 	}
@@ -114,7 +114,7 @@ public class VoteReader {
 			.orElse(null);
 	}
 
-	private List<VoteSummary> getVoteCursorSummaries(final List<VoteCursorSummary> voteSummaries) {
+	private List<VoteSummary> getVoteSummaries(final List<VoteCursorSummary> voteSummaries) {
 		return voteSummaries.stream()
 			.map(voteCursorSummary -> {
 				final Long item1Id = voteCursorSummary.item1Id();
