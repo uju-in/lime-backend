@@ -81,9 +81,10 @@ public class CommentController {
 		@PathVariable final Long feedId,
 		@Valid @ModelAttribute final CursorRequest cursorRequest
 	) {
-		CommentGetCursorResponse commentGetCursorResponse =
-			commentService.getFeedComments(feedId, cursorRequest.toParameters());
+		CommentGetCursorResponse response = CommentGetCursorResponse.from(
+			commentService.getFeedComments(feedId, cursorRequest.toParameters())
+		);
 
-		return ResponseEntity.ok(commentGetCursorResponse);
+		return ResponseEntity.ok(response);
 	}
 }
