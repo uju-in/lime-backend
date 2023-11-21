@@ -8,7 +8,8 @@ import com.programmers.bucketback.domains.review.model.ReviewCursorSummary;
 
 public record ReviewGetByCursorResponse(
 	String nextCursorId,
-	Long totalCount,
+	int itemReviewTotalCount,
+	int totalCount,
 	List<ReviewCursorSummary> reviews
 ) {
 	public static ReviewGetByCursorResponse from(final ReviewGetByCursorServiceResponse response) {
@@ -17,6 +18,7 @@ public record ReviewGetByCursorResponse(
 		return new ReviewGetByCursorResponse(
 			cursorSummary.nextCursorId(),
 			response.reviewCount(),
+			cursorSummary.summaryCount(),
 			cursorSummary.summaries()
 		);
 	}

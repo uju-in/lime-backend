@@ -22,12 +22,14 @@ public class ReviewCursorReader {
 
 	public CursorSummary<ReviewCursorSummary> readByCursor(
 		final Long itemId,
+		final Long memberId,
 		final CursorPageParameters parameters
 	) {
 		int pageSize = getPageSize(parameters);
 
 		List<ReviewCursorSummary> reviewCursorSummaries = reviewRepository.findAllByCursor(
 			itemId,
+			memberId,
 			parameters.cursorId(),
 			pageSize
 		);
