@@ -20,7 +20,7 @@ public record VoteGetServiceResponse(
 			.item2Info(summary.item2Info())
 			.voteInfo(summary.voteInfo())
 			.isOwner(summary.isOwner())
-			.selectedItemId(builder().selectedItemId)
+			.selectedItemId(summary.selectedItemId())
 			.build();
 	}
 }
