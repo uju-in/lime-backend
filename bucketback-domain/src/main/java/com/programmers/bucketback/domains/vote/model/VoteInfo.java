@@ -13,11 +13,7 @@ public record VoteInfo(
 	LocalDateTime startTime,
 	boolean isVoting,
 	int participants,
-
-	// @JsonInclude(JsonInclude.Include.NON_NULL)
 	Integer item1Votes,
-
-	// @JsonInclude(JsonInclude.Include.NON_NULL)
 	Integer item2Votes
 ) {
 	public VoteInfo(
