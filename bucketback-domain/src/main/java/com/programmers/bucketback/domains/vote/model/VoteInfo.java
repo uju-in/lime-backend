@@ -39,7 +39,7 @@ public record VoteInfo(
 			.id(vote.getId())
 			.content(vote.getContent())
 			.startTime(vote.getStartTime())
-			.isVoting(isVoting(vote.getEndTime()))
+			.isVoting(vote.isVoting())
 			.participants(item1Votes + item2Votes)
 			.item1Votes(item1Votes)
 			.item2Votes(item2Votes)
@@ -48,6 +48,6 @@ public record VoteInfo(
 
 	private static boolean isVoting(final LocalDateTime endTime) {
 		return LocalDateTime.now()
-			.isAfter(endTime);
+			.isBefore(endTime);
 	}
 }
