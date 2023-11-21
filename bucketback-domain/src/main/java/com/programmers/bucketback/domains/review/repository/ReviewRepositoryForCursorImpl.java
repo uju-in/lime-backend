@@ -64,13 +64,13 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 	}
 
 	@Override
-	public Long getReviewCount(final Long itemId) {
-		return jpaQueryFactory
+	public int getReviewCount(final Long itemId) {
+		return Math.toIntExact(jpaQueryFactory
 			.select(review.count())
 			.from(review)
 			.where(review.itemId.eq(itemId))
 			.join(review).on(review.memberId.eq(member.id))
-			.fetchFirst();
+			.fetchFirst());
 	}
 
 	private OrderSpecifier<LocalDateTime> decrease() {

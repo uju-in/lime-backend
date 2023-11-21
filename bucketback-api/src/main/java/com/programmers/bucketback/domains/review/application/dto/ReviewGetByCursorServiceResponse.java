@@ -4,7 +4,7 @@ import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.review.model.ReviewCursorSummary;
 
 public record ReviewGetByCursorServiceResponse(
-	Long reviewCount,
+	int reviewCount,
 	CursorSummary<ReviewCursorSummary> cursorSummary
 ) {
 }

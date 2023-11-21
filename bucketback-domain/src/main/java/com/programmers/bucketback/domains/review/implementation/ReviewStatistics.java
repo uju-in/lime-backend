@@ -12,7 +12,7 @@ public class ReviewStatistics {
 
 	private final ReviewRepository reviewRepository;
 
-	public Long getReviewCount(final Long itemId) {
+	public int getReviewCount(final Long itemId) {
 		return reviewRepository.getReviewCount(itemId);
 	}
 
