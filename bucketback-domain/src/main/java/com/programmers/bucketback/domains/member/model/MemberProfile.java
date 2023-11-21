@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.member.model;
 
 import com.programmers.bucketback.domains.member.domain.Member;
-import com.programmers.bucketback.domains.member.domain.vo.Introduction;
 
 import lombok.Builder;
 
@@ -11,7 +10,7 @@ public record MemberProfile(
 	String nickname,
 	// String profileImage, //refactor : 도메인 필드 추가시 반영
 	Integer levelPoint,
-	Introduction introduction
+	String introduction
 ) {
 	public static MemberProfile from(final Member member) {
 		return MemberProfile.builder()
