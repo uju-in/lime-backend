@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewCreateRequest;
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewUpdateRequest;
+import com.programmers.bucketback.domains.review.api.dto.response.ReviewCreateResponse;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.bucketback.domains.review.application.ReviewService;
 import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
@@ -33,13 +34,14 @@ public class ReviewController {
 
 	@Operation(summary = "아이템 리뷰 등록", description = "itemId, ReviewCreateRequest을 이용하여 아이템 리뷰를 등록 합니다.")
 	@PostMapping()
-	public ResponseEntity<Void> createReview(
+	public ResponseEntity<ReviewCreateResponse> createReview(
 		@PathVariable final Long itemId,
 		@Valid @RequestBody final ReviewCreateRequest request
 	) {
 		reviewService.createReview(itemId, request.toReviewContent());
+		ReviewCreateResponse response = new ReviewCreateResponse(itemId);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "아이템 리뷰 수정", description = "itemId, reviewId, ReviewUpdateRequest을 이용하여 아이템 리뷰를 수정 합니다.")
