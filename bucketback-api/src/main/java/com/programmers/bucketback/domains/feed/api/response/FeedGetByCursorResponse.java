@@ -7,12 +7,13 @@ import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 
 public record FeedGetByCursorResponse(
 	String nextCursorId,
-
+	int totalCount,
 	List<FeedCursorSummaryLike> feeds
 ) {
 	public static FeedGetByCursorResponse from(final CursorSummary<FeedCursorSummaryLike> cursorSummary) {
 		return new FeedGetByCursorResponse(
 			cursorSummary.nextCursorId(),
+			cursorSummary.summaryCount(),
 			cursorSummary.summaries()
 		);
 	}
