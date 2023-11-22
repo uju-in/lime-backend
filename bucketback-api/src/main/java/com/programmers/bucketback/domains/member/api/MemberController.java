@@ -128,7 +128,9 @@ public class MemberController {
 
 	@PutMapping("/profile/image")
 	@ResponseBody
-	public ResponseEntity<Void> upload(@RequestParam("image") final MultipartFile multipartFile) throws IOException {
+	public ResponseEntity<Void> upload(
+		@RequestParam(name = "image", required = false) final MultipartFile multipartFile
+	) throws IOException {
 		memberService.updateProfileImage(multipartFile);
 
 		return ResponseEntity.ok().build();

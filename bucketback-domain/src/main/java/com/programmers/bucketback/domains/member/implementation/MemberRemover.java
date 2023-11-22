@@ -18,4 +18,10 @@ public class MemberRemover {
 		final Member member = memberReader.read(memberId);
 		member.delete();
 	}
+
+	@Transactional
+	public void removeProfileImage(final Long memberId) {
+		final Member member = memberReader.read(memberId);
+		member.updateProfileImage(null);
+	}
 }

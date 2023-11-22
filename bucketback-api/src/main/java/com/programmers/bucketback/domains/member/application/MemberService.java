@@ -107,6 +107,12 @@ public class MemberService {
 		final String profileImage = memberId + BASE_EXTENSION;
 
 		s3Manager.deleteFile(profileImage, DIRECTORY);
+
+		if (multipartFile == null) {
+			memberRemover.removeProfileImage(memberId);
+			return;
+		}
+
 		s3Manager.uploadFile(multipartFile, DIRECTORY, profileImage);
 		memberModifier.modifyProfileImage(memberId, DIRECTORY, profileImage);
 	}
