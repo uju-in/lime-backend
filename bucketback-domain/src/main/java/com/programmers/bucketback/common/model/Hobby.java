@@ -2,6 +2,7 @@ package com.programmers.bucketback.common.model;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,6 +40,11 @@ public enum Hobby {
 	private final String name;
 
 	public static Hobby fromName(final String name) {
+
+		if (Objects.isNull(name)) {
+			return null;
+		}
+
 		String nameLowerCase = name.toLowerCase();
 		if (HOBBY_NAME_MAP.containsKey(nameLowerCase)) {
 			return HOBBY_NAME_MAP.get(nameLowerCase);
