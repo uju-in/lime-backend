@@ -16,7 +16,8 @@ import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.domain.Voter;
 import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
-import com.programmers.bucketback.domains.vote.model.VoteInfo;
+import com.programmers.bucketback.domains.vote.model.VoteDetail;
+import com.programmers.bucketback.domains.vote.model.VoteDetailInfo;
 import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.VoteSummary;
@@ -44,7 +45,7 @@ public class VoteReader {
 	}
 
 	@Transactional(readOnly = true)
-	public VoteSummary read(
+	public VoteDetail read(
 		final Long voteId,
 		final Long memberId
 	) {
@@ -56,12 +57,12 @@ public class VoteReader {
 
 		final int item1Votes = voteCounter.count(vote, item1Id);
 		final int item2Votes = voteCounter.count(vote, item2Id);
-		final VoteInfo voteInfo = VoteInfo.of(vote, item1Votes, item2Votes);
+		final VoteDetailInfo voteInfo = VoteDetailInfo.of(vote, item1Votes, item2Votes);
 
 		final boolean isOwner = vote.isOwner(memberId);
 		final Long selectedItemId = getSelectedItemId(vote, memberId);
 
-		return VoteSummary.builder()
+		return VoteDetail.builder()
 			.item1Info(item1Info)
 			.item2Info(item2Info)
 			.voteInfo(voteInfo)
