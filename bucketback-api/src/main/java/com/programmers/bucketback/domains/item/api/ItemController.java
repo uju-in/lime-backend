@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemAddResponse;
@@ -106,9 +107,12 @@ public class ItemController {
 	@Operation(summary = "나의 아이템 목록 조회", description = "나의 아이템 목록을 조회 합니다.")
 	@GetMapping("/myitems")
 	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
+		@RequestParam(required = false) final String hobbyName,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
+		Hobby hobby = Hobby.fromName(hobbyName);
 		CursorSummary<MemberItemSummary> cursorSummary = itemService.getMemberItemsByCursor(
+			hobby,
 			request.toParameters()
 		);
 		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(cursorSummary);

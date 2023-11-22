@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.cursor.CursorUtils;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
@@ -63,11 +64,13 @@ public class MemberItemReader {
 	}
 
 	public CursorSummary<MemberItemSummary> readMemberItem(
+		final Hobby hobby,
 		final Long memberId,
 		final CursorPageParameters parameters
 	) {
 		int size = getPageSize(parameters);
 		List<MemberItemSummary> memberItemsByCursor = memberItemRepository.findMemberItemsByCursor(
+			hobby,
 			memberId,
 			parameters.cursorId(),
 			size

@@ -9,6 +9,7 @@ public record MemberInfo(
 	String profileImage,
 	int level
 ) {
+
 	public MemberInfo(
 		final Long memberId,
 		final String nickName,
@@ -18,7 +19,7 @@ public record MemberInfo(
 		this.memberId = memberId;
 		this.nickName = nickName;
 		this.profileImage = profileImage;
-		this.level =  Level.from(level);
+		this.level = Level.from(level);
 	}
 
 	public static MemberInfo from(final Member member) {

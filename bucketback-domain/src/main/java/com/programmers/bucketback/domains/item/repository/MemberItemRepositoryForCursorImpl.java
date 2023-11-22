@@ -6,6 +6,7 @@ import static com.querydsl.core.group.GroupBy.*;
 
 import java.util.List;
 
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.item.model.MemberItemSummary;
@@ -61,6 +62,7 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 
 	@Override
 	public List<MemberItemSummary> findMemberItemsByCursor(
+		final Hobby hobby,
 		final Long memberId,
 		final String cursorId,
 		final int pageSize
@@ -86,6 +88,7 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 			).from(item)
 			.where(
 				cursorIdConditionFromMemberItem(cursorId),
+				hobbyCondition(hobby),
 				item.id.in(itemIdsFromMemberItem)
 			).orderBy(new OrderSpecifier<>(Order.DESC, item.createdAt))
 			.limit(pageSize)
@@ -97,6 +100,14 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 			.when(memberItem.item.id.in(itemIdsFromBucketItem))
 			.then(true)
 			.otherwise(false);
+	}
+
+	private BooleanExpression hobbyCondition(final Hobby hobby) {
+		if (hobby == null) {
+			return null;
+		}
+
+		return item.hobby.eq(hobby);
 	}
 
 	private BooleanExpression cursorIdConditionFromMemberItem(final String cursorId) {
