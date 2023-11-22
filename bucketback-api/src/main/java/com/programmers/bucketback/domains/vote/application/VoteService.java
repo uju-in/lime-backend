@@ -12,6 +12,7 @@ import com.programmers.bucketback.domains.vote.implementation.VoteAppender;
 import com.programmers.bucketback.domains.vote.implementation.VoteManager;
 import com.programmers.bucketback.domains.vote.implementation.VoteReader;
 import com.programmers.bucketback.domains.vote.implementation.VoteRemover;
+import com.programmers.bucketback.domains.vote.model.VoteDetail;
 import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.VoteSummary;
@@ -74,9 +75,9 @@ public class VoteService {
 
 	public VoteGetServiceResponse getVote(final Long voteId) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
-		final VoteSummary summary = voteReader.read(voteId, memberId);
+		final VoteDetail detail = voteReader.read(voteId, memberId);
 
-		return VoteGetServiceResponse.from(summary);
+		return VoteGetServiceResponse.from(detail);
 	}
 
 	public CursorSummary<VoteSummary> getVotesByCursor(
