@@ -74,7 +74,6 @@ public class MemberService {
 		final String introduction
 	) {
 		final Long memberId = MemberUtils.getCurrentMemberId();
-		memberChecker.checkNicknameDuplication(nickname);
 
 		memberModifier.modifyProfile(memberId, nickname, introduction);
 	}

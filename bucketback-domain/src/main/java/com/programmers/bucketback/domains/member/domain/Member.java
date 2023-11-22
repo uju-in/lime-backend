@@ -81,6 +81,10 @@ public class Member extends BaseEntity {
 		return nickname.getNickname();
 	}
 
+	public String getIntroduction() {
+		return introduction.getIntroduction();
+	}
+
 	public void delete() {
 		this.status = MemberStatus.DELETED;
 	}

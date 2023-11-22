@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberModifier {
 
 	private final MemberReader memberReader;
+	private final MemberChecker memberChecker;
 
 	@Transactional
 	public void modifyProfile(
@@ -20,6 +21,11 @@ public class MemberModifier {
 		final String introduction
 	) {
 		final Member member = memberReader.read(memberId);
+
+		if (!nickname.equals(member.getNickname())) {
+			memberChecker.checkNicknameDuplication(nickname);
+		}
+
 		member.updateProfile(nickname, introduction);
 	}
 
