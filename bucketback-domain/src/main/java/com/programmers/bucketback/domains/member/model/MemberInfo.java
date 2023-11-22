@@ -15,12 +15,21 @@ public record MemberInfo(
 	public MemberInfo(
 		final Long memberId,
 		final String nickName,
-		final int levelPoint
+		final String profileImage,
+		final int level
 	) {
-		this(memberId, nickName, null, Level.from(levelPoint));
+		this.memberId = memberId;
+		this.nickName = nickName;
+		this.profileImage = profileImage;
+		this.level =  Level.from(level);
 	}
 
 	public static MemberInfo from(final Member member) {
-		return new MemberInfo(member.getId(), member.getNickname(), member.getLevel());
+		return MemberInfo.builder()
+			.memberId(member.getId())
+			.nickName(member.getNickname())
+			.profileImage(member.getProfileImage())
+			.level(member.getLevel())
+			.build();
 	}
 }
