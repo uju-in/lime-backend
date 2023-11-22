@@ -15,6 +15,7 @@ import com.programmers.bucketback.domains.review.api.dto.request.ReviewCreateReq
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewUpdateRequest;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewCreateResponse;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetByCursorResponse;
+import com.programmers.bucketback.domains.review.api.dto.response.ReviewModifyResponse;
 import com.programmers.bucketback.domains.review.application.ReviewService;
 import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 import com.programmers.bucketback.global.cursor.CursorRequest;
@@ -46,14 +47,15 @@ public class ReviewController {
 
 	@Operation(summary = "아이템 리뷰 수정", description = "itemId, reviewId, ReviewUpdateRequest을 이용하여 아이템 리뷰를 수정 합니다.")
 	@PutMapping("/{reviewId}")
-	public ResponseEntity<Void> updateReview(
+	public ResponseEntity<ReviewModifyResponse> updateReview(
 		@PathVariable final Long itemId,
 		@PathVariable final Long reviewId,
 		@Valid @RequestBody final ReviewUpdateRequest request
 	) {
 		reviewService.updateReview(itemId, reviewId, request.toReviewContent());
+		ReviewModifyResponse response = new ReviewModifyResponse(itemId);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "아이템 리뷰 목록 조회", description = "itemId, CursorRequest 이용하여 아이템 리뷰 목록 조회 합니다.")
