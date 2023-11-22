@@ -11,8 +11,6 @@ public record VoteSummary(
 	VoteInfo voteInfo,
 	ItemInfo item1Info,
 	ItemInfo item2Info,
-	boolean isOwner,
-	Long selectedItemId,
 	String cursorId
 ) implements CursorIdParser {
 	public static VoteSummary of(
