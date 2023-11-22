@@ -42,6 +42,7 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 						MemberInfo.class,
 						member.id,
 						member.nickname.nickname,
+						member.profileImage,
 						member.levelPoint
 					),
 					review.id,
