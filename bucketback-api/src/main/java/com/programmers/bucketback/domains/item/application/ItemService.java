@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
@@ -87,10 +88,14 @@ public class ItemService {
 		);
 	}
 
-	public CursorSummary<MemberItemSummary> getMemberItemsByCursor(final CursorPageParameters parameters) {
+	public CursorSummary<MemberItemSummary> getMemberItemsByCursor(
+		final Hobby hobby,
+		final CursorPageParameters parameters
+	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 
 		return memberItemReader.readMemberItem(
+			hobby,
 			memberId,
 			parameters
 		);
