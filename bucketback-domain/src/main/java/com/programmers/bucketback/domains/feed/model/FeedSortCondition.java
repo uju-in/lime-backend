@@ -15,8 +15,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum FeedSortCondition {
-	POPULARITY("popularity"),
-	RECENT("recent");
+	POPULARITY,
+	RECENT;
 
 	private static final Map<String, FeedSortCondition> SORT_CONDITION_MAP;
 
@@ -25,15 +25,14 @@ public enum FeedSortCondition {
 			.collect(Collectors.toMap(FeedSortCondition::name, Function.identity())));
 	}
 
-	private final String name;
-
 	public static FeedSortCondition from(final String name) {
 		if (name == null) {
 			return RECENT;
 		}
 
-		if (SORT_CONDITION_MAP.containsKey(name)) {
-			return SORT_CONDITION_MAP.get(name);
+		String nameUpperCase = name.toUpperCase();
+		if (SORT_CONDITION_MAP.containsKey(nameUpperCase)) {
+			return SORT_CONDITION_MAP.get(nameUpperCase);
 		}
 
 		throw new BusinessException(ErrorCode.FEED_BAD_SORT_CONDITION);
