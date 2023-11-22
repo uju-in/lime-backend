@@ -80,7 +80,7 @@ public class InventoryController {
 	@GetMapping("/inventories/{inventoryId}/myitems")
 	public ResponseEntity<InventoryGetReviewedItemResponse> getReviewedItemsForModify(
 		@PathVariable final Long inventoryId,
-		@ModelAttribute("request") @Valid final CursorRequest cursorRequest
+		@ModelAttribute @Valid final CursorRequest cursorRequest
 	) {
 
 		InventoryGetReviewedItemResponse response = InventoryGetReviewedItemResponse.from(
