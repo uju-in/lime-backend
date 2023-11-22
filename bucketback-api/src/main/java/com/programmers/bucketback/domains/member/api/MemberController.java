@@ -129,7 +129,7 @@ public class MemberController {
 	@PutMapping("/profile/image")
 	@ResponseBody
 	public ResponseEntity<Void> upload(@RequestParam("image") final MultipartFile multipartFile) throws IOException {
-		memberService.updateProfileImage(multipartFile, "bucketback-static");
+		memberService.updateProfileImage(multipartFile);
 
 		return ResponseEntity.ok().build();
 	}
