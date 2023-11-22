@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberModifier {
 
+	public static final String IMAGE_BASE_PATH = "https://team-02-bucket.s3.ap-northeast-2.amazonaws.com/";
+
 	private final MemberReader memberReader;
 	private final MemberChecker memberChecker;
 
@@ -41,9 +43,12 @@ public class MemberModifier {
 	@Transactional
 	public void modifyProfileImage(
 		final Long memberId,
+		final String directory,
 		final String profileImage
 	) {
 		final Member member = memberReader.read(memberId);
-		member.updateProfileImage(profileImage);
+		final String imagePath = IMAGE_BASE_PATH + directory + "/" + profileImage;
+
+		member.updateProfileImage(imagePath);
 	}
 }

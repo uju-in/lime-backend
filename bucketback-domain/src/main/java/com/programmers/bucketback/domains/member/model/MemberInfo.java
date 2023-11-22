@@ -27,6 +27,7 @@ public record MemberInfo(
 			member.getId(),
 			member.getNickname(),
 			member.getProfileImage(),
-			member.getLevel());
+			member.getLevel()
+		);
 	}
 }

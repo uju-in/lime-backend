@@ -27,6 +27,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
+	public static final String DIRECTORY = "bucketback-static";
+	public static final String BASE_EXTENSION = ".png";
+
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
 	private final MemberRemover memberRemover;
@@ -99,15 +102,18 @@ public class MemberService {
 		return memberReader.readMyPage(nickname);
 	}
 
-	public void updateProfileImage(
-		final MultipartFile multipartFile,
-		final String directory
-	) throws IOException {
+	public void updateProfileImage(final MultipartFile multipartFile) throws IOException {
 		final Long memberId = MemberUtils.getCurrentMemberId();
-		final String profileImage = memberId + ".png";
+		final String profileImage = memberId + BASE_EXTENSION;
 
-		s3Manager.deleteFile(profileImage, directory);
-		s3Manager.uploadFile(multipartFile, directory, profileImage);
-		memberModifier.modifyProfileImage(memberId, profileImage);
+		s3Manager.deleteFile(profileImage, DIRECTORY);
+
+		if (multipartFile == null) {
+			memberRemover.removeProfileImage(memberId);
+			return;
+		}
+
+		s3Manager.uploadFile(multipartFile, DIRECTORY, profileImage);
+		memberModifier.modifyProfileImage(memberId, DIRECTORY, profileImage);
 	}
 }
