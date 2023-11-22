@@ -3,9 +3,6 @@ package com.programmers.bucketback.domains.member.model;
 import com.programmers.bucketback.domains.member.domain.Level;
 import com.programmers.bucketback.domains.member.domain.Member;
 
-import lombok.Builder;
-
-@Builder
 public record MemberInfo(
 	Long memberId,
 	String nickName,
@@ -25,11 +22,11 @@ public record MemberInfo(
 	}
 
 	public static MemberInfo from(final Member member) {
-		return MemberInfo.builder()
-			.memberId(member.getId())
-			.nickName(member.getNickname())
-			.profileImage(member.getProfileImage())
-			.level(member.getLevel())
-			.build();
+		return new MemberInfo(
+			member.getId(),
+			member.getNickname(),
+			member.getProfileImage(),
+			member.getLevel()
+		);
 	}
 }
