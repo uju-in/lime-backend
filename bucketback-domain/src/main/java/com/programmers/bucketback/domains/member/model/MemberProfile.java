@@ -9,7 +9,7 @@ public record MemberProfile(
 	Long memberId,
 	String nickname,
 	// String profileImage, //refactor : 도메인 필드 추가시 반영
-	Integer levelPoint,
+	int level,
 	String introduction
 ) {
 	public static MemberProfile from(final Member member) {
@@ -17,7 +17,7 @@ public record MemberProfile(
 			.memberId(member.getId())
 			.nickname(member.getNickname())
 			// .profileImage(member.getProfileImage())
-			.levelPoint(member.getLevelPoint())
+			.level(member.getLevel())
 			.introduction(member.getIntroduction())
 			.build();
 	}
