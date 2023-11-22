@@ -9,7 +9,7 @@ import lombok.Builder;
 public record MemberProfile(
 	Long memberId,
 	String nickname,
-	// String profileImage, //refactor : 도메인 필드 추가시 반영
+	String profileImage,
 	Integer levelPoint,
 	Introduction introduction
 ) {
@@ -17,7 +17,7 @@ public record MemberProfile(
 		return MemberProfile.builder()
 			.memberId(member.getId())
 			.nickname(member.getNickname())
-			// .profileImage(member.getProfileImage())
+			.profileImage(member.getProfileImage())
 			.levelPoint(member.getLevelPoint())
 			.introduction(member.getIntroduction())
 			.build();

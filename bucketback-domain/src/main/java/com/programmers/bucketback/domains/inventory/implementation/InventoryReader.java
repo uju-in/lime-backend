@@ -37,6 +37,7 @@ public class InventoryReader {
 
 	private static final int ITEM_IMAGE_LIMIT = 4;
 	private static final int INVENTORY_PROFILE_LIMIT = 3;
+	private static final int INVENTORY_ITEM_IMAGE_LIMIT = 3;
 	private final InventoryRepository inventoryRepository;
 	private final InventoryItemRepository inventoryItemRepository;
 	private final ReviewReader reviewReader;
@@ -91,9 +92,11 @@ public class InventoryReader {
 		List<InventoryInfoSummary> results = inventoryRepository.findInfoSummaries(memberId);
 
 		results.forEach(result ->
-			result.setItemImages(result.getItemImages().stream()
-				.limit(3)
-				.collect(Collectors.toList()))
+			result.setItemImages(
+				result.getItemImages().stream()
+					.limit(INVENTORY_ITEM_IMAGE_LIMIT)
+					.collect(Collectors.toList())
+			)
 		);
 
 		return results;
