@@ -8,7 +8,7 @@ import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 public class ItemBuilder {
 
-	public static Item successBuild() {
+	public static Item build() {
 		Item item = itemWithURLBuilder()
 			.price(10000)
 			.name("아이템")
