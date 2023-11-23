@@ -14,15 +14,15 @@ public record FeedInfo(
 	String content,
 	String bucketName,
 	Integer bucketBudget,
+	int totalPrice,
 	LocalDateTime createdAt,
 	boolean hasAdoptedComment,
 	int likeCount,
-
-	// @JsonInclude(JsonInclude.Include.NON_NULL)
 	Boolean isLiked
 ) {
 	public static FeedInfo of(
 		final Feed feed,
+		final int totalPrice,
 		final Boolean isLiked
 	) {
 		return FeedInfo.builder()
@@ -31,6 +31,7 @@ public record FeedInfo(
 			.content(feed.getFeedContent())
 			.bucketName(feed.getName())
 			.bucketBudget(feed.getBudget())
+			.totalPrice(totalPrice)
 			.createdAt(feed.getCreatedAt())
 			.hasAdoptedComment(feed.hasAdoptedComment())
 			.likeCount(feed.getLikes().size())

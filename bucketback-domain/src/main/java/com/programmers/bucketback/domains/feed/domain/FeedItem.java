@@ -38,8 +38,11 @@ public class FeedItem {
 		this.item = item;
 	}
 
+	public int getItemPrice() {
+		return this.item.getPrice();
+	}
+
 	public void changeFeed(final Feed feed) {
 		this.feed = feed;
 	}
-
 }
