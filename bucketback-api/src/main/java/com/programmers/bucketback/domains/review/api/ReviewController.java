@@ -15,9 +15,11 @@ import com.programmers.bucketback.domains.review.api.dto.request.ReviewCreateReq
 import com.programmers.bucketback.domains.review.api.dto.request.ReviewUpdateRequest;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewCreateResponse;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetByCursorResponse;
+import com.programmers.bucketback.domains.review.api.dto.response.ReviewGetResponse;
 import com.programmers.bucketback.domains.review.api.dto.response.ReviewModifyResponse;
 import com.programmers.bucketback.domains.review.application.ReviewService;
 import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
+import com.programmers.bucketback.domains.review.application.dto.ReviewGetServiceResponse;
 import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -83,5 +85,17 @@ public class ReviewController {
 		reviewService.deleteReview(itemId, reviewId);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "아이템 리뷰 상세조회", description = "reviewId을 이용하여 아이템 리뷰를 상세 조회 합니다.")
+	@GetMapping("/{reviewId}")
+	public ResponseEntity<ReviewGetResponse> getReview(
+		@PathVariable final Long itemId,
+		@PathVariable final Long reviewId
+	) {
+		ReviewGetServiceResponse serviceResponse = reviewService.getReview(itemId, reviewId);
+		ReviewGetResponse response = ReviewGetResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
 	}
 }

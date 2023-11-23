@@ -5,9 +5,12 @@ import org.springframework.stereotype.Service;
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.review.application.dto.ReviewGetByCursorServiceResponse;
+import com.programmers.bucketback.domains.review.application.dto.ReviewGetServiceResponse;
+import com.programmers.bucketback.domains.review.domain.Review;
 import com.programmers.bucketback.domains.review.implementation.ReviewAppender;
 import com.programmers.bucketback.domains.review.implementation.ReviewCursorReader;
 import com.programmers.bucketback.domains.review.implementation.ReviewModifier;
+import com.programmers.bucketback.domains.review.implementation.ReviewReader;
 import com.programmers.bucketback.domains.review.implementation.ReviewRemover;
 import com.programmers.bucketback.domains.review.implementation.ReviewStatistics;
 import com.programmers.bucketback.domains.review.model.ReviewContent;
@@ -27,6 +30,8 @@ public class ReviewService {
 	private final ReviewCursorReader reviewCursorReader;
 	private final ReviewRemover reviewRemover;
 	private final ReviewStatistics reviewStatistics;
+	private final MemberUtils memberUtils;
+	private final ReviewReader reviewReader;
 	private final MemberUtils memberUtils;
 
 	@PayPoint(15)
@@ -74,5 +79,19 @@ public class ReviewService {
 		reviewValidator.validItemReview(itemId, reviewId);
 		reviewValidator.validOwner(reviewId, memberId);
 		reviewRemover.remove(reviewId);
+	}
+
+	public ReviewGetServiceResponse getReview(
+		final Long itemId,
+		final Long reviewId
+	) {
+		reviewValidator.validItemReview(itemId, reviewId);
+		Review review = reviewReader.read(reviewId);
+
+		return new ReviewGetServiceResponse(
+			review.getId(),
+			review.getRating(),
+			review.getContent()
+		);
 	}
 }
