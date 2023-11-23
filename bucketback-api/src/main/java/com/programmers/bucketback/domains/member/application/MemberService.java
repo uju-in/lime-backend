@@ -110,7 +110,7 @@ public class MemberService {
 		s3Manager.deleteFile(profileImage, DIRECTORY);
 
 		if (multipartFile == null) {
-			memberRemover.removeProfileImage(member.getId());
+			memberRemover.removeProfileImage(member);
 			return;
 		}
 

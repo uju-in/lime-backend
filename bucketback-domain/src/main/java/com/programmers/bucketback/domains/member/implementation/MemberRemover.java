@@ -11,16 +11,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberRemover {
 
-	private final MemberReader memberReader;
-
 	@Transactional
 	public void remove(final Member member) {
 		member.delete();
 	}
 
 	@Transactional
-	public void removeProfileImage(final Long memberId) {
-		final Member member = memberReader.read(memberId);
+	public void removeProfileImage(final Member member) {
 		member.updateProfileImage(null);
 	}
 }
