@@ -29,13 +29,14 @@ public class CommentService {
 	private final CommentRemover commentRemover;
 	private final CommentReader commentReader;
 	private final FeedReader feedReader;
+	private final MemberUtils memberUtils;
 
 	@PayPoint(5)
 	public Long createComment(
 		final Long feedId,
 		final String content
 	) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		commentAppender.append(feedId, content, memberId);
 
 		return memberId;
@@ -46,7 +47,7 @@ public class CommentService {
 		final Long commentId,
 		final String content
 	) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		commentValidator.validCommentInFeed(feedId, commentId);
 		commentValidator.validCommentOwner(commentId, memberId);
 		commentModifier.modify(commentId, content);
@@ -56,7 +57,7 @@ public class CommentService {
 		final Long feedId,
 		final Long commentId
 	) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		commentValidator.validCommentInFeed(feedId, commentId);
 		commentValidator.validCommentOwner(commentId, memberId);
 		commentRemover.remove(commentId);
@@ -66,7 +67,7 @@ public class CommentService {
 		final Long feedId,
 		final CursorPageParameters parameters
 	) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 
 		return commentReader.readByCursor(feedId, memberId, parameters);
 	}
@@ -76,7 +77,7 @@ public class CommentService {
 		final Long feedId,
 		final Long commentId
 	) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 
 		final Feed feed = feedReader.read(feedId);
 		if (!feed.isOwner(memberId)) {
