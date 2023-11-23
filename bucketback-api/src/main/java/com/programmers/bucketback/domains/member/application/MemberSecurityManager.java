@@ -19,9 +19,10 @@ public class MemberSecurityManager {
 	private final SecurityManager securityManager;
 	private final PasswordEncoder passwordEncoder;
 	private final MemberReader memberReader;
+	private final MemberUtils memberUtils;
 
 	public MemberCheckJwtServiceResponse checkJwtToken() {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		final Member member = memberReader.read(memberId);
 
 		return new MemberCheckJwtServiceResponse(memberId, member.getNickname());
