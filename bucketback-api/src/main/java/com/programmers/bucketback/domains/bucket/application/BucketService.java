@@ -65,7 +65,7 @@ public class BucketService {
 	}
 
 	/**
-	 * 버킷 수정을 위한 멤버 아이템 목록 조회
+	 * 버킷 조회 수정을 위한 멤버 아이템 목록 조회
 	 */
 	public CursorSummary<BucketMemberItemSummary> getMemberItemsForModify(
 		final Long bucketId,

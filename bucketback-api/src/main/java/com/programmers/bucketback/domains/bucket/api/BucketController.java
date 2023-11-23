@@ -54,7 +54,7 @@ public class BucketController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "버킷 수정을 위한 내가 담은 아이템 목록 커서 조회")
+	@Operation(summary = "버킷 조회 수정을 위한 내가 담은 아이템 목록 커서 조회")
 	@GetMapping("/buckets/myitems")
 	public ResponseEntity<BucketGetMemberItemResponse> getMemberItemsForModify(
 		@RequestParam(required = false) final Long bucketId,

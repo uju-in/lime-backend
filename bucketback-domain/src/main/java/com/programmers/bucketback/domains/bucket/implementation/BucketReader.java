@@ -71,7 +71,7 @@ public class BucketReader {
 		return bucketItemRepository.findByBucketId(bucketId);
 	}
 
-	/** 버킷 수정을 위한 MemberItem 커서 조회 */
+	/** 버킷 조회와 수정을 위한 MemberItem 커서 조회 */
 	public CursorSummary<BucketMemberItemSummary> readByMemberItems(
 		final Long bucketId,
 		final Long memberId,
