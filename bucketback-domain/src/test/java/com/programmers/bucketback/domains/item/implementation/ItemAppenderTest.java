@@ -23,7 +23,7 @@ class ItemAppenderTest {
 	@Mock
 	ItemRepository itemRepository;
 
-	@Mock
+	@InjectMocks
 	private ItemAppender itemAppender;
 
 	@Test
