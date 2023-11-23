@@ -32,6 +32,7 @@ public class BucketService {
 	private final BucketReader bucketReader;
 	private final MemberReader memberReader;
 	private final ItemReader itemReader;
+	private final MemberUtils memberUtils;
 
 	/** 버킷 생성 */
 	public Long createBucket(
@@ -39,7 +40,7 @@ public class BucketService {
 		final ItemIdRegistry registry
 	) {
 		validateEmptyRegistry(registry);
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		validateExceedBudget(bucketInfo, registry);
 
 		return bucketAppender.append(memberId, bucketInfo, registry);
@@ -54,13 +55,13 @@ public class BucketService {
 		validateEmptyRegistry(registry);
 		validateExceedBudget(bucketInfo, registry);
 
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		bucketModifier.modify(memberId, bucketId, bucketInfo, registry);
 	}
 
 	/** 버킷 삭제 */
 	public void deleteBucket(final Long bucketId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		bucketRemover.remove(bucketId, memberId);
 	}
 
@@ -71,7 +72,7 @@ public class BucketService {
 		final Long bucketId,
 		final CursorPageParameters parameters
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 
 		return bucketReader.readByMemberItems(bucketId, memberId, parameters);
 	}
