@@ -1,7 +1,7 @@
 package com.programmers.bucketback.domains.item.implementation;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,13 +34,15 @@ class ItemAppenderTest {
 		Hobby hobby = Hobby.BASEBALL;
 		ItemCrawlerInfo itemCrawlerInfo = ItemCrawlerInfoBuilder.build();
 		Item item = ItemBuilder.fromItemCrawlerInfoBuild(hobby, itemCrawlerInfo);
-		when(itemRepository.save(any())).thenReturn(item);
+
+		given(itemRepository.save(any())).willReturn(item);
 		Long expectedItemId = item.getId();
 
 		// when
 		Long actualItemId = itemAppender.append(hobby, itemCrawlerInfo);
 
 		// then
+		then(itemRepository).should(times(1)).save(any());
 		assertThat(actualItemId).isEqualTo(expectedItemId);
 	}
 }
