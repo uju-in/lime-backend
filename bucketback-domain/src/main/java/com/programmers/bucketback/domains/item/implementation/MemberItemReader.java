@@ -50,6 +50,7 @@ public class MemberItemReader {
 	public List<BucketMemberItemSummary> readBucketMemberItem(
 		final List<Long> itemIdsFromBucketItem,
 		final List<Long> itemIdsFromMemberItem,
+		final Hobby hobby,
 		final Long memberId,
 		final String cursorId,
 		final int pageSize
@@ -57,6 +58,7 @@ public class MemberItemReader {
 		return memberItemRepository.findBucketMemberItemsByCursor(
 			itemIdsFromBucketItem,
 			itemIdsFromMemberItem,
+			hobby,
 			memberId,
 			cursorId,
 			pageSize

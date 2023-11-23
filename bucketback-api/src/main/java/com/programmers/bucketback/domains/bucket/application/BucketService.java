@@ -69,11 +69,17 @@ public class BucketService {
 	 */
 	public CursorSummary<BucketMemberItemSummary> getMemberItemsForModify(
 		final Long bucketId,
+		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 
-		return bucketReader.readByMemberItems(bucketId, memberId, parameters);
+		return bucketReader.readByMemberItems(
+			bucketId,
+			memberId,
+			hobby,
+			parameters
+		);
 	}
 
 	/**
