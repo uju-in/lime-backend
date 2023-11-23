@@ -18,8 +18,6 @@ public record FeedInfo(
 	LocalDateTime createdAt,
 	boolean hasAdoptedComment,
 	int likeCount,
-
-	// @JsonInclude(JsonInclude.Include.NON_NULL)
 	Boolean isLiked
 ) {
 	public static FeedInfo of(
