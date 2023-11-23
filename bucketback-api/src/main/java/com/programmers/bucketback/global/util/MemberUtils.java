@@ -23,24 +23,25 @@ public final class MemberUtils {
 			return null;
 		}
 
-		readMember(memberId);
+		final Member member = memberReader.read(memberId);
+
+		validateMember(member);
 
 		return memberId;
 	}
 
 	public Member getCurrentMember() {
 		final Long memberId = SecurityUtils.getCurrentMemberId();
-
-		return readMember(memberId);
-	}
-
-	private Member readMember(final Long memberId) {
 		final Member member = memberReader.read(memberId);
 
+		validateMember(member);
+
+		return member;
+	}
+
+	private void validateMember(final Member member) {
 		if (member.isDeleted()) {
 			throw new BusinessException(ErrorCode.MEMBER_DELETED);
 		}
-
-		return member;
 	}
 }
