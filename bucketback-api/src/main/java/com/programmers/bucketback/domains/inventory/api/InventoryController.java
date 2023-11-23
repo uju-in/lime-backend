@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.bucketback.common.model.Hobby;
@@ -76,16 +77,19 @@ public class InventoryController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "인벤토리 수정을 위한 내가 리뷰한 아이템 조회")
-	@GetMapping("/inventories/{inventoryId}/myitems")
+	@Operation(summary = "인벤토리 조회와 수정을 위한 내가 리뷰한 아이템 조회")
+	@GetMapping("/inventories/myitems")
 	public ResponseEntity<InventoryGetReviewedItemResponse> getReviewedItemsForModify(
-		@PathVariable final Long inventoryId,
+		@RequestParam(required = false) final Long inventoryId,
+		@RequestParam(required = false) final String hobbyName,
 		@ModelAttribute @Valid final CursorRequest cursorRequest
 	) {
 
 		InventoryGetReviewedItemResponse response = InventoryGetReviewedItemResponse.from(
 			inventoryService.getReviewedItemsForModify(
-				inventoryId, cursorRequest.toParameters()
+				inventoryId,
+				Hobby.fromName(hobbyName),
+				cursorRequest.toParameters()
 			)
 		);
 

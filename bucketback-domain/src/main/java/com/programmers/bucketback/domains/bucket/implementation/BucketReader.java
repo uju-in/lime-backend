@@ -69,25 +69,31 @@ public class BucketReader {
 		return bucketItemRepository.findByBucketId(bucketId);
 	}
 
-	/** 버킷 수정을 위한 MemberItem 커서 조회 */
+	/** 버킷 조회와 수정을 위한 MemberItem 커서 조회 */
 	public CursorSummary<BucketMemberItemSummary> readByMemberItems(
 		final Long bucketId,
 		final Long memberId,
+		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		int pageSize = getPageSize(parameters);
 
-		Bucket bucket = read(bucketId, memberId);
-		List<Long> itemIdsFromBucketItem = bucket.getBucketItems().stream()
-			.map(bucketItem -> bucketItem.getItem().getId())
-			.toList();
 		List<Long> itemIdsFromMemberItem = memberItemReader.readByMemberId(memberId).stream()
 			.map(memberItem -> memberItem.getItem().getId())
 			.toList();
+		List<Long> itemIdsFromBucketItem = null;
+
+		if (bucketId != null) {
+			Bucket bucket = read(bucketId, memberId);
+			itemIdsFromBucketItem = bucket.getBucketItems().stream()
+				.map(bucketItem -> bucketItem.getItem().getId())
+				.toList();
+		}
 
 		List<BucketMemberItemSummary> summaries = memberItemReader.readBucketMemberItem(
 			itemIdsFromBucketItem,
 			itemIdsFromMemberItem,
+			hobby,
 			memberId,
 			parameters.cursorId(),
 			pageSize

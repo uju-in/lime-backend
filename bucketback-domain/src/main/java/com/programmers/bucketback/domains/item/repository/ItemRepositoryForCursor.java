@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.item.repository;
 
 import java.util.List;
 
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
 
@@ -15,6 +16,7 @@ public interface ItemRepositoryForCursor {
 	List<InventoryReviewItemSummary> findReviewedItemByCursor(
 		final List<Long> itemIdsFromReview,
 		final List<Long> itemIdsFromInventory,
+		final Hobby hobby,
 		final String cursorId,
 		final int pageSize
 	);

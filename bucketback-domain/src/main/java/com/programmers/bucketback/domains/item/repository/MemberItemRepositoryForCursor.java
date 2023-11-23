@@ -10,6 +10,7 @@ public interface MemberItemRepositoryForCursor {
 	List<BucketMemberItemSummary> findBucketMemberItemsByCursor(
 		final List<Long> itemIdsFromBucketItem,
 		final List<Long> itemIdsFromMemberItem,
+		final Hobby hobby,
 		final Long memberId,
 		final String cursorId,
 		final int pageSize

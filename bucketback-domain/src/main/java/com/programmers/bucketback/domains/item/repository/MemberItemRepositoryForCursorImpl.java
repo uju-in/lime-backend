@@ -32,6 +32,7 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 	public List<BucketMemberItemSummary> findBucketMemberItemsByCursor(
 		final List<Long> itemIdsFromBucketItem,
 		final List<Long> itemIdsFromMemberItem,
+		final Hobby hobby,
 		final Long memberId,
 		final String cursorId,
 		final int pageSize
@@ -41,7 +42,8 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 			.join(memberItem).on(item.id.eq(memberItem.item.id))
 			.where(
 				cursorIdConditionFromMemberItem(cursorId),
-				item.id.in(itemIdsFromMemberItem)
+				item.id.in(itemIdsFromMemberItem),
+				hobbyCondition(hobby)
 			)
 			.orderBy(new OrderSpecifier<>(Order.DESC, item.createdAt))
 			.limit(pageSize)
@@ -96,6 +98,10 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 	}
 
 	private BooleanExpression isSelected(final List<Long> itemIdsFromBucketItem) {
+		if (itemIdsFromBucketItem == null) {
+			return Expressions.asBoolean(false).isTrue();
+		}
+
 		return new CaseBuilder()
 			.when(memberItem.item.id.in(itemIdsFromBucketItem))
 			.then(true)

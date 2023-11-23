@@ -38,6 +38,8 @@ public class InventoryReader {
 	private static final int ITEM_IMAGE_LIMIT = 4;
 	private static final int INVENTORY_PROFILE_LIMIT = 3;
 	private static final int INVENTORY_ITEM_IMAGE_LIMIT = 3;
+	private static final int DEFAULT_PAGING_SIZE = 20;
+
 	private final InventoryRepository inventoryRepository;
 	private final InventoryItemRepository inventoryItemRepository;
 	private final ReviewReader reviewReader;
@@ -68,7 +70,7 @@ public class InventoryReader {
 			});
 	}
 
-	/** 인벤토링 아이템 조회 */
+	/** 인벤토리 아이템 조회 */
 	public List<InventoryItem> inventoryItemRead(final Long inventoryId) {
 		return inventoryItemRepository.findByInventoryId(inventoryId);
 	}
@@ -106,14 +108,19 @@ public class InventoryReader {
 	public CursorSummary<InventoryReviewItemSummary> readReviewedItem(
 		final Long memberId,
 		final Long inventoryId,
+		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
-		int pageSize = parameters.size() == 0 ? 20 : parameters.size();
+		int pageSize = getPageSize(parameters);
 
-		List<Long> itemIdsFromInventory = read(inventoryId, memberId)
-			.getInventoryItems().stream()
-			.map(inventoryItem -> inventoryItem.getItem().getId())
-			.toList();
+		List<Long> itemIdsFromInventory = null;
+
+		if (inventoryId != null) {
+			itemIdsFromInventory = read(inventoryId, memberId)
+				.getInventoryItems().stream()
+				.map(inventoryItem -> inventoryItem.getItem().getId())
+				.toList();
+		}
 
 		List<Review> reviews = reviewReader.readByMemberId(memberId);
 		List<Long> itemIdsFromReview = reviews.stream()
@@ -123,6 +130,7 @@ public class InventoryReader {
 		List<InventoryReviewItemSummary> summaries = itemReader.readReviewedItem(
 			itemIdsFromReview,
 			itemIdsFromInventory,
+			hobby,
 			parameters.cursorId(),
 			pageSize
 		);
@@ -159,5 +167,10 @@ public class InventoryReader {
 			.map(InventoryItem::getItem)
 			.map(Item::getImage)
 			.toList();
+	}
+
+	private int getPageSize(final CursorPageParameters parameters) {
+		int pageSize = parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
+		return pageSize;
 	}
 }
