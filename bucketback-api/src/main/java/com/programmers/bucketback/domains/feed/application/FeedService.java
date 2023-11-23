@@ -29,10 +29,11 @@ public class FeedService {
 	private final FeedModifier feedModifier;
 	private final FeedRemover feedRemover;
 	private final FeedCursorReader feedCursorReader;
+	private final MemberUtils memberUtils;
 
 	/** 피드 생성 */
 	public Long createFeed(final FeedCreateServiceRequest request) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 
 		return feedAppender.append(memberId, request);
 	}
@@ -42,7 +43,7 @@ public class FeedService {
 		final Long feedId,
 		final FeedUpdateServiceRequest request
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		feedModifier.modify(memberId, feedId, request);
 	}
 
@@ -53,7 +54,7 @@ public class FeedService {
 		final CursorPageParameters parameters
 	) {
 		FeedSortCondition feedSortCondition = FeedSortCondition.from(sortCondition);
-		Long loginMemberId = MemberUtils.getCurrentMemberId();
+		Long loginMemberId = memberUtils.getCurrentMemberId();
 
 		return feedCursorReader.getFeedByCursor(
 			hobby,
@@ -66,25 +67,25 @@ public class FeedService {
 
 	/** 피드 삭제 */
 	public void deleteFeed(final Long feedId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		feedRemover.remove(memberId, feedId);
 	}
 
 	/** 피드 좋아요 */
 	public void likeFeed(final Long feedId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		feedAppender.like(memberId, feedId);
 	}
 
 	/** 피드 좋아요 취소 */
 	public void unLikeFeed(final Long feedId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		feedRemover.unlike(memberId, feedId);
 	}
 
 	/** 피드 상세 조회 **/
 	public FeedGetServiceResponse getFeed(final Long feedId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		final FeedDetail detail = feedReader.readDetail(feedId, memberId);
 
 		return FeedGetServiceResponse.from(detail);
