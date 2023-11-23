@@ -27,9 +27,7 @@ import com.programmers.bucketback.error.EntityNotFoundException;
 import com.programmers.bucketback.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -90,7 +88,6 @@ public class BucketReader {
 			itemIdsFromBucketItem = bucket.getBucketItems().stream()
 				.map(bucketItem -> bucketItem.getItem().getId())
 				.toList();
-			itemIdsFromBucketItem.forEach(System.out::println);
 		}
 
 		List<BucketMemberItemSummary> summaries = memberItemReader.readBucketMemberItem(
