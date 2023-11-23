@@ -82,6 +82,10 @@ public class Member extends BaseEntity {
 	}
 
 	public String getIntroduction() {
+		if (introduction == null) {
+			return null;
+		}
+
 		return introduction.getIntroduction();
 	}
 

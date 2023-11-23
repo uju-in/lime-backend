@@ -100,7 +100,12 @@ public class MemberService {
 	}
 
 	public MyPage getMyPage(final String nickname) {
-		return memberReader.readMyPage(nickname);
+		Member member = memberReader.readByNickname(nickname);
+		if (member.isDeleted()) {
+			throw new BusinessException(ErrorCode.MEMBER_DELETED);
+		}
+
+		return memberReader.readMyPage(member);
 	}
 
 	public void updateProfileImage(final MultipartFile multipartFile) throws IOException {
