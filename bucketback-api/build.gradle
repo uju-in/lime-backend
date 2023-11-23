@@ -18,9 +18,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+
     implementation project(':bucketback-domain')
     implementation project(':bucketback-common')
     implementation project(':bucketback-infrastructure')
+
+    testImplementation(testFixtures(project(':bucketback-domain')))
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     //swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
