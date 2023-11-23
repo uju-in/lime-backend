@@ -42,8 +42,7 @@ public class MemberReader {
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 	}
 
-	public MyPage readMyPage(final String nickname) {
-		Member member = readByNickname(nickname);
+	public MyPage readMyPage(final Member member) {
 		MemberProfile memberProfile = MemberProfile.from(member);
 
 		List<BucketProfile> bucketProfiles = bucketReader.readBucketProfile(member.getId());
