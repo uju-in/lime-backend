@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,10 +34,10 @@ class ItemAppenderTest {
 		Hobby hobby = Hobby.BASEBALL;
 		ItemCrawlerInfo itemCrawlerInfo = ItemCrawlerInfoBuilder.build();
 		Item item = ItemBuilder.fromItemCrawlerInfoBuild(hobby, itemCrawlerInfo);
+		when(itemRepository.save(any())).thenReturn(item);
 		Long expectedItemId = item.getId();
 
 		// when
-		when(itemRepository.save(any())).thenReturn(item);
 		Long actualItemId = itemAppender.append(hobby, itemCrawlerInfo);
 
 		// then
