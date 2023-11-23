@@ -98,4 +98,10 @@ public class Feed extends BaseEntity {
 		return this.comments.stream()
 			.anyMatch(Comment::isAdoption);
 	}
+
+	public int getTotalPrice() {
+		return this.feedItems.stream()
+			.mapToInt(FeedItem::getItemPrice)
+			.sum();
+	}
 }
