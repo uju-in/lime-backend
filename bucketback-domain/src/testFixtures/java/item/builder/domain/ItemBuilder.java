@@ -1,4 +1,4 @@
-package com.programmers.bucketback.item.builder.domain;
+package item.builder.domain;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -14,11 +14,7 @@ public class ItemBuilder {
 			.name("아이템")
 			.build();
 
-		ReflectionTestUtils.setField(
-			item,
-			"id",
-			1L
-		);
+		setItemId(item, 1L);
 
 		return item;
 	}
@@ -33,12 +29,27 @@ public class ItemBuilder {
 		final Hobby hobby,
 		final ItemCrawlerInfo itemCrawlerInfo
 	) {
-		return Item.builder()
+		Item item = Item.builder()
 			.hobby(hobby)
 			.url(itemCrawlerInfo.url())
 			.price(itemCrawlerInfo.price())
 			.name(itemCrawlerInfo.itemName())
 			.image(itemCrawlerInfo.imageUrl())
 			.build();
+
+		setItemId(item, 1L);
+
+		return item;
+	}
+
+	private static void setItemId(
+		final Item item,
+		final Long id
+	) {
+		ReflectionTestUtils.setField(
+			item,
+			"id",
+			id
+		);
 	}
 }

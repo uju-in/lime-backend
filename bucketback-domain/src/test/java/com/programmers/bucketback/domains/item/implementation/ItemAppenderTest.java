@@ -13,8 +13,9 @@ import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
-import com.programmers.bucketback.item.builder.domain.ItemBuilder;
-import com.programmers.bucketback.item.builder.model.ItemCrawlerInfoBuilder;
+
+import item.builder.domain.ItemBuilder;
+import item.builder.model.ItemCrawlerInfoBuilder;
 
 @ExtendWith(MockitoExtension.class)
 class ItemAppenderTest {
