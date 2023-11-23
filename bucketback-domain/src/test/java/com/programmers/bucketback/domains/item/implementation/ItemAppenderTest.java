@@ -30,7 +30,7 @@ class ItemAppenderTest {
 	void appendTest() {
 		// given
 		Hobby hobby = Hobby.BASEBALL;
-		ItemCrawlerInfo itemCrawlerInfo = ItemCrawlerInfoBuilder.successBuild();
+		ItemCrawlerInfo itemCrawlerInfo = ItemCrawlerInfoBuilder.build();
 		Item item = ItemBuilder.fromItemCrawlerInfoBuild(hobby, itemCrawlerInfo);
 		Long expectedItemId = item.getId();
 

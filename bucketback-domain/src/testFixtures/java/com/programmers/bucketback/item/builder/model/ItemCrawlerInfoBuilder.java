@@ -4,7 +4,7 @@ import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 public class ItemCrawlerInfoBuilder {
 
-	public static ItemCrawlerInfo successBuild() {
+	public static ItemCrawlerInfo build() {
 		return ItemCrawlerInfo.builder()
 			.itemName("아이템")
 			.price(10000)
