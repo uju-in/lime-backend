@@ -38,6 +38,7 @@ public class MemberService {
 	private final MemberChecker memberChecker;
 	private final EmailSender emailSender;
 	private final S3Manager s3Manager;
+	private final MemberUtils memberUtils;
 
 	public MemberCheckJwtServiceResponse checkJwtToken() {
 		return memberSecurityManager.checkJwtToken();
@@ -67,25 +68,25 @@ public class MemberService {
 	}
 
 	public void deleteMember() {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Member member = memberUtils.getCurrentMember();
 
-		memberRemover.remove(memberId);
+		memberRemover.remove(member);
 	}
 
 	public void updateProfile(
 		final String nickname,
 		final String introduction
 	) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Member member = memberUtils.getCurrentMember();
 
-		memberModifier.modifyProfile(memberId, nickname, introduction);
+		memberModifier.modifyProfile(member, nickname, introduction);
 	}
 
 	public void updatePassword(final String password) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Member member = memberUtils.getCurrentMember();
 		final String encodedPassword = memberSecurityManager.encodePassword(password);
 
-		memberModifier.modifyPassword(memberId, encodedPassword);
+		memberModifier.modifyPassword(member, encodedPassword);
 	}
 
 	public void checkNickname(final String nickname) {
@@ -103,17 +104,17 @@ public class MemberService {
 	}
 
 	public void updateProfileImage(final MultipartFile multipartFile) throws IOException {
-		final Long memberId = MemberUtils.getCurrentMemberId();
-		final String profileImage = memberId + BASE_EXTENSION;
+		final Member member = memberUtils.getCurrentMember();
+		final String profileImage = member.getId() + BASE_EXTENSION;
 
 		s3Manager.deleteFile(profileImage, DIRECTORY);
 
 		if (multipartFile == null) {
-			memberRemover.removeProfileImage(memberId);
+			memberRemover.removeProfileImage(member.getId());
 			return;
 		}
 
 		s3Manager.uploadFile(multipartFile, DIRECTORY, profileImage);
-		memberModifier.modifyProfileImage(memberId, DIRECTORY, profileImage);
+		memberModifier.modifyProfileImage(member, DIRECTORY, profileImage);
 	}
 }
