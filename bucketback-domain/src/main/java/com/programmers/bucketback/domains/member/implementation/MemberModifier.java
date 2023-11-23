@@ -13,7 +13,6 @@ public class MemberModifier {
 
 	public static final String IMAGE_BASE_PATH = "https://team-02-bucket.s3.ap-northeast-2.amazonaws.com/";
 
-	private final MemberReader memberReader;
 	private final MemberChecker memberChecker;
 
 	@Transactional
