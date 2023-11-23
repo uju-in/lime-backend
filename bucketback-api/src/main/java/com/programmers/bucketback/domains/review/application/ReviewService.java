@@ -32,7 +32,6 @@ public class ReviewService {
 	private final ReviewStatistics reviewStatistics;
 	private final MemberUtils memberUtils;
 	private final ReviewReader reviewReader;
-	private final MemberUtils memberUtils;
 
 	@PayPoint(15)
 	public Long createReview(
