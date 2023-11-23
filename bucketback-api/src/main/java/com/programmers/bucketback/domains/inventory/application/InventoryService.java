@@ -31,6 +31,7 @@ public class InventoryService {
 	private final InventoryModifier inventoryModifier;
 	private final InventoryRemover inventoryRemover;
 	private final MemberReader memberReader;
+	private final MemberUtils memberUtils;
 
 	/** 인벤토리 생성 */
 	public Long createInventory(
@@ -38,7 +39,7 @@ public class InventoryService {
 		final ItemIdRegistry registry
 	) {
 		validateEmptyRegistry(registry);
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		validateDuplication(hobby, memberId);
 
 		return inventoryAppender.append(memberId, hobby, registry);
@@ -50,14 +51,14 @@ public class InventoryService {
 		final ItemIdRegistry registry
 	) {
 		validateEmptyRegistry(registry);
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 
 		inventoryModifier.modify(memberId, inventoryId, registry);
 	}
 
 	/** 인벤토리 삭제 */
 	public void deleteInventory(final Long inventoryId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		inventoryRemover.remove(inventoryId, memberId);
 	}
 
@@ -84,7 +85,7 @@ public class InventoryService {
 		final Long inventoryId,
 		final CursorPageParameters parameters
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 
 		return inventoryReader.readReviewedItem(memberId, inventoryId, parameters);
 	}

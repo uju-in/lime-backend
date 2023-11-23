@@ -18,12 +18,10 @@ public class MemberModifier {
 
 	@Transactional
 	public void modifyProfile(
-		final Long memberId,
+		final Member member,
 		final String nickname,
 		final String introduction
 	) {
-		final Member member = memberReader.read(memberId);
-
 		if (!nickname.equals(member.getNickname())) {
 			memberChecker.checkNicknameDuplication(nickname);
 		}
@@ -33,20 +31,18 @@ public class MemberModifier {
 
 	@Transactional
 	public void modifyPassword(
-		final Long memberId,
+		final Member member,
 		final String encodedPassword
 	) {
-		final Member member = memberReader.read(memberId);
 		member.updatePassword(encodedPassword);
 	}
 
 	@Transactional
 	public void modifyProfileImage(
-		final Long memberId,
+		final Member member,
 		final String directory,
 		final String profileImage
 	) {
-		final Member member = memberReader.read(memberId);
 		final String imagePath = IMAGE_BASE_PATH + directory + "/" + profileImage;
 
 		member.updateProfileImage(imagePath);

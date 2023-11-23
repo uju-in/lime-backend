@@ -30,6 +30,7 @@ public class ReviewService {
 	private final ReviewCursorReader reviewCursorReader;
 	private final ReviewRemover reviewRemover;
 	private final ReviewStatistics reviewStatistics;
+	private final MemberUtils memberUtils;
 	private final ReviewReader reviewReader;
 
 	@PayPoint(15)
@@ -37,7 +38,7 @@ public class ReviewService {
 		final Long itemId,
 		final ReviewContent reviewContent
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		reviewAppender.append(itemId, memberId, reviewContent);
 
 		return memberId;
@@ -48,7 +49,7 @@ public class ReviewService {
 		final Long reviewId,
 		final ReviewContent reviewContent
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		reviewValidator.validItemReview(itemId, reviewId);
 		reviewValidator.validOwner(reviewId, memberId);
 		reviewModifier.modify(reviewId, reviewContent);
@@ -59,7 +60,7 @@ public class ReviewService {
 		final CursorPageParameters parameters
 	) {
 		int reviewCount = reviewStatistics.getReviewCount(itemId);
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		CursorSummary<ReviewCursorSummary> cursorSummary = reviewCursorReader.readByCursor(
 			itemId,
 			memberId,
@@ -73,7 +74,7 @@ public class ReviewService {
 		final Long itemId,
 		final Long reviewId
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		reviewValidator.validItemReview(itemId, reviewId);
 		reviewValidator.validOwner(reviewId, memberId);
 		reviewRemover.remove(reviewId);

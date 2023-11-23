@@ -14,8 +14,7 @@ public class MemberRemover {
 	private final MemberReader memberReader;
 
 	@Transactional
-	public void remove(final Long memberId) {
-		final Member member = memberReader.read(memberId);
+	public void remove(final Member member) {
 		member.delete();
 	}
 

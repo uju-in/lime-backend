@@ -40,9 +40,10 @@ public class ItemService {
 	private final MemberItemRemover memberItemRemover;
 	private final ItemFinder itemFinder;
 	private final ItemCursorReader itemCursorReader;
+	private final MemberUtils memberUtils;
 
 	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		List<Long> memberItemIds = memberItemAppender.addMemberItems(itemIdRegistry.itemIds(), memberId);
 
 		return new ItemAddServiceResponse(memberItemIds);
@@ -52,7 +53,7 @@ public class ItemService {
 		boolean isMemberItem = false;
 
 		Item item = itemReader.read(itemId);
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		isMemberItem = memberItemChecker.existMemberItemByMemberId(memberId, item);
 
 		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
@@ -67,7 +68,7 @@ public class ItemService {
 	}
 
 	public void removeMemberItem(final Long itemId) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 		MemberItem memberItem = memberItemReader.read(itemId, memberId);
 		memberItemRemover.remove(memberItem.getId());
 	}
@@ -92,7 +93,7 @@ public class ItemService {
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
-		Long memberId = MemberUtils.getCurrentMemberId();
+		Long memberId = memberUtils.getCurrentMemberId();
 
 		return memberItemReader.readMemberItem(
 			hobby,

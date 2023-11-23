@@ -30,9 +30,10 @@ public class VoteService {
 	private final VoteReader voteReader;
 	private final VoteManager voteManager;
 	private final VoteRemover voteRemover;
+	private final MemberUtils memberUtils;
 
 	public Long createVote(final VoteCreateServiceRequest request) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 
 		return voteAppender.append(memberId, request.toImplRequest());
 	}
@@ -41,7 +42,7 @@ public class VoteService {
 		final Long voteId,
 		final Long itemId
 	) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
 		if (!vote.isVoting()) {
@@ -56,14 +57,14 @@ public class VoteService {
 	}
 
 	public void cancelVote(final Long voteId) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
 		voteManager.cancel(vote, memberId);
 	}
 
 	public void deleteVote(final Long voteId) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
 		if (!vote.isOwner(memberId)) {
@@ -74,7 +75,7 @@ public class VoteService {
 	}
 
 	public VoteGetServiceResponse getVote(final Long voteId) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 		final VoteDetail detail = voteReader.read(voteId, memberId);
 
 		return VoteGetServiceResponse.from(detail);
@@ -86,7 +87,7 @@ public class VoteService {
 		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters
 	) {
-		final Long memberId = MemberUtils.getCurrentMemberId();
+		final Long memberId = memberUtils.getCurrentMemberId();
 
 		if (memberId == null && statusCondition.isRequiredLogin()) {
 			throw new BusinessException(ErrorCode.UNAUTHORIZED);
