@@ -23,6 +23,7 @@ public class LoginInfo {
 		"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
 	public static final Pattern PASSWORD_PATTERN = Pattern.compile(
 		"^(?=.*[!@#\\$%\\^&*\\(\\)\\-_+=\\[\\]{};:'\",.<>?/`~])(?=.*[A-Za-z])(?=.*\\d).*$");
+	public static final String DELETE_EXPRESSION = "delete";
 
 	@Column(name = "email", nullable = false)
 	private String email;
@@ -64,5 +65,9 @@ public class LoginInfo {
 
 	public void updatePassword(final String password) {
 		this.password = password;
+	}
+
+	public void delete() {
+		this.email += DELETE_EXPRESSION;
 	}
 }
