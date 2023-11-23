@@ -22,7 +22,7 @@ import item.builder.model.ItemCrawlerInfoBuilder;
 class ItemAppenderTest {
 
 	@Mock
-	ItemRepository itemRepository;
+	private ItemRepository itemRepository;
 
 	@InjectMocks
 	private ItemAppender itemAppender;
