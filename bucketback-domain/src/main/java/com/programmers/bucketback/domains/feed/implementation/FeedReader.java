@@ -57,8 +57,8 @@ public class FeedReader {
 	) {
 		final Feed feed = read(feedId);
 		final Long feedMemberId = feed.getMemberId();
-		final Member member = memberReader.read(feedMemberId);
-		final MemberInfo memberInfo = MemberInfo.from(member);
+		final Member feedOwner = memberReader.read(feedMemberId);
+		final MemberInfo memberInfo = MemberInfo.from(feedOwner);
 
 		final Boolean isLiked = isLiked(feed, memberId);
 		final FeedInfo feedInfo = FeedInfo.of(feed, isLiked);
