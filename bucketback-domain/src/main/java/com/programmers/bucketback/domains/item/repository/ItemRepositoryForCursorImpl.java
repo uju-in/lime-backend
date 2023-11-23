@@ -6,6 +6,7 @@ import static com.querydsl.core.group.GroupBy.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
@@ -61,12 +62,16 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 	public List<InventoryReviewItemSummary> findReviewedItemByCursor(
 		final List<Long> itemIdsFromReview,
 		final List<Long> itemIdsFromInventory,
+		final Hobby hobby,
 		final String cursorId,
 		final int pageSize
 	) {
 		return jpaQueryFactory
 			.selectFrom(item)
-			.where(item.id.in(itemIdsFromReview))
+			.where(
+				item.id.in(itemIdsFromReview),
+				hobbyCondition(hobby)
+			)
 			.orderBy(decrease(), item.id.desc())
 			.transform(groupBy(item.id)
 				.list(Projections.constructor(InventoryReviewItemSummary.class,
@@ -84,6 +89,10 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 	}
 
 	private BooleanExpression isSelected(final List<Long> itemIdsFromInventory) {
+		if (itemIdsFromInventory == null) {
+			return Expressions.asBoolean(false).isTrue();
+		}
+
 		return new CaseBuilder()
 			.when(item.id.in(itemIdsFromInventory))
 			.then(true)
@@ -92,6 +101,14 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 
 	private OrderSpecifier<LocalDateTime> decrease() {
 		return new OrderSpecifier<>(Order.DESC, item.createdAt);
+	}
+
+	private BooleanExpression hobbyCondition(final Hobby hobby) {
+		if (hobby == null) {
+			return null;
+		}
+
+		return item.hobby.eq(hobby);
 	}
 
 	private BooleanExpression cursorIdCondition(final String cursorId) {

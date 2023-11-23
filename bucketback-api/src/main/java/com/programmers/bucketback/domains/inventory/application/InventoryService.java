@@ -82,11 +82,17 @@ public class InventoryService {
 	 */
 	public CursorSummary<InventoryReviewItemSummary> getReviewedItemsForModify(
 		final Long inventoryId,
+		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = MemberUtils.getCurrentMemberId();
 
-		return inventoryReader.readReviewedItem(memberId, inventoryId, parameters);
+		return inventoryReader.readReviewedItem(
+			memberId,
+			inventoryId,
+			hobby,
+			parameters
+		);
 	}
 
 	private void validateDuplication(

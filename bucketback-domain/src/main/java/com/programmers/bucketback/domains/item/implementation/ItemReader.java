@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
@@ -28,12 +29,14 @@ public class ItemReader {
 	public List<InventoryReviewItemSummary> readReviewedItem(
 		final List<Long> itemIdsFromReview,
 		final List<Long> itemIdsFromInventory,
+		final Hobby hobby,
 		final String cursorId,
 		final int pageSize
 	) {
 		return itemRepository.findReviewedItemByCursor(
 			itemIdsFromReview,
 			itemIdsFromInventory,
+			hobby,
 			cursorId,
 			pageSize
 		);
