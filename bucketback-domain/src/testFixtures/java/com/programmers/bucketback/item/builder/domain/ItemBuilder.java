@@ -34,7 +34,7 @@ public class ItemBuilder {
 		final ItemCrawlerInfo itemCrawlerInfo
 	) {
 		return Item.builder()
-			.hobby(Hobby.BASEBALL)
+			.hobby(hobby)
 			.url(itemCrawlerInfo.url())
 			.price(itemCrawlerInfo.price())
 			.name(itemCrawlerInfo.itemName())
