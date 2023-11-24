@@ -22,6 +22,7 @@ public class ItemBuilder {
 			.url("https://www.naver.com")
 			.image("https://www.naver.com//image")
 			.price(10000)
+			.hobby(Hobby.SWIMMING)
 			.name("아이템");
 	}
 
