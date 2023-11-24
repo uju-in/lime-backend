@@ -22,8 +22,7 @@ public class VoteManager {
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = voterReader.read(vote, memberId)
-			.orElseGet(() -> new Voter(vote, memberId, itemId));
+		final Voter voter = voterReader.read(vote, memberId, itemId);
 
 		voter.participate(itemId);
 		vote.addVoter(voter);
