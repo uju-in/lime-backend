@@ -27,7 +27,7 @@ class ItemAppenderTest {
 	private ItemAppender itemAppender;
 
 	@Test
-	@DisplayName("아이템 추가 테스트")
+	@DisplayName("아이템 추가 테스트에 저장한다.")
 	void appendTest() {
 		// given
 		Hobby hobby = Hobby.BASEBALL;
