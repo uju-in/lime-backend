@@ -25,7 +25,6 @@ public class VoteManager {
 		final Voter voter = voterReader.read(vote, memberId, itemId);
 
 		voter.participate(itemId);
-		vote.addVoter(voter);
 	}
 
 	@Transactional
