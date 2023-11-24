@@ -11,12 +11,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.programmers.bucketback.common.model.ItemIdRegistry;
-import com.programmers.bucketback.common.model.builder.ItemIdRegistryBuilder;
-import com.programmers.bucketback.domains.bucket.builder.BucketBuilder;
+import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
+import com.programmers.bucketback.domains.bucket.domain.BucketBuilder;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
-import com.programmers.bucketback.domains.item.builder.domain.ItemBuilder;
+import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,14 +36,15 @@ public class BucketAppenderTest {
 	void createBucket() {
 		//given
 		Long memberId = 1L;
-		BucketInfo bucketInfo = BucketBuilder.buildBucketInfo();
-		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.createItemIdRegistry();
+		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.build();
 
-		Bucket bucket = BucketBuilder.build();
+		BucketInfo bucketInfo = BucketBuilder.buildBucketInfo();
+		Bucket bucket = BucketBuilder.build(bucketInfo);
 		Long expectBucketId = bucket.getId();
+
 		given(bucketRepository.save(any(Bucket.class)))
 			.willReturn(bucket);
-		given(itemReader.read(any(Long.class)))
+		given(itemReader.read(anyLong()))
 			.willReturn(ItemBuilder.build());
 
 		//when

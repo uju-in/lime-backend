@@ -17,13 +17,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
-import com.programmers.bucketback.domains.bucket.builder.BucketBuilder;
+import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
+import com.programmers.bucketback.domains.bucket.domain.BucketBuilder;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
-import com.programmers.bucketback.domains.item.builder.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.domain.Item;
+import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 
 @ExtendWith(MockitoExtension.class)
 public class BucketModifierTest {
@@ -49,15 +50,22 @@ public class BucketModifierTest {
 		//given
 		Long memberId = 1L;
 		Long bucketId = 1L;
-		BucketInfo bucketInfo = new BucketInfo(Hobby.CYCLE, "도로위의무법자", 200000);
-		ItemIdRegistry updateItemIds = new ItemIdRegistry(Arrays.asList(4L, 5L));
-		Bucket updateBucket = new Bucket(bucketInfo, memberId);
+
+		BucketInfo updateBucketInfo = BucketBuilder.buildBucketInfo(
+			Hobby.CYCLE,
+			"도로위의무법자",
+			200000
+		);
+		ItemIdRegistry updateItemIds = ItemIdRegistryBuilder.build(Arrays.asList(4L, 5L));
+		Bucket updateBucket = BucketBuilder.build(updateBucketInfo);
 
 		Bucket existBucket = BucketBuilder.build();
+
 		// 수정을 위해 기존 bucketItem 제거
-		given(bucketReader.read(any(Long.class), any(Long.class)))
+		given(bucketReader.read(anyLong(), anyLong()))
 			.willReturn(existBucket);
-		doNothing().when(bucketRemover).removeBucketItems(any(Long.class));
+		doNothing().when(bucketRemover)
+			.removeBucketItems(any(Long.class));
 
 		// 업데이트를 위한 새로운 데이터 생성
 		List<BucketItem> updateBucketItems = new ArrayList<>();
@@ -72,12 +80,10 @@ public class BucketModifierTest {
 			.willReturn(updateBucket);
 
 		//when
-		bucketModifier.modify(memberId, bucketId, bucketInfo, updateItemIds);
+		bucketModifier.modify(memberId, bucketId, updateBucketInfo, updateItemIds);
 
 		//then
-		assertThat(updateBucket.getName()).isEqualTo(bucketInfo.getName());
-		assertThat(updateBucket.getBudget()).isEqualTo(bucketInfo.getBudget());
-		assertThat(updateBucket.getHobby()).isEqualTo(bucketInfo.getHobby());
+		assertThat(updateBucket.getBucketInfo()).usingRecursiveComparison().isEqualTo(updateBucketInfo);
 		assertThat(updateBucketItems.size()).isEqualTo(updateItemIds.itemIds().size());
 	}
 }
