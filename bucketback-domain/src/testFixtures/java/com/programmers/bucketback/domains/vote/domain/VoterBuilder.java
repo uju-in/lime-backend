@@ -1,7 +1,7 @@
 package com.programmers.bucketback.domains.vote.domain;
 
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -15,8 +15,8 @@ public class VoterBuilder {
 		final Vote vote,
 		final Long itemId
 	) {
-		return IntStream.range(0, size)
-			.mapToObj(i -> VoterBuilder.build((long) (i + 1), vote, (long) (i + 1), itemId))
+		return LongStream.range(0, size)
+			.mapToObj(i -> VoterBuilder.build(i + 1, vote, i + 1, itemId))
 			.toList();
 	}
 
