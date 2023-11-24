@@ -9,9 +9,7 @@ import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 public class ItemBuilder {
 
 	public static Item build() {
-		Item item = itemWithURLBuilder()
-			.price(10000)
-			.name("아이템")
+		Item item = aItemBuilder()
 			.build();
 
 		setItemId(item, 1L);
@@ -19,10 +17,12 @@ public class ItemBuilder {
 		return item;
 	}
 
-	public static Item.ItemBuilder itemWithURLBuilder() {
+	public static Item.ItemBuilder aItemBuilder() {
 		return Item.builder()
 			.url("https://www.naver.com")
-			.image("https://www.naver.com//image");
+			.image("https://www.naver.com//image")
+			.price(10000)
+			.name("아이템");
 	}
 
 	public static Item fromItemCrawlerInfoBuild(
