@@ -1,9 +1,8 @@
-package com.programmers.bucketback.domains.item.builder.domain;
+package com.programmers.bucketback.domains.item.domain;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
-import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 public class ItemBuilder {

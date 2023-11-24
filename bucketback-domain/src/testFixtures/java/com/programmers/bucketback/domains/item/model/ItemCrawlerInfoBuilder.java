@@ -1,6 +1,4 @@
-package com.programmers.bucketback.domains.item.builder.model;
-
-import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
+package com.programmers.bucketback.domains.item.model;
 
 public class ItemCrawlerInfoBuilder {
 
