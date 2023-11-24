@@ -9,10 +9,6 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoteBuilder {
-	public static Vote build() {
-		return build(1L);
-	}
-
 	public static Vote build(final Long memberId) {
 		Vote vote = Vote.builder()
 			.memberId(memberId)
