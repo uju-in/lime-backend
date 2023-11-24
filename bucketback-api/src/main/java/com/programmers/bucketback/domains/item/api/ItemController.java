@@ -15,6 +15,7 @@ import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
+import com.programmers.bucketback.domains.item.api.dto.request.MemberItemDeleteRequest;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemAddResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetByCursorResponse;
@@ -73,9 +74,11 @@ public class ItemController {
 	}
 
 	@Operation(summary = "나의 아이템 목록에서 삭제", description = "itemId을 이용하여 나의 아이템 목록에서 삭제 합니다.")
-	@DeleteMapping("/myitems/{itemId}")
-	public ResponseEntity<Void> deleteMyItem(@PathVariable final Long itemId) {
-		itemService.removeMemberItem(itemId);
+	@DeleteMapping("/myitems")
+	public ResponseEntity<Void> deleteMyItem(@ModelAttribute @Valid final MemberItemDeleteRequest request) {
+		itemService.removeMemberItems(
+			request.toItemRemovalList()
+		);
 
 		return ResponseEntity.ok().build();
 	}
