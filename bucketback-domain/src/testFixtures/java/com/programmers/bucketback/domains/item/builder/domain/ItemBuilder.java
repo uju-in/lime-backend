@@ -17,6 +17,15 @@ public class ItemBuilder {
 		return item;
 	}
 
+	public static Item build(Long itemId) {
+		Item item = aItemBuilder()
+			.build();
+
+		setItemId(item, itemId);
+
+		return item;
+	}
+
 	public static Item.ItemBuilder aItemBuilder() {
 		return Item.builder()
 			.url("https://www.naver.com")
