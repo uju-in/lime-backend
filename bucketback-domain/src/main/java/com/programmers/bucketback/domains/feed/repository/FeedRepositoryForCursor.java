@@ -9,6 +9,7 @@ import com.programmers.bucketback.domains.feed.model.FeedSortCondition;
 public interface FeedRepositoryForCursor {
 	List<FeedCursorSummary> findAllByCursor(
 		final Long myPageMemberId,
+		final boolean myPageOwnerLikeFeeds,
 		final Hobby hobby,
 		final FeedSortCondition feedSortCondition,
 		final String cursorId,
