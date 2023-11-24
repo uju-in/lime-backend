@@ -33,7 +33,10 @@ public class VoterBuilder {
 		return voter;
 	}
 
-	private static void setVoterId(final Long id, final Voter voter) {
+	private static void setVoterId(
+		final Long id,
+		final Voter voter
+	) {
 		ReflectionTestUtils.setField(
 			voter,
 			"id",
