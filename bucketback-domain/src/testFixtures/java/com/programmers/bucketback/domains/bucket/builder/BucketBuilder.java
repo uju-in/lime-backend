@@ -1,11 +1,8 @@
 package com.programmers.bucketback.domains.bucket.builder;
 
-import java.util.Arrays;
-
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
-import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 
@@ -30,10 +27,6 @@ public class BucketBuilder {
 			"nba 올스타 세트",
 			100000
 		);
-	}
-
-	public static ItemIdRegistry createItemIdRegistry() {
-		return new ItemIdRegistry(Arrays.asList(1L, 2L, 3L));
 	}
 
 	private static void setBucketId(final Bucket bucket) {

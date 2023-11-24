@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.builder.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.bucket.builder.BucketBuilder;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
@@ -36,10 +37,10 @@ public class BucketAppenderTest {
 		//given
 		Long memberId = 1L;
 		BucketInfo bucketInfo = BucketBuilder.buildBucketInfo();
-		ItemIdRegistry itemIdRegistry = BucketBuilder.createItemIdRegistry();
+		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.createItemIdRegistry();
 
 		Bucket bucket = BucketBuilder.build();
-		Long expectedBucketId = bucket.getId();
+		Long expectBucketId = bucket.getId();
 		given(bucketRepository.save(any(Bucket.class)))
 			.willReturn(bucket);
 		given(itemReader.read(any(Long.class)))
@@ -49,7 +50,7 @@ public class BucketAppenderTest {
 		Long actualBucketId = bucketAppender.append(memberId, bucketInfo, itemIdRegistry);
 
 		//then
-		assertThat(actualBucketId).isEqualTo(expectedBucketId);
+		assertThat(actualBucketId).isEqualTo(expectBucketId);
 	}
 
 }
