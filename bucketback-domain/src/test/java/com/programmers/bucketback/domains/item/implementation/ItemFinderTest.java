@@ -28,11 +28,11 @@ class ItemFinderTest {
 	private ItemRepository itemRepository;
 
 	@Nested
-	@DisplayName("키워드로 아이템을 조회 테스트")
+	@DisplayName("아이템 검색 테스트")
 	class ItemFindByKeywordTest {
 
 		@Test
-		@DisplayName("아이템 이름이 있는 키워드로 아이템을 조회한다.")
+		@DisplayName("공백이 아닌 키워드로 아이템을 검색한다.")
 		void findByKeywordInItem() {
 			// given
 			String keyword = "농구";
@@ -54,7 +54,7 @@ class ItemFinderTest {
 		}
 
 		@Test
-		@DisplayName("공백으로 아이템을 조회한다.")
+		@DisplayName("공백인 키워드로 아이템을 검색한다.")
 		void findByKeywordNotInItem() {
 			// given
 			String keyword = "  ";
