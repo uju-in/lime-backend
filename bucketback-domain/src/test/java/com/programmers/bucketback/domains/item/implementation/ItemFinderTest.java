@@ -52,6 +52,19 @@ class ItemFinderTest {
 				.usingRecursiveComparison()
 				.isEqualTo(expectedItemInfos);
 		}
+
+		@Test
+		@DisplayName("공백으로 아이템을 조회한다.")
+		void findByKeywordNotInItem() {
+			// given
+			String keyword = "  ";
+
+			// when
+			List<ItemInfo> actualItemInfos = itemFinder.getItemNamesByKeyword(keyword);
+
+			// then
+			assertThat(actualItemInfos).isEmpty();
+		}
 	}
 
 }
