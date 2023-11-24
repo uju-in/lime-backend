@@ -34,7 +34,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 
 	public List<FeedCursorSummary> findAllByCursor(
 		final Long myPageMemberId,
-		final boolean onlyLikeFeed,
+		final boolean myPageOwnerLikeFeeds,
 		final Hobby hobby,
 		final FeedSortCondition feedSortCondition,
 		final String cursorId,
@@ -48,7 +48,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).fetch();
 
-		if (onlyLikeFeed) {
+		if (myPageOwnerLikeFeeds) {
 			feedIds = jpaQueryFactory.select(feedLike.feed.id)
 				.from(feedLike)
 				.where(

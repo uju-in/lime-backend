@@ -52,21 +52,21 @@ public class FeedService {
 	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
 		final Hobby hobby,
 		final String nickName,
-		final boolean onlyLikeFeed,
+		final boolean myPageOwnerLikeFeeds,
 		final String sortCondition,
 		final CursorPageParameters parameters
 	) {
 		FeedSortCondition feedSortCondition = FeedSortCondition.from(sortCondition);
 		Long loginMemberId = memberUtils.getCurrentMemberId();
 
-		if (onlyLikeFeed && nickName == null) {
+		if (myPageOwnerLikeFeeds && nickName == null) {
 			throw new BusinessException(ErrorCode.FEED_BAD_LIKE_ONLY_REQUEST);
 		}
 
 		return feedCursorReader.getFeedByCursor(
 			hobby,
 			nickName,
-			onlyLikeFeed,
+			myPageOwnerLikeFeeds,
 			loginMemberId,
 			feedSortCondition,
 			parameters
