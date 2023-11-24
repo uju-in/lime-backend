@@ -29,6 +29,30 @@ class VoteManagerTest {
 	@Mock
 	private VoterRepository voterRepository;
 
+	@Test
+	@DisplayName("투표를 취소한다.")
+	void cancelTest() {
+		// given
+		final Vote vote = VoteBuilder.build();
+		final Long memberId = 1L;
+		final Voter voter = VoterBuilder.build(vote, memberId, 1L);
+
+		vote.addVoter(voter);
+
+		will(invocation -> {
+			final Vote givenVote = invocation.getArgument(0);
+			final Long givenMemberId = invocation.getArgument(1);
+			givenVote.getVoters().removeIf(savedVoter -> savedVoter.getMemberId().equals(givenMemberId));
+			return null;
+		}).given(voterRepository).deleteByVoteAndMemberId(any(Vote.class), anyLong());
+
+		// when
+		voteManager.cancel(vote, memberId);
+
+		// then
+		assertThat(vote.getVoters()).doesNotContain(voter);
+	}
+
 	@Nested
 	@DisplayName("투표에")
 	class participateTest {
