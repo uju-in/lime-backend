@@ -83,6 +83,7 @@ public class FeedController {
 	public ResponseEntity<FeedGetByCursorResponse> getFeedByCursor(
 		@RequestParam final String hobbyName,
 		@RequestParam(required = false) final String nickname,
+		@RequestParam(required = false) final boolean onlyLikeFeed,
 		@RequestParam(required = false) final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
@@ -91,6 +92,7 @@ public class FeedController {
 		CursorSummary<FeedCursorSummaryLike> cursorSummary = feedService.getFeedByCursor(
 			hobby,
 			nickname,
+			onlyLikeFeed,
 			sortCondition,
 			request.toParameters()
 		);

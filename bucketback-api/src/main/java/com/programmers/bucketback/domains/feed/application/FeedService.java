@@ -16,6 +16,8 @@ import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 import com.programmers.bucketback.domains.feed.model.FeedDetail;
 import com.programmers.bucketback.domains.feed.model.FeedSortCondition;
 import com.programmers.bucketback.domains.feed.model.FeedUpdateServiceRequest;
+import com.programmers.bucketback.error.BusinessException;
+import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.util.MemberUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -50,15 +52,21 @@ public class FeedService {
 	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
 		final Hobby hobby,
 		final String nickName,
+		final boolean onlyLikeFeed,
 		final String sortCondition,
 		final CursorPageParameters parameters
 	) {
 		FeedSortCondition feedSortCondition = FeedSortCondition.from(sortCondition);
 		Long loginMemberId = memberUtils.getCurrentMemberId();
 
+		if (onlyLikeFeed && nickName == null) {
+			throw new BusinessException(ErrorCode.FEED_BAD_LIKE_ONLY_REQUEST);
+		}
+
 		return feedCursorReader.getFeedByCursor(
 			hobby,
 			nickName,
+			onlyLikeFeed,
 			loginMemberId,
 			feedSortCondition,
 			parameters

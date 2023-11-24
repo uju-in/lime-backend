@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.feed.repository;
 
 import static com.programmers.bucketback.domains.feed.domain.QFeed.*;
 import static com.programmers.bucketback.domains.feed.domain.QFeedItem.*;
+import static com.programmers.bucketback.domains.feed.domain.QFeedLike.*;
 import static com.programmers.bucketback.domains.member.domain.QMember.*;
 import static com.querydsl.core.group.GroupBy.*;
 
@@ -33,6 +34,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 
 	public List<FeedCursorSummary> findAllByCursor(
 		final Long myPageMemberId,
+		final boolean onlyLikeFeed,
 		final Hobby hobby,
 		final FeedSortCondition feedSortCondition,
 		final String cursorId,
@@ -45,6 +47,15 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 				eqMemberId(myPageMemberId),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).fetch();
+
+		if (onlyLikeFeed) {
+			feedIds = jpaQueryFactory.select(feedLike.feed.id)
+				.from(feedLike)
+				.where(
+					eqLikeMemberIdToJoin(myPageMemberId),
+					feedLike.feed.id.in(feedIds)
+				).fetch();
+		}
 
 		return jpaQueryFactory
 			.select()
@@ -83,6 +94,14 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 						)
 					)
 			);
+	}
+
+	private BooleanExpression eqLikeMemberIdToJoin(final Long myPageMemberId) {
+		if (myPageMemberId == null) {
+			return null;
+		}
+
+		return feedLike.memberId.eq(myPageMemberId);
 	}
 
 	private BooleanExpression eqMemberIdToJoin(final Long myPageMemberId) {
