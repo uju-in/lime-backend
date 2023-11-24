@@ -11,12 +11,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.programmers.bucketback.common.model.Hobby;
+import com.programmers.bucketback.domains.item.builder.domain.ItemBuilder;
+import com.programmers.bucketback.domains.item.builder.model.ItemCrawlerInfoBuilder;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
-
-import item.builder.domain.ItemBuilder;
-import item.builder.model.ItemCrawlerInfoBuilder;
 
 @ExtendWith(MockitoExtension.class)
 class ItemAppenderTest {

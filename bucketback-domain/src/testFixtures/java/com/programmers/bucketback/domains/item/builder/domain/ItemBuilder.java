@@ -1,4 +1,4 @@
-package item.builder.domain;
+package com.programmers.bucketback.domains.item.builder.domain;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
