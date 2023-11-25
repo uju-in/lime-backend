@@ -58,6 +58,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 						bucket.id,
 						bucket.bucketInfo.name,
 						bucket.bucketInfo.budget,
+						sum(bucketItem.item.price),
 						bucket.createdAt,
 						list(Projections.constructor(ItemImage.class,
 							item.id,
