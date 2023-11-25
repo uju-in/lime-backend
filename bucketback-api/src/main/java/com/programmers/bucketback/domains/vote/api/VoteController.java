@@ -91,7 +91,7 @@ public class VoteController {
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
+		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
 			Hobby.fromName(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
