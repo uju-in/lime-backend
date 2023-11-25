@@ -97,6 +97,27 @@ public class VoteService {
 			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
 		}
 
-		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters, memberId);
+		return voteReader.readByCursor(
+			hobby,
+			statusCondition,
+			sortCondition,
+			null,
+			parameters,
+			memberId
+		);
+	}
+
+	public CursorSummary<VoteSummary> getVotesByKeyword(
+		final String keyword,
+		final CursorPageParameters parameters
+	) {
+		return voteReader.readByCursor(
+			null,
+			VoteStatusCondition.COMPLETED,
+			VoteSortCondition.RECENT,
+			keyword,
+			parameters,
+			null
+		);
 	}
 }
