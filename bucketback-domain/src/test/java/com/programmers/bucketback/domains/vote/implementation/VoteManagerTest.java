@@ -55,7 +55,7 @@ class VoteManagerTest {
 
 	@Nested
 	@DisplayName("투표에")
-	class participateTest {
+	class ParticipateTest {
 
 		@Test
 		@DisplayName("처음 참여한다.")
