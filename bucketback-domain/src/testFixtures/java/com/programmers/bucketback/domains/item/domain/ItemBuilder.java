@@ -6,6 +6,7 @@ import java.util.stream.LongStream;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
+import com.programmers.bucketback.domains.bucket.model.ItemImage;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 public class ItemBuilder {
@@ -30,7 +31,7 @@ public class ItemBuilder {
 
 	public static List<Item> buildMany(final int size) {
 		return LongStream.range(0, size)
-			.mapToObj(i -> build(i + i))
+			.mapToObj(i -> build(i + 1))
 			.toList();
 	}
 
@@ -60,6 +61,12 @@ public class ItemBuilder {
 		return item;
 	}
 
+	public static List<ItemImage> buildItemImages() {
+		return LongStream.range(0, 3)
+			.mapToObj(i -> new ItemImage(i, "https://www.naver.com"))
+			.toList();
+	}
+
 	private static void setItemId(
 		final Item item,
 		final Long id
@@ -70,4 +77,5 @@ public class ItemBuilder {
 			id
 		);
 	}
+
 }
