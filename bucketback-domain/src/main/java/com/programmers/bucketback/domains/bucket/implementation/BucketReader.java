@@ -127,8 +127,11 @@ public class BucketReader {
 			.map(bucketItem -> itemReader.read(bucketItem.getItem().getId()))
 			.map(item -> ItemInfo.from(item))
 			.toList();
+		int totalPrice = itemInfos.stream()
+			.mapToInt(ItemInfo::price)
+			.sum();
 
-		return BucketGetServiceResponse.of(bucket, itemInfos);
+		return BucketGetServiceResponse.of(bucket, totalPrice, itemInfos);
 	}
 
 	/** 마이페이지를 위한 버킷 프로필 조회 (3개) */

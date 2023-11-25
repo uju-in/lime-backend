@@ -20,18 +20,26 @@ public class ItemBuilder {
 		return item;
 	}
 
-	public static Item build(final Long itemId) {
+
+	public static Item build(final Long id) {
+
 		Item item = aItemBuilder()
 			.build();
 
-		setItemId(item, itemId);
-
+		setItemId(item, id);
+    
 		return item;
 	}
 
 	public static List<Item> buildMany(final int size) {
 		return LongStream.range(0, size)
 			.mapToObj(i -> build(i + 1))
+      .toList();
+  }
+  
+	public static List<Item> buildMany() {
+		return LongStream.range(1, 11)
+			.mapToObj(ItemBuilder::build)
 			.toList();
 	}
 
