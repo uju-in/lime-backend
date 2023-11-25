@@ -24,7 +24,7 @@ public class ItemBuilder {
 			.build();
 
 		setItemId(item, id);
-
+    
 		return item;
 	}
 
@@ -39,6 +39,7 @@ public class ItemBuilder {
 			.url("https://www.naver.com")
 			.image("https://www.naver.com//image")
 			.price(10000)
+			.hobby(Hobby.SWIMMING)
 			.name("아이템");
 	}
 

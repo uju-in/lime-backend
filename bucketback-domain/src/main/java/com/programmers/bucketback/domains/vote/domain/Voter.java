@@ -50,5 +50,6 @@ public class Voter extends BaseEntity {
 
 	public void participate(final Long itemId) {
 		this.itemId = itemId;
+		this.vote.addVoter(this);
 	}
 }

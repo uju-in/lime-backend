@@ -1,7 +1,5 @@
 package com.programmers.bucketback.domains.vote.implementation;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +16,21 @@ public class VoterReader {
 	private final VoterRepository voterRepository;
 
 	@Transactional(readOnly = true)
-	public Optional<Voter> read(
+	public Long readItemId(
 		final Vote vote,
 		final Long memberId
 	) {
-		return voterRepository.findByVoteAndMemberId(vote, memberId);
+		return voterRepository.findByVoteAndMemberId(vote, memberId)
+			.map(Voter::getItemId).orElse(null);
+	}
+
+	@Transactional(readOnly = true)
+	public Voter read(
+		final Vote vote,
+		final Long memberId,
+		final Long itemId
+	) {
+		return voterRepository.findByVoteAndMemberId(vote, memberId)
+			.orElseGet(() -> new Voter(vote, memberId, itemId));
 	}
 }
