@@ -14,10 +14,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.cursor.CursorUtils;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketBuilder;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
+import com.programmers.bucketback.domains.bucket.domain.BucketSummaryBuilder;
 import com.programmers.bucketback.domains.bucket.model.BucketGetServiceResponse;
+import com.programmers.bucketback.domains.bucket.model.BucketSummary;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
@@ -67,7 +72,22 @@ public class BucketReaderTest {
 	@DisplayName("버킷 정보 커서 페이징 조회")
 	void readSummary() {
 		//given
-		new CursorPageParameters(null, 10);
+		Long memberId = 1L;
+		Hobby hobby = Hobby.BASKETBALL;
+		CursorPageParameters parameters = new CursorPageParameters(null, 10); // 이후 생성된 model로 대체 예정
+		List<BucketSummary> bucketSummaries = BucketSummaryBuilder.buildMany(parameters.size());
+		CursorSummary<BucketSummary> expectedCursorSummary = CursorUtils.getCursorSummaries(bucketSummaries);
+
+		given(bucketRepository.findAllByCursor(memberId, hobby, parameters.cursorId(),
+			parameters.size())) // 궁금한 점 anyInt는 왜 안되는가?
+			.willReturn(bucketSummaries);
+
+		//when
+		CursorSummary<BucketSummary> actualBucketSummaries = bucketReader.readByCursor(memberId, hobby, parameters);
+
+		//then
+		assertThat(expectedCursorSummary).usingRecursiveComparison()
+			.isEqualTo(actualBucketSummaries);
 	}
 
 	@Test
