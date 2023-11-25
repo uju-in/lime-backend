@@ -24,9 +24,9 @@ public class BucketSummaryBuilder {
 			1L,
 			"유러피안 농구",
 			100000,
+			90000,
 			LocalDateTime.of(2023, 1, 1, 0, 0, 0),
 			ItemBuilder.buildItemImages()
 		);
 	}
-
 }
