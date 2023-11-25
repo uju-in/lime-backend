@@ -1,7 +1,6 @@
 package com.programmers.bucketback.domains.vote.implementation;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,6 @@ import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.vote.domain.Vote;
-import com.programmers.bucketback.domains.vote.domain.Voter;
 import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
 import com.programmers.bucketback.domains.vote.model.VoteDetail;
 import com.programmers.bucketback.domains.vote.model.VoteDetailInfo;
@@ -60,7 +58,7 @@ public class VoteReader {
 		final VoteDetailInfo voteInfo = VoteDetailInfo.of(vote, item1Votes, item2Votes);
 
 		final boolean isOwner = vote.isOwner(memberId);
-		final Long selectedItemId = getSelectedItemId(vote, memberId);
+		final Long selectedItemId = voterReader.readItemId(vote, memberId);
 
 		return VoteDetail.builder()
 			.item1Info(item1Info)
@@ -103,16 +101,6 @@ public class VoteReader {
 		final Item item = itemReader.read(itemId);
 
 		return ItemInfo.from(item);
-	}
-
-	private Long getSelectedItemId(
-		final Vote vote,
-		final Long memberId
-	) {
-		final Optional<Voter> voter = voterReader.read(vote, memberId);
-
-		return voter.map(Voter::getItemId)
-			.orElse(null);
 	}
 
 	private List<VoteSummary> getVoteSummaries(final List<VoteCursorSummary> voteSummaries) {
