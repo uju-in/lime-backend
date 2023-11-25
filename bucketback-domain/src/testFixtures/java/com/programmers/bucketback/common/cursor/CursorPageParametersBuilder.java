@@ -8,4 +8,11 @@ public class CursorPageParametersBuilder {
 			20
 		);
 	}
+
+	public static CursorPageParameters buildWithNull() {
+		return new CursorPageParameters(
+			null,
+			null
+		);
+	}
 }

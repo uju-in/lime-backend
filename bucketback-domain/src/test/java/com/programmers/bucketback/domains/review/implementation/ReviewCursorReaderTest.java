@@ -35,6 +35,7 @@ class ReviewCursorReaderTest {
 	@Nested
 	@DisplayName("리뷰 목록을 조회 테스트")
 	class ReviewReadTest {
+
 		@Test
 		@DisplayName("커서를 이용해 리뷰 목록을 조회한다.")
 		void readByCursor() {
@@ -54,6 +55,41 @@ class ReviewCursorReaderTest {
 					memberId,
 					cursorPageParameters.cursorId(),
 					cursorPageParameters.size()
+				)
+			).willReturn(reviewCursorSummaries);
+
+			// when
+			CursorSummary<ReviewCursorSummary> actualReviewCursorSummary = reviewCursorReader.readByCursor(
+				itemId,
+				memberId,
+				cursorPageParameters
+			);
+
+			// then
+			assertThat(actualReviewCursorSummary)
+				.isNotNull()
+				.isEqualTo(expectedReviewCursorSummary);
+		}
+
+		@Test
+		@DisplayName("CursorId와 size가 null일 때 기본값으로 리뷰 목록을 조회한다.")
+		void readByCursorWithNullCursorIdAndSize() {
+			// given
+			Item item = ItemBuilder.build();
+			Long itemId = item.getId();
+			Long memberId = 1L;
+
+			CursorPageParameters cursorPageParameters = CursorPageParametersBuilder.buildWithNull();
+			List<ReviewCursorSummary> reviewCursorSummaries = ReviewCursorSummaryBuilder.buildMany();
+
+			CursorSummary<ReviewCursorSummary> expectedReviewCursorSummary = CursorUtils
+				.getCursorSummaries(reviewCursorSummaries);
+
+			given(reviewRepository.findAllByCursor(
+					itemId,
+					memberId,
+					null,
+					20
 				)
 			).willReturn(reviewCursorSummaries);
 
