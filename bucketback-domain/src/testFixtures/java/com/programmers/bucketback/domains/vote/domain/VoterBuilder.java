@@ -19,6 +19,7 @@ public class VoterBuilder {
 			.mapToObj(i -> {
 				Voter voter = VoterBuilder.build(vote, i + 1, itemId);
 				setVoterId(voter, i + 1);
+
 				return voter;
 			})
 			.toList();
