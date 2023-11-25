@@ -16,6 +16,7 @@ public record BucketGetResponse(
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	Integer budget,
 
+	Integer totalPrice,
 	Long memberId,
 	Long bucketId,
 	List<ItemInfo> itemInfos
@@ -25,6 +26,7 @@ public record BucketGetResponse(
 			.hobby(response.hobby().getHobbyValue())
 			.name(response.name())
 			.budget(response.budget())
+			.totalPrice(response.totalPrice())
 			.memberId(response.memberId())
 			.bucketId(response.bucketId())
 			.itemInfos(response.itemInfos())

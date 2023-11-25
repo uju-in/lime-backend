@@ -10,6 +10,7 @@ public record BucketSummary(
 	Long bucketId,
 	String name,
 	Integer budget,
+	Integer totalPrice,
 	LocalDateTime createdAt,
 	List<ItemImage> itemImages
 ) implements CursorIdParser {
