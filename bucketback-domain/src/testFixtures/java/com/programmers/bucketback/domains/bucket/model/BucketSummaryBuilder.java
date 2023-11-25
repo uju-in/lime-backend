@@ -1,10 +1,9 @@
-package com.programmers.bucketback.domains.bucket.domain;
+package com.programmers.bucketback.domains.bucket.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.LongStream;
 
-import com.programmers.bucketback.domains.bucket.model.BucketSummary;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 
 import lombok.AccessLevel;
