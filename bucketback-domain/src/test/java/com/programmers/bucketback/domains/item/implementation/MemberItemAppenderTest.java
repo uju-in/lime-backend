@@ -67,7 +67,7 @@ class MemberItemAppenderTest {
 					.orElseThrow();
 			});
 
-			given(memberItemRepository.saveAll(memberItems))
+			given(memberItemRepository.saveAll(anyList()))
 				.willReturn(memberItems);
 
 			// when
