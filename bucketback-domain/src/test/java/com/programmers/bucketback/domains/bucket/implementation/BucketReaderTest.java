@@ -20,12 +20,16 @@ import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketBuilder;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
-import com.programmers.bucketback.domains.bucket.domain.BucketSummaryBuilder;
 import com.programmers.bucketback.domains.bucket.model.BucketGetServiceResponse;
+import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
+import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummaryBuilder;
 import com.programmers.bucketback.domains.bucket.model.BucketProfile;
 import com.programmers.bucketback.domains.bucket.model.BucketSummary;
+import com.programmers.bucketback.domains.bucket.model.BucketSummaryBuilder;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
+import com.programmers.bucketback.domains.item.domain.MemberItem;
+import com.programmers.bucketback.domains.item.domain.MemberItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
 import com.programmers.bucketback.domains.item.implementation.MemberItemReader;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
@@ -64,7 +68,7 @@ public class BucketReaderTest {
 		//when
 		BucketGetServiceResponse response = bucketReader.readDetail(bucketId);
 
-		//then
+		//then //BucketBuilder.buildBucketInfo()로 대체 예정
 		BucketInfo responseBucketInfo = new BucketInfo(response.hobby(), response.name(), response.budget());
 
 		assertThat(responseBucketInfo).usingRecursiveComparison()
@@ -130,9 +134,43 @@ public class BucketReaderTest {
 	}
 
 	@Test
-	@DisplayName("버킷 조회와 수정을 위한 memberItem 커서 조회")
+	@DisplayName("버킷 생성 수정을 위한 memberItem 커서 조회")
 	void readBucketMemberItem() {
+		//given
+		Long bucketId = 1L;
+		Long memberId = 1L;
+		Hobby hobby = Hobby.BASKETBALL;
+		CursorPageParameters parameters = new CursorPageParameters(null, 2); // 이후 생성된 model로 대체 예정
 
+		MemberItem build1 = MemberItemBuilder.build();
+		MemberItem build2 = MemberItemBuilder.build();
+		List<MemberItem> memberItems = List.of(build1, build2);
+
+		Bucket bucket = BucketBuilder.build();
+		BucketBuilder.setBucketItems(bucket);
+
+		List<BucketMemberItemSummary> expectSummaries = BucketMemberItemSummaryBuilder.buildMany(3);
+		CursorSummary<BucketMemberItemSummary> expectCursorSummary = CursorUtils.getCursorSummaries(expectSummaries);
+
+		given(memberItemReader.readByMemberId(anyLong())).willReturn(memberItems);
+		given(bucketRepository.findByIdAndMemberId(anyLong(), anyLong())).willReturn(Optional.of(bucket));
+		given(memberItemReader.readBucketMemberItem(
+			anyList(),
+			anyList(),
+			any(Hobby.class),
+			anyLong(),
+			any(),
+			anyInt()
+		)).willReturn(expectSummaries);
+
+		//when
+		CursorSummary<BucketMemberItemSummary> actualSummary =
+			bucketReader.readByMemberItems(bucketId, memberId, hobby, parameters);
+
+		System.out.println(actualSummary.summaries().size());
+		//then
+		assertThat(actualSummary).usingRecursiveComparison()
+			.isEqualTo(expectCursorSummary);
 	}
 
 }
