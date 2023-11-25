@@ -69,7 +69,11 @@ public class BucketReaderTest {
 		BucketGetServiceResponse response = bucketReader.readDetail(bucketId);
 
 		//then //BucketBuilder.buildBucketInfo()로 대체 예정
-		BucketInfo responseBucketInfo = new BucketInfo(response.hobby(), response.name(), response.budget());
+		BucketInfo responseBucketInfo = BucketBuilder.buildBucketInfo(
+			response.hobby(),
+			response.name(),
+			response.budget()
+		);
 
 		assertThat(responseBucketInfo).usingRecursiveComparison()
 			.isEqualTo(bucket.getBucketInfo());
