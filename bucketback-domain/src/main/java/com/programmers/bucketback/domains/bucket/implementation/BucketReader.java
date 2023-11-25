@@ -61,7 +61,7 @@ public class BucketReader {
 	}
 
 	public List<Bucket> readByMemberId(final Long memberId) {
-		return bucketRepository.findByMemberId(memberId);
+		return bucketRepository.findAllByMemberId(memberId);
 	}
 
 	/** 버킷 아이템 정보 조회 */
