@@ -18,6 +18,7 @@ import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.item.repository.MemberItemRepository;
+import com.programmers.bucketback.error.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
 class MemberItemAppenderTest {
@@ -79,6 +80,38 @@ class MemberItemAppenderTest {
 
 			assertThat(actualItemIds).containsExactlyElementsOf(itemIds);
 
+		}
+
+		@Test
+		@DisplayName("이미 존재하는 아이템을 추가하려고 하면 예외가 발생한다.")
+		void appendExistItem() {
+			// given
+			Long memberId = 1L;
+
+			List<Item> items = ItemBuilder.buildMany();
+
+			List<Long> itemIds = items.stream()
+				.map(Item::getId)
+				.toList();
+
+			given(itemReader.read(anyLong())).willAnswer(invocation -> {
+				Long itemId = invocation.getArgument(0);
+				return items.stream()
+					.filter(item -> item.getId().equals(itemId))
+					.findFirst()
+					.orElseThrow();
+			});
+
+			doThrow(BusinessException.class).when(memberItemValidator)
+				.validateExistMemberItem(memberId, items);
+
+			// when && then
+			assertThatThrownBy(() -> memberItemAppender.addMemberItems(
+				itemIds,
+				memberId
+			)).isInstanceOf(BusinessException.class);
+
+			then(itemReader).should(times(itemIds.size())).read(anyLong());
 		}
 	}
 }
