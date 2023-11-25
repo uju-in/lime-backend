@@ -23,13 +23,12 @@ public class ItemBuilder {
 		Item item = aItemBuilder()
 			.build();
 
-		setItemId(item, 1L);
+		setItemId(item, id);
 
 		return item;
 	}
 
-	public static List<Item> buildMany(
-	) {
+	public static List<Item> buildMany() {
 		return LongStream.range(1, 11)
 			.mapToObj(ItemBuilder::build)
 			.toList();
