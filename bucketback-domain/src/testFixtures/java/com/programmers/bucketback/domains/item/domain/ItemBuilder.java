@@ -1,9 +1,8 @@
-package com.programmers.bucketback.domains.item.builder.domain;
+package com.programmers.bucketback.domains.item.domain;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
-import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
 public class ItemBuilder {
@@ -17,11 +16,21 @@ public class ItemBuilder {
 		return item;
 	}
 
+	public static Item build(Long itemId) {
+		Item item = aItemBuilder()
+			.build();
+
+		setItemId(item, itemId);
+
+		return item;
+	}
+
 	public static Item.ItemBuilder aItemBuilder() {
 		return Item.builder()
 			.url("https://www.naver.com")
 			.image("https://www.naver.com//image")
 			.price(10000)
+			.hobby(Hobby.SWIMMING)
 			.name("아이템");
 	}
 

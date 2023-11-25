@@ -11,10 +11,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.programmers.bucketback.common.model.Hobby;
-import com.programmers.bucketback.domains.item.builder.domain.ItemBuilder;
-import com.programmers.bucketback.domains.item.builder.model.ItemCrawlerInfoBuilder;
 import com.programmers.bucketback.domains.item.domain.Item;
+import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
+import com.programmers.bucketback.domains.item.model.ItemCrawlerInfoBuilder;
 import com.programmers.bucketback.domains.item.repository.ItemRepository;
 
 @ExtendWith(MockitoExtension.class)
