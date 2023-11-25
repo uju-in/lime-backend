@@ -1,5 +1,8 @@
 package com.programmers.bucketback.domains.item.domain;
 
+import java.util.List;
+import java.util.stream.LongStream;
+
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
@@ -16,13 +19,19 @@ public class ItemBuilder {
 		return item;
 	}
 
-	public static Item build(Long itemId) {
+	public static Item build(final Long id) {
 		Item item = aItemBuilder()
 			.build();
 
-		setItemId(item, itemId);
-
+		setItemId(item, id);
+    
 		return item;
+	}
+
+	public static List<Item> buildMany() {
+		return LongStream.range(1, 11)
+			.mapToObj(ItemBuilder::build)
+			.toList();
 	}
 
 	public static Item.ItemBuilder aItemBuilder() {
