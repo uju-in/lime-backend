@@ -13,18 +13,21 @@ public record BucketGetServiceResponse(
 	Hobby hobby,
 	String name,
 	Integer budget,
+	Integer totalPrice,
 	Long memberId,
 	Long bucketId,
 	List<ItemInfo> itemInfos
 ) {
 	public static BucketGetServiceResponse of(
 		final Bucket bucket,
+		final Integer totalPrice,
 		final List<ItemInfo> itemInfos
 	) {
 		return BucketGetServiceResponse.builder()
 			.hobby(bucket.getHobby())
 			.name(bucket.getName())
 			.budget(bucket.getBudget())
+			.totalPrice(totalPrice)
 			.memberId(bucket.getMemberId())
 			.bucketId(bucket.getId())
 			.itemInfos(itemInfos)
