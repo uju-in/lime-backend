@@ -22,10 +22,12 @@ import com.programmers.bucketback.domains.bucket.domain.BucketBuilder;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.bucket.domain.BucketSummaryBuilder;
 import com.programmers.bucketback.domains.bucket.model.BucketGetServiceResponse;
+import com.programmers.bucketback.domains.bucket.model.BucketProfile;
 import com.programmers.bucketback.domains.bucket.model.BucketSummary;
 import com.programmers.bucketback.domains.bucket.repository.BucketRepository;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
+import com.programmers.bucketback.domains.item.implementation.MemberItemReader;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,6 +38,9 @@ public class BucketReaderTest {
 
 	@Mock
 	private ItemReader itemReader;
+
+	@Mock
+	private MemberItemReader memberItemReader;
 
 	@InjectMocks
 	private BucketReader bucketReader;
@@ -91,9 +96,37 @@ public class BucketReaderTest {
 	}
 
 	@Test
-	@DisplayName("버킷 프로필 조회 (3개)")
+	@DisplayName("버킷 프로필 조회 취미별로 (최대 3개)")
 	void readBucketProfile() {
+		//given
+		Long memberId = 1L;
+		BucketInfo bucketInfo1 = BucketBuilder.buildBucketInfo(
+			Hobby.BASKETBALL,
+			"유러피안 농구",
+			100000
+		);
+		BucketInfo bucketInfo2 = BucketBuilder.buildBucketInfo(
+			Hobby.BASKETBALL,
+			"nba 농구",
+			200000
+		);
+		BucketInfo bucketInfo3 = BucketBuilder.buildBucketInfo(
+			Hobby.BASEBALL,
+			"메이저리그 야구",
+			100001
+		);
+		Bucket bucket1 = BucketBuilder.build(bucketInfo1);
+		Bucket bucket2 = BucketBuilder.build(bucketInfo2);
+		Bucket bucket3 = BucketBuilder.build(bucketInfo3);
+		List<Bucket> buckets = List.of(bucket1, bucket2, bucket3);
 
+		given(bucketRepository.findAllByMemberId(anyLong())).willReturn(buckets);
+
+		//when
+		List<BucketProfile> bucketProfiles = bucketReader.readBucketProfile(memberId);
+
+		//then
+		assertThat(bucketProfiles.size()).isEqualTo(2);
 	}
 
 	@Test
