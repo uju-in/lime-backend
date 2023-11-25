@@ -8,6 +8,7 @@ import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.ItemRemovalList;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
@@ -67,10 +68,13 @@ public class ItemService {
 			.build();
 	}
 
-	public void removeMemberItem(final Long itemId) {
+	public void removeMemberItems(final ItemRemovalList itemRemovalList) {
 		Long memberId = memberUtils.getCurrentMemberId();
-		MemberItem memberItem = memberItemReader.read(itemId, memberId);
-		memberItemRemover.remove(memberItem.getId());
+
+		for (Long itemId : itemRemovalList.itemIds()) {
+			MemberItem memberItem = memberItemReader.read(itemId, memberId);
+			memberItemRemover.remove(memberItem.getId());
+		}
 	}
 
 	public ItemGetNamesServiceResponse getItemNamesByKeyword(final String keyword) {

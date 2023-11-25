@@ -24,4 +24,14 @@ public class VoterReader {
 	) {
 		return voterRepository.findByVoteAndMemberId(vote, memberId);
 	}
+
+	@Transactional(readOnly = true)
+	public Voter read(
+		final Vote vote,
+		final Long memberId,
+		final Long itemId
+	) {
+		return voterRepository.findByVoteAndMemberId(vote, memberId)
+			.orElseGet(() -> new Voter(vote, memberId, itemId));
+	}
 }
