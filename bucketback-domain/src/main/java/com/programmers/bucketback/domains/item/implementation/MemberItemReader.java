@@ -53,7 +53,7 @@ public class MemberItemReader {
 		final Hobby hobby,
 		final Long memberId,
 		final String cursorId,
-		final int pageSize
+		final Integer pageSize
 	) {
 		return memberItemRepository.findBucketMemberItemsByCursor(
 			itemIdsFromBucketItem,
