@@ -30,7 +30,7 @@ class VoterReaderTest {
 
 	@Nested
 	@DisplayName("투표자가 선택한 아이템 id 반환 테스트")
-	class readItemIdTest {
+	class ReadItemIdTest {
 		@Test
 		@DisplayName("투표와 회원 id가 일치하는 투표자가 있다면 투표자가 선택한 아이템 id를 반환한다.")
 		void readVoterSelectedItemIdTest() {
