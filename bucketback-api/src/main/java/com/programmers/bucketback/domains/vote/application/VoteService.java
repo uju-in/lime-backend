@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.vote.application;
 
+import java.util.Collections;
+
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
@@ -111,6 +113,10 @@ public class VoteService {
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
+		if (keyword.isBlank()) {
+			return new CursorSummary<>(null, 0, Collections.emptyList());
+		}
+
 		return voteReader.readByCursor(
 			null,
 			VoteStatusCondition.COMPLETED,
