@@ -8,6 +8,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemBuilder {
 
 	public static Item build() {
@@ -24,7 +28,7 @@ public class ItemBuilder {
 			.build();
 
 		setItemId(item, id);
-    
+
 		return item;
 	}
 
