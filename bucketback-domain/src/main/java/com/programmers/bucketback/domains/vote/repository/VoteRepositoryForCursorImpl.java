@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.vote.repository;
 
+import static com.programmers.bucketback.domains.item.domain.QItem.*;
 import static com.programmers.bucketback.domains.vote.domain.QVote.*;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
+		final String keyword,
 		final Long memberId,
 		final String nextCursorId,
 		final int pageSize
@@ -52,14 +54,23 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			))
 			.from(vote)
 			.where(
-				vote.hobby.eq(hobby),
+				eqHobby(hobby),
 				getExpressionBy(statusCondition, memberId),
+				containsKeyword(keyword),
 				lessThanNextCursorId(sortCondition, nextCursorId)
 			)
 			.orderBy(getOrderSpecifierBy(sortCondition),
 				vote.id.desc())
 			.limit(pageSize)
 			.fetch();
+	}
+
+	private  BooleanExpression eqHobby(final Hobby hobby) {
+		if (hobby == null) {
+			return null;
+		}
+
+		return vote.hobby.eq(hobby);
 	}
 
 	private BooleanExpression getExpressionBy(
@@ -107,6 +118,25 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		}
 
 		return new OrderSpecifier<>(Order.DESC, vote.createdAt);
+	}
+
+	private BooleanExpression containsKeyword(final String keyword) {
+		if (keyword == null) {
+			return null;
+		}
+
+		final List<Long> itemIds = getItemIds(keyword);
+
+		return vote.item1Id.in(itemIds).or(vote.item2Id.in(itemIds));
+	}
+
+	private List<Long> getItemIds(final String keyword) {
+		return jpaQueryFactory
+			.select(item.id)
+			.from(item)
+			.where(item.name.contains(keyword))
+			.stream()
+			.toList();
 	}
 
 	private BooleanExpression lessThanNextCursorId(

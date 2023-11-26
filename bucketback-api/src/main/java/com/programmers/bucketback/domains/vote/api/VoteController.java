@@ -91,7 +91,7 @@ public class VoteController {
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
+		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
 			Hobby.fromName(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
@@ -102,4 +102,15 @@ public class VoteController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "투표 검색", description = "keyword를 이용하여 투표를 검색합니다.")
+	@GetMapping("/search")
+	public ResponseEntity<VoteGetByCursorResponse> getVotesByCursor(
+		@RequestParam final String keyword,
+		@ModelAttribute @Valid final CursorRequest request
+	) {
+		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByKeyword(keyword, request.toParameters());
+		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(cursorSummary);
+
+		return ResponseEntity.ok(response);
+	}
 }

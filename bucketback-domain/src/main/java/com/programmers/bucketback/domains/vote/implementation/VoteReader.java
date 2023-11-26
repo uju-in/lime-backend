@@ -74,6 +74,7 @@ public class VoteReader {
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
+		final String keyword,
 		final CursorPageParameters parameters,
 		final Long memberId
 	) {
@@ -83,6 +84,7 @@ public class VoteReader {
 			hobby,
 			statusCondition,
 			sortCondition,
+			keyword,
 			memberId,
 			parameters.cursorId(),
 			pageSize
