@@ -76,7 +76,7 @@ public class VoteService {
 
 	public VoteGetServiceResponse getVote(final Long voteId) {
 		final Long memberId = memberUtils.getCurrentMemberId();
-		final VoteDetail detail = voteReader.read(voteId, memberId);
+		final VoteDetail detail = voteReader.readDetail(voteId, memberId);
 
 		return VoteGetServiceResponse.from(detail);
 	}
