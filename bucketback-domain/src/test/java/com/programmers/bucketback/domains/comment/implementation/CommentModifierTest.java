@@ -38,4 +38,17 @@ class CommentModifierTest {
 		// then
 		assertThat(comment.getContent().getContent()).isEqualTo(newContent);
 	}
+
+	@Test
+	@DisplayName("댓글을 채택한다.")
+	void adoptTest() {
+		// given
+		final Comment comment = CommentBuilder.build();
+
+		// when
+		commentModifier.adopt(comment);
+
+		// then
+		assertThat(comment.isAdoption()).isTrue();
+	}
 }
