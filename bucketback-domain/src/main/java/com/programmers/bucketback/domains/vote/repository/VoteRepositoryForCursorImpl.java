@@ -125,14 +125,18 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			return null;
 		}
 
-		final List<Long> itemIds = jpaQueryFactory
+		final List<Long> itemIds = getItemIds(keyword);
+
+		return vote.item1Id.in(itemIds).or(vote.item2Id.in(itemIds));
+	}
+
+	private List<Long> getItemIds(final String keyword) {
+		return jpaQueryFactory
 			.select(item.id)
 			.from(item)
 			.where(item.name.contains(keyword))
 			.stream()
 			.toList();
-
-		return vote.item1Id.in(itemIds).or(vote.item2Id.in(itemIds));
 	}
 
 	private BooleanExpression lessThanNextCursorId(
