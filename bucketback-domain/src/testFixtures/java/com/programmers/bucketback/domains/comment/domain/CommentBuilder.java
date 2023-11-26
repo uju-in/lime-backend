@@ -12,7 +12,19 @@ import lombok.NoArgsConstructor;
 public class CommentBuilder {
 	public static Comment build() {
 		final Feed feed = FeedBuilder.build();
-		final Comment comment = new Comment(feed, 1L, "이거 좀 짱인듯?");
+		return build(feed, "이거 좀 짱인듯?");
+	}
+
+	public static Comment build(final String content) {
+		final Feed feed = FeedBuilder.build();
+		return build(feed, content);
+	}
+
+	public static Comment build(
+		final Feed feed,
+		final String content
+	) {
+		final Comment comment = new Comment(feed, 1L, content);
 
 		setCommentId(comment);
 

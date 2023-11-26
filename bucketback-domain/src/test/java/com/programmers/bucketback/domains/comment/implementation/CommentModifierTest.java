@@ -26,7 +26,7 @@ class CommentModifierTest {
 	@DisplayName("댓글을 수정한다.")
 	void modifyTest() {
 		// given
-		final Comment comment = CommentBuilder.build();
+		final Comment comment = CommentBuilder.build("이거 좀 짱인듯");
 		final String newContent = "우와 대박이네!";
 
 		given(commentReader.read(anyLong()))
