@@ -1,8 +1,12 @@
 package com.programmers.bucketback.domains.inventory.domain;
 
+import java.util.List;
+
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
+import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -19,25 +23,23 @@ public class InventoryBuilder {
 		return inventory;
 	}
 
-	/** 차후 사용 예정 */
-	// public static InventoryItem build(final Inventory inventory) {
-	// 	InventoryItem inventoryItem = InventoryItem.builder()
-	// 		.inventory(inventory)
-	// 		.itemId(1L)
-	// 		.build();
-	//
-	// 	setInventoryItemId(inventoryItem);
-	//
-	// 	return inventoryItem;
-	// }
-	//
-	// private static void setInventoryItemId(final InventoryItem inventoryItem) {
-	// 	ReflectionTestUtils.setField(
-	// 		inventoryItem,
-	// 		"id",
-	// 		1L
-	// 	);
-	// }
+	public static Inventory buildExist(ItemIdRegistry itemIdRegistry) {
+		Long memberId = 1L;
+		Inventory inventory = new Inventory(memberId, Hobby.BASKETBALL);
+		List<InventoryItem> inventoryItems = buildInventoryItems(itemIdRegistry);
+		inventoryItems.forEach(inventory::addInventoryItem);
+
+		setInventoryId(inventory);
+
+		return inventory;
+	}
+
+	public static List<InventoryItem> buildInventoryItems(ItemIdRegistry itemIdRegistry) {
+		return itemIdRegistry.itemIds().stream()
+			.map(itemId -> new InventoryItem(ItemBuilder.build(itemId)))
+			.toList();
+	}
+
 	private static void setInventoryId(final Inventory inventory) {
 		ReflectionTestUtils.setField(
 			inventory,
