@@ -26,6 +26,8 @@ import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.item.model.MemberItemSummary;
 import com.programmers.bucketback.domains.review.implementation.ReviewStatistics;
 import com.programmers.bucketback.global.util.MemberUtils;
+import com.programmers.bucketback.redis.dto.ItemRankingServiceResponse;
+import com.programmers.bucketback.redis.implement.ItemRanking;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,8 +44,18 @@ public class ItemService {
 	private final ItemFinder itemFinder;
 	private final ItemCursorReader itemCursorReader;
 	private final MemberUtils memberUtils;
+	private final ItemRanking itemRanking;
 
 	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
+		List<String> items = itemIdRegistry.itemIds().stream()
+			.map(itemId -> itemReader.read(itemId))
+			.map(item -> item.getName())
+			.toList();
+
+		for (String itemName : items) {
+			itemRanking.addPoint(itemName, 1);
+		}
+
 		Long memberId = memberUtils.getCurrentMemberId();
 		List<Long> memberItemIds = memberItemAppender.addMemberItems(itemIdRegistry.itemIds(), memberId);
 
@@ -104,5 +116,9 @@ public class ItemService {
 			memberId,
 			parameters
 		);
+	}
+
+	public List<ItemRankingServiceResponse> getRanking() {
+		return itemRanking.viewRanking();
 	}
 }
