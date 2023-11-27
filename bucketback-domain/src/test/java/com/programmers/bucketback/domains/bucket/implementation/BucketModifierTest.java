@@ -55,7 +55,7 @@ public class BucketModifierTest {
 		);
 		Bucket updateBucket = BucketBuilder.build(updateBucketInfo);
 		ItemIdRegistry updateItemRegistry = ItemIdRegistryBuilder.build(Arrays.asList(4L, 5L));
-		List<BucketItem> updateBucketItems = BucketBuilder.buildBucketItem(updateItemRegistry);
+		List<BucketItem> updateBucketItems = BucketBuilder.buildBucketItems(updateItemRegistry);
 
 		// 수정을 위해 기존 bucketItem 제거
 		Bucket existBucket = BucketBuilder.build();
