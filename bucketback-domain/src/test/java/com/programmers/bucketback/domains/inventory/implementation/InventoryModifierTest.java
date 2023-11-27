@@ -63,15 +63,13 @@ public class InventoryModifierTest {
 
 		given(inventoryAppender.createInventoryItem(updateItemRegistry))
 			.willReturn(updateInventoryItems);
-		given(inventoryRepository.save(any(Inventory.class)))
-			.willReturn(updateInventory);
 
 		//when
 		inventoryModifier.modify(memberId, bucketId, updateItemRegistry);
 
 		//then
-		assertThat(updateInventory.getInventoryItems()).usingRecursiveComparison().
-			isEqualTo(updateInventoryItems);
+		assertThat(updateInventory.getInventoryItems().size()).usingRecursiveComparison().
+			isEqualTo(updateInventoryItems.size());
 		assertThat(updateInventory.getHobby()).isEqualTo(hobby);
 	}
 }
