@@ -46,7 +46,8 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 				feed.bucketInfo.hobby.eq(hobby),
 				eqMemberId(myPageMemberId),
 				lessThanNextCursorId(feedSortCondition, cursorId)
-			).fetch();
+			).limit(pageSize)
+			.fetch();
 
 		if (myPageOwnerLikeFeeds) {
 			feedIds = jpaQueryFactory.select(feedLike.feed.id)
@@ -57,15 +58,13 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 				).fetch();
 		}
 
-		return jpaQueryFactory
-			.select()
-			.from(feedItem)
+		List<FeedCursorSummary> transform = jpaQueryFactory
+			.selectFrom(feedItem)
 			.where(
 				feedItem.feed.id.in(feedIds)
 			)
 			.join(member).on(eqMemberIdToJoin(myPageMemberId))
 			.orderBy(feedSort(feedSortCondition), feed.id.desc())
-			.limit(pageSize)
 			.transform(
 				groupBy(feed.id)
 					.list(Projections.constructor(
@@ -94,6 +93,10 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 						)
 					)
 			);
+
+		return transform.stream()
+			.limit(pageSize)
+			.toList();
 	}
 
 	private BooleanExpression eqLikeMemberId(final Long myPageMemberId) {
