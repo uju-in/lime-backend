@@ -14,16 +14,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InventoryBuilder {
 
-	public static Inventory build() {
+	public static Inventory build(
+		final Hobby hobby,
+		final ItemIdRegistry itemIdRegistry
+	) {
 		Long memberId = 1L;
-		Inventory inventory = new Inventory(memberId, Hobby.BASKETBALL);
+		Inventory inventory = new Inventory(memberId, hobby);
+		List<InventoryItem> inventoryItems = buildInventoryItems(itemIdRegistry);
+		inventoryItems.forEach(inventory::addInventoryItem);
 
 		setInventoryId(inventory);
 
 		return inventory;
 	}
 
-	public static Inventory buildExist(ItemIdRegistry itemIdRegistry) {
+	public static Inventory build(ItemIdRegistry itemIdRegistry) {
 		Long memberId = 1L;
 		Inventory inventory = new Inventory(memberId, Hobby.BASKETBALL);
 		List<InventoryItem> inventoryItems = buildInventoryItems(itemIdRegistry);
