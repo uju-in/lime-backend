@@ -56,7 +56,7 @@ public class BucketReaderTest {
 		Long bucketId = 1L;
 		Bucket bucket = BucketBuilder.build();
 		BucketBuilder.setBucketItems(bucket);
-		List<ItemInfo> actualItemInfos = ItemBuilder.buildMany(3).stream()
+		List<ItemInfo> actualItemInfos = ItemBuilder.buildMany().stream()
 			.map(item -> ItemInfo.from(item))
 			.toList();
 
@@ -67,14 +67,13 @@ public class BucketReaderTest {
 
 		//when
 		BucketGetServiceResponse response = bucketReader.readDetail(bucketId);
-
-		//then //BucketBuilder.buildBucketInfo()로 대체 예정
 		BucketInfo responseBucketInfo = BucketBuilder.buildBucketInfo(
 			response.hobby(),
 			response.name(),
 			response.budget()
 		);
 
+		//then
 		assertThat(responseBucketInfo).usingRecursiveComparison()
 			.isEqualTo(bucket.getBucketInfo());
 		assertThat(response.itemInfos()).usingRecursiveComparison()
@@ -149,10 +148,7 @@ public class BucketReaderTest {
 		Long memberId = 1L;
 		Hobby hobby = Hobby.BASKETBALL;
 		CursorPageParameters parameters = new CursorPageParameters(null, 2); // 이후 생성된 model로 대체 예정
-
-		MemberItem build1 = MemberItemBuilder.build();
-		MemberItem build2 = MemberItemBuilder.build();
-		List<MemberItem> memberItems = List.of(build1, build2);
+		List<MemberItem> memberItems = MemberItemBuilder.buildMany();
 
 		Bucket bucket = BucketBuilder.build();
 		BucketBuilder.setBucketItems(bucket);
@@ -175,7 +171,6 @@ public class BucketReaderTest {
 		CursorSummary<BucketMemberItemSummary> actualSummary =
 			bucketReader.readByMemberItems(bucketId, memberId, hobby, parameters);
 
-		System.out.println(actualSummary.summaries().size());
 		//then
 		assertThat(actualSummary).usingRecursiveComparison()
 			.isEqualTo(expectCursorSummary);

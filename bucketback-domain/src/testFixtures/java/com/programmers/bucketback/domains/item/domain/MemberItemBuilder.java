@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.item.domain;
 
+import java.util.List;
+
 import org.springframework.test.util.ReflectionTestUtils;
 
 import lombok.AccessLevel;
@@ -15,6 +17,12 @@ public class MemberItemBuilder {
 		setItemId(memberItem, 1L);
 
 		return memberItem;
+	}
+
+	public static List<MemberItem> buildMany() {
+		MemberItem build1 = MemberItemBuilder.build();
+		MemberItem build2 = MemberItemBuilder.build();
+		return List.of(build1, build2);
 	}
 
 	private static void setItemId(
