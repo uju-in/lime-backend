@@ -91,8 +91,12 @@ public class BucketReaderTest {
 		List<BucketSummary> bucketSummaries = BucketSummaryBuilder.buildMany(parameters.size());
 		CursorSummary<BucketSummary> expectedCursorSummary = CursorUtils.getCursorSummaries(bucketSummaries);
 
-		given(bucketRepository.findAllByCursor(memberId, hobby, parameters.cursorId(),
-			parameters.size())) // 궁금한 점 anyInt는 왜 안되는가?
+		given(bucketRepository.findAllByCursor(
+			anyLong(),
+			any(Hobby.class),
+			eq(parameters.cursorId()),
+			eq(parameters.size())
+		))
 			.willReturn(bucketSummaries);
 
 		//when
