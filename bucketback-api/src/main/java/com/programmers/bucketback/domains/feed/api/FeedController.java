@@ -25,9 +25,11 @@ import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "feeds", description = "피드 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/feeds")
