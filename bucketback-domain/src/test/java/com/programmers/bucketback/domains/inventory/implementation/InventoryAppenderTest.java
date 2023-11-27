@@ -3,6 +3,8 @@ package com.programmers.bucketback.domains.inventory.implementation;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,7 @@ import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryBuilder;
+import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
@@ -37,8 +40,10 @@ public class InventoryAppenderTest {
 		//given
 		Long memberId = 1L;
 		Hobby hobby = Hobby.BASKETBALL;
-		Inventory inventory = InventoryBuilder.build();
 		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.build();
+
+		Inventory inventory = InventoryBuilder.buildExist(itemIdRegistry);
+		List<InventoryItem> inventoryItems = InventoryBuilder.buildInventoryItems(itemIdRegistry);
 
 		given(inventoryRepository.save(any(Inventory.class)))
 			.willReturn(inventory);
@@ -50,5 +55,6 @@ public class InventoryAppenderTest {
 
 		//then
 		assertThat(actualInventoryId).isEqualTo(inventory.getId());
+		assertThat(inventory.getInventoryItems().size()).isEqualTo(inventoryItems.size());
 	}
 }
