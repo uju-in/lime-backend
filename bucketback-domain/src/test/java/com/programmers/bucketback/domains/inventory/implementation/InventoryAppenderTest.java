@@ -42,7 +42,7 @@ public class InventoryAppenderTest {
 		Hobby hobby = Hobby.BASKETBALL;
 		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.build();
 
-		Inventory inventory = InventoryBuilder.buildExist(itemIdRegistry);
+		Inventory inventory = InventoryBuilder.build(itemIdRegistry);
 		List<InventoryItem> inventoryItems = InventoryBuilder.buildInventoryItems(itemIdRegistry);
 
 		given(inventoryRepository.save(any(Inventory.class)))
