@@ -23,9 +23,11 @@ import com.programmers.bucketback.domains.inventory.application.InventoryService
 import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "inventories", description = "인벤토리 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
