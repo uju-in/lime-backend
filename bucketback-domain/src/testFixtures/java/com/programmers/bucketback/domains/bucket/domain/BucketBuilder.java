@@ -6,6 +6,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 
 import lombok.AccessLevel;
@@ -29,6 +30,9 @@ public class BucketBuilder {
 		BucketInfo bucketInfo = buildBucketInfo();
 		Bucket bucket = new Bucket(bucketInfo, memberId);
 		setBucketId(bucket);
+
+		List<BucketItem> bucketItems = buildBucketItems(ItemIdRegistryBuilder.build());
+		bucketItems.forEach(bucket::addBucketItem);
 
 		return bucket;
 	}

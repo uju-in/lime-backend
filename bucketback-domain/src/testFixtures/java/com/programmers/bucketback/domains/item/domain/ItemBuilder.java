@@ -31,7 +31,7 @@ public class ItemBuilder {
 	}
 
 	public static List<Item> buildMany() {
-		return LongStream.range(1, 11)
+		return LongStream.range(1, 4)
 			.mapToObj(ItemBuilder::build)
 			.toList();
 	}
