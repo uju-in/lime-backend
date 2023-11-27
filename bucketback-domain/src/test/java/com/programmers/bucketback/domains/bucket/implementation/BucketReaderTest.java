@@ -168,7 +168,7 @@ public class BucketReaderTest {
 			any(Hobby.class),
 			anyLong(),
 			any(),
-			anyInt()
+			eq(parameters.size())
 		)).willReturn(expectSummaries);
 
 		//when
