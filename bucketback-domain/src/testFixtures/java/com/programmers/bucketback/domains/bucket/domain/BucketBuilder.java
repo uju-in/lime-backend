@@ -6,7 +6,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
-import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 
 import lombok.AccessLevel;
@@ -50,14 +49,6 @@ public class BucketBuilder {
 		return itemIdRegistry.itemIds().stream()
 			.map(itemId -> new BucketItem(ItemBuilder.build(itemId)))
 			.toList();
-	}
-
-	public static void setBucketItems(final Bucket bucket) {
-		ReflectionTestUtils.setField(
-			bucket,
-			"bucketItems",
-			buildBucketItems(ItemIdRegistryBuilder.build())
-		);
 	}
 
 	private static void setBucketId(final Bucket bucket) {

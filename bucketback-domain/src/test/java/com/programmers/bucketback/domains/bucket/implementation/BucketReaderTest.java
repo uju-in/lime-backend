@@ -55,7 +55,6 @@ public class BucketReaderTest {
 		//given
 		Long bucketId = 1L;
 		Bucket bucket = BucketBuilder.build();
-		BucketBuilder.setBucketItems(bucket);
 		List<ItemInfo> actualItemInfos = ItemBuilder.buildMany().stream()
 			.map(item -> ItemInfo.from(item))
 			.toList();
@@ -151,7 +150,6 @@ public class BucketReaderTest {
 		List<MemberItem> memberItems = MemberItemBuilder.buildMany();
 
 		Bucket bucket = BucketBuilder.build();
-		BucketBuilder.setBucketItems(bucket);
 
 		List<BucketMemberItemSummary> expectSummaries = BucketMemberItemSummaryBuilder.buildMany(3);
 		CursorSummary<BucketMemberItemSummary> expectCursorSummary = CursorUtils.getCursorSummaries(expectSummaries);
