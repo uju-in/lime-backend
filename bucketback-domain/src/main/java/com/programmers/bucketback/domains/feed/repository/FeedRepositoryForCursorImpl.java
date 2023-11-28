@@ -33,8 +33,8 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	public List<FeedCursorSummary> findAllByCursor(
-		final Long myPageMemberId,
-		final boolean myPageOwnerLikeFeeds,
+		final Long nicknameMemberId,
+		final boolean onlyNicknameLikeFeeds,
 		final Hobby hobby,
 		final FeedSortCondition feedSortCondition,
 		final String cursorId,
@@ -44,16 +44,16 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 			.from(feed)
 			.where(
 				feed.bucketInfo.hobby.eq(hobby),
-				eqMemberId(myPageMemberId),
+				eqMemberId(nicknameMemberId),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).limit(pageSize)
 			.fetch();
 
-		if (myPageOwnerLikeFeeds) {
+		if (onlyNicknameLikeFeeds) {
 			feedIds = jpaQueryFactory.select(feedLike.feed.id)
 				.from(feedLike)
 				.where(
-					eqLikeMemberId(myPageMemberId),
+					eqLikeMemberId(nicknameMemberId),
 					feedLike.feed.id.in(feedIds)
 				).fetch();
 		}
@@ -63,7 +63,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 			.where(
 				feedItem.feed.id.in(feedIds)
 			)
-			.join(member).on(eqMemberIdToJoin(myPageMemberId))
+			.join(member).on(eqMemberIdToJoin(nicknameMemberId))
 			.orderBy(feedSort(feedSortCondition), feed.id.desc())
 			.transform(
 				groupBy(feed.id)

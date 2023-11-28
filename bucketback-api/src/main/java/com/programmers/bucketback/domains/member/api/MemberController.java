@@ -2,6 +2,7 @@ package com.programmers.bucketback.domains.member.api;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ import com.programmers.bucketback.domains.member.model.MyPage;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -118,10 +120,13 @@ public class MemberController {
 	@Operation(summary = "마이페이지 조회", description = "닉네임을 이용하여 마이페이지를 조회합니다.")
 	@GetMapping("/{nickname}")
 	public ResponseEntity<MemberGetMyPageResponse> getMyPage(
-		@PathVariable String nickname
+		@PathVariable final String nickname,
+		final HttpServletResponse servletResponse
 	) {
 		MyPage myPage = memberService.getMyPage(nickname);
 		MemberGetMyPageResponse response = MemberGetMyPageResponse.from(myPage);
+		servletResponse.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, max-age=0, must-revalidate");
+		servletResponse.setHeader("Pragma", "no-cache");
 
 		return ResponseEntity.ok(response);
 	}
