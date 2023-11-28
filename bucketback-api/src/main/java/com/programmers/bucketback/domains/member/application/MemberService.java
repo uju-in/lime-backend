@@ -1,6 +1,7 @@
 package com.programmers.bucketback.domains.member.application;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
 	public static final String DIRECTORY = "bucketback-static";
-	public static final String BASE_EXTENSION = ".png";
 
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
@@ -110,16 +110,16 @@ public class MemberService {
 
 	public void updateProfileImage(final MultipartFile multipartFile) throws IOException {
 		final Member member = memberUtils.getCurrentMember();
-		final String profileImage = member.getId() + BASE_EXTENSION;
 
-		s3Manager.deleteFile(profileImage, DIRECTORY);
+		s3Manager.deleteFile(DIRECTORY, member.getProfileImage());
 
 		if (multipartFile == null) {
 			memberRemover.removeProfileImage(member);
 			return;
 		}
 
+		final String profileImage = UUID.randomUUID().toString();
 		s3Manager.uploadFile(multipartFile, DIRECTORY, profileImage);
-		memberModifier.modifyProfileImage(member, DIRECTORY, profileImage);
+		memberModifier.modifyProfileImage(member, profileImage);
 	}
 }
