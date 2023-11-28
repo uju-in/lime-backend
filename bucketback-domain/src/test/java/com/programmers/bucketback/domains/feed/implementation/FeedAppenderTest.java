@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -18,10 +19,13 @@ import com.programmers.bucketback.domains.bucket.domain.Bucket;
 import com.programmers.bucketback.domains.bucket.domain.BucketBuilder;
 import com.programmers.bucketback.domains.bucket.domain.BucketItem;
 import com.programmers.bucketback.domains.bucket.implementation.BucketReader;
+import com.programmers.bucketback.domains.feed.FeedBuilder;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.domain.FeedItem;
+import com.programmers.bucketback.domains.feed.domain.FeedLike;
 import com.programmers.bucketback.domains.feed.model.FeedCreateServiceRequest;
 import com.programmers.bucketback.domains.feed.model.FeedCreateServiceRequestBuilder;
+import com.programmers.bucketback.domains.feed.repository.FeedLikeRepository;
 import com.programmers.bucketback.domains.feed.repository.FeedRepository;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
@@ -41,6 +45,12 @@ class FeedAppenderTest {
 
 	@Mock
 	private ItemReader itemReader;
+
+	@Mock
+	private FeedReader feedReader;
+
+	@Mock
+	private FeedLikeRepository feedLikeRepository;
 
 	@Test
 	@DisplayName("피드 생성 테스트를 한다.")
@@ -122,4 +132,39 @@ class FeedAppenderTest {
 			.isEqualTo(expectedFeedItems);
 	}
 
+	@Nested
+	@DisplayName("피드 좋아요 테스트")
+	class FeedLikeTest {
+
+		@Test
+		@DisplayName("피드 좋아요를 한다.")
+		void likeTest() {
+			// given
+			ArgumentCaptor<FeedLike> feedLikeArgumentCaptor = ArgumentCaptor.forClass(FeedLike.class);
+
+			final Long memberId = 1L;
+			final Long feedId = 1L;
+
+			final Feed feed = FeedBuilder.build();
+
+			FeedLike expectedFeedLike = new FeedLike(memberId, feed);
+
+			given(feedReader.read(feedId))
+				.willReturn(feed);
+
+			given(feedReader.alreadyLiked(memberId, feed))
+				.willReturn(false);
+
+			// when
+			feedAppender.like(memberId, feedId);
+
+			// then
+			then(feedLikeRepository).should().save(feedLikeArgumentCaptor.capture());
+			FeedLike actualFeedLike = feedLikeArgumentCaptor.getValue();
+			assertThat(actualFeedLike)
+				.usingRecursiveComparison()
+				.isEqualTo(expectedFeedLike);
+
+		}
+	}
 }
