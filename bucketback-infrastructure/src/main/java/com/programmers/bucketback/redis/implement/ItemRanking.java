@@ -27,7 +27,7 @@ public class ItemRanking {
 		redisTemplate.opsForZSet().add("itemRanking", itemName, score);
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<ItemRankingServiceResponse> viewRanking() {
 		String key = "itemRanking";
 		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
