@@ -47,7 +47,6 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 				eqMemberId(nicknameMemberId, onlyNicknameLikeFeeds),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).orderBy(feedSort(feedSortCondition), feed.id.desc())
-			.limit(pageSize)
 			.fetch();
 
 		if (onlyNicknameLikeFeeds) {
