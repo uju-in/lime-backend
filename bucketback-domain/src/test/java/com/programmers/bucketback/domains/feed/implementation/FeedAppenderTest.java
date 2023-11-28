@@ -30,6 +30,7 @@ import com.programmers.bucketback.domains.feed.repository.FeedRepository;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
+import com.programmers.bucketback.error.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
 class FeedAppenderTest {
@@ -165,6 +166,26 @@ class FeedAppenderTest {
 				.usingRecursiveComparison()
 				.isEqualTo(expectedFeedLike);
 
+		}
+
+		@Test
+		@DisplayName("이미 좋아요를 한 피드에 대해 좋아요를 한다.")
+		void alreadyLikedTest() {
+			// given
+			final Long memberId = 1L;
+			final Long feedId = 1L;
+
+			final Feed feed = FeedBuilder.build();
+
+			given(feedReader.read(feedId))
+				.willReturn(feed);
+
+			given(feedReader.alreadyLiked(memberId, feed))
+				.willReturn(true);
+
+			// when & then
+			assertThatThrownBy(() -> feedAppender.like(memberId, feedId))
+				.isInstanceOf(BusinessException.class);
 		}
 	}
 }
