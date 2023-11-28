@@ -109,7 +109,7 @@ class FeedAppenderTest {
 		// given
 		List<Long> itemIds = List.of(1L, 1L, 2L, 3L, 3L, 3L);
 
-		List<Item> items = LongStream.range(1L, 3L)
+		List<Item> items = LongStream.range(1L, 4L)
 			.mapToObj(ItemBuilder::build)
 			.toList();
 
