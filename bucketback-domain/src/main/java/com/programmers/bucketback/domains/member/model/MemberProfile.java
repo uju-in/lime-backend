@@ -16,7 +16,7 @@ public record MemberProfile(
 		return MemberProfile.builder()
 			.memberId(member.getId())
 			.nickname(member.getNickname())
-			.profileImage(member.getProfileImageUrl())
+			.profileImage(member.getProfileImage())
 			.level(member.getLevel())
 			.introduction(member.getIntroduction())
 			.build();
