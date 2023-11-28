@@ -20,6 +20,7 @@ import com.programmers.bucketback.domains.item.api.dto.response.ItemAddResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetNamesResponse;
+import com.programmers.bucketback.domains.item.api.dto.response.ItemGetRankingResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.MemberItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.application.ItemEnrollService;
@@ -119,6 +120,14 @@ public class ItemController {
 			request.toParameters()
 		);
 		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(cursorSummary);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "랭킹 조회", description = "랭킹을 TOP10까지 조회합니다.")
+	@GetMapping("/ranking")
+	public ResponseEntity<ItemGetRankingResponse> getRanking() {
+		ItemGetRankingResponse response = ItemGetRankingResponse.from(itemService.getRanking());
 
 		return ResponseEntity.ok(response);
 	}
