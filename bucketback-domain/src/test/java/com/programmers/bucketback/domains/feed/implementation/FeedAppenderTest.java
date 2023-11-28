@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.List;
+import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,8 @@ import com.programmers.bucketback.domains.feed.domain.FeedItem;
 import com.programmers.bucketback.domains.feed.model.FeedCreateServiceRequest;
 import com.programmers.bucketback.domains.feed.model.FeedCreateServiceRequestBuilder;
 import com.programmers.bucketback.domains.feed.repository.FeedRepository;
+import com.programmers.bucketback.domains.item.domain.Item;
+import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
 
 @ExtendWith(MockitoExtension.class)
@@ -87,6 +90,36 @@ class FeedAppenderTest {
 		assertThat(actualFeed)
 			.usingRecursiveComparison()
 			.isEqualTo(expectedFeed);
+	}
+
+	@Test
+	@DisplayName("중복된 아이템 id에 대한 피드 아이템 생성 테스트를 한다.")
+	void createFeedItemsTest() {
+		// given
+		List<Long> itemIds = List.of(1L, 1L, 2L, 3L, 3L, 3L);
+
+		List<Item> items = LongStream.range(1L, 3L)
+			.mapToObj(ItemBuilder::build)
+			.toList();
+
+		List<FeedItem> expectedFeedItems = items.stream()
+			.map(FeedItem::new)
+			.toList();
+
+		given(itemReader.read(anyLong())).willAnswer(
+			invocation -> items.stream()
+				.filter(item -> item.getId() == invocation.getArgument(0))
+				.findFirst()
+				.orElseThrow(() -> new AssertionError("아이템이 없습니다."))
+		);
+
+		// when
+		List<FeedItem> actualFeedItems = feedAppender.createFeedItems(itemIds);
+
+		// then
+		assertThat(actualFeedItems)
+			.usingRecursiveComparison()
+			.isEqualTo(expectedFeedItems);
 	}
 
 }
