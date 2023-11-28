@@ -111,7 +111,12 @@ public class MemberService {
 	public void updateProfileImage(final MultipartFile multipartFile) throws IOException {
 		final Member member = memberUtils.getCurrentMember();
 
-		s3Manager.deleteFile(DIRECTORY, member.getProfileImage());
+		String originProfileImageName = null;
+		if (member.getProfileImage() != null) {
+			originProfileImageName = member.getProfileImage().substring(73);
+		}
+
+		s3Manager.deleteFile(DIRECTORY, originProfileImageName);
 
 		if (multipartFile == null) {
 			memberRemover.removeProfileImage(member);
@@ -120,6 +125,6 @@ public class MemberService {
 
 		final String profileImage = UUID.randomUUID().toString();
 		s3Manager.uploadFile(multipartFile, DIRECTORY, profileImage);
-		memberModifier.modifyProfileImage(member, profileImage);
+		memberModifier.modifyProfileImage(member, DIRECTORY, profileImage);
 	}
 }
