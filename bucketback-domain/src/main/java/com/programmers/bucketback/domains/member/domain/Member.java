@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "members")
 public class Member extends BaseEntity {
 
-	public static final String BASE_PROFILE_IMAGE_URL = "https://team-02-bucket.s3.ap-northeast-2.amazonaws.com/bucketback-static";
+	public static final String BASE_PROFILE_IMAGE_URL = "https://team-02-bucket.s3.ap-northeast-2.amazonaws.com/bucketback-static/";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
