@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.vote.application;
 
+import java.util.Collections;
+
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
@@ -97,6 +99,31 @@ public class VoteService {
 			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
 		}
 
-		return voteReader.readByCursor(hobby, statusCondition, sortCondition, parameters, memberId);
+		return voteReader.readByCursor(
+			hobby,
+			statusCondition,
+			sortCondition,
+			null,
+			parameters,
+			memberId
+		);
+	}
+
+	public CursorSummary<VoteSummary> getVotesByKeyword(
+		final String keyword,
+		final CursorPageParameters parameters
+	) {
+		if (keyword.isBlank()) {
+			return new CursorSummary<>(null, 0, Collections.emptyList());
+		}
+
+		return voteReader.readByCursor(
+			null,
+			VoteStatusCondition.COMPLETED,
+			VoteSortCondition.RECENT,
+			keyword,
+			parameters,
+			null
+		);
 	}
 }

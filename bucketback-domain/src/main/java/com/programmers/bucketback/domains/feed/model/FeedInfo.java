@@ -2,7 +2,6 @@ package com.programmers.bucketback.domains.feed.model;
 
 import java.time.LocalDateTime;
 
-import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 
 import lombok.Builder;
@@ -10,7 +9,7 @@ import lombok.Builder;
 @Builder
 public record FeedInfo(
 	Long id,
-	Hobby hobby,
+	String hobby,
 	String content,
 	String bucketName,
 	Integer bucketBudget,
@@ -27,7 +26,7 @@ public record FeedInfo(
 	) {
 		return FeedInfo.builder()
 			.id(feed.getId())
-			.hobby(feed.getHobby())
+			.hobby(feed.getHobby().getHobbyValue())
 			.content(feed.getFeedContent())
 			.bucketName(feed.getName())
 			.bucketBudget(feed.getBudget())
