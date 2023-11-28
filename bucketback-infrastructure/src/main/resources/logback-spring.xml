@@ -25,7 +25,7 @@
             <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
         </layout>
         <logGroupName>team02-bucketback-log</logGroupName>
-        <logStreamUuidPrefix>i-096808e6ee318ef05-</logStreamUuidPrefix>
+        <logStreamUuidPrefix>bucketback-error-log-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>10</maxBatchLogEvents>
         <maxFlushTimeMillis>1000</maxFlushTimeMillis>
