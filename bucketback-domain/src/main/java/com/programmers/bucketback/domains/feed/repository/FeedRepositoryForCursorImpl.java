@@ -44,7 +44,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 			.from(feed)
 			.where(
 				feed.bucketInfo.hobby.eq(hobby),
-				eqMemberId(nicknameMemberId),
+				eqMemberId(nicknameMemberId, onlyNicknameLikeFeeds),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).limit(pageSize)
 			.fetch();
@@ -117,12 +117,19 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 		return member.id.eq(feedItem.feed.memberId);
 	}
 
-	private BooleanExpression eqMemberId(final Long memberId) {
-		if (memberId == null) {
+	private BooleanExpression eqMemberId(
+		final Long nicknameMemberId,
+		final boolean onlyNicknameLikeFeeds
+	) {
+		if (onlyNicknameLikeFeeds) {
 			return null;
 		}
 
-		return feed.memberId.eq(memberId);
+		if (nicknameMemberId == null) {
+			return null;
+		}
+
+		return feed.memberId.eq(nicknameMemberId);
 	}
 
 	private BooleanExpression lessThanNextCursorId(
