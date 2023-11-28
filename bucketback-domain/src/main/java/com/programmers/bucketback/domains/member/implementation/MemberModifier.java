@@ -39,11 +39,8 @@ public class MemberModifier {
 	@Transactional
 	public void modifyProfileImage(
 		final Member member,
-		final String directory,
 		final String profileImage
 	) {
-		final String imagePath = IMAGE_BASE_PATH + directory + "/" + profileImage;
-
-		member.updateProfileImage(imagePath);
+		member.updateProfileImage(profileImage);
 	}
 }
