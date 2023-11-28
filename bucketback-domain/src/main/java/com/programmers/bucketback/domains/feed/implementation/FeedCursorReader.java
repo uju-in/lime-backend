@@ -50,14 +50,13 @@ public class FeedCursorReader {
 		);
 
 		List<FeedCursorSummaryLike> feedCursorSummaryLikes = feedCursorSummaries.stream().map(
-			item -> {
+			feedCursorSummary -> {
 				boolean isLike = feedLikeRepository.existsByMemberIdAndFeed(
 					loginMemberId,
-					feedReader.read(item.feedId()
-					)
+					feedReader.read(feedCursorSummary.feedId())
 				);
 
-				return item.of(isLike);
+				return feedCursorSummary.of(isLike);
 			}
 		).toList();
 
