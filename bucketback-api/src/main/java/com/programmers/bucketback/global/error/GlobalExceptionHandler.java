@@ -92,4 +92,12 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
+
+	@ExceptionHandler(MultipartException.class)
+	public ResponseEntity<ErrorResponse> handleMultipartException(final MultipartException e) {
+		log.error("MultipartException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.IMAGE_MAXIMUM_SIZE_EXCEEDED);
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
 }

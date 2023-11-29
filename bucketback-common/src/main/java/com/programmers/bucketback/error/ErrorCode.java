@@ -23,6 +23,7 @@ public enum ErrorCode {
 	MISSING_PARAMETER("COMMON_007", "필수 파라미터가 있습니다."),
 	EXPIRED_JWT("COMMON_008", "만료된 JWT 토큰입니다."),
 	BAD_SIGNATURE_JWT("COMMON_009", "잘못된 서명의 JWT 토큰입니다."),
+	IMAGE_MAXIMUM_SIZE_EXCEEDED("COMMON_010", "업로드할 수 있는 파일의 최대 크기를 초과했습니다."),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
