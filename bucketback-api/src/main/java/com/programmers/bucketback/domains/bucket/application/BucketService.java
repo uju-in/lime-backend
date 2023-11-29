@@ -6,6 +6,7 @@ import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.domains.bucket.application.dto.response.BucketGetCursorServiceResponse;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.bucket.implementation.BucketAppender;
 import com.programmers.bucketback.domains.bucket.implementation.BucketModifier;
@@ -93,14 +94,21 @@ public class BucketService {
 	/**
 	 * 버킷 커서 조회
 	 */
-	public CursorSummary<BucketSummary> getBucketsByCursor(
+	public BucketGetCursorServiceResponse getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = memberReader.readByNickname(nickname).getId();
 
-		return bucketReader.readByCursor(memberId, hobby, parameters);
+		int totalBucketCount = bucketReader.countByMemberId(memberId);
+		CursorSummary<BucketSummary> cursorSummary = bucketReader.readByCursor(
+			memberId,
+			hobby,
+			parameters
+		);
+
+		return BucketGetCursorServiceResponse.of(cursorSummary, totalBucketCount);
 	}
 
 	private void validateExceedBudget(
