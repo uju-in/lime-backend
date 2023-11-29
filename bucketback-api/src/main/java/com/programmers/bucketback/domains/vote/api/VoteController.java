@@ -118,7 +118,7 @@ public class VoteController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "투표 랭킹", description = "진행 중인 투표에 대해서 1~10위까지 랭킹을 조회합니다.")
+	@Operation(summary = "랭킹 조회", description = "진행 중인 투표의 랭킹을 TOP 10까지 조회합니다.")
 	@GetMapping("/ranking")
 	public ResponseEntity<VoteRankResponse> rankVote() {
 		final List<VoteRedis> voteRanking = voteService.rankVote();
