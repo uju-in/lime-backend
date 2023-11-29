@@ -1,10 +1,13 @@
 package com.programmers.bucketback.domains.feed.application;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.model.Hobby;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetRankingServiceResponse;
 import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.bucketback.domains.feed.implementation.FeedAppender;
 import com.programmers.bucketback.domains.feed.implementation.FeedCursorReader;
@@ -14,11 +17,14 @@ import com.programmers.bucketback.domains.feed.implementation.FeedRemover;
 import com.programmers.bucketback.domains.feed.model.FeedCreateServiceRequest;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 import com.programmers.bucketback.domains.feed.model.FeedDetail;
+import com.programmers.bucketback.domains.feed.model.FeedInfo;
 import com.programmers.bucketback.domains.feed.model.FeedSortCondition;
 import com.programmers.bucketback.domains.feed.model.FeedUpdateServiceRequest;
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.util.MemberUtils;
+import com.programmers.bucketback.redis.feed.FeedRedisManager;
+import com.programmers.bucketback.redis.feed.model.FeedRankingInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -97,5 +103,11 @@ public class FeedService {
 		final FeedDetail detail = feedReader.readDetail(feedId, memberId);
 
 		return FeedGetServiceResponse.from(detail);
+	}
+
+	public FeedGetRankingServiceResponse getFeedRanking() {
+		List<FeedRankingInfo> feedRankingInfos = feedRedisManager.getFeedRanking();
+
+		return new FeedGetRankingServiceResponse(feedRankingInfos);
 	}
 }

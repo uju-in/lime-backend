@@ -18,8 +18,10 @@ import com.programmers.bucketback.domains.feed.api.request.FeedCreateRequest;
 import com.programmers.bucketback.domains.feed.api.request.FeedUpdateRequest;
 import com.programmers.bucketback.domains.feed.api.response.FeedCreateResponse;
 import com.programmers.bucketback.domains.feed.api.response.FeedGetByCursorResponse;
+import com.programmers.bucketback.domains.feed.api.response.FeedGetRankingResponse;
 import com.programmers.bucketback.domains.feed.api.response.FeedGetResponse;
 import com.programmers.bucketback.domains.feed.application.FeedService;
+import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetRankingServiceResponse;
 import com.programmers.bucketback.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 import com.programmers.bucketback.global.cursor.CursorRequest;
@@ -108,6 +110,15 @@ public class FeedController {
 	public ResponseEntity<FeedGetResponse> getFeed(@PathVariable final Long feedId) {
 		final FeedGetServiceResponse serviceResponse = feedService.getFeed(feedId);
 		final FeedGetResponse response = FeedGetResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "피드 랭킹 조회", description = "피드의 랭킹을 조회한다.")
+	@GetMapping("/ranking")
+	public ResponseEntity<FeedGetRankingResponse> getFeedRanking() {
+		FeedGetRankingServiceResponse serviceResponse = feedService.getFeedRanking();
+		FeedGetRankingResponse response = FeedGetRankingResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
