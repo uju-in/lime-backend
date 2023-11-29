@@ -63,7 +63,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 			.where(
 				feedItem.feed.id.in(feedIds)
 			)
-			.join(member).on(eqMemberIdToJoin(nicknameMemberId))
+			.join(member).on(eqMemberIdToJoin(nicknameMemberId, onlyNicknameLikeFeeds))
 			.orderBy(feedSort(feedSortCondition), feed.id.desc())
 			.transform(
 				groupBy(feed.id)
@@ -107,9 +107,12 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 		return feedLike.memberId.eq(myPageMemberId);
 	}
 
-	private BooleanExpression eqMemberIdToJoin(final Long myPageMemberId) {
+	private BooleanExpression eqMemberIdToJoin(
+		final Long myPageMemberId,
+		final boolean onlyNicknameLikeFeeds
+	) {
 		// 마이페이지 피드 조회
-		if (myPageMemberId != null) {
+		if (myPageMemberId != null && !onlyNicknameLikeFeeds) {
 			return member.id.eq(myPageMemberId);
 		}
 
