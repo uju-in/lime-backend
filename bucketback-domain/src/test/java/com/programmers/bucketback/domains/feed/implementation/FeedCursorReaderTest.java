@@ -84,12 +84,12 @@ class FeedCursorReaderTest {
 		given(memberReader.readByNickname(nickname.trim())).willReturn(member);
 
 		given(feedRepository.findAllByCursor(
-				eq(myPageMemberId),
-				anyBoolean(),
-				eq(hobby),
-				eq(sortCondition),
-				eq(parameters.cursorId()),
-				eq(pageSize)
+				myPageMemberId,
+				true,
+				hobby,
+				sortCondition,
+				parameters.cursorId(),
+				pageSize
 			)
 		).willReturn(feedCursorSummaries);
 
