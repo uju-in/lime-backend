@@ -13,7 +13,7 @@ public record FeedItemInfo(
 ) {
 	public static FeedItemInfo from(final FeedItem feedItem) {
 		return FeedItemInfo.builder()
-			.id(feedItem.getId())
+			.id(feedItem.getItem().getId())
 			.name(feedItem.getItem().getName())
 			.price(feedItem.getItem().getPrice())
 			.image(feedItem.getItem().getImage())
