@@ -3,14 +3,14 @@ package com.programmers.bucketback.domains.comment.application.dto.response;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.domains.comment.repository.CommentSummary;
 
-public record CommentsGetServiceResponse(
-	CursorSummary<CommentSummary> commentSummaries,
+public record CommentGetCursorServiceResponse(
+	CursorSummary<CommentSummary> commentSummary,
 	int totalCommentCount
 ) {
-	public static CommentsGetServiceResponse of(
-		final CursorSummary<CommentSummary> commentSummaries,
+	public static CommentGetCursorServiceResponse of(
+		final CursorSummary<CommentSummary> commentSummary,
 		final int totalCommentCount
 	) {
-		return new CommentsGetServiceResponse(commentSummaries, totalCommentCount);
+		return new CommentGetCursorServiceResponse(commentSummary, totalCommentCount);
 	}
 }

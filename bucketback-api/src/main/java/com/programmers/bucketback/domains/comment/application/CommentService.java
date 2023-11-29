@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
-import com.programmers.bucketback.domains.comment.application.dto.response.CommentsGetServiceResponse;
+import com.programmers.bucketback.domains.comment.application.dto.response.CommentGetCursorServiceResponse;
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.implementation.CommentAppender;
 import com.programmers.bucketback.domains.comment.implementation.CommentModifier;
@@ -64,21 +64,20 @@ public class CommentService {
 		commentRemover.remove(commentId);
 	}
 
-	public CommentsGetServiceResponse getFeedComments(
+	public CommentGetCursorServiceResponse getFeedComments(
 		final Long feedId,
 		final CursorPageParameters parameters
 	) {
 		final Long memberId = memberUtils.getCurrentMemberId();
 
 		int totalCommentCount = commentReader.countComments(feedId);
-
 		CursorSummary<CommentSummary> cursorSummary = commentReader.readByCursor(
 			feedId,
 			memberId,
 			parameters
 		);
 
-		return CommentsGetServiceResponse.of(cursorSummary, totalCommentCount);
+		return CommentGetCursorServiceResponse.of(cursorSummary, totalCommentCount);
 	}
 
 	@PayPoint(20)
