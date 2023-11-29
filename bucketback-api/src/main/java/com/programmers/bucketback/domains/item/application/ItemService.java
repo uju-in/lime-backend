@@ -12,6 +12,7 @@ import com.programmers.bucketback.common.model.ItemRemovalList;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 import com.programmers.bucketback.domains.item.implementation.ItemCursorReader;
@@ -105,17 +106,20 @@ public class ItemService {
 		);
 	}
 
-	public CursorSummary<MemberItemSummary> getMemberItemsByCursor(
+	public MemberItemGetServiceResponse getMemberItemsByCursor(
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
+		int totalMemberItemCount = memberItemReader.countByMemberIdAndHobby(memberId, hobby);
 
-		return memberItemReader.readMemberItem(
+		CursorSummary<MemberItemSummary> cursorSummary = memberItemReader.readMemberItem(
 			hobby,
 			memberId,
 			parameters
 		);
+
+		return new MemberItemGetServiceResponse(cursorSummary, totalMemberItemCount);
 	}
 
 	public List<ItemRankingServiceResponse> getRanking() {

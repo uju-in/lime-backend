@@ -6,6 +6,8 @@ import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.domains.bucket.application.dto.response.BucketGetCursorServiceResponse;
+import com.programmers.bucketback.domains.bucket.application.dto.response.BucketGetMemberItemServiceResponse;
 import com.programmers.bucketback.domains.bucket.domain.BucketInfo;
 import com.programmers.bucketback.domains.bucket.implementation.BucketAppender;
 import com.programmers.bucketback.domains.bucket.implementation.BucketModifier;
@@ -15,6 +17,7 @@ import com.programmers.bucketback.domains.bucket.model.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.bucket.model.BucketSummary;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
+import com.programmers.bucketback.domains.item.implementation.MemberItemReader;
 import com.programmers.bucketback.domains.member.implementation.MemberReader;
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
@@ -32,6 +35,7 @@ public class BucketService {
 	private final BucketReader bucketReader;
 	private final MemberReader memberReader;
 	private final ItemReader itemReader;
+	private final MemberItemReader memberItemReader;
 	private final MemberUtils memberUtils;
 
 	/** 버킷 생성 */
@@ -68,19 +72,22 @@ public class BucketService {
 	/**
 	 * 버킷 조회 수정을 위한 멤버 아이템 목록 조회
 	 */
-	public CursorSummary<BucketMemberItemSummary> getMemberItemsForModify(
+	public BucketGetMemberItemServiceResponse getMemberItemsForModify(
 		final Long bucketId,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
-		return bucketReader.readByMemberItems(
+		int totalMemberItemCount = memberItemReader.countByMemberIdAndHobby(memberId, hobby);
+		CursorSummary<BucketMemberItemSummary> cursorSummary = bucketReader.readByMemberItems(
 			bucketId,
 			memberId,
 			hobby,
 			parameters
 		);
+
+		return new BucketGetMemberItemServiceResponse(cursorSummary, totalMemberItemCount);
 	}
 
 	/**
@@ -93,14 +100,21 @@ public class BucketService {
 	/**
 	 * 버킷 커서 조회
 	 */
-	public CursorSummary<BucketSummary> getBucketsByCursor(
+	public BucketGetCursorServiceResponse getBucketsByCursor(
 		final String nickname,
 		final Hobby hobby,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = memberReader.readByNickname(nickname).getId();
 
-		return bucketReader.readByCursor(memberId, hobby, parameters);
+		int totalBucketCount = bucketReader.countByMemberId(memberId);
+		CursorSummary<BucketSummary> cursorSummary = bucketReader.readByCursor(
+			memberId,
+			hobby,
+			parameters
+		);
+
+		return new BucketGetCursorServiceResponse(cursorSummary, totalBucketCount);
 	}
 
 	private void validateExceedBudget(

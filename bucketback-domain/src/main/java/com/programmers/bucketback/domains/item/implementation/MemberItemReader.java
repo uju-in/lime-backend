@@ -90,4 +90,14 @@ public class MemberItemReader {
 
 		return parameterSize;
 	}
+
+	public int countByMemberIdAndHobby(
+		final Long memberId,
+		final Hobby hobby
+	) {
+		if (hobby == null) {
+			return memberItemRepository.countByMemberId(memberId);
+		}
+		return memberItemRepository.countByHobbyAndMemberId(hobby, memberId);
+	}
 }
