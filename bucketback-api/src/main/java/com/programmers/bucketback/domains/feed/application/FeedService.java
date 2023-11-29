@@ -38,6 +38,7 @@ public class FeedService {
 	private final FeedRemover feedRemover;
 	private final FeedCursorReader feedCursorReader;
 	private final MemberUtils memberUtils;
+	private final FeedRedisManager feedRedisManager;
 
 	/** 피드 생성 */
 	public Long createFeed(final FeedCreateServiceRequest request) {
@@ -101,6 +102,18 @@ public class FeedService {
 	public FeedGetServiceResponse getFeed(final Long feedId) {
 		final Long memberId = memberUtils.getCurrentMemberId();
 		final FeedDetail detail = feedReader.readDetail(feedId, memberId);
+
+		FeedInfo feedInfo = detail.feedInfo();
+
+		FeedRankingInfo feedRankingInfo = FeedRankingInfo.builder()
+			.feedId(feedInfo.id())
+			.feedContent(feedInfo.content())
+			.hobbyName(feedInfo.hobby())
+			.bucketName(feedInfo.bucketName())
+			.likeCount(feedInfo.likeCount())
+			.build();
+
+		feedRedisManager.increasePopularity(feedRankingInfo);
 
 		return FeedGetServiceResponse.from(detail);
 	}
