@@ -28,7 +28,7 @@ public class CommentRepositoryForCursorImpl implements CommentRepositoryForCurso
 	@Override
 	public List<CommentSummary> findByCursor(
 		final Long feedId,
-		final Long memberId, //내가 작성한 댓글 표시를 위한 대비
+		final Long memberId,
 		final String cursorId,
 		final int pageSize
 	) {
@@ -41,7 +41,7 @@ public class CommentRepositoryForCursorImpl implements CommentRepositoryForCurso
 						MemberInfo.class,
 						member.id,
 						member.nickname.nickname,
-						member.introduction.introduction,//프로필이미지 대신 임시로 사용 : 프로필 이미지 필드 생기면 추가
+						member.profileImage,
 						member.levelPoint
 					),
 					comment.id,

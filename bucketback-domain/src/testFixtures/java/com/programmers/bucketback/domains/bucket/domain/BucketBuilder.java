@@ -6,6 +6,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 
 import lombok.AccessLevel;
@@ -30,6 +31,9 @@ public class BucketBuilder {
 		Bucket bucket = new Bucket(bucketInfo, memberId);
 		setBucketId(bucket);
 
+		List<BucketItem> bucketItems = buildBucketItems(ItemIdRegistryBuilder.build());
+		bucketItems.forEach(bucket::addBucketItem);
+
 		return bucket;
 	}
 
@@ -45,7 +49,7 @@ public class BucketBuilder {
 		return new BucketInfo(Hobby.BASKETBALL, "유러피안 농구", 100000);
 	}
 
-	public static List<BucketItem> buildBucketItem(ItemIdRegistry itemIdRegistry) {
+	public static List<BucketItem> buildBucketItems(ItemIdRegistry itemIdRegistry) {
 		return itemIdRegistry.itemIds().stream()
 			.map(itemId -> new BucketItem(ItemBuilder.build(itemId)))
 			.toList();
@@ -58,4 +62,5 @@ public class BucketBuilder {
 			1L
 		);
 	}
+
 }

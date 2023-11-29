@@ -13,5 +13,7 @@ public interface BucketRepository extends JpaRepository<Bucket, Long>, BucketRep
 		final Long memberId
 	);
 
-	List<Bucket> findByMemberId(final Long memberId);
+	List<Bucket> findAllByMemberId(final Long memberId);
+
+	int countByMemberId(final Long memberId);
 }

@@ -25,9 +25,11 @@ import com.programmers.bucketback.domains.feed.model.FeedCursorSummaryLike;
 import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "feeds", description = "피드 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/feeds")
@@ -81,9 +83,9 @@ public class FeedController {
 	@Operation(summary = "피드 목록 조회", description = "hobbyName, nickname, sortCondition, CursorRequest을 이용하여 피드 목록 조회 합니다.")
 	@GetMapping
 	public ResponseEntity<FeedGetByCursorResponse> getFeedByCursor(
-		@RequestParam final String hobbyName,
+		@RequestParam(required = false) final String hobbyName,
 		@RequestParam(required = false) final String nickname,
-		@RequestParam(required = false) final boolean myPageOwnerLikeFeeds,
+		@RequestParam(required = false) final boolean onlyNicknameLikeFeeds,
 		@RequestParam(required = false) final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
@@ -92,7 +94,7 @@ public class FeedController {
 		CursorSummary<FeedCursorSummaryLike> cursorSummary = feedService.getFeedByCursor(
 			hobby,
 			nickname,
-			myPageOwnerLikeFeeds,
+			onlyNicknameLikeFeeds,
 			sortCondition,
 			request.toParameters()
 		);
