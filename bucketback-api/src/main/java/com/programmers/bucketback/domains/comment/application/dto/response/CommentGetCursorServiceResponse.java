@@ -7,10 +7,4 @@ public record CommentGetCursorServiceResponse(
 	CursorSummary<CommentSummary> commentSummary,
 	int totalCommentCount
 ) {
-	public static CommentGetCursorServiceResponse of(
-		final CursorSummary<CommentSummary> commentSummary,
-		final int totalCommentCount
-	) {
-		return new CommentGetCursorServiceResponse(commentSummary, totalCommentCount);
-	}
 }

@@ -7,10 +7,4 @@ public record BucketGetCursorServiceResponse(
 	CursorSummary<BucketSummary> cursorSummary,
 	int totalBucketCount
 ) {
-	public static BucketGetCursorServiceResponse of(
-		final CursorSummary<BucketSummary> cursorSummary,
-		final int totalBucketCount
-	) {
-		return new BucketGetCursorServiceResponse(cursorSummary, totalBucketCount);
-	}
 }

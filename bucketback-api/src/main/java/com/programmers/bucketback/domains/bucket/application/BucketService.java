@@ -87,7 +87,7 @@ public class BucketService {
 			parameters
 		);
 
-		return BucketGetMemberItemServiceResponse.of(cursorSummary, totalMemberItemCount);
+		return new BucketGetMemberItemServiceResponse(cursorSummary, totalMemberItemCount);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class BucketService {
 			parameters
 		);
 
-		return BucketGetCursorServiceResponse.of(cursorSummary, totalBucketCount);
+		return new BucketGetCursorServiceResponse(cursorSummary, totalBucketCount);
 	}
 
 	private void validateExceedBudget(

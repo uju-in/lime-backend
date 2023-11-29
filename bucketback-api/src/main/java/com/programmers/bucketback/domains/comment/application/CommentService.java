@@ -77,7 +77,7 @@ public class CommentService {
 			parameters
 		);
 
-		return CommentGetCursorServiceResponse.of(cursorSummary, totalCommentCount);
+		return new CommentGetCursorServiceResponse(cursorSummary, totalCommentCount);
 	}
 
 	@PayPoint(20)
