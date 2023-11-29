@@ -97,6 +97,7 @@ public class FeedService {
 	public void unLikeFeed(final Long feedId) {
 		Long memberId = memberUtils.getCurrentMemberId();
 		feedRemover.unlike(memberId, feedId);
+		feedRedisManager.decreasePopularity(feedId);
 	}
 
 	/** 피드 상세 조회 **/

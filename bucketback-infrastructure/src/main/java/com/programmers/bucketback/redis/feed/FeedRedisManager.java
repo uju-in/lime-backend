@@ -54,4 +54,24 @@ public class FeedRedisManager {
 				ZSetOperations.incrementScore(FEED_RANKING_INFO_SET_KEY, feedRankingInfo.getValue(), 1);
 			});
 	}
+
+	public void decreasePopularity(final Long targetFeedId) {
+		ZSetOperations<String, Object> ZSetOperations = redisTemplate.opsForZSet();
+
+		Set<ZSetOperations.TypedTuple<Object>> feedRankingInfoSet =
+			ZSetOperations.reverseRangeWithScores(
+				FEED_RANKING_INFO_SET_KEY, 0, 9
+			);
+
+		feedRankingInfoSet.stream()
+			.filter(s -> {
+				FeedRankingInfo feedRankingInfo = (FeedRankingInfo)s.getValue();
+				Long feedId = feedRankingInfo.feedId();
+				return feedId.equals(targetFeedId);
+			})
+			.findFirst()
+			.ifPresent(feedRankingInfo -> {
+				ZSetOperations.incrementScore(FEED_RANKING_INFO_SET_KEY, feedRankingInfo.getValue(), -1);
+			});
+	}
 }
