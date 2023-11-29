@@ -20,11 +20,18 @@ public class ItemRanking {
 	private final RedisTemplate redisTemplate;
 
 	@Transactional
-	public void addPoint(
+	public void increasePoint(
 		final String itemName,
 		final int score
 	) {
-		redisTemplate.opsForZSet().add("itemRanking", itemName, score);
+		redisTemplate.opsForZSet().incrementScore("itemRanking", itemName, score);
+	}
+
+	@Transactional
+	public void addRanking(
+		final String itemName
+	) {
+		redisTemplate.opsForZSet().add("itemRanking", itemName, 0);
 	}
 
 	@Transactional(readOnly = true)

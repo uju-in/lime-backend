@@ -11,6 +11,7 @@ import com.programmers.bucketback.crawling.WebSite;
 import com.programmers.bucketback.domains.item.application.dto.ItemEnrollServiceRequest;
 import com.programmers.bucketback.domains.item.implementation.ItemAppender;
 import com.programmers.bucketback.domains.item.model.ItemCrawlerInfo;
+import com.programmers.bucketback.redis.implement.ItemRanking;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,7 @@ public class ItemEnrollService {
 	private final ItemAppender itemAppender;
 	private final ItemService itemService;
 	private final ItemEnrollValidator itemEnrollValidator;
+	private final ItemRanking itemRanking;
 
 	public Long enrollItem(final ItemEnrollServiceRequest request) {
 		// 중복 링크 체크
@@ -34,9 +36,13 @@ public class ItemEnrollService {
 		// 아이템 등록
 		Long enrolledItemId = itemAppender.append(request.hobby(), itemCrawlerInfo);
 
+		// 아이텥 랭킹 등록
+		itemRanking.addRanking(itemCrawlerInfo.itemName());
+
 		// 아이템 담기
 		ItemIdRegistry itemIdRegistry = getItemIdRegistry(enrolledItemId);
 		itemService.addItem(itemIdRegistry);
+		itemRanking.increasePoint(itemCrawlerInfo.itemName(), 1);
 
 		return enrolledItemId;
 	}
