@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.programmers.bucketback.domains.member.application.dto.response.MemberCheckJwtServiceResponse;
@@ -123,7 +124,9 @@ public class MemberService {
 			return;
 		}
 
-		final String profileImage = UUID.randomUUID().toString();
+		final String fileType = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+		final String profileImage = UUID.randomUUID() + "." + fileType;
+
 		s3Manager.uploadFile(multipartFile, DIRECTORY, profileImage);
 		memberModifier.modifyProfileImage(member, DIRECTORY, profileImage);
 	}
