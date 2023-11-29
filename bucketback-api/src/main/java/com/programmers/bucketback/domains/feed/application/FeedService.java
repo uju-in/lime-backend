@@ -90,6 +90,7 @@ public class FeedService {
 	public void likeFeed(final Long feedId) {
 		Long memberId = memberUtils.getCurrentMemberId();
 		feedAppender.like(memberId, feedId);
+		feedRedisManager.increasePopularity(feedId);
 	}
 
 	/** 피드 좋아요 취소 */
