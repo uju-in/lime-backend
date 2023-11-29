@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.MemberItem;
 
@@ -33,4 +34,17 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 	boolean existsByMemberIdAndItemsIn(@Param("memberId") Long memberId, @Param("items") List<Item> items);
 
 	int countByMemberId(final Long memberId);
+
+	@Query(
+		"""
+				SELECT COUNT(mi)
+			  	FROM MemberItem mi
+			  	JOIN mi.item i
+			  	WHERE i.hobby = :hobby AND mi.memberId = :memberId
+			"""
+	)
+	int countByHobbyAndMemberId(
+		final Hobby hobby,
+		final Long memberId
+	);
 }
