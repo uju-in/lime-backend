@@ -90,48 +90,42 @@ public class FeedService {
 	public void likeFeed(final Long feedId) {
 		Long memberId = memberUtils.getCurrentMemberId();
 		feedAppender.like(memberId, feedId);
-		increasePopularity(feedId);
+		changePopularity(feedId, 1);
 	}
 
 	/** 피드 좋아요 취소 */
 	public void unLikeFeed(final Long feedId) {
 		Long memberId = memberUtils.getCurrentMemberId();
 		feedRemover.unlike(memberId, feedId);
-		decreasePopularity(feedId);
+		changePopularity(feedId, -1);
 	}
 
 	/** 피드 상세 조회 **/
 	public FeedGetServiceResponse getFeed(final Long feedId) {
 		final Long memberId = memberUtils.getCurrentMemberId();
 		final FeedDetail detail = feedReader.readDetail(feedId, memberId);
-		increasePopularity(detail);
+		changePopularity(detail, 1);
 
 		return FeedGetServiceResponse.from(detail);
 	}
 
-	private void decreasePopularity(
-		final Long feedId
+	private void changePopularity(
+		final Long feedId,
+		final int value
 	) {
 		if (feedRedisManager.isFeedExist(feedId)) {
-			feedRedisManager.decreasePopularity(feedId);
+			feedRedisManager.changePopularity(feedId, value);
+			return;
 		}
 
 		Long memberId = memberUtils.getCurrentMemberId();
-		increasePopularity(feedReader.readDetail(feedId, memberId));
+		changePopularity(feedReader.readDetail(feedId, memberId), value);
 	}
 
-	private void increasePopularity(
-		final Long feedId
+	private void changePopularity(
+		final FeedDetail feedDetail,
+		final int value
 	) {
-		if (feedRedisManager.isFeedExist(feedId)) {
-			feedRedisManager.increasePopularity(feedId);
-		}
-
-		Long memberId = memberUtils.getCurrentMemberId();
-		increasePopularity(feedReader.readDetail(feedId, memberId));
-	}
-
-	private void increasePopularity(final FeedDetail feedDetail) {
 		FeedInfo feedInfo = feedDetail.feedInfo();
 
 		FeedRankingInfo feedRankingInfo = FeedRankingInfo.builder()
@@ -142,7 +136,7 @@ public class FeedService {
 			.likeCount(feedInfo.likeCount())
 			.build();
 
-		feedRedisManager.increasePopularity(feedRankingInfo);
+		feedRedisManager.changePopularity(feedRankingInfo, value);
 	}
 
 	public FeedGetRankingServiceResponse getFeedRanking() {

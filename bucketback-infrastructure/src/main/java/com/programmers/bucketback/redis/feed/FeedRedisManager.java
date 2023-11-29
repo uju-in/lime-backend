@@ -18,10 +18,6 @@ public class FeedRedisManager {
 	private static final String FEED_RANKING_INFO_SET_KEY = "feedRankingInfoK";
 	private final RedisTemplate<String, Object> redisTemplate;
 
-	public void increasePopularity(final FeedRankingInfo feedRankingInfo) {
-		redisTemplate.opsForZSet().incrementScore(FEED_RANKING_INFO_SET_KEY, feedRankingInfo, 1);
-	}
-
 	public List<FeedRankingInfo> getFeedRanking() {
 		ZSetOperations<String, Object> ZSetOperations = redisTemplate.opsForZSet();
 
@@ -33,46 +29,6 @@ public class FeedRedisManager {
 		return feedRankingInfoSet.stream()
 			.map(FeedRankingInfo::of)
 			.toList();
-	}
-
-	public void increasePopularity(final Long targetFeedId) {
-		ZSetOperations<String, Object> ZSetOperations = redisTemplate.opsForZSet();
-
-		Set<ZSetOperations.TypedTuple<Object>> feedRankingInfoSet =
-			ZSetOperations.reverseRangeWithScores(
-				FEED_RANKING_INFO_SET_KEY, 0, 9
-			);
-
-		feedRankingInfoSet.stream()
-			.filter(s -> {
-				FeedRankingInfo feedRankingInfo = (FeedRankingInfo)s.getValue();
-				Long feedId = feedRankingInfo.feedId();
-				return feedId.equals(targetFeedId);
-			})
-			.findFirst()
-			.ifPresent(feedRankingInfo -> {
-				ZSetOperations.incrementScore(FEED_RANKING_INFO_SET_KEY, feedRankingInfo.getValue(), 1);
-			});
-	}
-
-	public void decreasePopularity(final Long targetFeedId) {
-		ZSetOperations<String, Object> ZSetOperations = redisTemplate.opsForZSet();
-
-		Set<ZSetOperations.TypedTuple<Object>> feedRankingInfoSet =
-			ZSetOperations.reverseRangeWithScores(
-				FEED_RANKING_INFO_SET_KEY, 0, 9
-			);
-
-		feedRankingInfoSet.stream()
-			.filter(s -> {
-				FeedRankingInfo feedRankingInfo = (FeedRankingInfo)s.getValue();
-				Long feedId = feedRankingInfo.feedId();
-				return feedId.equals(targetFeedId);
-			})
-			.findFirst()
-			.ifPresent(feedRankingInfo -> {
-				ZSetOperations.incrementScore(FEED_RANKING_INFO_SET_KEY, feedRankingInfo.getValue(), -1);
-			});
 	}
 
 	public boolean isFeedExist(final Long feedId) {
@@ -88,6 +44,30 @@ public class FeedRedisManager {
 				FeedRankingInfo feedRankingInfo = (FeedRankingInfo)s.getValue();
 				Long feedIdFromRedis = feedRankingInfo.feedId();
 				return feedIdFromRedis.equals(feedId);
+			});
+	}
+
+	public void changePopularity(final FeedRankingInfo feedRankingInfo, final int value) {
+		redisTemplate.opsForZSet().incrementScore(FEED_RANKING_INFO_SET_KEY, feedRankingInfo, value);
+	}
+
+	public void changePopularity(final Long targetFeedId, final int value) {
+		ZSetOperations<String, Object> ZSetOperations = redisTemplate.opsForZSet();
+
+		Set<ZSetOperations.TypedTuple<Object>> feedRankingInfoSet =
+			ZSetOperations.reverseRangeWithScores(
+				FEED_RANKING_INFO_SET_KEY, 0, 9
+			);
+
+		feedRankingInfoSet.stream()
+			.filter(s -> {
+				FeedRankingInfo feedRankingInfo = (FeedRankingInfo)s.getValue();
+				Long feedId = feedRankingInfo.feedId();
+				return feedId.equals(targetFeedId);
+			})
+			.findFirst()
+			.ifPresent(feedRankingInfo -> {
+				ZSetOperations.incrementScore(FEED_RANKING_INFO_SET_KEY, feedRankingInfo.getValue(), value);
 			});
 	}
 }
