@@ -91,10 +91,6 @@ public class MemberItemReader {
 		return parameterSize;
 	}
 
-	public int countByMemberId(final Long memberId) {
-		return memberItemRepository.countByMemberId(memberId);
-	}
-
 	public int countByMemberIdAndHobby(
 		final Long memberId,
 		final Hobby hobby

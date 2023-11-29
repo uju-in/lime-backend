@@ -79,7 +79,7 @@ public class BucketService {
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
-		int totalMemberItemCount = memberItemReader.countByMemberId(memberId);
+		int totalMemberItemCount = memberItemReader.countByMemberIdAndHobby(memberId, hobby);
 		CursorSummary<BucketMemberItemSummary> cursorSummary = bucketReader.readByMemberItems(
 			bucketId,
 			memberId,
