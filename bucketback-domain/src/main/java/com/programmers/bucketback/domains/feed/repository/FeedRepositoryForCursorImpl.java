@@ -99,21 +99,21 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 			.toList();
 	}
 
-	private BooleanExpression eqLikeMemberId(final Long myPageMemberId) {
-		if (myPageMemberId == null) {
+	private BooleanExpression eqLikeMemberId(final Long nicknameMemberId) {
+		if (nicknameMemberId == null) {
 			return null;
 		}
 
-		return feedLike.memberId.eq(myPageMemberId);
+		return feedLike.memberId.eq(nicknameMemberId);
 	}
 
 	private BooleanExpression eqMemberIdToJoin(
-		final Long myPageMemberId,
+		final Long nicknameMemberId,
 		final boolean onlyNicknameLikeFeeds
 	) {
 		// 마이페이지 피드 조회
-		if (myPageMemberId != null && !onlyNicknameLikeFeeds) {
-			return member.id.eq(myPageMemberId);
+		if (nicknameMemberId != null && !onlyNicknameLikeFeeds) {
+			return member.id.eq(nicknameMemberId);
 		}
 
 		// 일반 피드 조회
