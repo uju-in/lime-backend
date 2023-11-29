@@ -58,13 +58,13 @@ public class FeedAppender {
 	/** 피드 아이템 생성 */
 	public List<FeedItem> createFeedItems(final List<Long> itemIds) {
 		return itemIds.stream()
+			.distinct()
 			.map(itemId -> {
 				Item item = itemReader.read(itemId);
 				FeedItem feedItem = new FeedItem(item);
 
 				return feedItem;
 			})
-			.distinct()
 			.collect(Collectors.toList());
 	}
 
