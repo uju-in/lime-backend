@@ -90,4 +90,8 @@ public class MemberItemReader {
 
 		return parameterSize;
 	}
+
+	public int countByMemberId(final Long memberId) {
+		return memberItemRepository.countByMemberId(memberId);
+	}
 }

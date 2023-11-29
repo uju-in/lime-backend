@@ -31,4 +31,6 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 			"""
 	)
 	boolean existsByMemberIdAndItemsIn(@Param("memberId") Long memberId, @Param("items") List<Item> items);
+
+	int countByMemberId(final Long memberId);
 }
