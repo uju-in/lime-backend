@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedRedisManager {
 
-	private static final String FEED_RANKING_INFO_SET_KEY = "feedRankingInfo";
+	private static final String FEED_RANKING_INFO_SET_KEY = "feedRankingInfoK";
 	private final RedisTemplate<String, Object> redisTemplate;
 
 	public void increasePopularity(final FeedRankingInfo feedRankingInfo) {
@@ -72,6 +72,22 @@ public class FeedRedisManager {
 			.findFirst()
 			.ifPresent(feedRankingInfo -> {
 				ZSetOperations.incrementScore(FEED_RANKING_INFO_SET_KEY, feedRankingInfo.getValue(), -1);
+			});
+	}
+
+	public boolean isFeedExist(final Long feedId) {
+		ZSetOperations<String, Object> ZSetOperations = redisTemplate.opsForZSet();
+
+		Set<ZSetOperations.TypedTuple<Object>> feedRankingInfoSet =
+			ZSetOperations.reverseRangeWithScores(
+				FEED_RANKING_INFO_SET_KEY, 0, 9
+			);
+
+		return feedRankingInfoSet.stream()
+			.anyMatch(s -> {
+				FeedRankingInfo feedRankingInfo = (FeedRankingInfo)s.getValue();
+				Long feedIdFromRedis = feedRankingInfo.feedId();
+				return feedIdFromRedis.equals(feedId);
 			});
 	}
 }
