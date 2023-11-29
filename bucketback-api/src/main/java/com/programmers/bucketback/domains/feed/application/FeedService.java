@@ -90,22 +90,49 @@ public class FeedService {
 	public void likeFeed(final Long feedId) {
 		Long memberId = memberUtils.getCurrentMemberId();
 		feedAppender.like(memberId, feedId);
-		feedRedisManager.increasePopularity(feedId);
+		increasePopularity(feedId);
 	}
 
 	/** 피드 좋아요 취소 */
 	public void unLikeFeed(final Long feedId) {
 		Long memberId = memberUtils.getCurrentMemberId();
 		feedRemover.unlike(memberId, feedId);
-		feedRedisManager.decreasePopularity(feedId);
+		decreasePopularity(feedId);
 	}
 
 	/** 피드 상세 조회 **/
 	public FeedGetServiceResponse getFeed(final Long feedId) {
 		final Long memberId = memberUtils.getCurrentMemberId();
 		final FeedDetail detail = feedReader.readDetail(feedId, memberId);
+		increasePopularity(detail);
 
-		FeedInfo feedInfo = detail.feedInfo();
+		return FeedGetServiceResponse.from(detail);
+	}
+
+	private void decreasePopularity(
+		final Long feedId
+	) {
+		if (feedRedisManager.isFeedExist(feedId)) {
+			feedRedisManager.decreasePopularity(feedId);
+		}
+
+		Long memberId = memberUtils.getCurrentMemberId();
+		increasePopularity(feedReader.readDetail(feedId, memberId));
+	}
+
+	private void increasePopularity(
+		final Long feedId
+	) {
+		if (feedRedisManager.isFeedExist(feedId)) {
+			feedRedisManager.increasePopularity(feedId);
+		}
+
+		Long memberId = memberUtils.getCurrentMemberId();
+		increasePopularity(feedReader.readDetail(feedId, memberId));
+	}
+
+	private void increasePopularity(final FeedDetail feedDetail) {
+		FeedInfo feedInfo = feedDetail.feedInfo();
 
 		FeedRankingInfo feedRankingInfo = FeedRankingInfo.builder()
 			.feedId(feedInfo.id())
@@ -116,8 +143,6 @@ public class FeedService {
 			.build();
 
 		feedRedisManager.increasePopularity(feedRankingInfo);
-
-		return FeedGetServiceResponse.from(detail);
 	}
 
 	public FeedGetRankingServiceResponse getFeedRanking() {
