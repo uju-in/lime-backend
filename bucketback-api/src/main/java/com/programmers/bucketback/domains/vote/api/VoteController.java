@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.vote.api;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +20,14 @@ import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRe
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByCursorResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
+import com.programmers.bucketback.domains.vote.api.dto.response.VoteRankResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
 import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
 import com.programmers.bucketback.domains.vote.model.VoteSummary;
 import com.programmers.bucketback.global.cursor.CursorRequest;
+import com.programmers.bucketback.redis.vote.VoteRedis;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -110,6 +114,15 @@ public class VoteController {
 	) {
 		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByKeyword(keyword, request.toParameters());
 		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(cursorSummary);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "랭킹 조회", description = "진행 중인 투표의 랭킹을 TOP 10까지 조회합니다.")
+	@GetMapping("/ranking")
+	public ResponseEntity<VoteRankResponse> rankVote() {
+		final List<VoteRedis> voteRanking = voteService.rankVote();
+		final VoteRankResponse response = VoteRankResponse.from(voteRanking);
 
 		return ResponseEntity.ok(response);
 	}
