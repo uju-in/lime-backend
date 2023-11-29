@@ -2,12 +2,14 @@ package com.programmers.bucketback.global.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.EntityNotFoundException;
@@ -91,5 +93,22 @@ public class GlobalExceptionHandler {
 		final ErrorResponse response = ErrorResponse.from(e.getErrorCode());
 
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(MultipartException.class)
+	public ResponseEntity<ErrorResponse> handleMultipartException(final MultipartException e) {
+		log.error("MultipartException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.IMAGE_MAXIMUM_SIZE_EXCEEDED);
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
+		final HttpMessageNotReadableException e) {
+		log.error("HttpMessageNotReadableException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.INVALID_REQUEST_FILED_TYPE);
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 }
