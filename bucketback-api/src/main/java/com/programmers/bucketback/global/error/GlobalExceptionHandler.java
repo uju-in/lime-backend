@@ -100,4 +100,13 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
+		final HttpMessageNotReadableException e) {
+		log.error("HttpMessageNotReadableException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.INVALID_REQUEST_FILED_TYPE);
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
 }
