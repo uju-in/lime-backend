@@ -46,8 +46,13 @@ public class CommentReader {
 		return CursorUtils.getCursorSummaries(summaries);
 	}
 
+	public int countComments(final Long feedId) {
+		return commentRepository.countByFeedId(feedId);
+	}
+
 	private int getPageSize(final CursorPageParameters parameters) {
 		int pageSize = parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
 		return pageSize;
 	}
+
 }
