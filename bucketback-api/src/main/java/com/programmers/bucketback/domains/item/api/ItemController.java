@@ -28,8 +28,8 @@ import com.programmers.bucketback.domains.item.application.ItemService;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
-import com.programmers.bucketback.domains.item.model.MemberItemSummary;
 import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,11 +115,11 @@ public class ItemController {
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
 		Hobby hobby = Hobby.fromName(hobbyName);
-		CursorSummary<MemberItemSummary> cursorSummary = itemService.getMemberItemsByCursor(
+		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
 			hobby,
 			request.toParameters()
 		);
-		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(cursorSummary);
+		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
