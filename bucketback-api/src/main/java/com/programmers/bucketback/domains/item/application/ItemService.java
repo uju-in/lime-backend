@@ -53,7 +53,7 @@ public class ItemService {
 			.toList();
 
 		for (String itemName : items) {
-			itemRanking.addPoint(itemName, 1);
+			itemRanking.increasePoint(itemName, 1);
 		}
 
 		Long memberId = memberUtils.getCurrentMemberId();
