@@ -65,7 +65,7 @@ public class ItemService {
 	}
 
 	public ItemGetServiceResponse getItem(final Long itemId) {
-		boolean isMemberItem = false;
+		boolean isMemberItem;
 
 		Item item = itemReader.read(itemId);
 		Long memberId = memberUtils.getCurrentMemberId();
