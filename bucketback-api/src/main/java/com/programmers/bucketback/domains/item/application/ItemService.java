@@ -50,8 +50,8 @@ public class ItemService {
 
 	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
 		List<String> items = itemIdRegistry.itemIds().stream()
-			.map(itemId -> itemReader.read(itemId))
-			.map(item -> item.getName())
+			.map(itemReader::read)
+			.map(Item::getName)
 			.toList();
 
 		for (String itemName : items) {
