@@ -177,7 +177,13 @@ public class BucketReader {
 		return pageSize;
 	}
 
-	public int countByMemberId(final Long memberId) {
-		return bucketRepository.countByMemberId(memberId);
+	public int countByMemberIdAndHobby(
+		final Long memberId,
+		final Hobby hobby
+	) {
+		if (hobby == null) {
+			return bucketRepository.countByMemberId(memberId);
+		}
+		return bucketRepository.countByHobbyAndMemberId(hobby, memberId);
 	}
 }
