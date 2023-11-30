@@ -181,9 +181,6 @@ public class BucketReader {
 		final Long memberId,
 		final Hobby hobby
 	) {
-		if (hobby == null) {
-			return bucketRepository.countByMemberId(memberId);
-		}
 		return bucketRepository.countByHobbyAndMemberId(hobby, memberId);
 	}
 }
