@@ -16,7 +16,6 @@ import com.programmers.bucketback.domains.bucket.implementation.BucketRemover;
 import com.programmers.bucketback.domains.bucket.model.BucketGetServiceResponse;
 import com.programmers.bucketback.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.bucketback.domains.bucket.model.BucketSummary;
-import com.programmers.bucketback.domains.item.implementation.ItemReader;
 import com.programmers.bucketback.domains.item.implementation.MemberItemReader;
 import com.programmers.bucketback.domains.member.implementation.MemberReader;
 import com.programmers.bucketback.error.BusinessException;
@@ -34,7 +33,6 @@ public class BucketService {
 	private final BucketRemover bucketRemover;
 	private final BucketReader bucketReader;
 	private final MemberReader memberReader;
-	private final ItemReader itemReader;
 	private final MemberItemReader memberItemReader;
 	private final MemberUtils memberUtils;
 
@@ -45,7 +43,6 @@ public class BucketService {
 	) {
 		validateEmptyRegistry(registry);
 		Long memberId = memberUtils.getCurrentMemberId();
-		validateExceedBudget(bucketInfo, registry);
 
 		return bucketAppender.append(memberId, bucketInfo, registry);
 	}
@@ -57,7 +54,6 @@ public class BucketService {
 		final ItemIdRegistry registry
 	) {
 		validateEmptyRegistry(registry);
-		validateExceedBudget(bucketInfo, registry);
 
 		Long memberId = memberUtils.getCurrentMemberId();
 		bucketModifier.modify(memberId, bucketId, bucketInfo, registry);
@@ -107,7 +103,7 @@ public class BucketService {
 	) {
 		Long memberId = memberReader.readByNickname(nickname).getId();
 
-		int totalBucketCount = bucketReader.countByMemberId(memberId);
+		int totalBucketCount = bucketReader.countByMemberIdAndHobby(memberId, hobby);
 		CursorSummary<BucketSummary> cursorSummary = bucketReader.readByCursor(
 			memberId,
 			hobby,
@@ -115,19 +111,6 @@ public class BucketService {
 		);
 
 		return new BucketGetCursorServiceResponse(cursorSummary, totalBucketCount);
-	}
-
-	private void validateExceedBudget(
-		final BucketInfo bucketInfo,
-		final ItemIdRegistry registry
-	) {
-		if (bucketInfo.getBudget() != null) {
-			int totalPrice = registry.itemIds().stream()
-				.map(itemId -> itemReader.read(itemId).getPrice())
-				.reduce(0, Integer::sum);
-
-			bucketInfo.validateBucketBudget(totalPrice, bucketInfo.getBudget());
-		}
 	}
 
 	private void validateEmptyRegistry(final ItemIdRegistry registry) {

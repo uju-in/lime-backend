@@ -57,14 +57,4 @@ public class BucketInfo {
 			throw new BusinessException(ErrorCode.BUCKET_INVALID_BUDGET);
 		}
 	}
-
-	public void validateBucketBudget(
-		final int totalPrice,
-		final int bucketBudget
-	) {
-		if (totalPrice > bucketBudget) {
-			throw new BusinessException(ErrorCode.BUCKET_EXCEED_BUDGET);
-		}
-	}
-
 }
