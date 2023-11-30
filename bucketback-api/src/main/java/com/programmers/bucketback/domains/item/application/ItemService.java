@@ -10,6 +10,7 @@ import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
 import com.programmers.bucketback.common.model.ItemRemovalList;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.MemberItemGetServiceResponse;
@@ -96,13 +97,21 @@ public class ItemService {
 		return new ItemGetNamesServiceResponse(itemNameGetResults);
 	}
 
-	public CursorSummary<ItemCursorSummary> getItemsByCursor(
+	public ItemGetByCursorServiceResponse getItemsByCursor(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
-		return itemCursorReader.readByCursor(
+
+		CursorSummary<ItemCursorSummary> itemCursorSummaryCursorSummary = itemCursorReader.readByCursor(
 			keyword,
 			parameters
+		);
+
+		int itemTotalCount = itemReader.getItemTotalCountByKeyword(keyword);
+
+		return new ItemGetByCursorServiceResponse(
+			itemTotalCount,
+			itemCursorSummaryCursorSummary
 		);
 	}
 
