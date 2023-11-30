@@ -1,5 +1,6 @@
 package com.programmers.bucketback.domains.item.implementation;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -25,10 +26,17 @@ public class ItemCursorReader {
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
+		String trimmedKeyword = keyword.trim();
+
+		if (trimmedKeyword.isEmpty()) {
+			return new CursorSummary<>(
+				null,
+				0,
+				Collections.emptyList()
+			);
+		}
 
 		int pageSize = getPageSize(parameters);
-
-		String trimmedKeyword = keyword.trim();
 
 		List<ItemCursorSummary> itemCursorSummaries = itemRepository.findAllByCursor(
 			trimmedKeyword,

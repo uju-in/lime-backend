@@ -49,6 +49,10 @@ public class ItemReader {
 	public int getItemTotalCountByKeyword(final String keyword) {
 		String trimmedKeyword = keyword.trim();
 
+		if (trimmedKeyword.isEmpty()) {
+			return 0;
+		}
+
 		return itemRepository.countItemByKeyword(trimmedKeyword);
 	}
 }

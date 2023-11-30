@@ -101,7 +101,6 @@ public class ItemService {
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
-
 		CursorSummary<ItemCursorSummary> itemCursorSummaryCursorSummary = itemCursorReader.readByCursor(
 			keyword,
 			parameters
