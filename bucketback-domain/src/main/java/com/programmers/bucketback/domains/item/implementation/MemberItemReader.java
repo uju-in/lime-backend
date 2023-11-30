@@ -27,6 +27,7 @@ public class MemberItemReader {
 	private static final int DEFAULT_PAGE_SIZE = 20;
 
 	private final MemberItemRepository memberItemRepository;
+
 	private final ItemReader itemReader;
 
 	public MemberItem read(final Long memberItemId) {

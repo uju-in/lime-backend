@@ -20,8 +20,11 @@ import lombok.RequiredArgsConstructor;
 public class ItemEnrollService {
 
 	private final ItemAppender itemAppender;
+
 	private final ItemService itemService;
+
 	private final ItemEnrollValidator itemEnrollValidator;
+
 	private final ItemRanking itemRanking;
 
 	public Long enrollItem(final ItemEnrollServiceRequest request) {

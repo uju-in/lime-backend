@@ -38,14 +38,23 @@ import lombok.RequiredArgsConstructor;
 public class ItemService {
 
 	private final MemberItemAppender memberItemAppender;
+
 	private final MemberItemChecker memberItemChecker;
+
 	private final ItemReader itemReader;
+
 	private final ReviewStatistics reviewStatistics;
+
 	private final MemberItemReader memberItemReader;
+
 	private final MemberItemRemover memberItemRemover;
+
 	private final ItemFinder itemFinder;
+
 	private final ItemCursorReader itemCursorReader;
+
 	private final MemberUtils memberUtils;
+
 	private final ItemRanking itemRanking;
 
 	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
