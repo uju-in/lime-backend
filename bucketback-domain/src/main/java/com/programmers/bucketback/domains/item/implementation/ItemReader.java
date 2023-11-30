@@ -45,4 +45,14 @@ public class ItemReader {
 	public boolean existsItemsByUrl(final String itemURL) {
 		return itemRepository.existsItemsByUrl(itemURL);
 	}
+
+	public int getItemTotalCountByKeyword(final String keyword) {
+		String trimmedKeyword = keyword.trim();
+
+		if (trimmedKeyword.isEmpty()) {
+			return 0;
+		}
+
+		return itemRepository.countItemByKeyword(trimmedKeyword);
+	}
 }

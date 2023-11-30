@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberItemRemover {
 
 	private final MemberItemReader memberItemReader;
+
 	private final MemberItemRepository memberItemRepository;
 
 	public void remove(final Long memberItemId) {

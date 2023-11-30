@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
@@ -26,10 +25,10 @@ import com.programmers.bucketback.domains.item.api.dto.response.MemberItemGetByC
 import com.programmers.bucketback.domains.item.application.ItemEnrollService;
 import com.programmers.bucketback.domains.item.application.ItemService;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.MemberItemGetServiceResponse;
-import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
 import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -99,11 +98,11 @@ public class ItemController {
 		@RequestParam final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		CursorSummary<ItemCursorSummary> cursorSummary = itemService.getItemsByCursor(
+		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
 			request.toParameters()
 		);
-		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(cursorSummary);
+		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
