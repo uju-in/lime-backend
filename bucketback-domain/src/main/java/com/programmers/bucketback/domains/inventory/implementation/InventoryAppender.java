@@ -40,12 +40,13 @@ public class InventoryAppender {
 	/** 인벤토리 아이템 생성 */
 	public List<InventoryItem> createInventoryItem(final ItemIdRegistry registry) {
 		return registry.itemIds().stream()
+			.distinct()
 			.map(id -> {
 				Item item = itemReader.read(id);
 				InventoryItem inventoryItem = new InventoryItem(item);
 
 				return inventoryItem;
-			}).distinct()
+			})
 			.collect(Collectors.toList());
 	}
 }
