@@ -26,6 +26,7 @@ import com.programmers.bucketback.domains.item.implementation.MemberItemRemover;
 import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.item.model.MemberItemSummary;
+import com.programmers.bucketback.domains.review.implementation.ReviewReader;
 import com.programmers.bucketback.domains.review.implementation.ReviewStatistics;
 import com.programmers.bucketback.global.util.MemberUtils;
 import com.programmers.bucketback.redis.dto.ItemRankingServiceResponse;
@@ -57,6 +58,8 @@ public class ItemService {
 
 	private final ItemRanking itemRanking;
 
+	private final ReviewReader reviewReader;
+
 	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
 		List<String> items = itemIdRegistry.itemIds().stream()
 			.map(itemReader::read)
@@ -83,11 +86,14 @@ public class ItemService {
 		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
 		ItemInfo itemInfo = ItemInfo.from(item);
 
+		boolean isReviewed = reviewReader.existsReviewByMemberIdAndItemId(memberId, itemId);
+
 		return ItemGetServiceResponse.builder()
 			.itemInfo(itemInfo)
 			.isMemberItem(isMemberItem)
 			.itemUrl(item.getUrl())
 			.itemAvgRate(itemAvgRating)
+			.isReviewed(isReviewed)
 			.build();
 	}
 
