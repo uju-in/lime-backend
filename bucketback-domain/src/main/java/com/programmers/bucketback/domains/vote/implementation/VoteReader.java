@@ -95,6 +95,11 @@ public class VoteReader {
 		return CursorUtils.getCursorSummaries(voteSummaries);
 	}
 
+	@Transactional(readOnly = true)
+	public int countByKeyword(final String keyword) {
+		return voteRepository.countByKeyword(keyword);
+	}
+
 	private int getPageSize(final CursorPageParameters parameters) {
 		return parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
 	}

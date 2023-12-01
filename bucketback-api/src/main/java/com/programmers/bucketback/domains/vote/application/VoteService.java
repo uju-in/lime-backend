@@ -11,6 +11,7 @@ import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
 import com.programmers.bucketback.domains.vote.application.dto.request.VoteCreateServiceRequest;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetByKeywordServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.implementation.VoteAppender;
@@ -123,15 +124,17 @@ public class VoteService {
 		);
 	}
 
-	public CursorSummary<VoteSummary> getVotesByKeyword(
+	public VoteGetByKeywordServiceResponse getVotesByKeyword(
 		final String keyword,
 		final CursorPageParameters parameters
 	) {
 		if (keyword.isBlank()) {
-			return new CursorSummary<>(null, 0, Collections.emptyList());
+			return new VoteGetByKeywordServiceResponse(
+				new CursorSummary<>(null, 0, Collections.emptyList()), 0
+			);
 		}
 
-		return voteReader.readByCursor(
+		final CursorSummary<VoteSummary> cursorSummary = voteReader.readByCursor(
 			null,
 			VoteStatusCondition.COMPLETED,
 			VoteSortCondition.RECENT,
@@ -139,6 +142,9 @@ public class VoteService {
 			parameters,
 			null
 		);
+		final int totalVoteCount = voteReader.countByKeyword(keyword);
+
+		return new VoteGetByKeywordServiceResponse(cursorSummary, totalVoteCount);
 	}
 
 	public List<VoteRedis> rankVote() {

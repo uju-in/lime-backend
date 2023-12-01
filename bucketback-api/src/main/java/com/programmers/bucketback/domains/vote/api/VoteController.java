@@ -19,9 +19,11 @@ import com.programmers.bucketback.domains.vote.api.dto.request.VoteCreateRequest
 import com.programmers.bucketback.domains.vote.api.dto.request.VoteParticipateRequest;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteCreateResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByCursorResponse;
+import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetByKeywordResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteGetResponse;
 import com.programmers.bucketback.domains.vote.api.dto.response.VoteRankResponse;
 import com.programmers.bucketback.domains.vote.application.VoteService;
+import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetByKeywordServiceResponse;
 import com.programmers.bucketback.domains.vote.application.dto.response.VoteGetServiceResponse;
 import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
 import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
@@ -108,12 +110,12 @@ public class VoteController {
 
 	@Operation(summary = "투표 검색", description = "keyword를 이용하여 투표를 검색합니다.")
 	@GetMapping("/search")
-	public ResponseEntity<VoteGetByCursorResponse> getVotesByCursor(
+	public ResponseEntity<VoteGetByKeywordResponse> getVotesByKeyword(
 		@RequestParam final String keyword,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByKeyword(keyword, request.toParameters());
-		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(cursorSummary);
+		final VoteGetByKeywordServiceResponse serviceResponse = voteService.getVotesByKeyword(keyword, request.toParameters());
+		final VoteGetByKeywordResponse response = VoteGetByKeywordResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
