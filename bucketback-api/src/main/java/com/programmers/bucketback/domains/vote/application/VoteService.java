@@ -142,7 +142,7 @@ public class VoteService {
 			parameters,
 			null
 		);
-		final int totalVoteCount = voteReader.countByKeyword(keyword);
+		final long totalVoteCount = voteReader.countByKeyword(keyword);
 
 		return new VoteGetByKeywordServiceResponse(cursorSummary, totalVoteCount);
 	}

@@ -96,7 +96,7 @@ public class VoteReader {
 	}
 
 	@Transactional(readOnly = true)
-	public int countByKeyword(final String keyword) {
+	public long countByKeyword(final String keyword) {
 		return voteRepository.countByKeyword(keyword);
 	}
 

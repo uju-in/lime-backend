@@ -65,15 +65,15 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			.fetch();
 	}
 
-	public int countByKeyword(final String keyword) {
-		return (int) jpaQueryFactory
-			.selectFrom(vote)
+	public Long countByKeyword(final String keyword) {
+		return jpaQueryFactory
+			.select(vote.count())
+			.from(vote)
 			.where(
 				isCompleted(),
 				containsKeyword(keyword)
 			)
-			.stream()
-			.count();
+			.fetchOne();
 	}
 
 	private  BooleanExpression eqHobby(final Hobby hobby) {

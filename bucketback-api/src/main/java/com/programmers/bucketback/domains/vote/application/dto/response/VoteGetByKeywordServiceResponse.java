@@ -5,6 +5,6 @@ import com.programmers.bucketback.domains.vote.model.VoteSummary;
 
 public record VoteGetByKeywordServiceResponse(
 	CursorSummary<VoteSummary> voteSummary,
-	int totalVoteCount
+	long totalVoteCount
 ) {
 }
