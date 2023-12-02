@@ -65,6 +65,17 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			.fetch();
 	}
 
+	public Long countByKeyword(final String keyword) {
+		return jpaQueryFactory
+			.select(vote.count())
+			.from(vote)
+			.where(
+				isCompleted(),
+				containsKeyword(keyword)
+			)
+			.fetchOne();
+	}
+
 	private  BooleanExpression eqHobby(final Hobby hobby) {
 		if (hobby == null) {
 			return null;
@@ -121,10 +132,6 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 	}
 
 	private BooleanExpression containsKeyword(final String keyword) {
-		if (keyword == null) {
-			return null;
-		}
-
 		final List<Long> itemIds = getItemIds(keyword);
 
 		return vote.item1Id.in(itemIds).or(vote.item2Id.in(itemIds));
@@ -135,8 +142,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			.select(item.id)
 			.from(item)
 			.where(item.name.contains(keyword))
-			.stream()
-			.toList();
+			.fetch();
 	}
 
 	private BooleanExpression lessThanNextCursorId(
