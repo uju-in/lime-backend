@@ -132,6 +132,10 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 	}
 
 	private BooleanExpression containsKeyword(final String keyword) {
+		if (keyword == null) {
+			return null;
+		}
+
 		final List<Long> itemIds = getItemIds(keyword);
 
 		return vote.item1Id.in(itemIds).or(vote.item2Id.in(itemIds));
