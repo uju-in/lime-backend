@@ -8,7 +8,7 @@ import com.programmers.bucketback.domains.vote.model.VoteSummary;
 public record VoteGetByKeywordResponse(
 	String nextCursorId,
 	int totalCount,
-	long totalCommentCount,
+	long totalVoteCount,
 	List<VoteSummary> votes
 ) {
 	public static VoteGetByKeywordResponse from(final VoteGetByKeywordServiceResponse response) {
