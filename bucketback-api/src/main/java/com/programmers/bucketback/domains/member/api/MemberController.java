@@ -118,7 +118,7 @@ public class MemberController {
 	@Operation(summary = "마이페이지 조회", description = "닉네임을 이용하여 마이페이지를 조회합니다.")
 	@GetMapping("/{nickname}")
 	public ResponseEntity<MemberGetMyPageResponse> getMyPage(
-		@PathVariable String nickname
+		@PathVariable final String nickname
 	) {
 		MyPage myPage = memberService.getMyPage(nickname);
 		MemberGetMyPageResponse response = MemberGetMyPageResponse.from(myPage);

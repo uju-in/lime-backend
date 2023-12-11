@@ -89,9 +89,14 @@ public class Member extends BaseEntity {
 		return introduction.getIntroduction();
 	}
 
+	public String getProfileImage() {
+		return this.profileImage;
+	}
+
 	public void delete() {
 		this.status = MemberStatus.DELETED;
 		this.loginInfo.delete();
+		this.nickname.delete();
 	}
 
 	public boolean isDeleted() {

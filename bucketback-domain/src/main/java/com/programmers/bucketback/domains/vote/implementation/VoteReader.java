@@ -74,6 +74,7 @@ public class VoteReader {
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
+		final String keyword,
 		final CursorPageParameters parameters,
 		final Long memberId
 	) {
@@ -83,6 +84,7 @@ public class VoteReader {
 			hobby,
 			statusCondition,
 			sortCondition,
+			keyword,
 			memberId,
 			parameters.cursorId(),
 			pageSize
@@ -91,6 +93,11 @@ public class VoteReader {
 		final List<VoteSummary> voteSummaries = getVoteSummaries(voteCursorSummaries);
 
 		return CursorUtils.getCursorSummaries(voteSummaries);
+	}
+
+	@Transactional(readOnly = true)
+	public long countByKeyword(final String keyword) {
+		return voteRepository.countByKeyword(keyword);
 	}
 
 	private int getPageSize(final CursorPageParameters parameters) {

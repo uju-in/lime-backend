@@ -27,4 +27,11 @@ public class ReviewReader {
 	public List<Review> readByMemberId(final Long memberId) {
 		return reviewRepository.findByMemberId(memberId);
 	}
+
+	public boolean existsReviewByMemberIdAndItemId(
+		final Long memberId,
+		final Long itemId
+	) {
+		return reviewRepository.existsReviewByMemberIdAndItemId(memberId, itemId);
+	}
 }

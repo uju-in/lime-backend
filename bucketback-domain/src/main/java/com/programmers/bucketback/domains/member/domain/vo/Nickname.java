@@ -45,4 +45,8 @@ public class Nickname {
 			throw new BusinessException(ErrorCode.MEMBER_NICKNAME_BAD_PATTERN);
 		}
 	}
+
+	public void delete() {
+		this.nickname = "";
+	}
 }

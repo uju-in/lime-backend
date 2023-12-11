@@ -10,7 +10,8 @@ public record ItemGetResponse(
 	ItemInfo itemInfo,
 	String itemUrl,
 	Double itemAvgRate,
-	boolean isMemberItem
+	boolean isMemberItem,
+	boolean isReviewed
 ) {
 	public static ItemGetResponse from(final ItemGetServiceResponse response) {
 		return ItemGetResponse.builder()
@@ -18,6 +19,7 @@ public record ItemGetResponse(
 			.itemUrl(response.itemUrl())
 			.itemAvgRate(response.itemAvgRate())
 			.isMemberItem(response.isMemberItem())
+			.isReviewed(response.isReviewed())
 			.build();
 	}
 }

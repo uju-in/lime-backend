@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.bucket.domain.Bucket;
 
 public interface BucketRepository extends JpaRepository<Bucket, Long>, BucketRepositoryForCursor {
@@ -13,5 +15,19 @@ public interface BucketRepository extends JpaRepository<Bucket, Long>, BucketRep
 		final Long memberId
 	);
 
-	List<Bucket> findByMemberId(final Long memberId);
+	List<Bucket> findAllByMemberId(final Long memberId);
+
+	int countByMemberId(final Long memberId);
+
+	@Query(
+		"""
+				SELECT COUNT(b)
+			  	FROM Bucket b
+			  	WHERE b.bucketInfo.hobby = :hobby AND b.memberId = :memberId
+			"""
+	)
+	int countByHobbyAndMemberId(
+		final Hobby hobby,
+		final Long memberId
+	);
 }
