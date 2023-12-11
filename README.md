@@ -45,7 +45,7 @@ BucketBack은 취미 아이템 구매 결정을 도와주는 서비스입니다.
 ![image](https://github.com/bucket-back/bucket-back-backend/assets/98391539/d087b66a-7c4a-47a8-860d-3864d14c809b)
 
 
-## 🪄 CI/CD 파이프라인
+## 💫 CI/CD 파이프라인
 ![image](https://github.com/bucket-back/bucket-back-backend/assets/98391539/d4ad5f17-7ae4-4734-8e23-ffdb75a92d8f)
 
 
