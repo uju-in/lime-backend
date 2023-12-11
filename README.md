@@ -11,13 +11,13 @@
 
 <div align="center">
 
-  <img src="http://img.shields.io/badge/BucketBack-40AEF0?style=flat&logo=Ve&logoColor=white&link=https://bucket-back-frontend.vercel.app/feed?hobby=basketball" height="30">
-  <img src="http://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white&link=https://bucketback.shop/swagger-ui/index.html#/)](https://bucketback.shop/swagger-ui/index.html#/" height="30">
-  <img src="http://img.shields.io/badge/Github-181717?style=flat&logo=Github&logoColor=white&link=https://github.com/bucket-back/bucket-back-backend" height="30">
+  <img src="http://img.shields.io/badge/BucketBack-40AEF0?style=flat&logo=Ve&logoColor=white&link=https://bucket-back-frontend.vercel.app/feed?hobby=basketball" height="25">
+  <img src="http://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white&link=https://bucketback.shop/swagger-ui/index.html#/)](https://bucketback.shop/swagger-ui/index.html#/" height="25">
+  <img src="http://img.shields.io/badge/Github-181717?style=flat&logo=Github&logoColor=white&link=https://github.com/bucket-back/bucket-back-backend" height="25">
 
 </div>
 
-## 🧺 버킷백 소개
+## 🪣 버킷백 소개
 > 개발 기간: 2023.10-12 ~ 진행 중
 
 BucketBack은 취미 아이템 구매 결정을 도와주는 서비스입니다. 
@@ -33,24 +33,24 @@ BucketBack은 취미 아이템 구매 결정을 도와주는 서비스입니다.
 ## ⚒️ 기술 스택
 ### 백엔드
 <p align="center">
-<img src="https://github.com/bucket-back/bucket-back-backend/assets/98391539/f1c9a1f5-14b1-4b66-ba17-cec2bbd033df" width="70%" height="70%">
+  <img src="https://github.com/bucket-back/bucket-back-backend/assets/98391539/6535b1c4-46af-4d00-b7ab-3e2fc9fda57c" width="80%" height="80%">
 </p>
 
 ### 인프라
 <p align="center">
-<img src="https://github.com/bucket-back/bucket-back-backend/assets/98391539/9b52cccc-bc06-4f08-ba8b-3d2b945d28b4" width="70%" height="70%">
+  <img src="https://github.com/bucket-back/bucket-back-backend/assets/98391539/be569e7c-9705-4e64-90b1-35537e47152e" width="80%" height="80%">
 </p>
 
 ## ⚙️ 시스템 아키텍처
 ![image](https://github.com/bucket-back/bucket-back-backend/assets/98391539/d087b66a-7c4a-47a8-860d-3864d14c809b)
 
 
-## 🪈 CI/CD 파이프라인
-![image](https://github.com/bucket-back/bucket-back-backend/assets/98391539/310e0f2a-ab46-4449-9886-bb9178e77ef5)
+## 🪄 CI/CD 파이프라인
+![image](https://github.com/bucket-back/bucket-back-backend/assets/98391539/d4ad5f17-7ae4-4734-8e23-ffdb75a92d8f)
 
 
 ## 🧑🏻‍💻 멤버
 
 | <img src="https://avatars.githubusercontent.com/u/29273437?v=4"> | <img src ="https://avatars.githubusercontent.com/u/98391539?v=4"> | <img src ="https://avatars.githubusercontent.com/u/77893164?v=4"> |
 | :---------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
-|                         [강병곤](https://github.com/Curry4182)                         |                          [박이슬](https://github.com/Yiseull)                          |                             [조재현](https://github.com/HandmadeCloud)                             |
+|                         [강병곤](https://github.com/Curry4182)                         |                          [박이슬](https://github.com/Yiseull)                          |                             [조재현 (팀장)](https://github.com/HandmadeCloud)                             |
