@@ -49,8 +49,8 @@ public class InventoryModifierTest {
 		Hobby hobby = Hobby.SWIMMING;
 
 		//기존 inventoryItem 제거
-		ItemIdRegistry existItemRegistry = ItemIdRegistryBuilder.build();
-		Inventory existInventory = InventoryBuilder.build(existItemRegistry);
+		Inventory existInventory = InventoryBuilder.build();
+
 		given(inventoryReader.read(anyLong(), anyLong()))
 			.willReturn(existInventory);
 		doNothing().when(inventoryRemover)

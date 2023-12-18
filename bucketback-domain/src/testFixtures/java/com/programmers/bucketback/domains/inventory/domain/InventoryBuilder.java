@@ -6,6 +6,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 
 import lombok.AccessLevel;
@@ -28,9 +29,11 @@ public class InventoryBuilder {
 		return inventory;
 	}
 
-	public static Inventory build(ItemIdRegistry itemIdRegistry) {
+	public static Inventory build() {
 		Long memberId = 1L;
 		Inventory inventory = new Inventory(memberId, Hobby.BASKETBALL);
+
+		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.build();
 		List<InventoryItem> inventoryItems = buildInventoryItems(itemIdRegistry);
 		inventoryItems.forEach(inventory::addInventoryItem);
 
