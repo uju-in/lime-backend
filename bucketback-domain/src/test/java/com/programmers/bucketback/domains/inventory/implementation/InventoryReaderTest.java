@@ -40,9 +40,6 @@ public class InventoryReaderTest {
 	private InventoryRepository inventoryRepository;
 
 	@Mock
-	private InventoryAppender inventoryAppender;
-
-	@Mock
 	private ReviewReader reviewReader;
 
 	@Mock
@@ -52,7 +49,7 @@ public class InventoryReaderTest {
 	private InventoryReader inventoryReader;
 
 	@Test
-	@DisplayName("이벤토리 아이템을 상세조회한다.")
+	@DisplayName("인벤토리 아이템을 상세조회한다.")
 	void getInventoryDetail() {
 		//given
 		Long inventoryId = 1L;
@@ -131,7 +128,7 @@ public class InventoryReaderTest {
 		Inventory inventory3 = InventoryBuilder.build(Hobby.SWIMMING, new ItemIdRegistry(Arrays.asList(7L, 8L, 9L)));
 		InventoryBuilder.setModifiedDate(inventory3, LocalDateTime.of(2022, 1, 1, 1, 1, 1));
 		InventoryBuilder.setModifiedDate(inventory3.getInventoryItems(), LocalDateTime.of(2022, 1, 1, 1, 1, 1, 1));
-		Inventory inventory4 = InventoryBuilder.build(Hobby.SWIMMING, new ItemIdRegistry(Arrays.asList(10L, 11L, 12L)));
+		Inventory inventory4 = InventoryBuilder.build(Hobby.CYCLE, new ItemIdRegistry(Arrays.asList(10L, 11L, 12L)));
 		InventoryBuilder.setModifiedDate(inventory4, LocalDateTime.of(2021, 1, 1, 1, 1, 1));
 		InventoryBuilder.setModifiedDate(inventory4.getInventoryItems(), LocalDateTime.of(2021, 1, 1, 1, 1, 1, 1));
 
@@ -143,6 +140,6 @@ public class InventoryReaderTest {
 
 		//then
 		assertThat(inventoryProfiles.size()).isEqualTo(3);
-
+		assertThat(inventoryProfiles.get(2).hobby()).isEqualTo("수영");
 	}
 }
