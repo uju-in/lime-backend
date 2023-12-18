@@ -3,6 +3,8 @@ package com.programmers.bucketback.domains.inventory.implementation;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,17 +15,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorPageParametersBuilder;
+import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
-import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryBuilder;
 import com.programmers.bucketback.domains.inventory.model.InventoryGetServiceResponse;
 import com.programmers.bucketback.domains.inventory.model.InventoryItemGetResponse;
+import com.programmers.bucketback.domains.inventory.model.InventoryProfile;
+import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
+import com.programmers.bucketback.domains.review.ReviewBuilder;
+import com.programmers.bucketback.domains.review.implementation.ReviewReader;
 
 @ExtendWith(MockitoExtension.class)
 public class InventoryReaderTest {
@@ -33,6 +41,9 @@ public class InventoryReaderTest {
 
 	@Mock
 	private InventoryAppender inventoryAppender;
+
+	@Mock
+	private ReviewReader reviewReader;
 
 	@Mock
 	private ItemReader itemReader;
@@ -70,39 +81,68 @@ public class InventoryReaderTest {
 	}
 
 	@Test
-	@DisplayName("인벤토리 목록을 조회한다.")
-	void getInventories() {
-		//given
-		// Inventory inventory = InventoryBuilder.build();
-		//when
-
-		//then
-
-	}
-
-	@Test
 	@DisplayName("내가 리뷰한 아이템 목록을 조회한다.")
 	void getReviewedItems() {
 		//given
+		Long memberId = 1L;
+		Inventory inventory = InventoryBuilder.build();
+		List<Long> itemIds = inventory.getInventoryItems().stream()
+			.map(inventoryItem -> inventoryItem.getItem().getId())
+			.toList();
+		List<InventoryReviewItemSummary> summaries = InventoryBuilder.buildInventoryReviewItemSummaries(itemIds);
+		CursorPageParameters parameters = CursorPageParametersBuilder.build(); // 이후 생성된 model로 대체 예정
+
+		given(inventoryRepository.findByIdAndMemberId(anyLong(), anyLong()))
+			.willReturn(Optional.of(inventory));
+		given(reviewReader.readByMemberId(anyLong()))
+			.willReturn(ReviewBuilder.buildMany());
+		given(itemReader.readReviewedItem(
+			anyList(),
+			anyList(),
+			any(Hobby.class),
+			anyString(),
+			anyInt()
+		)).willReturn(summaries);
 
 		//when
+		CursorSummary<InventoryReviewItemSummary> cursorSummary =
+			inventoryReader.readReviewedItem(
+				memberId,
+				inventory.getId(),
+				Hobby.BASKETBALL,
+				parameters
+			);
 
 		//then
-
+		assertThat(cursorSummary.summaries()).usingRecursiveComparison().isEqualTo(summaries);
 	}
 
 	@Test
 	@DisplayName("마이페이지를 위한 인벤토리 프로필을 조회한다.")
 	void getInventoryProfile() {
 		//given
-		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.build();
-		Inventory inventory1 = InventoryBuilder.build(Hobby.BASKETBALL, itemIdRegistry);
-		Inventory inventory2 = InventoryBuilder.build(Hobby.BASEBALL, itemIdRegistry);
-		Inventory inventory3 = InventoryBuilder.build(Hobby.SWIMMING, itemIdRegistry);
+		Long memberId = 1L;
+		Inventory inventory1 = InventoryBuilder.build(Hobby.BASKETBALL, new ItemIdRegistry(Arrays.asList(1L, 2L, 3L)));
+		InventoryBuilder.setModifiedDate(inventory1, LocalDateTime.of(2024, 1, 1, 1, 1, 1));
+		InventoryBuilder.setModifiedDate(inventory1.getInventoryItems(), LocalDateTime.of(2024, 1, 1, 1, 1, 1));
+		Inventory inventory2 = InventoryBuilder.build(Hobby.BASEBALL, new ItemIdRegistry(Arrays.asList(4L, 5L, 6L)));
+		InventoryBuilder.setModifiedDate(inventory2, LocalDateTime.of(2023, 1, 1, 1, 1, 1));
+		InventoryBuilder.setModifiedDate(inventory2.getInventoryItems(), LocalDateTime.of(2023, 1, 1, 1, 1, 1, 1));
+		Inventory inventory3 = InventoryBuilder.build(Hobby.SWIMMING, new ItemIdRegistry(Arrays.asList(7L, 8L, 9L)));
+		InventoryBuilder.setModifiedDate(inventory3, LocalDateTime.of(2022, 1, 1, 1, 1, 1));
+		InventoryBuilder.setModifiedDate(inventory3.getInventoryItems(), LocalDateTime.of(2022, 1, 1, 1, 1, 1, 1));
+		Inventory inventory4 = InventoryBuilder.build(Hobby.SWIMMING, new ItemIdRegistry(Arrays.asList(10L, 11L, 12L)));
+		InventoryBuilder.setModifiedDate(inventory4, LocalDateTime.of(2021, 1, 1, 1, 1, 1));
+		InventoryBuilder.setModifiedDate(inventory4.getInventoryItems(), LocalDateTime.of(2021, 1, 1, 1, 1, 1, 1));
+
+		given(inventoryRepository.findByMemberId(memberId))
+			.willReturn(Arrays.asList(inventory1, inventory2, inventory3, inventory4));
 
 		//when
+		List<InventoryProfile> inventoryProfiles = inventoryReader.readInventoryProfile(memberId);
 
 		//then
+		assertThat(inventoryProfiles.size()).isEqualTo(3);
 
 	}
 }
