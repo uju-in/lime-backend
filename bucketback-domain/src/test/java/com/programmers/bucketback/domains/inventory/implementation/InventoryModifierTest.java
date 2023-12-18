@@ -20,14 +20,9 @@ import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
 import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryBuilder;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
-import com.programmers.bucketback.domains.inventory.repository.InventoryRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class InventoryModifierTest {
-
-	@Mock
-	private InventoryRepository inventoryRepository;
-
 	@Mock
 	private InventoryAppender inventoryAppender;
 
