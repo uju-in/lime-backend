@@ -2,19 +2,23 @@ package com.programmers.bucketback.domains.comment.api.dto.response;
 
 import java.util.List;
 
-import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.domains.comment.application.dto.response.CommentGetCursorServiceResponse;
 import com.programmers.bucketback.domains.comment.repository.CommentSummary;
 
 public record CommentGetCursorResponse(
 	String nextCursorId,
 	int totalCount,
+	int totalCommentCount,
 	List<CommentSummary> comments
 ) {
-	public static CommentGetCursorResponse from(final CursorSummary<CommentSummary> summary) {
+	public static CommentGetCursorResponse from(
+		final CommentGetCursorServiceResponse response
+	) {
 		return new CommentGetCursorResponse(
-			summary.nextCursorId(),
-			summary.summaryCount(),
-			summary.summaries()
+			response.commentSummary().nextCursorId(),
+			response.commentSummary().summaryCount(),
+			response.totalCommentCount(),
+			response.commentSummary().summaries()
 		);
 	}
 }

@@ -37,9 +37,10 @@ class VoteAppenderTest {
 			.willReturn(vote);
 
 		// when
-		final Long savedVoteId = voteAppender.append(memberId, request);
+		final Vote savedVote = voteAppender.append(memberId, request);
 
 		// then
-		assertThat(savedVoteId).isEqualTo(vote.getId());
+		assertThat(savedVote).usingRecursiveComparison()
+			.isEqualTo(vote);
 	}
 }

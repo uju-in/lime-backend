@@ -56,6 +56,9 @@ public class InventoryAppenderTest {
 
 		//then
 		assertThat(actualInventoryId).isEqualTo(inventory.getId());
-		assertThat(inventory.getInventoryItems().size()).isEqualTo(inventoryItems.size());
+		assertThat(inventory.getInventoryItems())
+			.usingRecursiveComparison()
+			.ignoringFields("inventory")
+			.isEqualTo(inventoryItems);
 	}
 }

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.bucketback.common.cursor.CursorSummary;
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.bucketback.domains.item.api.dto.request.MemberItemAddRequest;
@@ -20,15 +19,16 @@ import com.programmers.bucketback.domains.item.api.dto.response.ItemAddResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetNamesResponse;
+import com.programmers.bucketback.domains.item.api.dto.response.ItemGetRankingResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.ItemGetResponse;
 import com.programmers.bucketback.domains.item.api.dto.response.MemberItemGetByCursorResponse;
 import com.programmers.bucketback.domains.item.application.ItemEnrollService;
 import com.programmers.bucketback.domains.item.application.ItemService;
 import com.programmers.bucketback.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.bucketback.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.bucketback.domains.item.application.dto.ItemGetServiceResponse;
-import com.programmers.bucketback.domains.item.model.ItemCursorSummary;
-import com.programmers.bucketback.domains.item.model.MemberItemSummary;
+import com.programmers.bucketback.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.bucketback.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -98,11 +98,11 @@ public class ItemController {
 		@RequestParam final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		CursorSummary<ItemCursorSummary> cursorSummary = itemService.getItemsByCursor(
+		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
 			request.toParameters()
 		);
-		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(cursorSummary);
+		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
@@ -114,11 +114,19 @@ public class ItemController {
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
 		Hobby hobby = Hobby.fromName(hobbyName);
-		CursorSummary<MemberItemSummary> cursorSummary = itemService.getMemberItemsByCursor(
+		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
 			hobby,
 			request.toParameters()
 		);
-		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(cursorSummary);
+		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "랭킹 조회", description = "랭킹을 TOP10까지 조회합니다.")
+	@GetMapping("/ranking")
+	public ResponseEntity<ItemGetRankingResponse> getRanking() {
+		ItemGetRankingResponse response = ItemGetRankingResponse.from(itemService.getRanking());
 
 		return ResponseEntity.ok(response);
 	}

@@ -176,4 +176,11 @@ public class BucketReader {
 		int pageSize = parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
 		return pageSize;
 	}
+
+	public int countByMemberIdAndHobby(
+		final Long memberId,
+		final Hobby hobby
+	) {
+		return bucketRepository.countByHobbyAndMemberId(hobby, memberId);
+	}
 }

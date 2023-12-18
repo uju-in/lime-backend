@@ -41,13 +41,13 @@ public class BucketAppender {
 	/** 버킷 아이템 생성 */
 	public List<BucketItem> createBucketItems(final ItemIdRegistry registry) {
 		return registry.itemIds().stream()
+			.distinct()
 			.map(itemId -> {
 				Item item = itemReader.read(itemId);
 				BucketItem bucketItem = new BucketItem(item);
 
 				return bucketItem;
 			})
-			.distinct()
 			.collect(Collectors.toList());
 	}
 }

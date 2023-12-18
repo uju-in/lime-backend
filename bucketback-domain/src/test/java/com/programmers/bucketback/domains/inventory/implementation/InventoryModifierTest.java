@@ -21,8 +21,10 @@ import com.programmers.bucketback.domains.inventory.domain.Inventory;
 import com.programmers.bucketback.domains.inventory.domain.InventoryBuilder;
 import com.programmers.bucketback.domains.inventory.domain.InventoryItem;
 
+
 @ExtendWith(MockitoExtension.class)
 public class InventoryModifierTest {
+
 	@Mock
 	private InventoryAppender inventoryAppender;
 
@@ -45,7 +47,7 @@ public class InventoryModifierTest {
 
 		//기존 inventoryItem 제거
 		Inventory existInventory = InventoryBuilder.build();
-
+    
 		given(inventoryReader.read(anyLong(), anyLong()))
 			.willReturn(existInventory);
 		doNothing().when(inventoryRemover)

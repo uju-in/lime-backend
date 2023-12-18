@@ -28,7 +28,7 @@ public class NaverCrawler implements WebCrawler {
 				.last()
 				.text()
 				.replace(",", ""));
-			String imgUrl = "https:" + document.select("img[alt=대표이미지]")
+			String imgUrl = document.select("img[alt=대표이미지]")
 				.first()
 				.attr("src");
 

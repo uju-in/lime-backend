@@ -17,4 +17,6 @@ public interface VoteRepositoryForCursor {
 		final String nextCursorId,
 		final int pageSize
 	);
+
+	Long countByKeyword(final String keyword);
 }
