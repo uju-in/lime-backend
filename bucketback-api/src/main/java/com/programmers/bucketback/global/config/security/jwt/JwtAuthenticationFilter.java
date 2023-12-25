@@ -1,11 +1,13 @@
 package com.programmers.bucketback.global.config.security.jwt;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtService jwtService;
-	private final UserDetailsService userDetailsService;
 	private final HandlerExceptionResolver handlerExceptionResolver;
 
 	@Override
@@ -48,18 +49,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		try {
 			memberId = jwtService.extractUsername(jwt);
 
-			if (memberId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-				final UserDetails userDetails = this.userDetailsService.loadUserByUsername(memberId);
-
-				if (jwtService.isTokenValid(jwt, userDetails)) {
-					final UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-						userDetails,
-						null,
-						userDetails.getAuthorities()
-					);
-					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-					SecurityContextHolder.getContext().setAuthentication(authToken);
-				}
+			if (memberId != null && SecurityContextHolder.getContext().getAuthentication() == null && jwtService.isTokenValid(jwt)) {
+				final UserDetails principal = makePrincipal(memberId);
+				final UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+					principal,
+					null,
+					principal.getAuthorities()
+				);
+				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				SecurityContextHolder.getContext().setAuthentication(authToken);
 			}
 
 			filterChain.doFilter(request, response);
@@ -67,5 +65,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		} catch (SignatureException | ExpiredJwtException e) {
 			handlerExceptionResolver.resolveException(request, response, null, e);
 		}
+	}
+
+	private static UserDetails makePrincipal(final String memberId) {
+		return new User(memberId, "", List.of(new SimpleGrantedAuthority("ROLE_USER")));
 	}
 }
