@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
-import com.programmers.bucketback.domains.comment.application.dto.response.CommentCreateEvent;
 import com.programmers.bucketback.domains.comment.application.dto.response.CommentGetCursorServiceResponse;
+import com.programmers.bucketback.domains.comment.application.event.CommentCreateEvent;
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.implementation.CommentAppender;
 import com.programmers.bucketback.domains.comment.implementation.CommentModifier;
@@ -43,9 +43,10 @@ public class CommentService {
 		final String content
 	) {
 		final Long memberId = memberUtils.getCurrentMemberId();
-		Comment comment = commentAppender.append(feedId, content, memberId);
-		String nickname = memberReader.read(memberId).getNickname();
-		CommentCreateEvent commentCreateEvent = CommentCreateEvent.from(nickname, comment);
+		final Comment comment = commentAppender.append(feedId, content, memberId);
+
+		final String commentWriter = memberReader.read(memberId).getNickname();
+		CommentCreateEvent commentCreateEvent = CommentCreateEvent.from(commentWriter, comment);
 
 		applicationEventPublisher.publishEvent(commentCreateEvent);
 

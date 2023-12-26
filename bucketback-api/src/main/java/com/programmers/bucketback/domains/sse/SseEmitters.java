@@ -19,7 +19,7 @@ public class SseEmitters {
 		SseEmitter sseEmitter = new SseEmitter(DEFAULT_TIMEOUT);
 
 		this.emitters.put(receiverId, sseEmitter);
-		sseEmitter.onTimeout(sseEmitter::complete); // 완료, 시간초과, 에러로 전송불가시 sseEmitter삭제
+		sseEmitter.onTimeout(sseEmitter::complete);
 		sseEmitter.onCompletion(() -> this.emitters.remove(receiverId));
 		sseEmitter.onError((e) -> this.emitters.remove(receiverId));
 

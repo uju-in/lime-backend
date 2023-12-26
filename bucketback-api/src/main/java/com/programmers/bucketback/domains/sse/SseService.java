@@ -14,11 +14,11 @@ public class SseService {
 	private final SseEmitters sseEmitters;
 
 	public SseEmitter subscribe() {
-		Long memberId = SecurityUtils.getCurrentMemberId();
-		SseEmitter sseEmitter = sseEmitters.add(memberId);
+		Long receiverId = SecurityUtils.getCurrentMemberId();
+		SseEmitter sseEmitter = sseEmitters.add(receiverId);
 
 		//최초 연결 시점에는 더미 데이터 전송
-		sseEmitters.send(memberId, DUMMY_DATA);
+		sseEmitters.send(receiverId, DUMMY_DATA);
 
 		return sseEmitter;
 	}
