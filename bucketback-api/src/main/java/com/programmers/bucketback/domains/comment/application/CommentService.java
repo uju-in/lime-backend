@@ -1,9 +1,11 @@
 package com.programmers.bucketback.domains.comment.application;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.domains.comment.application.dto.response.CommentCreateEvent;
 import com.programmers.bucketback.domains.comment.application.dto.response.CommentGetCursorServiceResponse;
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.implementation.CommentAppender;
@@ -13,6 +15,7 @@ import com.programmers.bucketback.domains.comment.implementation.CommentRemover;
 import com.programmers.bucketback.domains.comment.repository.CommentSummary;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.implementation.FeedReader;
+import com.programmers.bucketback.domains.member.implementation.MemberReader;
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.level.PayPoint;
@@ -30,7 +33,9 @@ public class CommentService {
 	private final CommentRemover commentRemover;
 	private final CommentReader commentReader;
 	private final FeedReader feedReader;
+	private final MemberReader memberReader;
 	private final MemberUtils memberUtils;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	@PayPoint(5)
 	public Long createComment(
@@ -38,7 +43,11 @@ public class CommentService {
 		final String content
 	) {
 		final Long memberId = memberUtils.getCurrentMemberId();
-		commentAppender.append(feedId, content, memberId);
+		Comment comment = commentAppender.append(feedId, content, memberId);
+		String nickname = memberReader.read(memberId).getNickname();
+		CommentCreateEvent commentCreateEvent = CommentCreateEvent.from(nickname, comment);
+
+		applicationEventPublisher.publishEvent(commentCreateEvent);
 
 		return memberId;
 	}
