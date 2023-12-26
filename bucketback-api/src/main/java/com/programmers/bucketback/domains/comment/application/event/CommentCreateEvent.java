@@ -1,37 +1,34 @@
-package com.programmers.bucketback.domains.comment.application.dto.response;
+package com.programmers.bucketback.domains.comment.application.event;
 
 import java.util.Map;
 
 import com.programmers.bucketback.domains.comment.domain.Comment;
 
 public record CommentCreateEvent(
-	Long commentId,
-	Long memberId,
+	Long commentWriterId,
 	Long receiverId,
 	Long feedId,
 	String commentWriter
 ) {
 	public static CommentCreateEvent from(
-		final String nickName,
+		final String nickname,
 		final Comment comment
 	) {
 		return new CommentCreateEvent(
-			comment.getId(),
 			comment.getMemberId(),
 			comment.getFeed().getMemberId(),
 			comment.getFeed().getId(),
-			nickName
+			nickname
 		);
 	}
 
-	public Map<String, Object> toMap(String alarmType) {
+	public Map<String, Object> toMap(String alarmMessage) {
 		return Map.ofEntries(
-			Map.entry("alarmType", alarmType),
-			Map.entry("commentId", this.commentId()),
-			Map.entry("memberId", this.memberId()),
+			Map.entry("alarmMessage", alarmMessage),
+			Map.entry("memberId", this.commentWriterId()),
 			Map.entry("receiverId", this.receiverId()),
 			Map.entry("feedId", this.feedId()),
-			Map.entry("nickName", this.commentWriter)
+			Map.entry("commentWriter", this.commentWriter())
 		);
 	}
 }

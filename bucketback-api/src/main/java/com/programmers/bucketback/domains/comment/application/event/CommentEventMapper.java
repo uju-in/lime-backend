@@ -1,6 +1,5 @@
-package com.programmers.bucketback.domains.comment.application;
+package com.programmers.bucketback.domains.comment.application.event;
 
-import com.programmers.bucketback.domains.comment.application.dto.response.CommentCreateEvent;
 import com.programmers.bucketback.domains.sse.SsePayload;
 
 import lombok.AccessLevel;
@@ -10,12 +9,12 @@ import lombok.NoArgsConstructor;
 public class CommentEventMapper {
 
 	public static SsePayload toSsePayload(
-		String alarmType,
+		String alarmMessage,
 		CommentCreateEvent commentCreateEvent
 	) {
 		return SsePayload.builder()
 			.receiverId(commentCreateEvent.receiverId())
-			.data(commentCreateEvent.toMap(alarmType))
+			.data(commentCreateEvent.toMap(alarmMessage))
 			.build();
 	}
 }
