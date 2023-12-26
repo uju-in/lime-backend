@@ -48,7 +48,7 @@ class BucketInfoTest {
 
 	@ParameterizedTest
 	@CsvSource({"0, 0", "26, 2147483647", "25, -1"})
-	@DisplayName("bucketInfo 생성 성공")
+	@DisplayName("bucketInfo 생성 실패")
 	void failCreateBucketInfo(
 		final int count,
 		final Integer budget
