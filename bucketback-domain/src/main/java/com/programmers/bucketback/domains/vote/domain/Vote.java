@@ -111,6 +111,6 @@ public class Vote extends BaseEntity {
 	}
 
 	public boolean reachMaximumParticipants() {
-		return this.voters.size() == this.maximumParticipants;
+		return this.maximumParticipants != null && this.maximumParticipants == this.voters.size();
 	}
 }
