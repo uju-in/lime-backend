@@ -1,12 +1,16 @@
 package com.programmers.bucketback.domains.inventory.domain;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.common.model.ItemIdRegistry;
+import com.programmers.bucketback.common.model.ItemIdRegistryBuilder;
+import com.programmers.bucketback.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
+import com.programmers.bucketback.domains.item.model.ItemInfo;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -28,9 +32,11 @@ public class InventoryBuilder {
 		return inventory;
 	}
 
-	public static Inventory build(ItemIdRegistry itemIdRegistry) {
+	public static Inventory build() {
 		Long memberId = 1L;
 		Inventory inventory = new Inventory(memberId, Hobby.BASKETBALL);
+
+		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.build();
 		List<InventoryItem> inventoryItems = buildInventoryItems(itemIdRegistry);
 		inventoryItems.forEach(inventory::addInventoryItem);
 
@@ -51,5 +57,42 @@ public class InventoryBuilder {
 			"id",
 			1L
 		);
+	}
+
+	public static void setModifiedDate(
+		final Inventory inventory,
+		final LocalDateTime modifiedDate
+	) {
+		ReflectionTestUtils.setField(
+			inventory,
+			"modifiedAt",
+			modifiedDate
+		);
+	}
+
+	public static void setModifiedDate(
+		final List<InventoryItem> inventoryItems,
+		final LocalDateTime modifiedDate
+	) {
+		for (InventoryItem inventoryItem : inventoryItems) {
+			ReflectionTestUtils.setField(
+				inventoryItem,
+				"modifiedAt",
+				modifiedDate
+			);
+		}
+	}
+
+	public static List<InventoryReviewItemSummary> buildInventoryReviewItemSummaries(final List<Long> itemIds) {
+		return itemIds.stream()
+			.map(itemId -> {
+				return new InventoryReviewItemSummary(
+					"202301010000000000000" + itemId,
+					true,
+					LocalDateTime.now(),
+					ItemInfo.from(ItemBuilder.build(itemId))
+				);
+			})
+			.toList();
 	}
 }
