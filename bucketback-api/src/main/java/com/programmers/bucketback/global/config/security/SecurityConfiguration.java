@@ -63,7 +63,14 @@ public class SecurityConfiguration {
 					.requestMatchers("/api/{nickname}/buckets/**").permitAll()
 
 					.requestMatchers("/api/hobbies").permitAll()
+					.requestMatchers("/js/**").permitAll()
+					.requestMatchers("/css/**").permitAll()
+					.requestMatchers("/images/**").permitAll()
 
+					.requestMatchers("/chat/**").permitAll()
+					.requestMatchers("/chat-rooms").permitAll()
+
+					.requestMatchers("/ws-stomp/**").permitAll()
 					.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session
