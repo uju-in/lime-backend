@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta viewport="width=device-width, initial-scale=1.0">
+    <title>Group Chat</title>
+    <link href="/css/chat.css" rel="stylesheet">
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>Group Chat Room</h2>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+        <!-- 채팅 내역은 여기에 추가 됩니다. -->
+    </div>
+    <div class="chat-input">
+        <input id="msg" placeholder="Type a message..." type="text">
+        <button id="sendBtn">Send</button>
+    </div>
+</div>
+<script src="/js/chat.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        referrerpolicy="no-referrer"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw=="
+        referrerpolicy="no-referrer"
+        src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
+        referrerpolicy="no-referrer"
+        src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script th:inline="javascript">
+    var roomId = [[${roomId}]];
+
+    connect(roomId);
+</script>
+</body>
+</html>
