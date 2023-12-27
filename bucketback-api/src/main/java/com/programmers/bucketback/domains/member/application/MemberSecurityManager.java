@@ -36,7 +36,7 @@ public class MemberSecurityManager {
 		final String nickname = member.getNickname();
 
 		securityManager.authenticate(memberId, rawPassword);
-		final String jwtToken = securityManager.generateToken(member);
+		final String jwtToken = securityManager.generateAccessToken(memberId);
 
 		return new MemberLoginServiceResponse(memberId, nickname, jwtToken);
 	}

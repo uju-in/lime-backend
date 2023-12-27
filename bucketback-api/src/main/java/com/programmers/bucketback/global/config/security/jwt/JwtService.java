@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -34,17 +33,17 @@ public class JwtService {
 		return claimsTResolver.apply(claims);
 	}
 
-	public String generateToken(final UserDetails userDetails) {
-		return generateToken(new HashMap<>(), userDetails);
+	public String generateAccessToken(final String subject) {
+		return generateAccessToken(new HashMap<>(), subject);
 	}
 
-	public String generateToken(
+	public String generateAccessToken(
 		final Map<String, Object> extraClaims,
-		final UserDetails userDetails
+		final String subject
 	) {
 		return Jwts.builder()
 			.setClaims(extraClaims)
-			.setSubject(userDetails.getUsername())
+			.setSubject(subject)
 			.setIssuedAt(new Date(System.currentTimeMillis()))
 			.setExpiration(new Date(System.currentTimeMillis() + 1000 * jwtConfig.expirationSeconds()))
 			.signWith(getSignInKey(), SignatureAlgorithm.HS256)

@@ -4,7 +4,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
-import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.global.config.security.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,7 @@ public class SecurityManager {
 		authenticationManager.authenticate(authenticationToken);
 	}
 
-	public String generateToken(final Member member) {
-		final MemberSecurity memberSecurity = new MemberSecurity(member);
-
-		return jwtService.generateToken(memberSecurity);
+	public String generateAccessToken(final Long memberId) {
+		return jwtService.generateAccessToken(memberId.toString());
 	}
 }
