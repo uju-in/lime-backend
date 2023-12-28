@@ -71,4 +71,8 @@ public class Comment extends BaseEntity {
 	public void adopt() {
 		this.adoption = true;
 	}
+
+	public String getContent() {
+		return this.content.getContent();
+	}
 }
