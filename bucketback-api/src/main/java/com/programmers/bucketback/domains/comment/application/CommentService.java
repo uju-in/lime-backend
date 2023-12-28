@@ -15,6 +15,7 @@ import com.programmers.bucketback.domains.comment.implementation.CommentRemover;
 import com.programmers.bucketback.domains.comment.repository.CommentSummary;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.implementation.FeedReader;
+import com.programmers.bucketback.domains.member.domain.Member;
 import com.programmers.bucketback.domains.member.implementation.MemberReader;
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
@@ -42,15 +43,14 @@ public class CommentService {
 		final Long feedId,
 		final String content
 	) {
-		final Long memberId = memberUtils.getCurrentMemberId();
-		final Comment comment = commentAppender.append(feedId, content, memberId);
+		final Member commentWriter = memberUtils.getCurrentMember();
+		final Comment comment = commentAppender.append(feedId, content, commentWriter.getId());
 
-		final String commentWriter = memberReader.read(memberId).getNickname();
-		CommentCreateEvent commentCreateEvent = CommentCreateEvent.from(commentWriter, comment);
+		CommentCreateEvent commentCreateEvent = CommentCreateEvent.from(commentWriter.getNickname(), comment);
 
 		applicationEventPublisher.publishEvent(commentCreateEvent);
 
-		return memberId;
+		return commentWriter.getId();
 	}
 
 	public void modifyComment(

@@ -12,7 +12,7 @@ public class SseEventListener {
 	private final SseEmitters sseEmitters;
 
 	@EventListener
-	public void sendSseEmitter(SsePayload ssePayload) {
+	public void sendSseEmitter(final SsePayload ssePayload) {
 		sseEmitters.send(
 			ssePayload.receiverId(),
 			ssePayload.data()
