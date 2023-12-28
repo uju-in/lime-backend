@@ -16,7 +16,7 @@ import com.programmers.bucketback.domains.comment.repository.CommentSummary;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.implementation.FeedReader;
 import com.programmers.bucketback.domains.member.domain.Member;
-import com.programmers.bucketback.domains.member.implementation.MemberReader;
+import com.programmers.bucketback.domains.sse.SsePayload;
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.level.PayPoint;
@@ -34,7 +34,6 @@ public class CommentService {
 	private final CommentRemover commentRemover;
 	private final CommentReader commentReader;
 	private final FeedReader feedReader;
-	private final MemberReader memberReader;
 	private final MemberUtils memberUtils;
 	private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -46,9 +45,9 @@ public class CommentService {
 		final Member commentWriter = memberUtils.getCurrentMember();
 		final Comment comment = commentAppender.append(feedId, content, commentWriter.getId());
 
-		CommentCreateEvent commentCreateEvent = CommentCreateEvent.from(commentWriter.getNickname(), comment);
+		SsePayload ssePayload = CommentCreateEvent.toSsePayload(commentWriter.getNickname(), comment);
 
-		applicationEventPublisher.publishEvent(commentCreateEvent);
+		applicationEventPublisher.publishEvent(ssePayload);
 
 		return commentWriter.getId();
 	}
