@@ -55,9 +55,8 @@ public class JwtService {
 			.compact();
 	}
 
-	public String generateRefreshToken(final String subject) {
+	public String generateRefreshToken() {
 		return Jwts.builder()
-			.setSubject(subject)
 			.setIssuedAt(new Date(System.currentTimeMillis()))
 			.setExpiration(new Date(System.currentTimeMillis() + jwtConfig.refreshExpirationSeconds() * 1000L))
 			.signWith(getSignInKey(jwtConfig.refreshSecretKey()), SignatureAlgorithm.HS256)

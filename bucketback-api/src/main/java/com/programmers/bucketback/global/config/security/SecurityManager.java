@@ -1,5 +1,6 @@
 package com.programmers.bucketback.global.config.security;
 
+import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityManager {
 
+	public static final String REFRESH_TOKEN_CACHE = "refreshToken";
+
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
+	private final CacheManager cacheManager;
 
 	public void authenticate(
 		final Long memberId,
@@ -30,6 +34,9 @@ public class SecurityManager {
 	}
 
 	public String generateRefreshToken(final Long memberId) {
-		return jwtService.generateRefreshToken(memberId.toString());
+		final String refreshToken = jwtService.generateRefreshToken();
+		cacheManager.getCache(REFRESH_TOKEN_CACHE).put(refreshToken, memberId);
+
+		return refreshToken;
 	}
 }
