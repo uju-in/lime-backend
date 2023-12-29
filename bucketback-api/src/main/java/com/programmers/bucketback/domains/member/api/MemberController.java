@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,6 +87,22 @@ public class MemberController {
 		httpServletResponse.addHeader(SET_COOKIE, cookie.toString());
 
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "로그아웃")
+	@DeleteMapping("/logout")
+	public ResponseEntity<Void> logout(@CookieValue("refresh-token") final String refreshToken) {
+		memberService.logout(refreshToken);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "회원 탈퇴")
+	@DeleteMapping("/delete")
+	public ResponseEntity<Void> deleteMember(@CookieValue("refresh-token") final String refreshToken) {
+		memberService.deleteMember(refreshToken);
+
+		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "프로필 수정", description = "MemberUpdateProfileRequest 을 이용하여 프로필을 수정합니다.")

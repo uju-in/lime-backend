@@ -46,4 +46,8 @@ public class MemberSecurityManager {
 		Member.validatePassword(password);
 		return passwordEncoder.encode(password);
 	}
+
+	public void removeRefreshToken(final String refreshToken) {
+		securityManager.removeRefreshToken(refreshToken);
+	}
 }

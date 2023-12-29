@@ -39,4 +39,8 @@ public class SecurityManager {
 
 		return refreshToken;
 	}
+
+	public void removeRefreshToken(final String refreshToken) {
+		cacheManager.getCache(REFRESH_TOKEN_CACHE).evict(refreshToken);
+	}
 }
