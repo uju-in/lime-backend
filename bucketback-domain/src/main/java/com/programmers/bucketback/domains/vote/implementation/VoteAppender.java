@@ -26,6 +26,7 @@ public class VoteAppender {
 			.item2Id(request.item2Id())
 			.hobby(request.hobby())
 			.content(request.content())
+			.maximumParticipants(request.maximumParticipants())
 			.build();
 
 		return voteRepository.save(vote);

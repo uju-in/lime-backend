@@ -9,6 +9,7 @@ public record VoteCreateImplRequest(
 	Hobby hobby,
 	String content,
 	Long item1Id,
-	Long item2Id
+	Long item2Id,
+	Integer maximumParticipants
 ) {
 }
