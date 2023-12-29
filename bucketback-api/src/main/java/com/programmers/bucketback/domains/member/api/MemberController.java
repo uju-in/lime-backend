@@ -1,9 +1,11 @@
 package com.programmers.bucketback.domains.member.api;
 
+import static org.springframework.http.HttpHeaders.*;
+
 import java.io.IOException;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,7 @@ import com.programmers.bucketback.domains.member.model.MyPage;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +44,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
 public class MemberController {
+
+	public static final int COOKIE_AGE_SECONDS = 1209600;
 
 	private final MemberService memberService;
 
@@ -63,19 +68,23 @@ public class MemberController {
 
 	@Operation(summary = "로그인", description = "MemberLoginRequest 을 이용하여 로그인을 합니다.")
 	@PostMapping("/login")
-	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody final MemberLoginRequest request) {
+	public ResponseEntity<MemberLoginResponse> login(
+		HttpServletResponse httpServletResponse,
+		@Valid @RequestBody final MemberLoginRequest request
+	) {
 		final MemberLoginServiceResponse serviceResponse = memberService.login(request.toLoginInfo());
 		final MemberLoginResponse response = MemberLoginResponse.from(serviceResponse);
 
+		final ResponseCookie cookie = ResponseCookie.from("refresh-token", serviceResponse.refreshToken())
+			.maxAge(COOKIE_AGE_SECONDS)
+			.secure(true)
+			.httpOnly(true)
+			.sameSite("None")
+			.path("/")
+			.build();
+		httpServletResponse.addHeader(SET_COOKIE, cookie.toString());
+
 		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "회원 탈퇴")
-	@DeleteMapping("/delete")
-	public ResponseEntity<Void> deleteMember() {
-		memberService.deleteMember();
-
-		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "프로필 수정", description = "MemberUpdateProfileRequest 을 이용하여 프로필을 수정합니다.")
