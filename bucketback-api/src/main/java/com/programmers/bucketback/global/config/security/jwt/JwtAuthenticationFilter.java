@@ -35,11 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		@NonNull final HttpServletResponse response,
 		@NonNull final FilterChain filterChain
 	) throws ServletException, IOException {
+		final String requestUri = request.getRequestURI();
 		final String authHeader = request.getHeader("Authorization");
 		final String jwt;
 		final String memberId;
 
-		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+		if (requestUri.equals("/api/members/refresh") || authHeader == null || !authHeader.startsWith("Bearer ")) {
 			filterChain.doFilter(request, response);
 			return;
 		}

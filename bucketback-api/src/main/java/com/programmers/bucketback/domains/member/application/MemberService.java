@@ -69,6 +69,10 @@ public class MemberService {
 		return memberSecurityManager.login(rawPassword, member);
 	}
 
+	public String extendLogin(final String refreshToken, final String authorizationHeader) {
+		return memberSecurityManager.reissueAccessToken(refreshToken, authorizationHeader);
+	}
+
 	public void logout(final String refreshToken) {
 		memberSecurityManager.removeRefreshToken(refreshToken);
 	}

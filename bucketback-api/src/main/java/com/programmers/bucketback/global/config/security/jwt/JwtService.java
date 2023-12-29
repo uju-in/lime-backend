@@ -9,6 +9,7 @@ import java.util.function.Function;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -23,10 +24,6 @@ public class JwtService {
 
 	public String extractAccessTokenUsername(final String token) {
 		return extractClaim(token, Claims::getSubject, jwtConfig.accessSecretKey());
-	}
-
-	public String extractRefreshTokenUsername(final String token) {
-		return extractClaim(token, Claims::getSubject, jwtConfig.refreshSecretKey());
 	}
 
 	public <T> T extractClaim(
@@ -61,6 +58,27 @@ public class JwtService {
 			.setExpiration(new Date(System.currentTimeMillis() + jwtConfig.refreshExpirationSeconds() * 1000L))
 			.signWith(getSignInKey(jwtConfig.refreshSecretKey()), SignatureAlgorithm.HS256)
 			.compact();
+	}
+
+	public boolean isRefreshValidAndAccessInValid(
+		final String refreshToken,
+		final String accessToken
+	) {
+		isRefreshTokenValid(refreshToken);
+		try {
+			isAccessTokenValid(accessToken);
+		} catch (ExpiredJwtException e) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isRefreshAndAccessValid(
+		final String refreshToken,
+		final String accessToken
+	) {
+		return isRefreshTokenValid(refreshToken) && isAccessTokenValid(accessToken);
 	}
 
 	public boolean isAccessTokenValid(final String token) {

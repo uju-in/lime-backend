@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.programmers.bucketback.global.config.security.jwt.JwtService;
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -42,5 +43,25 @@ public class SecurityManager {
 
 	public void removeRefreshToken(final String refreshToken) {
 		cacheManager.getCache(REFRESH_TOKEN_CACHE).evict(refreshToken);
+	}
+
+	public String reissueAccessToken(final String refreshToken, final String authorizationHeader) {
+		final String accessToken = authorizationHeader.substring(7);
+
+		if (jwtService.isRefreshValidAndAccessInValid(refreshToken, accessToken)) {
+			final Long memberId = cacheManager.getCache(REFRESH_TOKEN_CACHE).get(refreshToken, Long.class);
+
+			if (memberId == null) {
+				throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
+			}
+
+			return generateAccessToken(Long.valueOf(memberId));
+		}
+
+		if (jwtService.isRefreshAndAccessValid(refreshToken, accessToken)) {
+			return accessToken;
+		}
+
+		throw new JwtException("Access Token을 재발급 할 수 없습니다.");
 	}
 }

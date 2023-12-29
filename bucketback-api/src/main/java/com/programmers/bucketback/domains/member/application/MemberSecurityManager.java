@@ -50,4 +50,11 @@ public class MemberSecurityManager {
 	public void removeRefreshToken(final String refreshToken) {
 		securityManager.removeRefreshToken(refreshToken);
 	}
+
+	public String reissueAccessToken(
+		final String refreshToken,
+		final String authorizationHeader
+	) {
+		return securityManager.reissueAccessToken(refreshToken, authorizationHeader);
+	}
 }

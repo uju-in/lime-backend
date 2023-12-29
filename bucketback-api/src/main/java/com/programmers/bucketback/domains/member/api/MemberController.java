@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +26,7 @@ import com.programmers.bucketback.domains.member.api.dto.request.MemberLoginRequ
 import com.programmers.bucketback.domains.member.api.dto.request.MemberSignupRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdatePasswordRequest;
 import com.programmers.bucketback.domains.member.api.dto.request.MemberUpdateProfileRequest;
+import com.programmers.bucketback.domains.member.api.dto.response.AccessTokenResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckEmailResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckJwtResponse;
 import com.programmers.bucketback.domains.member.api.dto.response.MemberCheckNicknameResponse;
@@ -85,6 +87,18 @@ public class MemberController {
 			.path("/")
 			.build();
 		httpServletResponse.addHeader(SET_COOKIE, cookie.toString());
+
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "로그인 연장", description = "Refresh Token 을 이용하여 Access Token 을 재발급 받습니다.")
+	@PostMapping("/refresh")
+	public ResponseEntity<AccessTokenResponse> extendLogin(
+		@CookieValue("refresh-token") final String refreshToken,
+		@RequestHeader("Authorization") final String authorizationHeader
+	) {
+		final String accessToken = memberService.extendLogin(refreshToken, authorizationHeader);
+		final AccessTokenResponse response = new AccessTokenResponse(accessToken);
 
 		return ResponseEntity.ok(response);
 	}
