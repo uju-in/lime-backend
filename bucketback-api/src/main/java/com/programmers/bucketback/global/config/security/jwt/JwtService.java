@@ -9,8 +9,6 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.programmers.bucketback.global.config.security.MemberSecurity;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -37,17 +35,17 @@ public class JwtService {
 		return claimsTResolver.apply(claims);
 	}
 
-	public String generateToken(final MemberSecurity memberSecurity) {
-		return generateToken(new HashMap<>(), memberSecurity);
+	public String generateToken(final UserDetails userDetails) {
+		return generateToken(new HashMap<>(), userDetails);
 	}
 
 	public String generateToken(
 		final Map<String, Object> extraClaims,
-		final MemberSecurity memberSecurity
+		final UserDetails userDetails
 	) {
 		return Jwts.builder()
 			.setClaims(extraClaims)
-			.setSubject(memberSecurity.getUsername())
+			.setSubject(userDetails.getUsername())
 			.setIssuedAt(new Date(System.currentTimeMillis()))
 			.setExpiration(new Date(System.currentTimeMillis() + 1000 * jwtConfig.expirationSeconds()))
 			.signWith(getSignInKey(), SignatureAlgorithm.HS256)
