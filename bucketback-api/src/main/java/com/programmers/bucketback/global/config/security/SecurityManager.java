@@ -51,17 +51,13 @@ public class SecurityManager {
 		if (jwtService.isRefreshValidAndAccessInValid(refreshToken, accessToken)) {
 			final Long memberId = cacheManager.getCache(REFRESH_TOKEN_CACHE).get(refreshToken, Long.class);
 
-			if (memberId == null) {
-				throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
-			}
-
-			return generateAccessToken(Long.valueOf(memberId));
+			return generateAccessToken(memberId);
 		}
 
-		if (jwtService.isRefreshAndAccessValid(refreshToken, accessToken)) {
+		if (jwtService.isAccessTokenValid(accessToken)) {
 			return accessToken;
 		}
 
-		throw new JwtException("Access Token을 재발급 할 수 없습니다.");
+		throw new JwtException("Refresh Token이 유효하지 않습니다.");
 	}
 }

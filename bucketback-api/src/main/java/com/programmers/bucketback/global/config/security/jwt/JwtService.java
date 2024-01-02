@@ -2,14 +2,13 @@ package com.programmers.bucketback.global.config.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -22,7 +21,7 @@ public class JwtService {
 
 	private final JwtConfig jwtConfig;
 
-	public String extractAccessTokenUsername(final String token) {
+	public String extractUsername(final String token) {
 		return extractClaim(token, Claims::getSubject, jwtConfig.accessSecretKey());
 	}
 
@@ -36,15 +35,7 @@ public class JwtService {
 	}
 
 	public String generateAccessToken(final String subject) {
-		return generateAccessToken(new HashMap<>(), subject);
-	}
-
-	public String generateAccessToken(
-		final Map<String, Object> extraClaims,
-		final String subject
-	) {
 		return Jwts.builder()
-			.setClaims(extraClaims)
 			.setSubject(subject)
 			.setIssuedAt(new Date(System.currentTimeMillis()))
 			.setExpiration(new Date(System.currentTimeMillis() + jwtConfig.accessExpirationSeconds() * 1000L))
@@ -67,26 +58,31 @@ public class JwtService {
 		isRefreshTokenValid(refreshToken);
 		try {
 			isAccessTokenValid(accessToken);
-		} catch (ExpiredJwtException e) {
+		} catch (JwtException e) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public boolean isRefreshAndAccessValid(
-		final String refreshToken,
-		final String accessToken
-	) {
-		return isRefreshTokenValid(refreshToken) && isAccessTokenValid(accessToken);
-	}
-
 	public boolean isAccessTokenValid(final String token) {
-		return !isTokenExpired(token, jwtConfig.accessSecretKey());
+		try {
+			return !isTokenExpired(token, jwtConfig.accessSecretKey());
+		} catch (final ExpiredJwtException e) {
+			throw new JwtException("Access Token이 만료되었습니다.");
+		} catch (final JwtException e) {
+			throw new JwtException("Access Token이 유효하지 않습니다.");
+		}
 	}
 
 	public boolean isRefreshTokenValid(final String token) {
-		return !isTokenExpired(token, jwtConfig.refreshSecretKey());
+		try {
+			return !isTokenExpired(token, jwtConfig.refreshSecretKey());
+		} catch (final ExpiredJwtException e) {
+			throw new JwtException("Refresh Token이 만료되었습니다.");
+		} catch (final JwtException e) {
+			throw new JwtException("Refresh Token이 유효하지 않습니다.");
+		}
 	}
 
 	private boolean isTokenExpired(

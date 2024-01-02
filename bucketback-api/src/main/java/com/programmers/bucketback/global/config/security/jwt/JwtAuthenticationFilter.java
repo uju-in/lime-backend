@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,9 +47,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		jwt = authHeader.substring(7);
 
 		try {
-			memberId = jwtService.extractAccessTokenUsername(jwt);
+			if (SecurityContextHolder.getContext().getAuthentication() == null && jwtService.isAccessTokenValid(jwt)) {
+				memberId = jwtService.extractUsername(jwt);
 
-			if (memberId != null && SecurityContextHolder.getContext().getAuthentication() == null && jwtService.isAccessTokenValid(jwt)) {
 				final UserDetails principal = makePrincipal(memberId);
 				final UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 					principal,
@@ -63,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 			filterChain.doFilter(request, response);
 
-		} catch (SignatureException | ExpiredJwtException e) {
+		} catch (JwtException e) {
 			handlerExceptionResolver.resolveException(request, response, null, e);
 		}
 	}
