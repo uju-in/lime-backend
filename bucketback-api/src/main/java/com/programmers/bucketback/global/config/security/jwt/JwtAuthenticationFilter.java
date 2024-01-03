@@ -25,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+	public static final int TOKEN_BEGIN_INDEX = 7;
+
 	private final JwtService jwtService;
 	private final HandlerExceptionResolver handlerExceptionResolver;
 
@@ -44,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		jwt = authHeader.substring(7);
+		jwt = authHeader.substring(TOKEN_BEGIN_INDEX);
 
 		try {
 			if (SecurityContextHolder.getContext().getAuthentication() == null && jwtService.isAccessTokenValid(jwt)) {
