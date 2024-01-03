@@ -20,7 +20,7 @@ public class CacheConfiguration {
 	public CacheManager cacheManager() {
 		final List<CaffeineCache> caffeineCaches = Arrays.stream(CacheType.values())
 			.map(cache -> new CaffeineCache(cache.getCacheName(), Caffeine.newBuilder().recordStats()
-				.expireAfterWrite(cache.getExpireAfterWrite(), TimeUnit.HOURS)
+				.expireAfterWrite(cache.getExpireAfterWrite(), TimeUnit.SECONDS)
 				.maximumSize(cache.getEntryMaxSize())
 				.build()))
 			.toList();
