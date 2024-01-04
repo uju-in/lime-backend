@@ -2,7 +2,6 @@ package com.programmers.bucketback.global.config.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
 
@@ -22,16 +21,7 @@ public class JwtService {
 	private final JwtConfig jwtConfig;
 
 	public String extractUsername(final String token) {
-		return extractClaim(token, Claims::getSubject, jwtConfig.accessSecretKey());
-	}
-
-	public <T> T extractClaim(
-		final String token,
-		final Function<Claims, T> claimsTResolver,
-		final String secretKey
-	) {
-		final Claims claims = extractAllClaims(token, secretKey);
-		return claimsTResolver.apply(claims);
+		return extractClaim(token, jwtConfig.accessSecretKey()).getSubject();
 	}
 
 	public String generateAccessToken(final String subject) {
@@ -96,10 +86,10 @@ public class JwtService {
 		final String token,
 		final String secretKey
 	) {
-		return extractClaim(token, Claims::getExpiration, secretKey);
+		return extractClaim(token, secretKey).getExpiration();
 	}
 
-	private Claims extractAllClaims(
+	private Claims extractClaim(
 		final String token,
 		final String secretKey
 	) {
