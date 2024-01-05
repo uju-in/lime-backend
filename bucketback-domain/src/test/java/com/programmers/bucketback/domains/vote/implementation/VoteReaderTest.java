@@ -118,4 +118,21 @@ class VoteReaderTest {
 		assertThat(result.item2Info()).isEqualTo(item2Info);
 		assertThat(result.selectedItemId()).isEqualTo(item1Id);
 	}
+
+	@Test
+	@DisplayName("키워드가 투표 아이템 이름에 들어가는 투표의 개수를 센다.")
+	void countByKeywordTest() {
+		// given
+		final String keyword = "농구공";
+		final long count = 10;
+
+		given(voteRepository.countByKeyword(anyString()))
+			.willReturn(count);
+
+		// when
+		final long result = voteReader.countByKeyword(keyword);
+
+		// then
+		assertThat(result).isEqualTo(count);
+	}
 }
