@@ -3,6 +3,7 @@ package com.programmers.bucketback.domains.vote.implementation;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -13,14 +14,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.programmers.bucketback.common.cursor.CursorPageParameters;
+import com.programmers.bucketback.common.cursor.CursorPageParametersBuilder;
+import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.common.cursor.CursorUtils;
+import com.programmers.bucketback.common.model.Hobby;
 import com.programmers.bucketback.domains.item.domain.Item;
 import com.programmers.bucketback.domains.item.domain.ItemBuilder;
 import com.programmers.bucketback.domains.item.implementation.ItemReader;
 import com.programmers.bucketback.domains.item.model.ItemInfo;
 import com.programmers.bucketback.domains.vote.domain.Vote;
 import com.programmers.bucketback.domains.vote.domain.VoteBuilder;
+import com.programmers.bucketback.domains.vote.model.VoteCursorSummary;
+import com.programmers.bucketback.domains.vote.model.VoteCursorSummaryBuilder;
 import com.programmers.bucketback.domains.vote.model.VoteDetail;
 import com.programmers.bucketback.domains.vote.model.VoteDetailInfo;
+import com.programmers.bucketback.domains.vote.model.VoteSortCondition;
+import com.programmers.bucketback.domains.vote.model.VoteStatusCondition;
+import com.programmers.bucketback.domains.vote.model.VoteSummary;
+import com.programmers.bucketback.domains.vote.model.VoteSummaryBuilder;
 import com.programmers.bucketback.domains.vote.repository.VoteRepository;
 import com.programmers.bucketback.error.EntityNotFoundException;
 
@@ -117,6 +129,52 @@ class VoteReaderTest {
 		assertThat(result.item1Info()).isEqualTo(item1Info);
 		assertThat(result.item2Info()).isEqualTo(item2Info);
 		assertThat(result.selectedItemId()).isEqualTo(item1Id);
+	}
+
+	@Test
+	@DisplayName("검색 조건에 맞는 투표 목록을 조회한다.")
+	void readByConditionTest() {
+		// given
+		final int DEFAULT_PAGING_SIZE = 20;
+		final Hobby hobby = Hobby.BASKETBALL;
+		final VoteStatusCondition statusCondition = VoteStatusCondition.COMPLETED;
+		final VoteSortCondition sortCondition = VoteSortCondition.RECENT;
+		final CursorPageParameters parameters = CursorPageParametersBuilder.build();
+		final Long memberId = 1L;
+
+		final int pageSize = parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
+		final List<VoteCursorSummary> voteCursorSummaries = VoteCursorSummaryBuilder.buildMany(pageSize);
+		final List<VoteSummary> voteSummaries = VoteSummaryBuilder.buildMany(voteCursorSummaries);
+		final CursorSummary<VoteSummary> cursorSummary = CursorUtils.getCursorSummaries(voteSummaries);
+
+		given(voteRepository.findAllByCursor(
+			any(Hobby.class),
+			eq(statusCondition),
+			eq(sortCondition),
+			eq(null),
+			anyLong(),
+			eq(parameters.cursorId()),
+			eq(pageSize)
+		)).willReturn(voteCursorSummaries);
+
+		given(itemReader.read(anyLong()))
+			.will(invocation -> {
+				final Long givenItemId = invocation.getArgument(0);
+				return ItemBuilder.build(givenItemId);
+			});
+
+		// when
+		final CursorSummary<VoteSummary> result = voteReader.readByCursor(
+			hobby,
+			statusCondition,
+			sortCondition,
+			null,
+			parameters,
+			memberId
+		);
+
+		// then
+		assertThat(result).isEqualTo(cursorSummary);
 	}
 
 	@Test
