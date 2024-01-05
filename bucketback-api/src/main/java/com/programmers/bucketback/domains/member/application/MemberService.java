@@ -69,10 +69,21 @@ public class MemberService {
 		return memberSecurityManager.login(rawPassword, member);
 	}
 
-	public void deleteMember() {
-		final Member member = memberUtils.getCurrentMember();
+	public String extendLogin(
+		final String refreshToken,
+		final String authorizationHeader
+	) {
+		return memberSecurityManager.reissueAccessToken(refreshToken, authorizationHeader);
+	}
 
+	public void logout(final String refreshToken) {
+		memberSecurityManager.removeRefreshToken(refreshToken);
+	}
+
+	public void deleteMember(final String refreshToken) {
+		final Member member = memberUtils.getCurrentMember();
 		memberRemover.remove(member);
+		memberSecurityManager.removeRefreshToken(refreshToken);
 	}
 
 	public void updateProfile(

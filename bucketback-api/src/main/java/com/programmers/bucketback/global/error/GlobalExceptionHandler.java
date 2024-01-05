@@ -6,6 +6,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,8 +16,6 @@ import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.EntityNotFoundException;
 import com.programmers.bucketback.error.ErrorCode;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -63,18 +62,10 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(SignatureException.class)
-	protected ResponseEntity<ErrorResponse> handleSignatureException(final SignatureException e) {
-		log.error("SignatureException", e);
-		final ErrorResponse response = ErrorResponse.from(ErrorCode.BAD_SIGNATURE_JWT);
-
-		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(ExpiredJwtException.class)
-	protected ResponseEntity<ErrorResponse> handleJwtException(final ExpiredJwtException e) {
-		log.error("ExpiredJwtException", e);
-		final ErrorResponse response = ErrorResponse.from(ErrorCode.EXPIRED_JWT);
+	@ExceptionHandler(MissingRequestCookieException.class)
+	protected ResponseEntity<ErrorResponse> handleMissingRequestCookieException(final MissingRequestCookieException e) {
+		log.error("MissingRequestCookieException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.EXPIRED_REFRESH_TOKEN);
 
 		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}

@@ -2,14 +2,12 @@ package com.programmers.bucketback.global.config.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -23,61 +21,88 @@ public class JwtService {
 	private final JwtConfig jwtConfig;
 
 	public String extractUsername(final String token) {
-		return extractClaim(token, Claims::getSubject);
+		return extractClaim(token, jwtConfig.accessSecretKey()).getSubject();
 	}
 
-	public <T> T extractClaim(
-		final String token,
-		final Function<Claims, T> claimsTResolver
-	) {
-		final Claims claims = extractAllClaims(token);
-		return claimsTResolver.apply(claims);
-	}
-
-	public String generateToken(final UserDetails userDetails) {
-		return generateToken(new HashMap<>(), userDetails);
-	}
-
-	public String generateToken(
-		final Map<String, Object> extraClaims,
-		final UserDetails userDetails
-	) {
+	public String generateAccessToken(final String subject) {
 		return Jwts.builder()
-			.setClaims(extraClaims)
-			.setSubject(userDetails.getUsername())
+			.setSubject(subject)
 			.setIssuedAt(new Date(System.currentTimeMillis()))
-			.setExpiration(new Date(System.currentTimeMillis() + 1000 * jwtConfig.expirationSeconds()))
-			.signWith(getSignInKey(), SignatureAlgorithm.HS256)
+			.setExpiration(new Date(System.currentTimeMillis() + jwtConfig.accessExpirationSeconds() * 1000L))
+			.signWith(getSignInKey(jwtConfig.accessSecretKey()), SignatureAlgorithm.HS256)
 			.compact();
 	}
 
-	public boolean isTokenValid(
-		final String token,
-		final UserDetails userDetails
+	public String generateRefreshToken() {
+		return Jwts.builder()
+			.setIssuedAt(new Date(System.currentTimeMillis()))
+			.setExpiration(new Date(System.currentTimeMillis() + jwtConfig.refreshExpirationSeconds() * 1000L))
+			.signWith(getSignInKey(jwtConfig.refreshSecretKey()), SignatureAlgorithm.HS256)
+			.compact();
+	}
+
+	public boolean isRefreshValidAndAccessInValid(
+		final String refreshToken,
+		final String accessToken
 	) {
-		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+		isRefreshTokenValid(refreshToken);
+		try {
+			isAccessTokenValid(accessToken);
+		} catch (JwtException e) {
+			return true;
+		}
+
+		return false;
 	}
 
-	private boolean isTokenExpired(final String token) {
-		return extractExpiratiob(token).before(new Date());
+	public boolean isAccessTokenValid(final String token) {
+		try {
+			return !isTokenExpired(token, jwtConfig.accessSecretKey());
+		} catch (final ExpiredJwtException e) {
+			throw new JwtException("Access Token이 만료되었습니다.");
+		} catch (final JwtException e) {
+			throw new JwtException("Access Token이 유효하지 않습니다.");
+		}
 	}
 
-	private Date extractExpiratiob(final String token) {
-		return extractClaim(token, Claims::getExpiration);
+	public boolean isRefreshTokenValid(final String token) {
+		try {
+			return !isTokenExpired(token, jwtConfig.refreshSecretKey());
+		} catch (final ExpiredJwtException e) {
+			throw new JwtException("Refresh Token이 만료되었습니다.");
+		} catch (final JwtException e) {
+			throw new JwtException("Refresh Token이 유효하지 않습니다.");
+		}
 	}
 
-	private Claims extractAllClaims(final String token) {
+	private boolean isTokenExpired(
+		final String token,
+		final String secretKey
+	) {
+		return extractExpiration(token, secretKey).before(new Date());
+	}
+
+	private Date extractExpiration(
+		final String token,
+		final String secretKey
+	) {
+		return extractClaim(token, secretKey).getExpiration();
+	}
+
+	private Claims extractClaim(
+		final String token,
+		final String secretKey
+	) {
 		return Jwts
 			.parserBuilder()
-			.setSigningKey(getSignInKey())
+			.setSigningKey(getSignInKey(secretKey))
 			.build()
 			.parseClaimsJws(token)
 			.getBody();
 	}
 
-	private Key getSignInKey() {
-		byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.secretKey());
+	private Key getSignInKey(final String secretKey) {
+		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 }
