@@ -72,4 +72,41 @@ class MemberReaderTest {
 				.isInstanceOf(EntityNotFoundException.class);
 		}
 	}
+
+	@Nested
+	@DisplayName("이메일로 회원 조회 테스트")
+	class ReadByEmailTest {
+		@Test
+		@DisplayName("주어진 이메일을 가진 회원을 반환한다.")
+		void successTest() {
+			// given
+			final String email = "email@naver.com";
+			final Member member = MemberBuilder.build(1L);
+
+			given(memberRepository.findByLoginInfoEmail(anyString()))
+				.willReturn(Optional.ofNullable(member));
+
+			// when
+			final Member result = memberReader.readByEmail(email);
+
+			// then
+			assertThat(result).isEqualTo(member);
+		}
+
+		@Test
+		@DisplayName("주어진 이메일을 가진 회원이 없으면 예외가 발생한다.")
+		void occurExceptionIfNotExistTest() {
+			// given
+			final String email = "email@naver.com";
+
+			given(memberRepository.findByLoginInfoEmail(anyString()))
+				.willReturn(Optional.empty());
+
+			// when & then
+			assertThatThrownBy(
+				() -> memberReader.readByEmail(email)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+	}
 }
