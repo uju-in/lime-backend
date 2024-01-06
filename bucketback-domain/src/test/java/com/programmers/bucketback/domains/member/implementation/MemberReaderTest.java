@@ -109,4 +109,41 @@ class MemberReaderTest {
 				.isInstanceOf(EntityNotFoundException.class);
 		}
 	}
+
+	@Nested
+	@DisplayName("닉네임으로 회원 조회 테스트")
+	class ReadByNicknameTest {
+		@Test
+		@DisplayName("주어진 닉네임을 가진 회원을 반환한다.")
+		void successTest() {
+			// given
+			final String nickname = "nickname";
+			final Member member = MemberBuilder.build(1L);
+
+			given(memberRepository.findByNicknameNickname(anyString()))
+				.willReturn(Optional.ofNullable(member));
+
+			// when
+			final Member result = memberReader.readByNickname(nickname);
+
+			// then
+			assertThat(result).isEqualTo(member);
+		}
+
+		@Test
+		@DisplayName("주어진 닉네임을 가진 회원이 없으면 예외가 발생한다.")
+		void occurExceptionIfNotExistTest() {
+			// given
+			final String nickname = "nickname";
+
+			given(memberRepository.findByNicknameNickname(anyString()))
+				.willReturn(Optional.empty());
+
+			// when & then
+			assertThatThrownBy(
+				() -> memberReader.readByNickname(nickname)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+	}
 }
