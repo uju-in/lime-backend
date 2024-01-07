@@ -5,13 +5,13 @@ import com.programmers.bucketback.domains.member.application.dto.response.Member
 public record MemberLoginResponse(
         Long memberId,
 		String nickname,
-        String jwtToken
+		String accessToken
 ) {
 	public static MemberLoginResponse from(final MemberLoginServiceResponse serviceResponse) {
 		return new MemberLoginResponse(
 			serviceResponse.memberId(),
 			serviceResponse.nickname(),
-			serviceResponse.jwtToken()
+			serviceResponse.accessToken()
 		);
 	}
 }

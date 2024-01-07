@@ -36,7 +36,7 @@ class CommentModifierTest {
 		commentModifier.modify(comment.getId(), newContent);
 
 		// then
-		assertThat(comment.getContent().getContent()).isEqualTo(newContent);
+		assertThat(comment.getContent()).isEqualTo(newContent);
 	}
 
 	@Test

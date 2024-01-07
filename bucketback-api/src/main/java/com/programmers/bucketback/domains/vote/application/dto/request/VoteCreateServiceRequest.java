@@ -10,9 +10,10 @@ public record VoteCreateServiceRequest(
 	Hobby hobby,
 	String content,
 	Long item1Id,
-	Long item2Id
+	Long item2Id,
+	Integer maximumParticipants
 ) {
 	public VoteCreateImplRequest toImplRequest() {
-		return new VoteCreateImplRequest(hobby, content, item1Id, item2Id);
+		return new VoteCreateImplRequest(hobby, content, item1Id, item2Id, maximumParticipants);
 	}
 }

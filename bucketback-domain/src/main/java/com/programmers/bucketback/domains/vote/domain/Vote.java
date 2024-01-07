@@ -58,6 +58,9 @@ public class Vote extends BaseEntity {
 	@Column(name = "end_time", nullable = false)
 	private LocalDateTime endTime;
 
+	@Column(name = "maximum_participants")
+	private Integer maximumParticipants;
+
 	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
 	private List<Voter> voters = new ArrayList<>();
 
@@ -67,7 +70,8 @@ public class Vote extends BaseEntity {
 		final Long item1Id,
 		final Long item2Id,
 		final Hobby hobby,
-		final String content
+		final String content,
+		final Integer maximumParticipants
 	) {
 		this.memberId = Objects.requireNonNull(memberId);
 		this.item1Id = Objects.requireNonNull(item1Id);
@@ -76,6 +80,7 @@ public class Vote extends BaseEntity {
 		this.content = new Content(content);
 		this.startTime = LocalDateTime.now();
 		this.endTime = startTime.plusDays(1);
+		this.maximumParticipants = maximumParticipants;
 	}
 
 	public String getContent() {
@@ -99,5 +104,13 @@ public class Vote extends BaseEntity {
 	public boolean isVoting() {
 		final LocalDateTime now = LocalDateTime.now();
 		return this.endTime.isAfter(now);
+	}
+
+	public void close(final LocalDateTime now) {
+		this.endTime = now;
+	}
+
+	public boolean reachMaximumParticipants() {
+		return this.maximumParticipants != null && this.maximumParticipants == this.voters.size();
 	}
 }

@@ -23,7 +23,10 @@ public record VoteCreateRequest(
 
 	@Schema(description = "아이템2 ID", example = "2")
 	@NotNull(message = "아이템2 ID는 필수 값입니다.")
-	Long item2Id
+	Long item2Id,
+
+	@Schema(description = "최대 투표자 수", example = "100")
+	Integer maximumParticipants
 ) {
 	public VoteCreateServiceRequest toCreateVoteServiceRequest() {
 		return VoteCreateServiceRequest.builder()
@@ -31,6 +34,7 @@ public record VoteCreateRequest(
 			.content(content)
 			.item1Id(item1Id)
 			.item2Id(item2Id)
+			.maximumParticipants(maximumParticipants)
 			.build();
 	}
 }
