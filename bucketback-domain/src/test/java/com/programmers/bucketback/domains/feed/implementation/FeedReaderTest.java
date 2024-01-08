@@ -47,10 +47,10 @@ class FeedReaderTest {
 	@DisplayName("피드 상세 조회에 성공한다.")
 	void successReadFeedDetail() {
 		//given
-		Member member = MemberBuilder.build();
+		Long memberId = 1L;
+		Member member = MemberBuilder.build(1L);
 		Feed feed = FeedBuilder.build();
 		Long feedId = 1L;
-		Long memberId = 1L;
 
 		MemberInfo memberInfo = new MemberInfo(member.getId(),
 			member.getNickname(),
@@ -64,18 +64,18 @@ class FeedReaderTest {
 			.toList();
 		feedItems.forEach(feed::addFeedItem);
 
-		FeedInfo feedInfo = new FeedInfo(
-			feed.getId(),
-			feed.getHobby().getHobbyValue(),
-			feed.getFeedContent(),
-			feed.getBucketInfo().getName(),
-			feed.getBucketInfo().getBudget(),
-			feed.getTotalPrice(),
-			feed.getCreatedAt(),
-			feed.hasAdoptedComment(),
-			feed.getLikes().size(),
-			true
-		);
+		FeedInfo feedInfo = FeedInfo.builder()
+			.id(feed.getId())
+			.hobby(feed.getHobby().getHobbyValue())
+			.content(feed.getFeedContent())
+			.bucketName(feed.getName())
+			.bucketBudget(feed.getBudget())
+			.totalPrice(feed.getTotalPrice())
+			.createdAt(feed.getCreatedAt())
+			.hasAdoptedComment(false)
+			.isLiked(true)
+			.likeCount(feed.getLikes().size())
+			.build();
 
 		List<FeedItemInfo> feedItemInfos = feedItems.stream()
 			.map(FeedItemInfo::from)
