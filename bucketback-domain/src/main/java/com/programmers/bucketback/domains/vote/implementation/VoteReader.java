@@ -43,7 +43,7 @@ public class VoteReader {
 	}
 
 	@Transactional(readOnly = true)
-	public VoteDetail read(
+	public VoteDetail readDetail(
 		final Long voteId,
 		final Long memberId
 	) {
