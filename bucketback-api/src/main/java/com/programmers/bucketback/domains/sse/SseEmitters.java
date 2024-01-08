@@ -30,23 +30,17 @@ public class SseEmitters {
 		final Long receiverId,
 		final Object data
 	) {
-		SseEmitter sseEmitter = get(receiverId);
+		SseEmitter sseEmitter = emitters.get(receiverId);
+		if (sseEmitter == null) {
+			log.warn("SSE를 구독하지 않은 유저입니다. userId : {}", receiverId);
+			return;
+		}
+
 		try {
 			sseEmitter.send(data);
 			log.info("알람을 보냈습니다. userId : {}", receiverId);
 		} catch (Exception e) {
-			log.error("알람을 보내는 과정에서 오류가 발생했습니다.");
-			throw new RuntimeException();
+			log.warn("알람을 보내는 과정에서 오류가 발생했습니다.");
 		}
-	}
-
-	public SseEmitter get(
-		final Long receiverId
-	) {
-		var sseEmitter = emitters.get(receiverId);
-		if (sseEmitter == null) {
-			log.warn("SSE를 구독하지 않은 유저입니다. userId : {}", receiverId);
-		}
-		return sseEmitter;
 	}
 }
