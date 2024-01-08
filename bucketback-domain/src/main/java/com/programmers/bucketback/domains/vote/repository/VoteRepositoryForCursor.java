@@ -12,8 +12,11 @@ public interface VoteRepositoryForCursor {
 		final Hobby hobby,
 		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
+		final String keyword,
 		final Long memberId,
 		final String nextCursorId,
 		final int pageSize
 	);
+
+	Long countByKeyword(final String keyword);
 }

@@ -69,10 +69,12 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 		return jpaQueryFactory
 			.selectFrom(item)
 			.where(
+				cursorIdCondition(cursorId),
 				item.id.in(itemIdsFromReview),
 				hobbyCondition(hobby)
 			)
 			.orderBy(decrease(), item.id.desc())
+			.limit(pageSize)
 			.transform(groupBy(item.id)
 				.list(Projections.constructor(InventoryReviewItemSummary.class,
 					generateItemCursorId(),

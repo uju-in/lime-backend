@@ -7,9 +7,14 @@ import com.programmers.bucketback.domains.vote.model.VoteSummary;
 
 public record VoteGetByCursorResponse(
 	String nextCursorId,
+	Integer totalCount,
 	List<VoteSummary> votes
 ) {
 	public static VoteGetByCursorResponse from(final CursorSummary<VoteSummary> cursorSummary) {
-		return new VoteGetByCursorResponse(cursorSummary.nextCursorId(), cursorSummary.summaries());
+		return new VoteGetByCursorResponse(
+			cursorSummary.nextCursorId(),
+			cursorSummary.summaryCount(),
+			cursorSummary.summaries()
+		);
 	}
 }

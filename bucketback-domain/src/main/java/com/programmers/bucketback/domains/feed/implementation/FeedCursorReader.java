@@ -32,17 +32,17 @@ public class FeedCursorReader {
 	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
 		final Hobby hobby,
 		final String nickname,
-		final boolean myPageOwnerLikeFeeds,
+		final boolean onlyNicknameLikeFeeds,
 		final Long loginMemberId,
 		final FeedSortCondition sortCondition,
 		final CursorPageParameters parameters
 	) {
 		int pageSize = getPageSizeByParameter(parameters);
-		Long myPageMemberId = getMemberIdByNickname(nickname);
+		Long nicknameMemberId = getMemberIdByNickname(nickname);
 
 		List<FeedCursorSummary> feedCursorSummaries = feedRepository.findAllByCursor(
-			myPageMemberId,
-			myPageOwnerLikeFeeds,
+			nicknameMemberId,
+			onlyNicknameLikeFeeds,
 			hobby,
 			sortCondition,
 			parameters.cursorId(),
@@ -50,14 +50,13 @@ public class FeedCursorReader {
 		);
 
 		List<FeedCursorSummaryLike> feedCursorSummaryLikes = feedCursorSummaries.stream().map(
-			item -> {
+			feedCursorSummary -> {
 				boolean isLike = feedLikeRepository.existsByMemberIdAndFeed(
 					loginMemberId,
-					feedReader.read(item.feedId()
-					)
+					feedReader.read(feedCursorSummary.feedId())
 				);
 
-				return item.of(isLike);
+				return feedCursorSummary.of(isLike);
 			}
 		).toList();
 

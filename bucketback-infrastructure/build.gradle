@@ -8,6 +8,12 @@ dependencies {
     // S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // cloud watch log
+    implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.6.0'
 }
 
 bootJar {

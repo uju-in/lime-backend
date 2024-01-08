@@ -33,8 +33,8 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	public List<FeedCursorSummary> findAllByCursor(
-		final Long myPageMemberId,
-		final boolean myPageOwnerLikeFeeds,
+		final Long nicknameMemberId,
+		final boolean onlyNicknameLikeFeeds,
 		final Hobby hobby,
 		final FeedSortCondition feedSortCondition,
 		final String cursorId,
@@ -44,28 +44,27 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 			.from(feed)
 			.where(
 				feed.bucketInfo.hobby.eq(hobby),
-				eqMemberId(myPageMemberId),
+				eqMemberId(nicknameMemberId, onlyNicknameLikeFeeds),
 				lessThanNextCursorId(feedSortCondition, cursorId)
-			).fetch();
+			).orderBy(feedSort(feedSortCondition), feed.id.desc())
+			.fetch();
 
-		if (myPageOwnerLikeFeeds) {
+		if (onlyNicknameLikeFeeds) {
 			feedIds = jpaQueryFactory.select(feedLike.feed.id)
 				.from(feedLike)
 				.where(
-					eqLikeMemberId(myPageMemberId),
+					eqLikeMemberId(nicknameMemberId),
 					feedLike.feed.id.in(feedIds)
 				).fetch();
 		}
 
-		return jpaQueryFactory
-			.select()
-			.from(feedItem)
+		List<FeedCursorSummary> transform = jpaQueryFactory
+			.selectFrom(feedItem)
 			.where(
 				feedItem.feed.id.in(feedIds)
 			)
-			.join(member).on(eqMemberIdToJoin(myPageMemberId))
+			.join(member).on(eqMemberIdToJoin(nicknameMemberId, onlyNicknameLikeFeeds))
 			.orderBy(feedSort(feedSortCondition), feed.id.desc())
-			.limit(pageSize)
 			.transform(
 				groupBy(feed.id)
 					.list(Projections.constructor(
@@ -94,32 +93,46 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 						)
 					)
 			);
+
+		return transform.stream()
+			.limit(pageSize)
+			.toList();
 	}
 
-	private BooleanExpression eqLikeMemberId(final Long myPageMemberId) {
-		if (myPageMemberId == null) {
+	private BooleanExpression eqLikeMemberId(final Long nicknameMemberId) {
+		if (nicknameMemberId == null) {
 			return null;
 		}
 
-		return feedLike.memberId.eq(myPageMemberId);
+		return feedLike.memberId.eq(nicknameMemberId);
 	}
 
-	private BooleanExpression eqMemberIdToJoin(final Long myPageMemberId) {
+	private BooleanExpression eqMemberIdToJoin(
+		final Long nicknameMemberId,
+		final boolean onlyNicknameLikeFeeds
+	) {
 		// 마이페이지 피드 조회
-		if (myPageMemberId != null) {
-			return member.id.eq(myPageMemberId);
+		if (nicknameMemberId != null && !onlyNicknameLikeFeeds) {
+			return member.id.eq(nicknameMemberId);
 		}
 
 		// 일반 피드 조회
 		return member.id.eq(feedItem.feed.memberId);
 	}
 
-	private BooleanExpression eqMemberId(final Long memberId) {
-		if (memberId == null) {
+	private BooleanExpression eqMemberId(
+		final Long nicknameMemberId,
+		final boolean onlyNicknameLikeFeeds
+	) {
+		if (onlyNicknameLikeFeeds) {
 			return null;
 		}
 
-		return feed.memberId.eq(memberId);
+		if (nicknameMemberId == null) {
+			return null;
+		}
+
+		return feed.memberId.eq(nicknameMemberId);
 	}
 
 	private BooleanExpression lessThanNextCursorId(

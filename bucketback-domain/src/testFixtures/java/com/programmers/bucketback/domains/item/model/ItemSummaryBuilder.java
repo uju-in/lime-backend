@@ -2,6 +2,10 @@ package com.programmers.bucketback.domains.item.model;
 
 import java.time.LocalDateTime;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemSummaryBuilder {
 
 	public static ItemSummary build(final Long id) {

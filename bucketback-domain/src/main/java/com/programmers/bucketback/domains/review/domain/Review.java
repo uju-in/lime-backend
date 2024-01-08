@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "reviews")
 public class Review extends BaseEntity {
 
+	private static final int REVIEW_CONTENT_MAX_LENGTH = 1000;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -34,7 +36,7 @@ public class Review extends BaseEntity {
 	@Column(name = "members_id", nullable = false)
 	private Long memberId;
 
-	@Column(name = "content", nullable = false)
+	@Column(name = "content", length = REVIEW_CONTENT_MAX_LENGTH)
 	private String content;
 
 	@Column(name = "rating", nullable = false)
@@ -49,7 +51,7 @@ public class Review extends BaseEntity {
 	) {
 		this.itemId = Objects.requireNonNull(itemId);
 		this.memberId = Objects.requireNonNull(memberId);
-		this.content = Objects.requireNonNull(content);
+		this.content = content;
 		this.rating = Objects.requireNonNull(rating);
 	}
 

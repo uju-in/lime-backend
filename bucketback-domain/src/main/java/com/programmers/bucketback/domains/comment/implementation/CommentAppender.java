@@ -16,7 +16,7 @@ public class CommentAppender {
 	private final CommentRepository commentRepository;
 	private final FeedReader feedReader;
 
-	public void append(
+	public Comment append(
 		final Long feedId,
 		final String content,
 		final Long memberId
@@ -24,6 +24,6 @@ public class CommentAppender {
 		final Feed feed = feedReader.read(feedId);
 		final Comment comment = new Comment(feed, memberId, content);
 
-		commentRepository.save(comment);
+		return commentRepository.save(comment);
 	}
 }

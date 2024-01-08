@@ -3,6 +3,10 @@ package com.programmers.bucketback.domains.item.model;
 import java.util.List;
 import java.util.stream.LongStream;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemCursorSummaryBuilder {
 
 	public static ItemCursorSummary build(final Long id) {

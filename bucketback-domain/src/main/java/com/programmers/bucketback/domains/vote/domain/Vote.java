@@ -31,27 +31,38 @@ import lombok.NoArgsConstructor;
 @Table(name = "votes")
 public class Vote extends BaseEntity {
 
-	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
-	private final List<Voter> voters = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
+
 	@Column(name = "member_id", nullable = false)
 	private Long memberId;
+
 	@Column(name = "item1_id", nullable = false)
 	private Long item1Id;
+
 	@Column(name = "item2_id", nullable = false)
 	private Long item2Id;
+
 	@Column(name = "hobby", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Hobby hobby;
+
 	@Embedded
 	private Content content;
+
 	@Column(name = "start_time", nullable = false)
 	private LocalDateTime startTime;
+
 	@Column(name = "end_time", nullable = false)
 	private LocalDateTime endTime;
+
+	@Column(name = "maximum_participants")
+	private Integer maximumParticipants;
+
+	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
+	private List<Voter> voters = new ArrayList<>();
 
 	@Builder
 	private Vote(
@@ -59,7 +70,8 @@ public class Vote extends BaseEntity {
 		final Long item1Id,
 		final Long item2Id,
 		final Hobby hobby,
-		final String content
+		final String content,
+		final Integer maximumParticipants
 	) {
 		this.memberId = Objects.requireNonNull(memberId);
 		this.item1Id = Objects.requireNonNull(item1Id);
@@ -68,6 +80,7 @@ public class Vote extends BaseEntity {
 		this.content = new Content(content);
 		this.startTime = LocalDateTime.now();
 		this.endTime = startTime.plusDays(1);
+		this.maximumParticipants = maximumParticipants;
 	}
 
 	public String getContent() {
@@ -91,5 +104,13 @@ public class Vote extends BaseEntity {
 	public boolean isVoting() {
 		final LocalDateTime now = LocalDateTime.now();
 		return this.endTime.isAfter(now);
+	}
+
+	public void close(final LocalDateTime now) {
+		this.endTime = now;
+	}
+
+	public boolean reachMaximumParticipants() {
+		return this.maximumParticipants != null && this.maximumParticipants == this.voters.size();
 	}
 }

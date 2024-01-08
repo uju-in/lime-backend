@@ -1,8 +1,10 @@
 package com.programmers.bucketback.domains.member.application;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.programmers.bucketback.domains.member.application.dto.response.MemberCheckJwtServiceResponse;
@@ -28,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
 	public static final String DIRECTORY = "bucketback-static";
-	public static final String BASE_EXTENSION = ".png";
+	public static final String RESIZED_DIRECTORY = "resized";
 
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
@@ -67,10 +69,21 @@ public class MemberService {
 		return memberSecurityManager.login(rawPassword, member);
 	}
 
-	public void deleteMember() {
-		final Member member = memberUtils.getCurrentMember();
+	public String extendLogin(
+		final String refreshToken,
+		final String authorizationHeader
+	) {
+		return memberSecurityManager.reissueAccessToken(refreshToken, authorizationHeader);
+	}
 
+	public void logout(final String refreshToken) {
+		memberSecurityManager.removeRefreshToken(refreshToken);
+	}
+
+	public void deleteMember(final String refreshToken) {
+		final Member member = memberUtils.getCurrentMember();
 		memberRemover.remove(member);
+		memberSecurityManager.removeRefreshToken(refreshToken);
 	}
 
 	public void updateProfile(
@@ -110,16 +123,23 @@ public class MemberService {
 
 	public void updateProfileImage(final MultipartFile multipartFile) throws IOException {
 		final Member member = memberUtils.getCurrentMember();
-		final String profileImage = member.getId() + BASE_EXTENSION;
 
-		s3Manager.deleteFile(profileImage, DIRECTORY);
+		if (member.getProfileImage() != null) {
+			final int lastSlashIndex = member.getProfileImage().lastIndexOf("/");
+			final String originProfileImage = member.getProfileImage().substring(lastSlashIndex + 1);
+			s3Manager.deleteFile(DIRECTORY, originProfileImage);
+			s3Manager.deleteFile(RESIZED_DIRECTORY, originProfileImage);
+		}
 
 		if (multipartFile == null) {
 			memberRemover.removeProfileImage(member);
 			return;
 		}
 
+		final String fileType = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+		final String profileImage = UUID.randomUUID() + "." + fileType;
+
 		s3Manager.uploadFile(multipartFile, DIRECTORY, profileImage);
-		memberModifier.modifyProfileImage(member, DIRECTORY, profileImage);
+		memberModifier.modifyProfileImage(member, RESIZED_DIRECTORY, profileImage);
 	}
 }

@@ -1,5 +1,7 @@
 package com.programmers.bucketback.domains.vote.implementation;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,10 @@ public class VoteManager {
 		final Voter voter = voterReader.read(vote, memberId, itemId);
 
 		voter.participate(itemId);
+
+		if (vote.reachMaximumParticipants()) {
+			vote.close(LocalDateTime.now());
+		}
 	}
 
 	@Transactional

@@ -1,9 +1,12 @@
 package com.programmers.bucketback.domains.comment.application;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.programmers.bucketback.common.cursor.CursorPageParameters;
 import com.programmers.bucketback.common.cursor.CursorSummary;
+import com.programmers.bucketback.domains.comment.application.dto.response.CommentGetCursorServiceResponse;
+import com.programmers.bucketback.domains.comment.application.event.CommentCreateEvent;
 import com.programmers.bucketback.domains.comment.domain.Comment;
 import com.programmers.bucketback.domains.comment.implementation.CommentAppender;
 import com.programmers.bucketback.domains.comment.implementation.CommentModifier;
@@ -12,6 +15,8 @@ import com.programmers.bucketback.domains.comment.implementation.CommentRemover;
 import com.programmers.bucketback.domains.comment.repository.CommentSummary;
 import com.programmers.bucketback.domains.feed.domain.Feed;
 import com.programmers.bucketback.domains.feed.implementation.FeedReader;
+import com.programmers.bucketback.domains.member.domain.Member;
+import com.programmers.bucketback.domains.sse.SsePayload;
 import com.programmers.bucketback.error.BusinessException;
 import com.programmers.bucketback.error.ErrorCode;
 import com.programmers.bucketback.global.level.PayPoint;
@@ -30,16 +35,21 @@ public class CommentService {
 	private final CommentReader commentReader;
 	private final FeedReader feedReader;
 	private final MemberUtils memberUtils;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	@PayPoint(5)
 	public Long createComment(
 		final Long feedId,
 		final String content
 	) {
-		final Long memberId = memberUtils.getCurrentMemberId();
-		commentAppender.append(feedId, content, memberId);
+		final Member commentWriter = memberUtils.getCurrentMember();
+		final Comment comment = commentAppender.append(feedId, content, commentWriter.getId());
 
-		return memberId;
+		SsePayload ssePayload = CommentCreateEvent.toSsePayload(commentWriter.getNickname(), comment);
+
+		applicationEventPublisher.publishEvent(ssePayload);
+
+		return commentWriter.getId();
 	}
 
 	public void modifyComment(
@@ -63,13 +73,20 @@ public class CommentService {
 		commentRemover.remove(commentId);
 	}
 
-	public CursorSummary<CommentSummary> getFeedComments(
+	public CommentGetCursorServiceResponse getFeedComments(
 		final Long feedId,
 		final CursorPageParameters parameters
 	) {
 		final Long memberId = memberUtils.getCurrentMemberId();
 
-		return commentReader.readByCursor(feedId, memberId, parameters);
+		int totalCommentCount = commentReader.countComments(feedId);
+		CursorSummary<CommentSummary> cursorSummary = commentReader.readByCursor(
+			feedId,
+			memberId,
+			parameters
+		);
+
+		return new CommentGetCursorServiceResponse(cursorSummary, totalCommentCount);
 	}
 
 	@PayPoint(20)

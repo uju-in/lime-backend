@@ -46,25 +46,17 @@ public class BucketInfo {
 	}
 
 	public void validateBucketName(final String name) {
-		if (name != null && (name.length() < MIN_BUCKET_NAME_LENGTH ||
-			name.length() > MAX_BUCKET_NAME_LENGTH)) {
+		if (
+			name == null ||
+				(name.length() < MIN_BUCKET_NAME_LENGTH || name.length() > MAX_BUCKET_NAME_LENGTH)
+		) {
 			throw new BusinessException(ErrorCode.BUCKET_INVALID_NAME);
 		}
 	}
 
 	public void validateBucketBudget(final Integer budget) {
-		if (budget != null && budget < MIN_BUDGET) {
+		if (budget == null || budget < MIN_BUDGET) {
 			throw new BusinessException(ErrorCode.BUCKET_INVALID_BUDGET);
 		}
 	}
-
-	public void validateBucketBudget(
-		final int totalPrice,
-		final int bucketBudget
-	) {
-		if (totalPrice > bucketBudget) {
-			throw new BusinessException(ErrorCode.BUCKET_EXCEED_BUDGET);
-		}
-	}
-
 }

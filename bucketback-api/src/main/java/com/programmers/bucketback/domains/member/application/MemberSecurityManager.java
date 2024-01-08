@@ -36,13 +36,25 @@ public class MemberSecurityManager {
 		final String nickname = member.getNickname();
 
 		securityManager.authenticate(memberId, rawPassword);
-		final String jwtToken = securityManager.generateToken(member);
+		final String accessToken = securityManager.generateAccessToken(memberId);
+		final String refreshToken = securityManager.generateRefreshToken(memberId);
 
-		return new MemberLoginServiceResponse(memberId, nickname, jwtToken);
+		return new MemberLoginServiceResponse(memberId, nickname, accessToken, refreshToken);
 	}
 
 	public String encodePassword(final String password) {
 		Member.validatePassword(password);
 		return passwordEncoder.encode(password);
+	}
+
+	public void removeRefreshToken(final String refreshToken) {
+		securityManager.removeRefreshToken(refreshToken);
+	}
+
+	public String reissueAccessToken(
+		final String refreshToken,
+		final String authorizationHeader
+	) {
+		return securityManager.reissueAccessToken(refreshToken, authorizationHeader);
 	}
 }

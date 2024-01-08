@@ -46,6 +46,7 @@ public class SecurityConfiguration {
 					.requestMatchers("/api/members/check/nickname").permitAll()
 					.requestMatchers("/api/members/check/email").permitAll()
 					.requestMatchers("/api/members/{nickname}").permitAll()
+					.requestMatchers("/api/members/refresh").permitAll()
 
 					.requestMatchers(HttpMethod.GET, "/api/votes").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/votes/{voteId}").permitAll()

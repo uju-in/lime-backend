@@ -61,7 +61,7 @@ public class BucketReader {
 	}
 
 	public List<Bucket> readByMemberId(final Long memberId) {
-		return bucketRepository.findByMemberId(memberId);
+		return bucketRepository.findAllByMemberId(memberId);
 	}
 
 	/** 버킷 아이템 정보 조회 */
@@ -175,5 +175,12 @@ public class BucketReader {
 	private int getPageSize(final CursorPageParameters parameters) {
 		int pageSize = parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
 		return pageSize;
+	}
+
+	public int countByMemberIdAndHobby(
+		final Long memberId,
+		final Hobby hobby
+	) {
+		return bucketRepository.countByHobbyAndMemberId(hobby, memberId);
 	}
 }

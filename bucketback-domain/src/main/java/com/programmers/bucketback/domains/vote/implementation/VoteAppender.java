@@ -16,7 +16,7 @@ public class VoteAppender {
 	private final VoteRepository voteRepository;
 
 	@Transactional
-	public Long append(
+	public Vote append(
 		final Long memberId,
 		final VoteCreateImplRequest request
 	) {
@@ -26,10 +26,9 @@ public class VoteAppender {
 			.item2Id(request.item2Id())
 			.hobby(request.hobby())
 			.content(request.content())
+			.maximumParticipants(request.maximumParticipants())
 			.build();
 
-		final Vote savedVote = voteRepository.save(vote);
-
-		return savedVote.getId();
+		return voteRepository.save(vote);
 	}
 }

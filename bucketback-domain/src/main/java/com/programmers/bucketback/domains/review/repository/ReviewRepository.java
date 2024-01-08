@@ -14,4 +14,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
 	Double getAvgRatingByReviewId(@Param("itemId") Long itemId);
 
 	List<Review> findByMemberId(Long memberId);
+
+	boolean existsReviewByMemberIdAndItemId(Long memberId, Long itemId);
 }

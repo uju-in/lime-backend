@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record ReviewCreateRequest(
 
@@ -16,6 +17,7 @@ public record ReviewCreateRequest(
 	Integer rating,
 
 	@Schema(description = "리뷰 내용", example = "제가 원하는 스타일이에요")
+	@Size(max = 1000, message = "리뷰 내용은 최대 1000자 입니다.")
 	String content
 ) {
 	public ReviewContent toReviewContent() {
