@@ -20,7 +20,7 @@ public class MemberAppender {
   		memberRepository.save(member);
 	}
 
-	public void append(
+	public Member append(
 		final String email,
 		final String encodedPassword,
 		final String nickname
@@ -32,6 +32,6 @@ public class MemberAppender {
 			.role(Role.USER)
 			.build();
 
-		memberRepository.save(member);
+		return memberRepository.save(member);
 	}
 }
