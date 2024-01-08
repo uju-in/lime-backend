@@ -31,7 +31,7 @@ public class SecurityManager {
 	}
 
 	public String generateAccessToken(final Long memberId) {
-		return jwtService.generateAccessToken(memberId.toString());
+		return jwtService.generateAccessToken(String.valueOf(memberId));
 	}
 
 	public String generateRefreshToken(final Long memberId) {

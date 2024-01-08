@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class Content {
 
 	public static final int MAX_CONTENT_LENGTH = 300;
+	public static final int MIN_CONTENT_LENGTH = 1;
 
 	@Column(name = "content", length = MAX_CONTENT_LENGTH, nullable = false)
 	private String content;
@@ -25,7 +26,10 @@ public class Content {
 	}
 
 	private void validate(final String content) {
-		if (content == null || content.length() > MAX_CONTENT_LENGTH) {
+		if (content == null ||
+			content.length() > MAX_CONTENT_LENGTH ||
+			content.length() < MIN_CONTENT_LENGTH
+		) {
 			throw new BusinessException(ErrorCode.COMMENT_CONTENT_BAD_LENGTH);
 		}
 	}
