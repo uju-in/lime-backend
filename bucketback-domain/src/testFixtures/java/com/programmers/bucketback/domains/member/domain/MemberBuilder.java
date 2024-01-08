@@ -23,29 +23,6 @@ public class MemberBuilder {
 		return member;
 	}
 
-	public static Member build() {
-		Member member = Member.builder()
-			.nickname("nickname")
-			.email("email@naver.com")
-			.password("password")
-			.role(Role.USER)
-			.build();
-
-		setMemberId(member);
-
-		return member;
-	}
-
-	private static void setMemberId(
-		final Member member
-	) {
-		ReflectionTestUtils.setField(
-			member,
-			"id",
-			1L
-		);
-	}
-
 	private static void setMemberId(
 		final Member member,
 		final Long id
