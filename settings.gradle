@@ -1,6 +1,6 @@
-rootProject.name = 'bucket-back'
+rootProject.name = 'lime'
 
-include 'bucketback-domain'
-include 'bucketback-common'
-include 'bucketback-infrastructure'
-include 'bucketback-api'
+include 'lime-domain'
+include 'lime-common'
+include 'lime-infrastructure'
+include 'lime-api'
