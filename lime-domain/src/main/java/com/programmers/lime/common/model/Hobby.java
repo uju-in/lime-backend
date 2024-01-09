@@ -17,13 +17,20 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Hobby {
-
+	// Sports
 	BASKETBALL("농구"),
+	BADMINTON("배드민턴"),
+	CLIMBING("클라이밍"),
+	WORK_OUT("헬스"),
 	BASEBALL("야구"),
-	SOCCER("축구"),
-	CYCLE("사이클"),
-	KEYBOARD("키보드"),
-	SWIMMING("수영");
+
+	// Lifestyle
+	COOKING("요리"),
+	GAME("게임"),
+	DESKTERIOR("데스크테리어"),
+	PAINTING("그림"),
+	MUSIC("음악"),
+	;
 
 	private static final Map<String, Hobby> HOBBY_NAME_MAP;
 
