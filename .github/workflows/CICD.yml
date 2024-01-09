@@ -22,16 +22,16 @@ jobs:
     
     - name: Set YML
       run: |
-          mkdir -p bucketback-api/src/main/resources
-          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > bucketback-api/src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION_API_YML }}" | base64 --decode > bucketback-api/src/main/resources/application-api.yml
-          find bucketback-api/src
-          mkdir -p bucketback-domain/src/main/resources
-          echo "${{ secrets.APPLICATION_DOMAIN_YML }}" | base64 --decode > bucketback-domain/src/main/resources/application-domain.yml
-          find bucketback-domain/src
-          mkdir -p bucketback-infrastructure/src/main/resources
-          echo "${{ secrets.APPLICATION_INFRA_YML }}" | base64 --decode > bucketback-infrastructure/src/main/resources/application-infra.yml
-          find bucketback-infrastructure/src
+          mkdir -p lime-api/src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > lime-api/src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_API_YML }}" | base64 --decode > lime-api/src/main/resources/application-api.yml
+          find lime-api/src
+          mkdir -p lime-domain/src/main/resources
+          echo "${{ secrets.APPLICATION_DOMAIN_YML }}" | base64 --decode > lime-domain/src/main/resources/application-domain.yml
+          find lime-domain/src
+          mkdir -p lime-infrastructure/src/main/resources
+          echo "${{ secrets.APPLICATION_INFRA_YML }}" | base64 --decode > lime-infrastructure/src/main/resources/application-infra.yml
+          find lime-infrastructure/src
           
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
