@@ -30,7 +30,7 @@ public record VoteCreateRequest(
 ) {
 	public VoteCreateServiceRequest toCreateVoteServiceRequest() {
 		return VoteCreateServiceRequest.builder()
-			.hobby(Hobby.fromHobbyValue(hobby))
+			.hobby(Hobby.fromName(hobby))
 			.content(content)
 			.item1Id(item1Id)
 			.item2Id(item2Id)

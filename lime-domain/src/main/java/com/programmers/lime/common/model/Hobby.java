@@ -1,6 +1,7 @@
 package com.programmers.lime.common.model;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -17,47 +18,38 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Hobby {
 
-	BASKETBALL("농구", "basketball"),
-	BASEBALL("야구", "baseball"),
-	SOCCER("축구", "soccer"),
-	CYCLE("사이클", "cycle"),
-	KEYBOARD("키보드", "keyboard"),
-	SWIMMING("수영", "swimming");
+	BASKETBALL("농구"),
+	BASEBALL("야구"),
+	SOCCER("축구"),
+	CYCLE("사이클"),
+	KEYBOARD("키보드"),
+	SWIMMING("수영");
 
 	private static final Map<String, Hobby> HOBBY_NAME_MAP;
-
-	private static final Map<String, Hobby> HOBBY_VALUE_MAP;
 
 	static {
 		HOBBY_NAME_MAP = Collections.unmodifiableMap(Stream.of(values())
 			.collect(Collectors.toMap(Hobby::getName, Function.identity())));
-
-		HOBBY_VALUE_MAP = Collections.unmodifiableMap(Stream.of(values())
-			.collect(Collectors.toMap(Hobby::getHobbyValue, Function.identity())));
 	}
 
-	private final String hobbyValue;
 	private final String name;
 
 	public static Hobby fromName(final String name) {
-
 		if (Objects.isNull(name)) {
 			return null;
 		}
 
-		String nameLowerCase = name.toLowerCase();
-		if (HOBBY_NAME_MAP.containsKey(nameLowerCase)) {
-			return HOBBY_NAME_MAP.get(nameLowerCase);
+		if (HOBBY_NAME_MAP.containsKey(name)) {
+			return HOBBY_NAME_MAP.get(name);
 		}
 
 		throw new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER);
 	}
 
-	public static Hobby fromHobbyValue(final String hobbyValue) {
-		if (HOBBY_VALUE_MAP.containsKey(hobbyValue)) {
-			return HOBBY_VALUE_MAP.get(hobbyValue);
-		}
-
-		throw new BusinessException(ErrorCode.HOBBY_BAD_PARAMETER);
+	public static List<String> getHobbies() {
+		return HOBBY_NAME_MAP.values()
+			.stream()
+			.map(Hobby::getName)
+			.toList();
 	}
 }

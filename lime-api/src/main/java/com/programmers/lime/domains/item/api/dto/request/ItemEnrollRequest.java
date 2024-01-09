@@ -17,7 +17,7 @@ public record ItemEnrollRequest(
 ) {
 
 	public ItemEnrollServiceRequest toEnrollItemServiceRequest() {
-		Hobby hobby = Hobby.fromHobbyValue(hobbyValue);
+		Hobby hobby = Hobby.fromName(hobbyValue);
 
 		return new ItemEnrollServiceRequest(hobby, itemUrl);
 	}
