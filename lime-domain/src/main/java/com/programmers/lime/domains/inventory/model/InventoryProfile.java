@@ -15,7 +15,7 @@ public record InventoryProfile(
 	) {
 		return new InventoryProfile(
 			inventory.getId(),
-			inventory.getHobby().getHobbyValue(),
+			inventory.getHobby().getName(),
 			itemImages
 		);
 	}

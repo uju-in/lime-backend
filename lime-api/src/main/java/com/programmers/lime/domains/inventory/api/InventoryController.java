@@ -39,7 +39,7 @@ public class InventoryController {
 	@PostMapping("/inventories")
 	public ResponseEntity<InventoryCreateResponse> createInventory(
 		@RequestBody @Valid final InventoryCreateRequest request) {
-		Hobby hobby = Hobby.fromHobbyValue(request.hobbyValue());
+		Hobby hobby = Hobby.fromName(request.hobbyValue());
 		Long inventoryId = inventoryService.createInventory(hobby, request.toRegistry());
 
 		return ResponseEntity.ok(new InventoryCreateResponse(inventoryId));
