@@ -98,7 +98,7 @@ public class VoteController {
 		@ModelAttribute @Valid final CursorRequest request
 	) {
 		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
-			Hobby.fromName(hobby),
+			Hobby.from(hobby),
 			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
 			request.toParameters()
@@ -114,7 +114,8 @@ public class VoteController {
 		@RequestParam final String keyword,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		final VoteGetByKeywordServiceResponse serviceResponse = voteService.getVotesByKeyword(keyword, request.toParameters());
+		final VoteGetByKeywordServiceResponse serviceResponse = voteService.getVotesByKeyword(keyword,
+			request.toParameters());
 		final VoteGetByKeywordResponse response = VoteGetByKeywordResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);

@@ -91,7 +91,7 @@ public class FeedController {
 		@RequestParam(required = false) final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		Hobby hobby = Hobby.fromName(hobbyName);
+		Hobby hobby = Hobby.from(hobbyName);
 
 		CursorSummary<FeedCursorSummaryLike> cursorSummary = feedService.getFeedByCursor(
 			hobby,
