@@ -41,7 +41,7 @@ public enum Hobby {
 
 	private final String name;
 
-	public static Hobby fromName(final String name) {
+	public static Hobby from(final String name) {
 		if (Objects.isNull(name)) {
 			return null;
 		}
