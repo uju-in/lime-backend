@@ -23,7 +23,7 @@ public class HobbyController {
 	@Operation(summary = "취미 목록 조회", description = "취미 목록 조회 결과를 반환 합니다.")
 	@GetMapping
 	public ResponseEntity<HobbyGetResponse> getHobby() {
-		HobbyGetResponse response = hobbyService.getHobbies();
+		final HobbyGetResponse response = hobbyService.getHobbies();
 
 		return ResponseEntity.ok(response);
 	}

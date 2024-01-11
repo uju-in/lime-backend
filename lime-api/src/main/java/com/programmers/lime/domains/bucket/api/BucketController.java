@@ -65,7 +65,7 @@ public class BucketController {
 		BucketGetMemberItemResponse response = BucketGetMemberItemResponse.from(
 			bucketService.getMemberItemsForModify(
 				bucketId,
-				Hobby.fromName(hobbyName),
+				Hobby.from(hobbyName),
 				cursorRequest.toParameters()
 			)
 		);
@@ -102,7 +102,7 @@ public class BucketController {
 		BucketGetByCursorResponse response = BucketGetByCursorResponse.from(
 			bucketService.getBucketsByCursor(
 				nickname,
-				Hobby.fromName(hobby),
+				Hobby.from(hobby),
 				request.toParameters()
 			));
 

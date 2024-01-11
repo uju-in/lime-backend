@@ -33,7 +33,7 @@ public record BucketUpdateRequest(
 ) {
 
 	public BucketInfo toInfo() {
-		Hobby hobby = Hobby.fromHobbyValue(hobbyValue);
+		Hobby hobby = Hobby.from(hobbyValue);
 
 		return new BucketInfo(hobby, name, budget);
 	}

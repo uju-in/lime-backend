@@ -26,7 +26,7 @@ public record FeedInfo(
 	) {
 		return FeedInfo.builder()
 			.id(feed.getId())
-			.hobby(feed.getHobby().getHobbyValue())
+			.hobby(feed.getHobby().getName())
 			.content(feed.getFeedContent())
 			.bucketName(feed.getName())
 			.bucketBudget(feed.getBudget())

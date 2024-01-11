@@ -15,7 +15,7 @@ public record BucketProfile(
 	) {
 		return new BucketProfile(
 			bucket.getId(),
-			bucket.getHobby().getHobbyValue(),
+			bucket.getHobby().getName(),
 			itemImages);
 	}
 }

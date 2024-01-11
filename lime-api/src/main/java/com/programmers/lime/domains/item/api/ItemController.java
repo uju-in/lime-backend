@@ -113,7 +113,7 @@ public class ItemController {
 		@RequestParam(required = false) final String hobbyName,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		Hobby hobby = Hobby.fromName(hobbyName);
+		Hobby hobby = Hobby.from(hobbyName);
 		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
 			hobby,
 			request.toParameters()
