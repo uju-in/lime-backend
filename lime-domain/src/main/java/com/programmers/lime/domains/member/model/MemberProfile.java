@@ -10,7 +10,11 @@ public record MemberProfile(
 	String nickname,
 	String profileImage,
 	int level,
-	String introduction
+	String hobby,
+	int career,
+	String favorability,
+	String content,
+	String mbti
 ) {
 	public static MemberProfile from(final Member member) {
 		return MemberProfile.builder()
@@ -18,7 +22,11 @@ public record MemberProfile(
 			.nickname(member.getNickname())
 			.profileImage(member.getProfileImage())
 			.level(member.getLevel())
-			.introduction(member.getIntroduction())
+			.hobby(member.getHobby())
+			.career(member.getCareer())
+			.favorability(member.getFavorability())
+			.content(member.getContent())
+			.mbti(member.getMbti())
 			.build();
 	}
 }

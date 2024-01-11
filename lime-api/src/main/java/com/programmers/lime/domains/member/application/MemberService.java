@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.programmers.lime.domains.member.application.dto.response.MemberCheckJwtServiceResponse;
 import com.programmers.lime.domains.member.application.dto.response.MemberLoginServiceResponse;
 import com.programmers.lime.domains.member.domain.Member;
+import com.programmers.lime.domains.member.domain.vo.Introduction;
 import com.programmers.lime.domains.member.domain.vo.LoginInfo;
 import com.programmers.lime.domains.member.implementation.MemberAppender;
 import com.programmers.lime.domains.member.implementation.MemberChecker;
@@ -88,7 +89,7 @@ public class MemberService {
 
 	public void updateProfile(
 		final String nickname,
-		final String introduction
+		final Introduction introduction
 	) {
 		final Member member = memberUtils.getCurrentMember();
 

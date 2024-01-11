@@ -81,12 +81,24 @@ public class Member extends BaseEntity {
 		return nickname.getNickname();
 	}
 
-	public String getIntroduction() {
-		if (introduction == null) {
-			return null;
-		}
+	public String getHobby() {
+		return introduction.getHobby().getName();
+	}
 
-		return introduction.getIntroduction();
+	public int getCareer() {
+		return introduction.getCareer();
+	}
+
+	public String getFavorability() {
+		return introduction.getFavorability().getName();
+	}
+
+	public String getContent() {
+		return introduction.getContent();
+	}
+
+	public String getMbti() {
+		return introduction.getMbti().name();
 	}
 
 	public String getProfileImage() {
@@ -105,10 +117,10 @@ public class Member extends BaseEntity {
 
 	public void updateProfile(
 		final String nickname,
-		final String introduction
+		final Introduction introduction
 	) {
 		this.nickname = new Nickname(nickname);
-		this.introduction = new Introduction(introduction);
+		this.introduction = introduction;
 	}
 
 	public void updatePassword(final String password) {
