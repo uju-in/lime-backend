@@ -3,6 +3,7 @@ package com.programmers.lime.domains.member.implementation;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.YearMonth;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +39,7 @@ class MemberModifierTest {
 		final Member member = MemberBuilder.build(1L);
 		final Introduction introduction = Introduction.builder()
 			.hobby("basketball")
-			.career(2)
+			.startDate(YearMonth.of(2023, 11))
 			.favorability("관심")
 			.content("안녕하세요!")
 			.mbti("ISFJ")
