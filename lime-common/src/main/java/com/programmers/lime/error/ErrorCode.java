@@ -40,8 +40,11 @@ public enum ErrorCode {
 	MEMBER_NICKNAME_BAD_PATTERN("MEMBER_009", "닉네임은 영어 대소문자, 숫자 그리고 언더스코어만 허용합니다."),
 	MEMBER_PASSWORD_BAD_LENGTH("MEMBER_010", "비밀번호는 6글자에서 15글자 사이여야 합니다."),
 	MEMBER_PASSWORD_BAD_PATTERN("MEMBER_011", "비밀번호는 영어, 숫자, 특수문자가 최소 1개씩 포함되야합니다."),
-	MEMBER_INTRODUCTION_BAD_LENGTH("MEMBER_012", "자기소개는 최대 300자 입니다."),
+	MEMBER_INTRODUCTION_CONTENT_BAD_LENGTH("MEMBER_012", "자기소개는 최대 300자 입니다."),
 	MEMBER_EMAIL_BAD_PATTERN("MEMBER_013", "이메일 형식이 아닙니다."),
+	MEMBER_INTRODUCTION_MBTI_BAD_REQUEST("MEMBER_014", "잘못된 MBTI 값입니다."),
+	MEMBER_INTRODUCTION_FAVORABILITY_BAD_REQUEST("MEMBER_015", "잘못된 선호도 값입니다."),
+	MEMBER_INTRODUCTION_CAREER_BAD_REQUEST("MEMBER_016", "경력은 최소 0개월 이상이어야 합니다."),
 
 	// Item
 	ITEM_MARKET_NOT_FOUND("ITEM_001", "지원하지 않는 아이템 URL 입니다."),

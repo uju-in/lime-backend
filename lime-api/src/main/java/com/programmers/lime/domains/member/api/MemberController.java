@@ -119,10 +119,10 @@ public class MemberController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "프로필 수정", description = "MemberUpdateProfileRequest 을 이용하여 프로필을 수정합니다.")
+	@Operation(summary = "프로필 업데이트", description = "닉네임, 대표 취미, 취미 경력, 취미 선호도, 자기소개, MBTI 를 받아 프로필을 업데이트합니다.")
 	@PutMapping("/profile")
 	public ResponseEntity<Void> updateProfile(@Valid @RequestBody final MemberUpdateProfileRequest request) {
-		memberService.updateProfile(request.nickname(), request.introduction());
+		memberService.updateProfile(request.nickname(), request.toIntroduction());
 
 		return ResponseEntity.ok().build();
 	}

@@ -1,11 +1,18 @@
 package com.programmers.lime.domains.member.domain.vo;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+
+import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,19 +21,44 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Introduction {
 
-	public static final int MAX_INTRODUCTION_LENGTH = 300;
+	public static final int MAX_CONTENT_LENGTH = 300;
 
-	@Column(name = "introduction", length = MAX_INTRODUCTION_LENGTH)
-	private String introduction;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "hobby")
+	private Hobby hobby;
 
-	public Introduction(final String introduction) {
-		validate(introduction);
-		this.introduction = introduction;
+	@Column(name = "start_date")
+	private LocalDate startDate;
+
+	@Column(name = "favorability")
+	private Favorability favorability;
+
+	@Column(name = "content", length = MAX_CONTENT_LENGTH)
+	private String content;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "mbti")
+	private Mbti mbti;
+
+	@Builder
+	private Introduction(
+		final String hobby,
+		final YearMonth startDate,
+		final String favorability,
+		final String content,
+		final String mbti
+	) {
+		validate(content);
+		this.hobby = Hobby.from(hobby);
+		this.startDate = startDate.atDay(1);
+		this.favorability = Favorability.from(favorability);
+		this.content = content;
+		this.mbti = Mbti.from(mbti);
 	}
 
-	private void validate(final String introduction) {
-		if (introduction.length() > MAX_INTRODUCTION_LENGTH) {
-			throw new BusinessException(ErrorCode.MEMBER_INTRODUCTION_BAD_LENGTH);
+	private void validate(final String content) {
+		if (content.length() > MAX_CONTENT_LENGTH) {
+			throw new BusinessException(ErrorCode.MEMBER_INTRODUCTION_CONTENT_BAD_LENGTH);
 		}
 	}
 }
