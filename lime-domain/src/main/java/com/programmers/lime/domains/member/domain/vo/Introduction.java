@@ -24,20 +24,20 @@ public class Introduction {
 	public static final int MAX_CONTENT_LENGTH = 300;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "hobby", nullable = false)
+	@Column(name = "hobby")
 	private Hobby hobby;
 
-	@Column(name = "start_date", nullable = false)
+	@Column(name = "start_date")
 	private LocalDate startDate;
 
-	@Column(name = "favorability", nullable = false)
+	@Column(name = "favorability")
 	private Favorability favorability;
 
-	@Column(name = "content", nullable = false, length = MAX_CONTENT_LENGTH)
+	@Column(name = "content", length = MAX_CONTENT_LENGTH)
 	private String content;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "mbti", nullable = false)
+	@Column(name = "mbti")
 	private Mbti mbti;
 
 	@Builder
