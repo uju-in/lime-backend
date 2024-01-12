@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
-	public static final String DIRECTORY = "bucketback-static";
+	public static final String DIRECTORY = "lime-static";
 	public static final String RESIZED_DIRECTORY = "resized";
 
 	private final MemberAppender memberAppender;
