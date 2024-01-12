@@ -49,7 +49,7 @@ public class Introduction {
 		final String mbti
 	) {
 		validate(content);
-		this.hobby = Hobby.fromName(hobby);
+		this.hobby = Hobby.from(hobby);
 		this.startDate = startDate.atDay(1);
 		this.favorability = Favorability.from(favorability);
 		this.content = content;
