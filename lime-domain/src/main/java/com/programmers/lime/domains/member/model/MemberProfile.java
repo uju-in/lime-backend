@@ -11,7 +11,7 @@ public record MemberProfile(
 	String profileImage,
 	int level,
 	String hobby,
-	int career,
+	long career,
 	String favorability,
 	String content,
 	String mbti

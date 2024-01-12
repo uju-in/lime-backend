@@ -1,5 +1,8 @@
 package com.programmers.lime.domains.member.domain.vo;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
@@ -19,14 +22,13 @@ import lombok.NoArgsConstructor;
 public class Introduction {
 
 	public static final int MAX_CONTENT_LENGTH = 300;
-	public static final int MIN_CAREER = 0;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "hobby", nullable = false)
 	private Hobby hobby;
 
-	@Column(name = "career", nullable = false)
-	private int career;
+	@Column(name = "start_date", nullable = false)
+	private LocalDate startDate;
 
 	@Column(name = "favorability", nullable = false)
 	private Favorability favorability;
@@ -41,36 +43,22 @@ public class Introduction {
 	@Builder
 	private Introduction(
 		final String hobby,
-		final int career,
+		final YearMonth startDate,
 		final String favorability,
 		final String content,
 		final String mbti
 	) {
-		validate(content, career);
+		validate(content);
 		this.hobby = Hobby.fromName(hobby);
-		this.career = career;
+		this.startDate = startDate.atDay(1);
 		this.favorability = Favorability.from(favorability);
 		this.content = content;
 		this.mbti = Mbti.from(mbti);
 	}
 
-	private void validate(
-		final String content,
-		final int career
-	) {
-		validateContent(content);
-		validateCareer(career);
-	}
-
-	private void validateContent(final String content) {
+	private void validate(final String content) {
 		if (content.length() > MAX_CONTENT_LENGTH) {
 			throw new BusinessException(ErrorCode.MEMBER_INTRODUCTION_CONTENT_BAD_LENGTH);
-		}
-	}
-
-	private void validateCareer(final int career) {
-		if (career < MIN_CAREER) {
-			throw new BusinessException(ErrorCode.MEMBER_INTRODUCTION_CAREER_BAD_REQUEST);
 		}
 	}
 }

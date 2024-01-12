@@ -1,5 +1,8 @@
 package com.programmers.lime.domains.member.domain;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import com.programmers.lime.domains.BaseEntity;
 import com.programmers.lime.domains.member.domain.vo.Introduction;
 import com.programmers.lime.domains.member.domain.vo.LoginInfo;
@@ -85,8 +88,11 @@ public class Member extends BaseEntity {
 		return introduction.getHobby().getName();
 	}
 
-	public int getCareer() {
-		return introduction.getCareer();
+	public long getCareer() {
+		final LocalDate startDate = introduction.getStartDate();
+		final LocalDate now = LocalDate.now();
+
+		return ChronoUnit.MONTHS.between(startDate, now);
 	}
 
 	public String getFavorability() {

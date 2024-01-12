@@ -1,5 +1,8 @@
 package com.programmers.lime.domains.member.api.dto.request;
 
+import java.time.YearMonth;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.programmers.lime.domains.member.domain.vo.Introduction;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,9 +17,10 @@ public record MemberUpdateProfileRequest(
 	@NotNull(message = "대표 취미는 필수 값입니다.")
 	String hobby,
 
-	@Schema(description = "취미 경력", example = "2(개월)")
-	@NotNull(message = "취미 경력은 필수 값입니다.")
-	int career,
+	@Schema(description = "취미 시작일", example = "2023.02")
+	@NotNull(message = "취미 시작일은 필수 값입니다.")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM", timezone = "Asia/Seoul")
+	YearMonth startDate,
 
 	@Schema(description = "취미 호감도", example = "관심")
 	@NotNull(message = "취미 호감도는 필수 값입니다.")
@@ -33,7 +37,7 @@ public record MemberUpdateProfileRequest(
 	public Introduction toIntroduction() {
 		return Introduction.builder()
 			.hobby(hobby)
-			.career(career)
+			.startDate(startDate)
 			.favorability(favorability)
 			.content(content)
 			.mbti(mbti)
