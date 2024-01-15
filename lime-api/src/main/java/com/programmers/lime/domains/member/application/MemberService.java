@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.programmers.lime.domains.member.application.dto.response.MemberCheckJwtServiceResponse;
 import com.programmers.lime.domains.member.domain.Member;
+import com.programmers.lime.domains.member.domain.vo.Introduction;
 import com.programmers.lime.domains.member.implementation.MemberChecker;
 import com.programmers.lime.domains.member.implementation.MemberModifier;
 import com.programmers.lime.domains.member.implementation.MemberReader;
@@ -25,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
-	public static final String DIRECTORY = "bucketback-static";
+	public static final String DIRECTORY = "lime-static";
 	public static final String RESIZED_DIRECTORY = "resized";
 
 	private final MemberReader memberReader;
@@ -59,7 +60,7 @@ public class MemberService {
 
 	public void updateProfile(
 		final String nickname,
-		final String introduction
+		final Introduction introduction
 	) {
 		final Member member = memberUtils.getCurrentMember();
 

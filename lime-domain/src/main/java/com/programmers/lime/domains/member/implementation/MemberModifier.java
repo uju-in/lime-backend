@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.lime.domains.member.domain.Member;
+import com.programmers.lime.domains.member.domain.vo.Introduction;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +20,7 @@ public class MemberModifier {
 	public void modifyProfile(
 		final Member member,
 		final String nickname,
-		final String introduction
+		final Introduction introduction
 	) {
 		if (!nickname.equals(member.getNickname())) {
 			memberChecker.checkNicknameDuplication(nickname);

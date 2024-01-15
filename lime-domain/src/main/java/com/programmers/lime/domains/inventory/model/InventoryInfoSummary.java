@@ -20,7 +20,7 @@ public class InventoryInfoSummary {
 		int inventoryTotalPrice,
 		List<ItemImage> itemImages
 	) {
-		this.hobby = hobby.getHobbyValue();
+		this.hobby = hobby.getName();
 		this.inventoryId = inventoryId;
 		this.inventoryTotalPrice = inventoryTotalPrice;
 		this.itemImages = itemImages;

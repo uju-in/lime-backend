@@ -1,5 +1,8 @@
 package com.programmers.lime.domains.member.domain;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import com.programmers.lime.domains.BaseEntity;
 import com.programmers.lime.domains.member.domain.vo.Introduction;
 import com.programmers.lime.domains.member.domain.vo.MemberStatus;
@@ -73,12 +76,27 @@ public class Member extends BaseEntity {
 		return nickname.getNickname();
 	}
 
-	public String getIntroduction() {
-		if (introduction == null) {
-			return null;
-		}
+	public String getHobby() {
+		return introduction.getHobby().getName();
+	}
 
-		return introduction.getIntroduction();
+	public long getCareer() {
+		final LocalDate startDate = introduction.getStartDate();
+		final LocalDate now = LocalDate.now();
+
+		return ChronoUnit.MONTHS.between(startDate, now);
+	}
+
+	public String getFavorability() {
+		return introduction.getFavorability().getName();
+	}
+
+	public String getContent() {
+		return introduction.getContent();
+	}
+
+	public String getMbti() {
+		return introduction.getMbti().name();
 	}
 
 	public String getProfileImage() {
@@ -96,10 +114,10 @@ public class Member extends BaseEntity {
 
 	public void updateProfile(
 		final String nickname,
-		final String introduction
+		final Introduction introduction
 	) {
 		this.nickname = new Nickname(nickname);
-		this.introduction = new Introduction(introduction);
+		this.introduction = introduction;
 	}
 
 	public int getLevel() {

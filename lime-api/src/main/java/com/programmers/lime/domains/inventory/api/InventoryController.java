@@ -39,7 +39,7 @@ public class InventoryController {
 	@PostMapping("/inventories")
 	public ResponseEntity<InventoryCreateResponse> createInventory(
 		@RequestBody @Valid final InventoryCreateRequest request) {
-		Hobby hobby = Hobby.fromHobbyValue(request.hobbyValue());
+		Hobby hobby = Hobby.from(request.hobbyValue());
 		Long inventoryId = inventoryService.createInventory(hobby, request.toRegistry());
 
 		return ResponseEntity.ok(new InventoryCreateResponse(inventoryId));
@@ -90,7 +90,7 @@ public class InventoryController {
 		InventoryGetReviewedItemResponse response = InventoryGetReviewedItemResponse.from(
 			inventoryService.getReviewedItemsForModify(
 				inventoryId,
-				Hobby.fromName(hobbyName),
+				Hobby.from(hobbyName),
 				cursorRequest.toParameters()
 			)
 		);

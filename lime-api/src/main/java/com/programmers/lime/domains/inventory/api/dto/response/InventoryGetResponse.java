@@ -17,7 +17,7 @@ public record InventoryGetResponse(
 	public static InventoryGetResponse from(final InventoryGetServiceResponse serviceResponse) {
 		return InventoryGetResponse.builder()
 			.memberId(serviceResponse.memberId())
-			.hobby(serviceResponse.hobby().getHobbyValue())
+			.hobby(serviceResponse.hobby().getName())
 			.itemCount(serviceResponse.itemCount())
 			.inventoryItemInfos(serviceResponse.inventoryItemInfos())
 			.build();
