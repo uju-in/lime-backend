@@ -107,6 +107,24 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "나의 아이템 폴더 조회", description = "나의 아이템 폴더 목록을 조회 합니다.")
+	@GetMapping("/myitems/folders")
+	public ResponseEntity<MemberItemFolderGetByCursorResponse> getMemberItemFoldersByCursor(
+		@RequestParam(required = false) final String hobbyName,
+		@ModelAttribute("request") @Valid final CursorRequest request
+	) {
+		Hobby hobby = Hobby.from(hobbyName);
+		MemberItemFolderGetServiceResponse memberItemFolderByCursor = itemService.getMemberItemFolderByCursor(
+			hobby,
+			request.toParameters()
+		);
+
+		MemberItemFolderGetByCursorResponse response = MemberItemFolderGetByCursorResponse
+			.from(memberItemFolderByCursor);
+
+		return ResponseEntity.ok(response);
+	}
+
 	@Operation(summary = "나의 아이템 목록 조회", description = "나의 아이템 목록을 조회 합니다.")
 	@GetMapping("/myitems")
 	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(

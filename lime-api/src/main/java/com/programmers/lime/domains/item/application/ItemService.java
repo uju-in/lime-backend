@@ -13,6 +13,7 @@ import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
+import com.programmers.lime.domains.item.application.dto.MemberItemFolderGetServiceResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
@@ -21,10 +22,12 @@ import com.programmers.lime.domains.item.implementation.ItemFinder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemChecker;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderReader;
 import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
+import com.programmers.lime.domains.item.model.MemberItemFolderCursorSummary;
 import com.programmers.lime.domains.item.model.MemberItemSummary;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
 import com.programmers.lime.domains.review.implementation.ReviewStatistics;
@@ -59,6 +62,8 @@ public class ItemService {
 	private final ItemRanking itemRanking;
 
 	private final ReviewReader reviewReader;
+
+	private final MemberItemFolderReader memberItemFolderReader;
 
 	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
 		List<String> items = itemIdRegistry.itemIds().stream()
@@ -144,6 +149,23 @@ public class ItemService {
 
 		return new MemberItemGetServiceResponse(cursorSummary, totalMemberItemCount);
 	}
+
+	public MemberItemFolderGetServiceResponse getMemberItemFolderByCursor(
+			final Hobby hobby,
+			final CursorPageParameters parameters
+	) {
+		Long memberId = memberUtils.getCurrentMemberId();
+		int totalMemberItemFolderCount = memberItemFolderReader.countByMemberIdAndHobby(memberId, hobby);
+
+		CursorSummary<MemberItemFolderCursorSummary> cursorSummary = memberItemFolderReader.readMemberItemFolderByCursor(
+			hobby,
+			memberId,
+			parameters
+		);
+
+		return new MemberItemFolderGetServiceResponse(cursorSummary, totalMemberItemFolderCount);
+	}
+
 
 	public List<ItemRankingServiceResponse> getRanking() {
 		return itemRanking.viewRanking();
