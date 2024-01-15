@@ -2,10 +2,10 @@ package com.programmers.lime.domains.member.domain;
 
 import com.programmers.lime.domains.BaseEntity;
 import com.programmers.lime.domains.member.domain.vo.Introduction;
-import com.programmers.lime.domains.member.domain.vo.LoginInfo;
 import com.programmers.lime.domains.member.domain.vo.MemberStatus;
 import com.programmers.lime.domains.member.domain.vo.Nickname;
 import com.programmers.lime.domains.member.domain.vo.Role;
+import com.programmers.lime.domains.member.domain.vo.SocialInfo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -17,7 +17,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,7 +32,7 @@ public class Member extends BaseEntity {
 	private Long id;
 
 	@Embedded
-	private LoginInfo loginInfo;
+	private SocialInfo socialInfo;
 
 	@Embedded
 	private Nickname nickname;
@@ -41,40 +40,33 @@ public class Member extends BaseEntity {
 	@Embedded
 	private Introduction introduction;
 
-	@Column(name = "profile_image")
-	private String profileImage;
-
 	@Column(name = "level_point", nullable = false)
 	private Integer levelPoint;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "role", nullable = false)
-	private Role role;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
 	private MemberStatus status;
 
-	@Builder
-	private Member(
-		final String email,
-		final String password,
-		final String nickname,
-		final Role role
+	public Member(
+		final SocialInfo socialInfo,
+		final String nickname
 	) {
-		this.loginInfo = new LoginInfo(email, password);
+		this.socialInfo = socialInfo;
 		this.nickname = new Nickname(nickname);
 		this.levelPoint = 0;
-		this.role = role;
 		this.status = MemberStatus.ACTIVE;
 	}
 
-	public static void validatePassword(final String password) {
-		LoginInfo.validatePassword(password);
+	public String getEmail() {
+		return socialInfo.getEmail();
 	}
 
-	public String getPassword() {
-		return loginInfo.getPassword();
+	public String getSocialId() {
+		return socialInfo.getSocialId();
+	}
+
+	public Role getRole() {
+		return socialInfo.getRole();
 	}
 
 	public String getNickname() {
@@ -90,12 +82,11 @@ public class Member extends BaseEntity {
 	}
 
 	public String getProfileImage() {
-		return this.profileImage;
+		return this.socialInfo.getProfileImage();
 	}
 
 	public void delete() {
 		this.status = MemberStatus.DELETED;
-		this.loginInfo.delete();
 		this.nickname.delete();
 	}
 
@@ -111,10 +102,6 @@ public class Member extends BaseEntity {
 		this.introduction = new Introduction(introduction);
 	}
 
-	public void updatePassword(final String password) {
-		this.loginInfo.updatePassword(password);
-	}
-
 	public int getLevel() {
 		return Level.from(this.levelPoint);
 	}
@@ -124,6 +111,7 @@ public class Member extends BaseEntity {
 	}
 
 	public void updateProfileImage(final String profileImage) {
-		this.profileImage = profileImage;
+		this.socialInfo.updateProfileImage(profileImage);
+
 	}
 }
