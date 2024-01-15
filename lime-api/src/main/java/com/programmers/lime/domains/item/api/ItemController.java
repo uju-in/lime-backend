@@ -15,6 +15,7 @@ import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemAddRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemDeleteRequest;
+import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderCreateRequest;
 import com.programmers.lime.domains.item.api.dto.response.ItemAddResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorResponse;
@@ -151,5 +152,19 @@ public class ItemController {
 		ItemGetRankingResponse response = ItemGetRankingResponse.from(itemService.getRanking());
 
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "나의 아이템 폴더 생성", description = "나의 아이템 폴더를 생성 합니다.")
+	@PostMapping("/myitems/folders")
+	public ResponseEntity<Void> addMemberItemFolder(
+		@RequestBody @Valid final MemberItemFolderCreateRequest request
+	) {
+		Hobby hobby = Hobby.from(request.hobbyName());
+		itemService.createMemberItemFolder(
+			request.folderName(),
+			hobby
+		);
+
+		return ResponseEntity.ok().build();
 	}
 }

@@ -34,6 +34,7 @@ import com.programmers.lime.domains.review.implementation.ReviewStatistics;
 import com.programmers.lime.global.util.MemberUtils;
 import com.programmers.lime.redis.dto.ItemRankingServiceResponse;
 import com.programmers.lime.redis.implement.ItemRanking;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderAppender;
 
 import lombok.RequiredArgsConstructor;
 
@@ -62,6 +63,9 @@ public class ItemService {
 	private final ItemRanking itemRanking;
 
 	private final ReviewReader reviewReader;
+
+	private final MemberItemFolderAppender memberItemFolderAppender;
+
 
 	private final MemberItemFolderReader memberItemFolderReader;
 
@@ -171,5 +175,10 @@ public class ItemService {
 
 	public List<ItemRankingServiceResponse> getRanking() {
 		return itemRanking.viewRanking();
+	}
+
+	public void createMemberItemFolder(final String folderName, final Hobby hobby) {
+		Long memberId = memberUtils.getCurrentMemberId();
+		memberItemFolderAppender.append(folderName, memberId, hobby);
 	}
 }
