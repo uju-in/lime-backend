@@ -19,17 +19,17 @@ import lombok.RequiredArgsConstructor;
 public enum Hobby {
 	// Sports
 	BASKETBALL("농구"),
-	BADMINTON("배드민턴"),
-	CLIMBING("클라이밍"),
-	WORK_OUT("헬스"),
 	BASEBALL("야구"),
+	BADMINTON("배드민턴"),
+	WORK_OUT("헬스"),
+	CLIMBING("클라이밍"),
 
-	// Lifestyle
-	COOKING("요리"),
+	// Life
+	PAINTING("드로잉"),
+	MUSIC("음악"),
+	COOKING("쿠킹"),
 	GAME("게임"),
 	DESKTERIOR("데스크테리어"),
-	PAINTING("그림"),
-	MUSIC("음악"),
 	;
 
 	private static final Map<String, Hobby> HOBBY_NAME_MAP;
