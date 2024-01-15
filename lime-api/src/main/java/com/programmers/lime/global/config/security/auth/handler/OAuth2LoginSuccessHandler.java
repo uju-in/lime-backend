@@ -1,11 +1,7 @@
 package com.programmers.lime.global.config.security.auth.handler;
 
-import static com.programmers.lime.domains.member.api.MemberController.*;
-import static org.springframework.http.HttpHeaders.*;
-
 import java.io.IOException;
 
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -44,20 +40,20 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 	) throws IOException, ServletException {
 		log.info("Oauth2 로그인 성공");
 
-		try{
-			CustomOauth2User oauth2User = (CustomOauth2User) authentication.getPrincipal();
+		try {
+			CustomOauth2User oauth2User = (CustomOauth2User)authentication.getPrincipal();
 
-			if(oauth2User.getRole() == Role.GUEST) {
+			if (oauth2User.getRole() == Role.GUEST) {
 				log.info("기본 인적사항은 업데이트 하지 않은 유저");
 				String accessToken = jwtService.generateAccessToken(String.valueOf(oauth2User.getMemberId()));
 				response.addHeader("Authorization", "Bearer " + accessToken);
 				response.sendRedirect("/api/members/profile"); //인적사항을 입력하는 곳으로 리다이렉트시킴
 				jwtService.sendAccessToken(response, accessToken);
-			} else{
+			} else {
 				log.info("기본 인적사항이 등록된 유저");
 				loginSuccess(response, oauth2User);
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -70,22 +66,21 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		String accessToken = jwtService.generateAccessToken(String.valueOf(memberId));
 		String refreshToken = jwtService.generateRefreshToken();
 
-		final ResponseCookie cookie = ResponseCookie.from("refresh-token", refreshToken)
-			.maxAge(COOKIE_AGE_SECONDS)
-			.secure(true)
-			.httpOnly(true)
-			.sameSite("None")
-			.path("/")
-			.build();
+		createLoginResponse(response, memberId, accessToken);
 
+		jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
+	}
+
+	private void createLoginResponse(
+		final HttpServletResponse response,
+		final Long memberId,
+		final String accessToken
+	) throws IOException {
 		Member member = memberReader.read(memberId);
-		MemberLoginResponse loginResponse = MemberLoginResponse.from(member,accessToken);
+		MemberLoginResponse loginResponse = MemberLoginResponse.from(member, accessToken);
+
 		String result = objectMapper.writeValueAsString(loginResponse);
 		response.getWriter().write(result);
-
-		response.addHeader("Authorization", "Bearer " + accessToken);
-		response.addHeader(SET_COOKIE, String.valueOf(cookie));
-		jwtService.sendAccessAndRefreshToken(response, accessToken);
 	}
 
 }

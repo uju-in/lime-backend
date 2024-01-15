@@ -1,10 +1,8 @@
 package com.programmers.lime.domains.member.api;
 
-import static org.springframework.http.HttpHeaders.*;
 
 import java.io.IOException;
 
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -101,7 +99,7 @@ public class MemberController {
 	}
 
 	@Operation(summary = "마이페이지 조회", description = "닉네임을 이용하여 마이페이지를 조회합니다.")
-	@GetMapping("/{nickname}")
+	@GetMapping("/mypage/{nickname}")
 	public ResponseEntity<MemberGetMyPageResponse> getMyPage(
 		@PathVariable final String nickname
 	) {

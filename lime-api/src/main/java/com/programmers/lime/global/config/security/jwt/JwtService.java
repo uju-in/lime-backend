@@ -1,8 +1,12 @@
 package com.programmers.lime.global.config.security.jwt;
 
+import static com.programmers.lime.domains.member.api.MemberController.*;
+import static org.springframework.http.HttpHeaders.*;
+
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -121,11 +125,23 @@ public class JwtService {
 
 	public void sendAccessAndRefreshToken(
 		final HttpServletResponse response,
-		final String accessToken
+		final String accessToken,
+		final String refreshToken
 	){
 		response.setStatus(HttpServletResponse.SC_OK);
-
 		response.setHeader("Authorization", accessToken);
-		log.info("Access Token, Refresh Token 헤더 설정 완료");
+
+		final ResponseCookie cookie = ResponseCookie.from("refresh-token", refreshToken)
+			.maxAge(COOKIE_AGE_SECONDS)
+			.secure(true)
+			.httpOnly(true)
+			.sameSite("None")
+			.path("/")
+			.build();
+
+		response.addHeader("Authorization", "Bearer " + accessToken);
+		response.addHeader(SET_COOKIE, String.valueOf(cookie));
+
+		log.info("Access Token, Refresh 설정 완료");
 	}
 }
