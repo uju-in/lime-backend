@@ -22,6 +22,7 @@ import com.programmers.lime.domains.item.implementation.ItemFinder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemChecker;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderRemover;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderValidator;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderModifier;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderReader;
@@ -73,6 +74,8 @@ public class ItemService {
 	private final MemberItemFolderModifier memberItemFolderModifier;
 
 	private final MemberItemFolderValidator memberItemFolderValidator;
+
+	private final MemberItemFolderRemover memberItemFolderRemover;
 
 	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
 		List<String> items = itemIdRegistry.itemIds().stream()
@@ -193,5 +196,13 @@ public class ItemService {
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
 
 		memberItemFolderModifier.modify(folderId, folderName);
+	}
+
+	public void removeMemberItemFolder(final Long folderId) {
+		Long memberId = memberUtils.getCurrentMemberId();
+
+		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+
+		memberItemFolderRemover.remove(memberId, folderId);
 	}
 }

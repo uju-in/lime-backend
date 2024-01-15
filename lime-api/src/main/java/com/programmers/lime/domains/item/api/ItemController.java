@@ -183,4 +183,16 @@ public class ItemController {
 
 		return ResponseEntity.ok().build();
 	}
+
+	@Operation(summary = "나의 아이템 폴더 삭제", description = "나의 아이템 폴더를 삭제 합니다.")
+	@DeleteMapping("/myitems/folders/{folderId}")
+	public ResponseEntity<Void> removeMemberItemFolder(
+		@PathVariable final Long folderId
+	) {
+		itemService.removeMemberItemFolder(
+			folderId
+		);
+
+		return ResponseEntity.ok().build();
+	}
 }
