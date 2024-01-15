@@ -119,16 +119,16 @@ public class InventoryReaderTest {
 	void getInventoryProfile() {
 		//given
 		Long memberId = 1L;
-		Inventory inventory1 = InventoryBuilder.build(Hobby.BASKETBALL, new ItemIdRegistry(Arrays.asList(1L, 2L, 3L)));
+		Inventory inventory1 = InventoryBuilder.build(Hobby.BASEBALL, new ItemIdRegistry(Arrays.asList(1L, 2L, 3L)));
 		InventoryBuilder.setModifiedDate(inventory1, LocalDateTime.of(2024, 1, 1, 1, 1, 1));
 		InventoryBuilder.setModifiedDate(inventory1.getInventoryItems(), LocalDateTime.of(2024, 1, 1, 1, 1, 1));
 		Inventory inventory2 = InventoryBuilder.build(Hobby.BASEBALL, new ItemIdRegistry(Arrays.asList(4L, 5L, 6L)));
 		InventoryBuilder.setModifiedDate(inventory2, LocalDateTime.of(2023, 1, 1, 1, 1, 1));
 		InventoryBuilder.setModifiedDate(inventory2.getInventoryItems(), LocalDateTime.of(2023, 1, 1, 1, 1, 1, 1));
-		Inventory inventory3 = InventoryBuilder.build(Hobby.SWIMMING, new ItemIdRegistry(Arrays.asList(7L, 8L, 9L)));
+		Inventory inventory3 = InventoryBuilder.build(Hobby.BASEBALL, new ItemIdRegistry(Arrays.asList(7L, 8L, 9L)));
 		InventoryBuilder.setModifiedDate(inventory3, LocalDateTime.of(2022, 1, 1, 1, 1, 1));
 		InventoryBuilder.setModifiedDate(inventory3.getInventoryItems(), LocalDateTime.of(2022, 1, 1, 1, 1, 1, 1));
-		Inventory inventory4 = InventoryBuilder.build(Hobby.CYCLE, new ItemIdRegistry(Arrays.asList(10L, 11L, 12L)));
+		Inventory inventory4 = InventoryBuilder.build(Hobby.BASEBALL, new ItemIdRegistry(Arrays.asList(10L, 11L, 12L)));
 		InventoryBuilder.setModifiedDate(inventory4, LocalDateTime.of(2021, 1, 1, 1, 1, 1));
 		InventoryBuilder.setModifiedDate(inventory4.getInventoryItems(), LocalDateTime.of(2021, 1, 1, 1, 1, 1, 1));
 
@@ -140,6 +140,6 @@ public class InventoryReaderTest {
 
 		//then
 		assertThat(inventoryProfiles.size()).isEqualTo(3);
-		assertThat(inventoryProfiles.get(2).hobby()).isEqualTo("수영");
+		assertThat(inventoryProfiles.get(2).hobby()).isEqualTo("야구");
 	}
 }

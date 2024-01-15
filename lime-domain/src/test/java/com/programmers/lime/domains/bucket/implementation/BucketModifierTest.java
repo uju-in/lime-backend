@@ -49,8 +49,8 @@ public class BucketModifierTest {
 		Long bucketId = 1L;
 
 		BucketInfo updateBucketInfo = BucketBuilder.buildBucketInfo(
-			Hobby.CYCLE,
-			"도로위의무법자",
+			Hobby.BASEBALL,
+			"운동장위의무법자",
 			200000
 		);
 		Bucket updateBucket = BucketBuilder.build(updateBucketInfo);

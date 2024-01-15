@@ -43,7 +43,7 @@ public class InventoryModifierTest {
 		//given
 		Long memberId = 1L;
 		Long bucketId = 1L;
-		Hobby hobby = Hobby.SWIMMING;
+		Hobby hobby = Hobby.BASEBALL;
 
 		//기존 inventoryItem 제거
 		Inventory existInventory = InventoryBuilder.build();
