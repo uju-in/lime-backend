@@ -23,7 +23,7 @@ public record BucketGetResponse(
 ) {
 	public static BucketGetResponse from(final BucketGetServiceResponse response) {
 		return BucketGetResponse.builder()
-			.hobby(response.hobby().getHobbyValue())
+			.hobby(response.hobby().getName())
 			.name(response.name())
 			.budget(response.budget())
 			.totalPrice(response.totalPrice())

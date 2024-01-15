@@ -60,10 +60,6 @@ public class Member extends BaseEntity {
 		this.status = MemberStatus.ACTIVE;
 	}
 
-	public String getEmail() {
-		return socialInfo.getEmail();
-	}
-
 	public String getSocialId() {
 		return socialInfo.getSocialId();
 	}
@@ -130,6 +126,5 @@ public class Member extends BaseEntity {
 
 	public void updateProfileImage(final String profileImage) {
 		this.socialInfo.updateProfileImage(profileImage);
-
 	}
 }
