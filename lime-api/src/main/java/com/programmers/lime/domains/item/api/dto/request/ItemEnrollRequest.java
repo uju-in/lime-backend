@@ -23,6 +23,6 @@ public record ItemEnrollRequest(
 	public ItemEnrollServiceRequest toEnrollItemServiceRequest() {
 		Hobby hobby = Hobby.from(hobbyValue);
 
-		return new ItemEnrollServiceRequest(hobby, itemUrl);
+		return new ItemEnrollServiceRequest(hobby, itemUrl, folderId);
 	}
 }
