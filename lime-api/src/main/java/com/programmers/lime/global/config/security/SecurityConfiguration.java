@@ -12,12 +12,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.programmers.lime.domains.member.implementation.MemberReader;
+import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginFailureHandler;
+import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginSuccessHandler;
+import com.programmers.lime.domains.auth.OAuth2UserService;
 import com.programmers.lime.global.config.security.jwt.JwtAuthenticationFilter;
+import com.programmers.lime.global.config.security.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +33,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+	private final OAuth2UserService oAuth2UserService; //추가
+	private final JwtService jwtService; // 추가
+	private final MemberReader memberReader;
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final AuthenticationProvider authenticationProvider;
 
@@ -65,6 +75,8 @@ public class SecurityConfiguration {
 
 					.requestMatchers("/api/hobbies").permitAll()
 
+					.requestMatchers("/login").permitAll() //추가
+
 					.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session
@@ -73,7 +85,22 @@ public class SecurityConfiguration {
 			.authenticationProvider(authenticationProvider)
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+		http.oauth2Login(oauth2Configurer -> oauth2Configurer
+			.successHandler(successHandler())
+			.failureHandler(failureHandler())
+			.userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(oAuth2UserService)));
+
 		return http.build();
+	}
+
+	@Bean
+	public AuthenticationFailureHandler failureHandler() {
+		return new OAuth2LoginFailureHandler();
+	}
+
+	@Bean
+	public AuthenticationSuccessHandler successHandler() {
+		return new OAuth2LoginSuccessHandler(jwtService, memberReader);
 	}
 
 	@Bean
