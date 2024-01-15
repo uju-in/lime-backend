@@ -9,8 +9,11 @@ import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.cursor.CursorUtils;
 import com.programmers.lime.common.model.Hobby;
+import com.programmers.lime.domains.item.domain.MemberItemFolder;
 import com.programmers.lime.domains.item.model.MemberItemFolderCursorSummary;
 import com.programmers.lime.domains.item.repository.MemberItemFolderRepository;
+import com.programmers.lime.error.EntityNotFoundException;
+import com.programmers.lime.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -54,5 +57,12 @@ public class MemberItemFolderReader {
 		}
 
 		return parameterSize;
+	}
+
+	public MemberItemFolder read(
+		final Long folderId
+	) {
+		return memberItemFolderRepository.findById(folderId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_ITEM_FOLDER_NOT_FOUND));
 	}
 }

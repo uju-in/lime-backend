@@ -106,7 +106,11 @@ public enum ErrorCode {
 	// Crawler
 	CRAWLER_NAVER_BAD_REQUEST("CRAWLER", "네이버 크롤러에서 파싱할 수 없는 URL 입니다."),
 	CRAWLER_COUPANG_BAD_REQUEST("CRAWLER", "쿠팡 크롤러에서 파싱할 수 없는 URL 입니다."),
-	CRAWLER_DANAWA_BAD_REQUEST("CRAWLER", "다나와 크롤러에서 파싱할 수 없는 URL 입니다.");
+	CRAWLER_DANAWA_BAD_REQUEST("CRAWLER", "다나와 크롤러에서 파싱할 수 없는 URL 입니다."),
+
+	// MemberItemFolder
+	MEMBER_ITEM_FOLDER_NOT_FOUND("MEMBER_ITEM_FOLDER_001", "폴더를 찾을 수 없습니다."),
+	MEMBER_ITEM_FOLDER_NOT_MINE("MEMBER_ITEM_FOLDER_002", "나의 아이템 폴더가 아닙니다.");
 
 	private static final Map<String, ErrorCode> ERROR_CODE_MAP;
 
