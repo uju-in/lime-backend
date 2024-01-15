@@ -29,14 +29,6 @@ public class MemberModifier {
 	}
 
 	@Transactional
-	public void modifyPassword(
-		final Member member,
-		final String encodedPassword
-	) {
-		member.updatePassword(encodedPassword);
-	}
-
-	@Transactional
 	public void modifyProfileImage(
 		final Member member,
 		final String directory,

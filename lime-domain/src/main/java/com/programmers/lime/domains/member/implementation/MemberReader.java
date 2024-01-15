@@ -1,6 +1,7 @@
 package com.programmers.lime.domains.member.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import com.programmers.lime.domains.bucket.implementation.BucketReader;
 import com.programmers.lime.domains.bucket.model.BucketProfile;
 import com.programmers.lime.domains.inventory.implementation.InventoryReader;
 import com.programmers.lime.domains.inventory.model.InventoryProfile;
+import com.programmers.lime.domains.member.domain.vo.SocialType;
 import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.member.model.MemberProfile;
 import com.programmers.lime.domains.member.model.MyPage;
@@ -33,7 +35,7 @@ public class MemberReader {
 	}
 
 	public Member readByEmail(final String email) {
-		return memberRepository.findByLoginInfoEmail(email)
+		return memberRepository.findBySocialInfoEmail(email)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_LOGIN_FAIL));
 	}
 
@@ -50,5 +52,9 @@ public class MemberReader {
 		List<InventoryProfile> inventoryProfiles = inventoryReader.readInventoryProfile(member.getId());
 
 		return new MyPage(memberProfile, bucketProfiles, inventoryProfiles);
+	}
+
+	public Optional<Member> readBySocialIdAndSocialType(String socialId, SocialType socialType) {
+		return memberRepository.findBySocialInfoSocialIdAndSocialInfoSocialType(socialId, socialType);
 	}
 }
