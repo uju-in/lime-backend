@@ -53,6 +53,7 @@ class MemberItemReaderTest {
 		int pageSize = parameters.size() == null ? DEFAULT_PAGE_SIZE : parameters.size();
 		given(memberItemRepository.findMemberItemsByCursor(
 				hobby,
+				1L,
 				memberId,
 				parameters.cursorId(),
 				pageSize
@@ -62,6 +63,7 @@ class MemberItemReaderTest {
 		// when
 		CursorSummary<MemberItemSummary> actualCursorSummary = memberItemReader.readMemberItem(
 			hobby,
+			1L,
 			memberId,
 			parameters
 		);
