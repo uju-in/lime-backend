@@ -116,6 +116,10 @@ public class Member extends BaseEntity {
 		this.introduction = introduction;
 	}
 
+	public void updateRole(final Role role) {
+		this.socialInfo.updateRole(role);
+	}
+
 	public int getLevel() {
 		return Level.from(this.levelPoint);
 	}

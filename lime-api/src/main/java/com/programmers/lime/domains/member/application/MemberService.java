@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.programmers.lime.domains.member.application.dto.response.MemberCheckJwtServiceResponse;
 import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.member.domain.vo.Introduction;
+import com.programmers.lime.domains.member.domain.vo.Role;
 import com.programmers.lime.domains.member.implementation.MemberChecker;
 import com.programmers.lime.domains.member.implementation.MemberModifier;
 import com.programmers.lime.domains.member.implementation.MemberReader;
@@ -63,6 +64,9 @@ public class MemberService {
 		final Introduction introduction
 	) {
 		final Member member = memberUtils.getCurrentMember();
+		if (member.getRole().equals(Role.GUEST)){
+			memberModifier.modifyRole(member, Role.USER);
+		}
 
 		memberModifier.modifyProfile(member, nickname, introduction);
 	}
