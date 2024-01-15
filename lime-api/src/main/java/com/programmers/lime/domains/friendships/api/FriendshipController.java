@@ -27,4 +27,12 @@ public class FriendshipController {
 
 		return ResponseEntity.ok().build();
 	}
+
+	@Operation(summary = "언팔로우", description = "언팔로우 할 닉네임을 이용하여 팔로우를 취소합니다.")
+	@PostMapping("/unfollow/{nickname}")
+	public ResponseEntity<Void> unfollow(@PathVariable final String nickname) {
+		friendshipService.unfollow(nickname);
+
+		return ResponseEntity.ok().build();
+	}
 }
