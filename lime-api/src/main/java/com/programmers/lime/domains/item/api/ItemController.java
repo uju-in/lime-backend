@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemAddRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemDeleteRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderCreateRequest;
+import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderUpdateRequest;
 import com.programmers.lime.domains.item.api.dto.response.ItemAddResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorResponse;
@@ -163,6 +165,20 @@ public class ItemController {
 		itemService.createMemberItemFolder(
 			request.folderName(),
 			hobby
+		);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "나의 아이템 폴더 수정", description = "나의 아이템 폴더를 수정 합니다.")
+	@PutMapping("/myitems/folders/{folderId}")
+	public ResponseEntity<Void> modifyMemberItemFolder(
+		@PathVariable final Long folderId,
+		@RequestBody @Valid final MemberItemFolderUpdateRequest request
+	) {
+		itemService.modifyMemberItemFolder(
+			folderId,
+			request.folderName()
 		);
 
 		return ResponseEntity.ok().build();

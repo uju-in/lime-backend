@@ -20,4 +20,6 @@ public interface MemberItemFolderRepository
 		final Hobby hobby,
 		final Long memberId
 	);
+
+	boolean existsMemberItemFolderByIdAndMemberId(Long id, Long memberId);
 }

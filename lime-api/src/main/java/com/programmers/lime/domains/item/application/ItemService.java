@@ -22,6 +22,8 @@ import com.programmers.lime.domains.item.implementation.ItemFinder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemChecker;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderValidator;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderModifier;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderReader;
 import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
@@ -66,8 +68,11 @@ public class ItemService {
 
 	private final MemberItemFolderAppender memberItemFolderAppender;
 
-
 	private final MemberItemFolderReader memberItemFolderReader;
+
+	private final MemberItemFolderModifier memberItemFolderModifier;
+
+	private final MemberItemFolderValidator memberItemFolderValidator;
 
 	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
 		List<String> items = itemIdRegistry.itemIds().stream()
@@ -180,5 +185,13 @@ public class ItemService {
 	public void createMemberItemFolder(final String folderName, final Hobby hobby) {
 		Long memberId = memberUtils.getCurrentMemberId();
 		memberItemFolderAppender.append(folderName, memberId, hobby);
+	}
+
+	public void modifyMemberItemFolder(final Long folderId, final String folderName) {
+		Long memberId = memberUtils.getCurrentMemberId();
+
+		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+
+		memberItemFolderModifier.modify(folderId, folderName);
 	}
 }
