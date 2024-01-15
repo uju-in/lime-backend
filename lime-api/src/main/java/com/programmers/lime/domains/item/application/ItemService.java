@@ -136,6 +136,7 @@ public class ItemService {
 
 	public MemberItemGetServiceResponse getMemberItemsByCursor(
 		final Hobby hobby,
+		final Long folderId,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
@@ -143,6 +144,7 @@ public class ItemService {
 
 		CursorSummary<MemberItemSummary> cursorSummary = memberItemReader.readMemberItem(
 			hobby,
+			folderId,
 			memberId,
 			parameters
 		);

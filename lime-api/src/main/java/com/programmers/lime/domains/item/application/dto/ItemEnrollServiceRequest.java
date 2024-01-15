@@ -4,6 +4,7 @@ import com.programmers.lime.common.model.Hobby;
 
 public record ItemEnrollServiceRequest(
 	Hobby hobby,
-	String itemUrl
+	String itemUrl,
+	Long folderId
 ) {
 }

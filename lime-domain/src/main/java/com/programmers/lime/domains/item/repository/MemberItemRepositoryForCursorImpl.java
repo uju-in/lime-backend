@@ -65,6 +65,7 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 	@Override
 	public List<MemberItemSummary> findMemberItemsByCursor(
 		final Hobby hobby,
+		final Long folderId,
 		final Long memberId,
 		final String cursorId,
 		final int pageSize
@@ -89,6 +90,7 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 				)
 			).from(item)
 			.where(
+				item.folderId.eq(folderId),
 				cursorIdConditionFromMemberItem(cursorId),
 				hobbyCondition(hobby),
 				item.id.in(itemIdsFromMemberItem)

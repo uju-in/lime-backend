@@ -21,6 +21,7 @@ import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorRespons
 import com.programmers.lime.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetRankingResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetResponse;
+import com.programmers.lime.domains.item.api.dto.response.MemberItemFolderGetByCursorResponse;
 import com.programmers.lime.domains.item.api.dto.response.MemberItemGetByCursorResponse;
 import com.programmers.lime.domains.item.application.ItemEnrollService;
 import com.programmers.lime.domains.item.application.ItemService;
@@ -28,6 +29,7 @@ import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
+import com.programmers.lime.domains.item.application.dto.MemberItemFolderGetServiceResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.lime.global.cursor.CursorRequest;
 
@@ -126,14 +128,16 @@ public class ItemController {
 	}
 
 	@Operation(summary = "나의 아이템 목록 조회", description = "나의 아이템 목록을 조회 합니다.")
-	@GetMapping("/myitems")
+	@GetMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
+		@PathVariable final Long folderId,
 		@RequestParam(required = false) final String hobbyName,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
 		Hobby hobby = Hobby.from(hobbyName);
 		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
 			hobby,
+			folderId,
 			request.toParameters()
 		);
 		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(serviceResponse);

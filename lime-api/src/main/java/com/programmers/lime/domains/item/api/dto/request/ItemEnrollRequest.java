@@ -13,7 +13,11 @@ public record ItemEnrollRequest(
 
 	@Schema(description = "아이템 URL", example = "https://www.coupang.com/vp/products/5720604355?itemId=9567481661")
 	@NotNull(message = "아이템 URL을 입력하지 않았습니다.")
-	String itemUrl
+	String itemUrl,
+
+	@Schema(description = "폴더 ID", example = "1")
+	@NotNull(message = "폴더 ID를 입력하지 않았습니다.")
+	Long folderId
 ) {
 
 	public ItemEnrollServiceRequest toEnrollItemServiceRequest() {
