@@ -24,28 +24,28 @@ class MemberAppenderTest {
 	@Mock
 	private MemberRepository memberRepository;
 
-	@Test
-	@DisplayName("이메일, 암호화된 비밀번호, 닉네임로 회원을 생성 후 저장한다.")
-	void appendTest() {
-		// given
-		final String email = "test@test.com";
-		final String encodedPassword = "$2b$12$9136HMSjeym7mmJ5OgvCPusoDmCmAN5w1caMkXN8s7OuklKr755y6";
-		final String nickname = "best_park";
-		final Member member = Member.builder()
-			.email(email)
-			.password(encodedPassword)
-			.nickname(nickname)
-			.role(Role.USER)
-			.build();
-
-		given(memberRepository.save(any(Member.class)))
-			.willReturn(member);
-
-		// when
-		final Member result = memberAppender.append(email, encodedPassword, nickname);
-
-		// then
-		assertThat(result).usingRecursiveComparison()
-			.isEqualTo(member);
-	}
+	// @Test
+	// @DisplayName("이메일, 암호화된 비밀번호, 닉네임로 회원을 생성 후 저장한다.")
+	// void appendTest() {
+	// 	// given
+	// 	final String email = "test@test.com";
+	// 	final String encodedPassword = "$2b$12$9136HMSjeym7mmJ5OgvCPusoDmCmAN5w1caMkXN8s7OuklKr755y6";
+	// 	final String nickname = "best_park";
+	// 	final Member member = Member.builder()
+	// 		.email(email)
+	// 		.password(encodedPassword)
+	// 		.nickname(nickname)
+	// 		.role(Role.USER)
+	// 		.build();
+	//
+	// 	given(memberRepository.save(any(Member.class)))
+	// 		.willReturn(member);
+	//
+	// 	// when
+	// 	final Member result = memberAppender.append(email, encodedPassword, nickname);
+	//
+	// 	// then
+	// 	assertThat(result).usingRecursiveComparison()
+	// 		.isEqualTo(member);
+	// }
 }

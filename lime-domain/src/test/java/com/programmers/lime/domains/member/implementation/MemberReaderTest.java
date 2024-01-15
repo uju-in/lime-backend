@@ -83,7 +83,7 @@ class MemberReaderTest {
 			final String email = "email@naver.com";
 			final Member member = MemberBuilder.build(1L);
 
-			given(memberRepository.findByLoginInfoEmail(anyString()))
+			given(memberRepository.findBySocialInfoEmail(anyString()))
 				.willReturn(Optional.ofNullable(member));
 
 			// when
@@ -99,7 +99,7 @@ class MemberReaderTest {
 			// given
 			final String email = "email@naver.com";
 
-			given(memberRepository.findByLoginInfoEmail(anyString()))
+			given(memberRepository.findBySocialInfoEmail(anyString()))
 				.willReturn(Optional.empty());
 
 			// when & then

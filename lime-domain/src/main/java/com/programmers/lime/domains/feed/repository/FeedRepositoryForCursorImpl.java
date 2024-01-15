@@ -74,7 +74,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 								MemberInfo.class,
 								member.id,
 								member.nickname.nickname,
-								member.profileImage,
+								member.socialInfo.profileImage,
 								member.levelPoint
 							),
 							feedItem.feed.id,

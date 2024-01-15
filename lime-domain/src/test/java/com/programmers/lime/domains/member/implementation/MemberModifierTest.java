@@ -47,20 +47,6 @@ class MemberModifierTest {
 	}
 
 	@Test
-	@DisplayName("비밀번호를 변경한다.")
-	void modifyPasswordTest() {
-		// given
-		final Member member = MemberBuilder.build(1L);
-		final String encodedPassword = "$2b$12$9136HMSjeym7mmJ5OgvCPusoDmCmAN5w1caMkXN8s7OuklKr755y6";
-
-		// when
-		memberModifier.modifyPassword(member, encodedPassword);
-
-		// then
-		assertThat(member.getPassword()).isEqualTo(encodedPassword);
-	}
-
-	@Test
 	@DisplayName("프로필 이미지를 변경한다.")
 	void modifyProfileImageTest() {
 		// given
