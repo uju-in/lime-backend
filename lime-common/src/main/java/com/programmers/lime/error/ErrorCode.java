@@ -37,7 +37,7 @@ public enum ErrorCode {
 	MEMBER_NOT_LOGIN("MEMBER_006", "로그인 하지 않은 유저 입니다."),
 	MEMBER_NICKNAME_DUPLICATE("MEMBER_007", "닉네임이 중복되었습니다."),
 	MEMBER_NICKNAME_BAD_LENGTH("MEMBER_008", "닉네임은 3글자에서 25글자 사이여야 합니다."),
-	MEMBER_NICKNAME_BAD_PATTERN("MEMBER_009", "닉네임은 영어 대소문자, 숫자 그리고 언더스코어만 허용합니다."),
+	MEMBER_NICKNAME_BAD_PATTERN("MEMBER_009", "닉네임은 영어 대소문자, 한글, 숫자 그리고 언더스코어만 허용합니다."),
 	MEMBER_PASSWORD_BAD_LENGTH("MEMBER_010", "비밀번호는 6글자에서 15글자 사이여야 합니다."),
 	MEMBER_PASSWORD_BAD_PATTERN("MEMBER_011", "비밀번호는 영어, 숫자, 특수문자가 최소 1개씩 포함되야합니다."),
 	MEMBER_INTRODUCTION_CONTENT_BAD_LENGTH("MEMBER_012", "자기소개는 최대 300자 입니다."),
