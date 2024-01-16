@@ -12,7 +12,6 @@ import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
-import com.programmers.lime.domains.item.application.dto.MemberItemFolderGetServiceResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
@@ -21,15 +20,10 @@ import com.programmers.lime.domains.item.implementation.ItemFinder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemChecker;
-import com.programmers.lime.domains.item.implementation.MemberItemFolderRemover;
-import com.programmers.lime.domains.item.implementation.MemberItemFolderValidator;
-import com.programmers.lime.domains.item.implementation.MemberItemFolderModifier;
-import com.programmers.lime.domains.item.implementation.MemberItemFolderReader;
 import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
-import com.programmers.lime.domains.item.model.MemberItemFolderCursorSummary;
 import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
 import com.programmers.lime.domains.item.model.MemberItemSummary;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
@@ -37,7 +31,6 @@ import com.programmers.lime.domains.review.implementation.ReviewStatistics;
 import com.programmers.lime.global.util.MemberUtils;
 import com.programmers.lime.redis.dto.ItemRankingServiceResponse;
 import com.programmers.lime.redis.implement.ItemRanking;
-import com.programmers.lime.domains.item.implementation.MemberItemFolderAppender;
 
 import lombok.RequiredArgsConstructor;
 
@@ -61,21 +54,11 @@ public class ItemService {
 
 	private final ItemCursorReader itemCursorReader;
 
-	private final MemberUtils memberUtils;
-
 	private final ItemRanking itemRanking;
 
 	private final ReviewReader reviewReader;
 
-	private final MemberItemFolderAppender memberItemFolderAppender;
-
-	private final MemberItemFolderReader memberItemFolderReader;
-
-	private final MemberItemFolderModifier memberItemFolderModifier;
-
-	private final MemberItemFolderValidator memberItemFolderValidator;
-
-	private final MemberItemFolderRemover memberItemFolderRemover;
+	private final MemberUtils memberUtils;
 
 	public ItemAddServiceResponse addItem(
 		final MemberItemIdRegistry memberItemIdRegistry
@@ -170,45 +153,8 @@ public class ItemService {
 		return new MemberItemGetServiceResponse(cursorSummary, totalMemberItemCount);
 	}
 
-	public MemberItemFolderGetServiceResponse getMemberItemFolderByCursor(
-			final Hobby hobby,
-			final CursorPageParameters parameters
-	) {
-		Long memberId = memberUtils.getCurrentMemberId();
-		int totalMemberItemFolderCount = memberItemFolderReader.countByMemberIdAndHobby(memberId, hobby);
-
-		CursorSummary<MemberItemFolderCursorSummary> cursorSummary = memberItemFolderReader.readMemberItemFolderByCursor(
-			hobby,
-			memberId,
-			parameters
-		);
-
-		return new MemberItemFolderGetServiceResponse(cursorSummary, totalMemberItemFolderCount);
-	}
-
 
 	public List<ItemRankingServiceResponse> getRanking() {
 		return itemRanking.viewRanking();
-	}
-
-	public void createMemberItemFolder(final String folderName, final Hobby hobby) {
-		Long memberId = memberUtils.getCurrentMemberId();
-		memberItemFolderAppender.append(folderName, memberId, hobby);
-	}
-
-	public void modifyMemberItemFolder(final Long folderId, final String folderName) {
-		Long memberId = memberUtils.getCurrentMemberId();
-
-		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
-
-		memberItemFolderModifier.modify(folderId, folderName);
-	}
-
-	public void removeMemberItemFolder(final Long folderId) {
-		Long memberId = memberUtils.getCurrentMemberId();
-
-		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
-
-		memberItemFolderRemover.remove(memberId, folderId);
 	}
 }

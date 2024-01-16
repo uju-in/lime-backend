@@ -28,6 +28,7 @@ import com.programmers.lime.domains.item.api.dto.response.MemberItemFolderGetByC
 import com.programmers.lime.domains.item.api.dto.response.MemberItemGetByCursorResponse;
 import com.programmers.lime.domains.item.application.ItemEnrollService;
 import com.programmers.lime.domains.item.application.ItemService;
+import com.programmers.lime.domains.item.application.MemberItemFolderService;
 import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
@@ -50,6 +51,8 @@ public class ItemController {
 	private final ItemEnrollService itemEnrollService;
 
 	private final ItemService itemService;
+
+	private final MemberItemFolderService memberItemFolderService;
 
 	@Operation(summary = "아이템 등록", description = "ItemEnrollRequest 을 이용하여 아이템을 등록합니다.")
 	@PostMapping("/enroll")
@@ -114,24 +117,6 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "나의 아이템 폴더 조회", description = "나의 아이템 폴더 목록을 조회 합니다.")
-	@GetMapping("/myitems/folders")
-	public ResponseEntity<MemberItemFolderGetByCursorResponse> getMemberItemFoldersByCursor(
-		@RequestParam final String hobbyName,
-		@ModelAttribute("request") @Valid final CursorRequest request
-	) {
-		Hobby hobby = Hobby.from(hobbyName);
-		MemberItemFolderGetServiceResponse memberItemFolderByCursor = itemService.getMemberItemFolderByCursor(
-			hobby,
-			request.toParameters()
-		);
-
-		MemberItemFolderGetByCursorResponse response = MemberItemFolderGetByCursorResponse
-			.from(memberItemFolderByCursor);
-
-		return ResponseEntity.ok(response);
-	}
-
 	@Operation(summary = "나의 아이템 목록 조회", description = "나의 아이템 목록을 조회 합니다.")
 	@GetMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
@@ -158,13 +143,31 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Operation(summary = "나의 아이템 폴더 조회", description = "나의 아이템 폴더 목록을 조회 합니다.")
+	@GetMapping("/myitems/folders")
+	public ResponseEntity<MemberItemFolderGetByCursorResponse> getMemberItemFoldersByCursor(
+		@RequestParam final String hobbyName,
+		@ModelAttribute("request") @Valid final CursorRequest request
+	) {
+		Hobby hobby = Hobby.from(hobbyName);
+		MemberItemFolderGetServiceResponse memberItemFolderByCursor = memberItemFolderService.getMemberItemFolderByCursor(
+			hobby,
+			request.toParameters()
+		);
+
+		MemberItemFolderGetByCursorResponse response = MemberItemFolderGetByCursorResponse
+			.from(memberItemFolderByCursor);
+
+		return ResponseEntity.ok(response);
+	}
+
 	@Operation(summary = "나의 아이템 폴더 생성", description = "나의 아이템 폴더를 생성 합니다.")
 	@PostMapping("/myitems/folders")
 	public ResponseEntity<Void> addMemberItemFolder(
 		@RequestBody @Valid final MemberItemFolderCreateRequest request
 	) {
 		Hobby hobby = Hobby.from(request.hobbyName());
-		itemService.createMemberItemFolder(
+		memberItemFolderService.createMemberItemFolder(
 			request.folderName(),
 			hobby
 		);
@@ -178,7 +181,7 @@ public class ItemController {
 		@PathVariable final Long folderId,
 		@RequestBody @Valid final MemberItemFolderUpdateRequest request
 	) {
-		itemService.modifyMemberItemFolder(
+		memberItemFolderService.modifyMemberItemFolder(
 			folderId,
 			request.folderName()
 		);
@@ -191,7 +194,7 @@ public class ItemController {
 	public ResponseEntity<Void> removeMemberItemFolder(
 		@PathVariable final Long folderId
 	) {
-		itemService.removeMemberItemFolder(
+		memberItemFolderService.removeMemberItemFolder(
 			folderId
 		);
 
