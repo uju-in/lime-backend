@@ -22,10 +22,6 @@ public record MemberUpdateProfileRequest(
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM", timezone = "Asia/Seoul")
 	YearMonth startDate,
 
-	@Schema(description = "취미 호감도", example = "관심")
-	@NotNull(message = "취미 호감도는 필수 값입니다.")
-	String favorability,
-
 	@Schema(description = "자기소개", example = "안녕하세요!")
 	@NotNull(message = "자기소개는 필수 값입니다.")
 	String content,
@@ -38,7 +34,6 @@ public record MemberUpdateProfileRequest(
 		return Introduction.builder()
 			.hobby(hobby)
 			.startDate(startDate)
-			.favorability(favorability)
 			.content(content)
 			.mbti(mbti)
 			.build();
