@@ -65,7 +65,10 @@ public class ItemService {
 
 	private final MemberItemFolderReader memberItemFolderReader;
 
-	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
+	public ItemAddServiceResponse addItem(
+		final ItemIdRegistry itemIdRegistry,
+		final Long folderId
+	) {
 		List<String> items = itemIdRegistry.itemIds().stream()
 			.map(itemReader::read)
 			.map(Item::getName)

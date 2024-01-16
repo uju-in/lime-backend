@@ -35,7 +35,7 @@ public class ItemEnrollService {
 		ItemCrawlerInfo itemCrawlerInfo = itemCrawlerResultToInfo(itemCrawlerResult);
 
 		// 아이템 등록
-		Long enrolledItemId = itemAppender.append(request.hobby(), request.folderId(), itemCrawlerInfo);
+		Long enrolledItemId = itemAppender.append(request.hobby(), itemCrawlerInfo);
 
 		// 아이텥 랭킹 등록
 		itemRanking.addRanking(itemCrawlerInfo.itemName());

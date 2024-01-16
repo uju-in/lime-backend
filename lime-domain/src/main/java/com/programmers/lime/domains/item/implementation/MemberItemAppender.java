@@ -50,7 +50,7 @@ public class MemberItemAppender {
 
 		return items.stream()
 			.map(
-				item -> new MemberItem(memberId, item)
+				item -> new MemberItem(memberId, item, 1L)
 			).toList();
 	}
 
