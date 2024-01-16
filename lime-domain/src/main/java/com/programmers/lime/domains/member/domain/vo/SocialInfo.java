@@ -49,4 +49,8 @@ public class SocialInfo {
 	public void updateProfileImage(final String profileImage) {
 		this.profileImage = profileImage;
 	}
+
+	public void updateRole(final Role role) {
+		this.role = role;
+	}
 }
