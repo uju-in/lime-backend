@@ -53,7 +53,7 @@ class MemberItemAppenderTest {
 				.toList();
 
 			List<MemberItem> memberItems = items.stream()
-				.map(item -> new MemberItem(memberId, item))
+				.map(item -> new MemberItem(memberId, item, 1L))
 				.toList();
 
 			doNothing().when(memberItemValidator)
@@ -73,6 +73,7 @@ class MemberItemAppenderTest {
 			// when
 			List<Long> actualItemIds = memberItemAppender.addMemberItems(
 				itemIds,
+				1L,
 				memberId
 			);
 
@@ -109,6 +110,7 @@ class MemberItemAppenderTest {
 			// when && then
 			assertThatThrownBy(() -> memberItemAppender.addMemberItems(
 				itemIds,
+				1L,
 				memberId
 			)).isInstanceOf(BusinessException.class);
 
@@ -133,7 +135,7 @@ class MemberItemAppenderTest {
 			duplicateItemIds.add(originalItemIds.get(1));
 
 			List<MemberItem> memberItems = items.stream()
-				.map(item -> new MemberItem(memberId, item))
+				.map(item -> new MemberItem(memberId, item, 1L))
 				.toList();
 
 			doNothing().when(memberItemValidator)
@@ -153,6 +155,7 @@ class MemberItemAppenderTest {
 			// when
 			List<Long> actualItemIds = memberItemAppender.addMemberItems(
 				duplicateItemIds,
+				1L,
 				memberId
 			);
 
