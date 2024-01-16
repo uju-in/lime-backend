@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.Hobby;
-import com.programmers.lime.common.model.ItemIdRegistry;
 import com.programmers.lime.common.model.ItemRemovalList;
 import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
@@ -28,6 +27,7 @@ import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
 import com.programmers.lime.domains.item.model.MemberItemFolderCursorSummary;
+import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
 import com.programmers.lime.domains.item.model.MemberItemSummary;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
 import com.programmers.lime.domains.review.implementation.ReviewStatistics;
@@ -66,10 +66,9 @@ public class ItemService {
 	private final MemberItemFolderReader memberItemFolderReader;
 
 	public ItemAddServiceResponse addItem(
-		final ItemIdRegistry itemIdRegistry,
-		final Long folderId
+		final MemberItemIdRegistry memberItemIdRegistry
 	) {
-		List<String> items = itemIdRegistry.itemIds().stream()
+		List<String> items = memberItemIdRegistry.itemIds().stream()
 			.map(itemReader::read)
 			.map(Item::getName)
 			.toList();
@@ -79,7 +78,11 @@ public class ItemService {
 		}
 
 		Long memberId = memberUtils.getCurrentMemberId();
-		List<Long> memberItemIds = memberItemAppender.addMemberItems(itemIdRegistry.itemIds(), memberId);
+		List<Long> memberItemIds = memberItemAppender.addMemberItems(
+			memberItemIdRegistry.itemIds(),
+			memberItemIdRegistry.folderId(),
+			memberId
+		);
 
 		return new ItemAddServiceResponse(memberItemIds);
 	}

@@ -60,7 +60,9 @@ public class ItemController {
 	@Operation(summary = "아이템 담기", description = "MemberItemAddRequest을 이용하여 사용자에 아이템을 담기 합니다.")
 	@PostMapping("/myitems")
 	public ResponseEntity<ItemAddResponse> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
-		ItemAddServiceResponse serviceResponse = itemService.addItem(request.toAddMemberItemServiceRequest());
+		ItemAddServiceResponse serviceResponse = itemService.addItem(
+			request.toMemberItemIdRegistry()
+		);
 		ItemAddResponse response = ItemAddResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
@@ -112,7 +114,7 @@ public class ItemController {
 	@Operation(summary = "나의 아이템 폴더 조회", description = "나의 아이템 폴더 목록을 조회 합니다.")
 	@GetMapping("/myitems/folders")
 	public ResponseEntity<MemberItemFolderGetByCursorResponse> getMemberItemFoldersByCursor(
-		@RequestParam(required = false) final String hobbyName,
+		@RequestParam final String hobbyName,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
 		Hobby hobby = Hobby.from(hobbyName);
@@ -131,7 +133,7 @@ public class ItemController {
 	@GetMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
 		@PathVariable final Long folderId,
-		@RequestParam(required = false) final String hobbyName,
+		@RequestParam final String hobbyName,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
 		Hobby hobby = Hobby.from(hobbyName);

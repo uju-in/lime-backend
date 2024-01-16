@@ -72,7 +72,10 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 	) {
 		List<Long> itemIdsFromMemberItem = jpaQueryFactory.select(memberItem.item.id)
 			.from(memberItem)
-			.where(memberItem.memberId.eq(memberId))
+			.where(
+				memberItem.folderId.eq(folderId),
+				memberItem.memberId.eq(memberId)
+			)
 			.stream()
 			.toList();
 
@@ -90,7 +93,6 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 				)
 			).from(item)
 			.where(
-				item.folderId.eq(folderId),
 				cursorIdConditionFromMemberItem(cursorId),
 				hobbyCondition(hobby),
 				item.id.in(itemIdsFromMemberItem)
