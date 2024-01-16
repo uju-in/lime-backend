@@ -21,8 +21,6 @@ public class ItemEnrollService {
 
 	private final ItemAppender itemAppender;
 
-	private final ItemService itemService;
-
 	private final ItemEnrollValidator itemEnrollValidator;
 
 	private final ItemRanking itemRanking;
@@ -42,11 +40,6 @@ public class ItemEnrollService {
 		// 아이텥 랭킹 등록
 		itemRanking.addRanking(itemCrawlerInfo.itemName());
 
-		// 아이템 담기
-		ItemIdRegistry itemIdRegistry = getItemIdRegistry(enrolledItemId);
-		itemService.addItem(itemIdRegistry);
-		itemRanking.increasePoint(itemCrawlerInfo.itemName(), 1);
-
 		return enrolledItemId;
 	}
 
@@ -58,11 +51,5 @@ public class ItemEnrollService {
 			.imageUrl(itemCrawlerResult.imageUrl())
 			.url(itemCrawlerResult.url())
 			.build();
-	}
-
-	private ItemIdRegistry getItemIdRegistry(final Long enrolledItemId) {
-		List<Long> ids = List.of(enrolledItemId);
-
-		return new ItemIdRegistry(ids);
 	}
 }
