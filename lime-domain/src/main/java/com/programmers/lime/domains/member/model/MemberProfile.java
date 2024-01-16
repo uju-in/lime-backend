@@ -12,7 +12,6 @@ public record MemberProfile(
 	int level,
 	String hobby,
 	long career,
-	String favorability,
 	String content,
 	String mbti
 ) {
@@ -24,7 +23,6 @@ public record MemberProfile(
 			.level(member.getLevel())
 			.hobby(member.getHobby())
 			.career(member.getCareer())
-			.favorability(member.getFavorability())
 			.content(member.getContent())
 			.mbti(member.getMbti())
 			.build();

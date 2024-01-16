@@ -30,9 +30,6 @@ public class Introduction {
 	@Column(name = "start_date")
 	private LocalDate startDate;
 
-	@Column(name = "favorability")
-	private Favorability favorability;
-
 	@Column(name = "content", length = MAX_CONTENT_LENGTH)
 	private String content;
 
@@ -44,14 +41,12 @@ public class Introduction {
 	private Introduction(
 		final String hobby,
 		final YearMonth startDate,
-		final String favorability,
 		final String content,
 		final String mbti
 	) {
 		validate(content);
 		this.hobby = Hobby.from(hobby);
 		this.startDate = startDate.atDay(1);
-		this.favorability = Favorability.from(favorability);
 		this.content = content;
 		this.mbti = Mbti.from(mbti);
 	}
