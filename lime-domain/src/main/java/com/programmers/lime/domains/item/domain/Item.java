@@ -47,23 +47,18 @@ public class Item extends BaseEntity {
 	@Column(name = "image", nullable = false)
 	private String image;
 
-	@Column(name = "folder_id", nullable = false)
-	private Long folderId;
-
 	@Builder
 	public Item(
 		final Hobby hobby,
 		final String name,
 		final Integer price,
 		final String url,
-		final String image,
-		final Long folderId
+		final String image
 	) {
 		this.hobby = Objects.requireNonNull(hobby);
 		this.name = Objects.requireNonNull(name);
 		this.price = Objects.requireNonNull(price);
 		this.url = Objects.requireNonNull(url);
 		this.image = Objects.requireNonNull(image);
-		this.folderId = Objects.requireNonNull(folderId);
 	}
 }

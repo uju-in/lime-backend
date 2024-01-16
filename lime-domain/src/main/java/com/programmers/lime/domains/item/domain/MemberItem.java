@@ -35,11 +35,16 @@ public class MemberItem extends BaseEntity {
 	@JoinColumn(name = "item_id", nullable = false)
 	private Item item;
 
+	@Column(name = "folder_id")
+	private Long folderId;
+
 	public MemberItem(
 		final Long memberId,
-		final Item item
+		final Item item,
+		final Long folderId
 	) {
 		this.memberId = Objects.requireNonNull(memberId);
 		this.item = Objects.requireNonNull(item);
+		this.folderId = Objects.requireNonNull(folderId);
 	}
 }

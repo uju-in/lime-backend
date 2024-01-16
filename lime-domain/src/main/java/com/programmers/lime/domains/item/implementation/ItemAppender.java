@@ -17,12 +17,10 @@ public class ItemAppender {
 
 	public Long append(
 		final Hobby hobby,
-		final Long folderId,
 		final ItemCrawlerInfo itemInfo
 	) {
 		Item item = Item.builder().
 			hobby(hobby).
-			folderId(folderId).
 			image(itemInfo.imageUrl()).
 			url(itemInfo.url()).
 			price(itemInfo.price()).

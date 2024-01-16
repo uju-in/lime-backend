@@ -32,13 +32,13 @@ class ItemAppenderTest {
 		// given
 		Hobby hobby = Hobby.BASEBALL;
 		ItemCrawlerInfo itemCrawlerInfo = ItemCrawlerInfoBuilder.build();
-		Item item = ItemBuilder.fromItemCrawlerInfoBuild(hobby, 1L, itemCrawlerInfo);
+		Item item = ItemBuilder.fromItemCrawlerInfoBuild(hobby, itemCrawlerInfo);
 
 		given(itemRepository.save(any())).willReturn(item);
 		Long expectedItemId = item.getId();
 
 		// when
-		Long actualItemId = itemAppender.append(hobby, 1L, itemCrawlerInfo);
+		Long actualItemId = itemAppender.append(hobby, itemCrawlerInfo);
 
 		// then
 		then(itemRepository).should(times(1)).save(any());
