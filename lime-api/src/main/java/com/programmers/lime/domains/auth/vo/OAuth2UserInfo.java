@@ -2,11 +2,11 @@ package com.programmers.lime.domains.auth.vo;
 
 import java.util.Map;
 
-public abstract class Oauth2UserInfo {
+public abstract class OAuth2UserInfo {
 
 	protected Map<String, Object> attributes;
 
-	public Oauth2UserInfo(Map<String, Object> attributes){
+	public OAuth2UserInfo(Map<String, Object> attributes){
 		this.attributes = attributes;
 	}
 

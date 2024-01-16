@@ -10,11 +10,11 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import com.programmers.lime.domains.auth.dto.OAuthAttributes;
 import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.member.implementation.MemberAppender;
 import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.domains.member.domain.vo.SocialType;
-import com.programmers.lime.global.config.security.auth.CustomOauth2User;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +69,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 		).orElse(null);
 
 		if(foundMember == null){
-
 			return saveMember(attributes, socialType);
 		}
 

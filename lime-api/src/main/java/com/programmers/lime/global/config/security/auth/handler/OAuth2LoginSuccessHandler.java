@@ -13,7 +13,7 @@ import com.programmers.lime.domains.member.domain.vo.Role;
 import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
-import com.programmers.lime.global.config.security.auth.CustomOauth2User;
+import com.programmers.lime.domains.auth.CustomOauth2User;
 import com.programmers.lime.global.config.security.jwt.JwtService;
 
 import jakarta.servlet.ServletException;

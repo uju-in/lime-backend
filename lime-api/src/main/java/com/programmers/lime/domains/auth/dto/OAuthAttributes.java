@@ -1,15 +1,15 @@
-package com.programmers.lime.domains.auth;
+package com.programmers.lime.domains.auth.dto;
 
 import java.util.Map;
 import java.util.UUID;
 
+import com.programmers.lime.domains.auth.vo.GoogleOAuth2UserInfo;
+import com.programmers.lime.domains.auth.vo.KakaoOAuth2UserInfo;
+import com.programmers.lime.domains.auth.vo.OAuth2UserInfo;
 import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.member.domain.vo.Role;
 import com.programmers.lime.domains.member.domain.vo.SocialType;
 import com.programmers.lime.domains.member.domain.vo.SocialInfo;
-import com.programmers.lime.domains.auth.vo.GoogleOAuth2UserInfo;
-import com.programmers.lime.domains.auth.vo.KakaoOauth2UserInfo;
-import com.programmers.lime.domains.auth.vo.Oauth2UserInfo;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,12 +18,12 @@ import lombok.Getter;
 public class OAuthAttributes {
 
 	private String nameAttributeKey; // 키가 되는 필드값(pk)
-	private Oauth2UserInfo oauth2UserInfo; // 소셜 유저 정보
+	private OAuth2UserInfo oauth2UserInfo; // 소셜 유저 정보
 
 	@Builder
 	OAuthAttributes(
 		final String nameAttributeKey,
-		final Oauth2UserInfo oauth2UserInfo
+		final OAuth2UserInfo oauth2UserInfo
 	){
 		this.nameAttributeKey = nameAttributeKey;
 		this.oauth2UserInfo = oauth2UserInfo;
@@ -42,7 +42,7 @@ public class OAuthAttributes {
 
 	public Member toEntity(
 		final SocialType socialType,
-		final Oauth2UserInfo oauth2UserInfo
+		final OAuth2UserInfo oauth2UserInfo
 	){
 		SocialInfo socialInfo = SocialInfo.builder()
 			.socialId(oauth2UserInfo.getSocialId())
@@ -65,7 +65,7 @@ public class OAuthAttributes {
 	) {
 		return OAuthAttributes.builder()
 			.nameAttributeKey(userNameAttributeName)
-			.oauth2UserInfo(new KakaoOauth2UserInfo(attributes))
+			.oauth2UserInfo(new KakaoOAuth2UserInfo(attributes))
 			.build();
 	}
 	public static OAuthAttributes ofGoogle(

@@ -2,7 +2,7 @@ package com.programmers.lime.domains.auth.vo;
 
 import java.util.Map;
 
-public class GoogleOAuth2UserInfo extends Oauth2UserInfo {
+public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
 	public GoogleOAuth2UserInfo(final Map<String, Object> attributes) {
 		super(attributes);
 	}

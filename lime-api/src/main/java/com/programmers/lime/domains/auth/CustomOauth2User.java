@@ -1,4 +1,4 @@
-package com.programmers.lime.global.config.security.auth;
+package com.programmers.lime.domains.auth;
 
 import java.util.Collection;
 import java.util.Map;

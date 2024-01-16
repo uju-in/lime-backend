@@ -2,8 +2,8 @@ package com.programmers.lime.domains.auth.vo;
 
 import java.util.Map;
 
-public class KakaoOauth2UserInfo extends Oauth2UserInfo {
-	public KakaoOauth2UserInfo(final Map<String, Object> attributes) {
+public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
+	public KakaoOAuth2UserInfo(final Map<String, Object> attributes) {
 		super(attributes);
 	}
 
