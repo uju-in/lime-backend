@@ -83,10 +83,6 @@ public class Member extends BaseEntity {
 		return ChronoUnit.MONTHS.between(startDate, now);
 	}
 
-	public String getFavorability() {
-		return introduction.getFavorability().getName();
-	}
-
 	public String getContent() {
 		return introduction.getContent();
 	}
