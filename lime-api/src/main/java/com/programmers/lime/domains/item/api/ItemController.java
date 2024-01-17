@@ -87,8 +87,11 @@ public class ItemController {
 
 	@Operation(summary = "나의 아이템 목록에서 삭제", description = "itemId을 이용하여 나의 아이템 목록에서 삭제 합니다.")
 	@DeleteMapping("/myitems")
-	public ResponseEntity<Void> deleteMyItem(@ModelAttribute @Valid final MemberItemDeleteRequest request) {
+	public ResponseEntity<Void> deleteMyItem(
+		@ModelAttribute @Valid final MemberItemDeleteRequest request
+	) {
 		itemService.removeMemberItems(
+			request.folderId(),
 			request.toItemRemovalList()
 		);
 

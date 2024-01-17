@@ -80,6 +80,15 @@ public class MemberItemReader {
 		return CursorUtils.getCursorSummaries(memberItemsByCursor);
 	}
 
+	public MemberItem readByItemIdAndFolderId(
+		final Long itemId,
+		final Long folderId
+	) {
+		Item item = itemReader.read(itemId);
+		return memberItemRepository.findMemberItemByFolderIdAndItem(folderId, item)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_ITEM_NOT_FOUND));
+	}
+
 	private int getPageSize(final CursorPageParameters parameters) {
 		Integer parameterSize = parameters.size();
 

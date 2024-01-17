@@ -114,11 +114,16 @@ public class ItemService {
 			.build();
 	}
 
-	public void removeMemberItems(final ItemRemovalList itemRemovalList) {
+	public void removeMemberItems(
+		final Long folderId,
+		final ItemRemovalList itemRemovalList
+	) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
+		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+
 		for (Long itemId : itemRemovalList.itemIds()) {
-			MemberItem memberItem = memberItemReader.read(itemId, memberId);
+			MemberItem memberItem = memberItemReader.readByItemIdAndFolderId(itemId, folderId);
 			memberItemRemover.remove(memberItem.getId());
 		}
 	}
