@@ -2,8 +2,12 @@ package com.programmers.lime.domains.friendships.application;
 
 import org.springframework.stereotype.Service;
 
+import com.programmers.lime.common.cursor.CursorPageParameters;
+import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.domains.friendships.implementation.FriendshipAppender;
+import com.programmers.lime.domains.friendships.implementation.FriendshipReader;
 import com.programmers.lime.domains.friendships.implementation.FriendshipRemover;
+import com.programmers.lime.domains.friendships.model.FollowerSummary;
 import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.global.util.MemberUtils;
 
@@ -15,6 +19,7 @@ public class FriendshipService {
 
 	private final FriendshipAppender friendshipAppender;
 	private final FriendshipRemover friendshipRemover;
+	private final FriendshipReader friendshipReader;
 	private final MemberUtils memberUtils;
 	private final MemberReader memberReader;
 
@@ -30,5 +35,12 @@ public class FriendshipService {
 		final Long toMemberId = memberReader.readByNickname(nickname).getId();
 
 		friendshipRemover.remove(toMemberId, fromMemberId);
+	}
+
+	public CursorSummary<FollowerSummary> getFollower(
+		final String nickname,
+		final CursorPageParameters parameters
+	) {
+		return friendshipReader.readByCursor(nickname, parameters);
 	}
 }

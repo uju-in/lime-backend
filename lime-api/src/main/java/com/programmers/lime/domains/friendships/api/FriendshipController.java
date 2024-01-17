@@ -1,15 +1,22 @@
 package com.programmers.lime.domains.friendships.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.lime.common.cursor.CursorSummary;
+import com.programmers.lime.domains.friendships.api.dto.response.FollowerGetByCursorResponse;
 import com.programmers.lime.domains.friendships.application.FriendshipService;
+import com.programmers.lime.domains.friendships.model.FollowerSummary;
+import com.programmers.lime.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "friendships", description = "친구 관계 API")
@@ -34,5 +41,20 @@ public class FriendshipController {
 		friendshipService.unfollow(nickname);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "팔로워 목록 조회", description = "회원을 팔로우한 사람들의 목록을 조회한다.")
+	@GetMapping("/follower/{nickname}")
+	public ResponseEntity<FollowerGetByCursorResponse> getFollower(
+		@PathVariable final String nickname,
+		@ModelAttribute @Valid final CursorRequest request
+	) {
+		final CursorSummary<FollowerSummary> cursorSummary = friendshipService.getFollower(
+			nickname,
+			request.toParameters()
+		);
+		final FollowerGetByCursorResponse response = FollowerGetByCursorResponse.from(cursorSummary);
+
+		return ResponseEntity.ok(response);
 	}
 }

@@ -57,6 +57,9 @@ public class SecurityConfiguration {
 					.requestMatchers("/api/members/mypage/{nickname}").permitAll()
 					.requestMatchers("/api/members/refresh").permitAll()
 
+					.requestMatchers("/api/friendships/follower/**").permitAll()
+					.requestMatchers("/api/friendships/following/**").permitAll()
+
 					.requestMatchers(HttpMethod.GET, "/api/votes").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/votes/{voteId}").permitAll()
 
