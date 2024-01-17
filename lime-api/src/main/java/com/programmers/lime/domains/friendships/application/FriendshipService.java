@@ -19,15 +19,15 @@ public class FriendshipService {
 	private final MemberReader memberReader;
 
 	public void follow(final String nickname) {
-		final Long toMemberId = memberUtils.getCurrentMemberId();
-		final Long fromMemberId = memberReader.readByNickname(nickname).getId();
+		final Long fromMemberId = memberUtils.getCurrentMemberId();
+		final Long toMemberId = memberReader.readByNickname(nickname).getId();
 
 		friendshipAppender.append(toMemberId, fromMemberId);
 	}
 
 	public void unfollow(final String nickname) {
-		final Long toMemberId = memberUtils.getCurrentMemberId();
-		final Long fromMemberId = memberReader.readByNickname(nickname).getId();
+		final Long fromMemberId = memberUtils.getCurrentMemberId();
+		final Long toMemberId = memberReader.readByNickname(nickname).getId();
 
 		friendshipRemover.remove(toMemberId, fromMemberId);
 	}
