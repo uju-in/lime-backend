@@ -8,7 +8,7 @@ import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.common.model.ItemRemovalList;
-import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
@@ -42,8 +42,6 @@ public class ItemService {
 
 	private final MemberItemChecker memberItemChecker;
 
-	private final ItemReader itemReader;
-
 	private final ReviewStatistics reviewStatistics;
 
 	private final MemberItemReader memberItemReader;
@@ -60,7 +58,11 @@ public class ItemService {
 
 	private final MemberUtils memberUtils;
 
-	public ItemAddServiceResponse addItem(
+	private final MemberItemFolderValidator memberItemFolderValidator;
+
+	private final ItemReader itemReader;
+
+	public MemberItemCreateServiceResponse createMemberItems(
 		final MemberItemIdRegistry memberItemIdRegistry
 	) {
 		List<String> items = memberItemIdRegistry.itemIds().stream()
@@ -72,14 +74,19 @@ public class ItemService {
 			itemRanking.increasePoint(itemName, 1);
 		}
 
+		memberItemFolderValidator.validateItemHobbyEqualsFolderHobby(
+			memberItemIdRegistry.itemIds(),
+			memberItemIdRegistry.folderId()
+		);
+
 		Long memberId = memberUtils.getCurrentMemberId();
-		List<Long> memberItemIds = memberItemAppender.addMemberItems(
+		List<Long> memberItemIds = memberItemAppender.appendMemberItems(
 			memberItemIdRegistry.itemIds(),
 			memberItemIdRegistry.folderId(),
 			memberId
 		);
 
-		return new ItemAddServiceResponse(memberItemIds);
+		return new MemberItemCreateServiceResponse(memberItemIds);
 	}
 
 	public ItemGetServiceResponse getItem(final Long itemId) {

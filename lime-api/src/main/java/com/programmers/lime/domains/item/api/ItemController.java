@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
-import com.programmers.lime.domains.item.api.dto.request.MemberItemAddRequest;
+import com.programmers.lime.domains.item.api.dto.request.MemberItemCreateRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemDeleteRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderCreateRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderUpdateRequest;
-import com.programmers.lime.domains.item.api.dto.response.ItemAddResponse;
+import com.programmers.lime.domains.item.api.dto.response.MemberItemCreateResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetNamesResponse;
@@ -29,7 +29,7 @@ import com.programmers.lime.domains.item.api.dto.response.MemberItemGetByCursorR
 import com.programmers.lime.domains.item.application.ItemEnrollService;
 import com.programmers.lime.domains.item.application.ItemService;
 import com.programmers.lime.domains.item.application.MemberItemFolderService;
-import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
@@ -65,11 +65,13 @@ public class ItemController {
 
 	@Operation(summary = "아이템 담기", description = "MemberItemAddRequest을 이용하여 사용자에 아이템을 담기 합니다.")
 	@PostMapping("/myitems")
-	public ResponseEntity<ItemAddResponse> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
-		ItemAddServiceResponse serviceResponse = itemService.addItem(
+	public ResponseEntity<MemberItemCreateResponse> createMemberItems(
+		@Valid @RequestBody final MemberItemCreateRequest request
+	) {
+		MemberItemCreateServiceResponse serviceResponse = itemService.createMemberItems(
 			request.toMemberItemIdRegistry()
 		);
-		ItemAddResponse response = ItemAddResponse.from(serviceResponse);
+		MemberItemCreateResponse response = MemberItemCreateResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}

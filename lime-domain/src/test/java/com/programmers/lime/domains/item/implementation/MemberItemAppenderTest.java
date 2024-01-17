@@ -71,7 +71,7 @@ class MemberItemAppenderTest {
 				.willReturn(memberItems);
 
 			// when
-			List<Long> actualItemIds = memberItemAppender.addMemberItems(
+			List<Long> actualItemIds = memberItemAppender.appendMemberItems(
 				itemIds,
 				1L,
 				memberId
@@ -108,7 +108,7 @@ class MemberItemAppenderTest {
 				.validateExistMemberItem(memberId, items);
 
 			// when && then
-			assertThatThrownBy(() -> memberItemAppender.addMemberItems(
+			assertThatThrownBy(() -> memberItemAppender.appendMemberItems(
 				itemIds,
 				1L,
 				memberId
@@ -153,7 +153,7 @@ class MemberItemAppenderTest {
 				.willReturn(memberItems);
 
 			// when
-			List<Long> actualItemIds = memberItemAppender.addMemberItems(
+			List<Long> actualItemIds = memberItemAppender.appendMemberItems(
 				duplicateItemIds,
 				1L,
 				memberId
