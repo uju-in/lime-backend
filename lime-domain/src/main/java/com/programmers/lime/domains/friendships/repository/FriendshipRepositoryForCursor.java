@@ -10,4 +10,10 @@ public interface FriendshipRepositoryForCursor {
 		final String nextCursorId,
 		final int pageSize
 	);
+
+	List<FriendshipSummary> findFollowingByCursor(
+		final String nickname,
+		final String nextCursorId,
+		final int pageSize
+	);
 }

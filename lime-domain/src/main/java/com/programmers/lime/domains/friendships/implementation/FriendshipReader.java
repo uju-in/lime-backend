@@ -48,6 +48,21 @@ public class FriendshipReader {
 		return CursorUtils.getCursorSummaries(followerSummaries);
 	}
 
+	@Transactional(readOnly = true)
+	public CursorSummary<FriendshipSummary> readFollowingByCursor(
+		final String nickname,
+		final CursorPageParameters parameters
+	) {
+		final int pageSize = getPageSize(parameters);
+		final List<FriendshipSummary> followerSummaries = friendshipRepository.findFollowingByCursor(
+			nickname,
+			parameters.cursorId(),
+			pageSize
+		);
+
+		return CursorUtils.getCursorSummaries(followerSummaries);
+	}
+
 	private int getPageSize(final CursorPageParameters parameters) {
 		return parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
 	}

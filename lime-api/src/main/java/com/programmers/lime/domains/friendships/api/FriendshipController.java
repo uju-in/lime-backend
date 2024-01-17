@@ -57,4 +57,19 @@ public class FriendshipController {
 
 		return ResponseEntity.ok(response);
 	}
+
+	@Operation(summary = "팔로잉 목록 조회", description = "회원이 팔로우한 사람들의 목록을 조회한다.")
+	@GetMapping("/following/{nickname}")
+	public ResponseEntity<FriendshipGetByCursorResponse> getFollowing(
+		@PathVariable final String nickname,
+		@ModelAttribute @Valid final CursorRequest request
+	) {
+		final CursorSummary<FriendshipSummary> cursorSummary = friendshipService.getFollowing(
+			nickname,
+			request.toParameters()
+		);
+		final FriendshipGetByCursorResponse response = FriendshipGetByCursorResponse.from(cursorSummary);
+
+		return ResponseEntity.ok(response);
+	}
 }

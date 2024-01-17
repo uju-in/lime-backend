@@ -49,6 +49,33 @@ public class FriendshipRepositoryForCursorImpl implements FriendshipRepositoryFo
 			.fetch();
 	}
 
+	@Override
+	public List<FriendshipSummary> findFollowingByCursor(
+		final String nickname,
+		final String nextCursorId,
+		final int pageSize
+	) {
+		return jpaQueryFactory
+			.select(Projections.constructor(FriendshipSummary.class,
+				Projections.constructor(MemberInfo.class,
+					member.id,
+					member.nickname.nickname,
+					member.profileImage,
+					member.levelPoint
+				),
+				generateCursorId()
+			))
+			.from(friendship)
+			.join(member).on(friendship.toMemberId.eq(member.id))
+			.where(
+				friendship.fromMemberId.eq(getMemberId(nickname)),
+				lessThanNextCursorId(nextCursorId)
+			)
+			.orderBy(friendship.id.desc())
+			.limit(pageSize)
+			.fetch();
+	}
+
 	private Long getMemberId(final String nickname) {
 		return jpaQueryFactory
 			.select(member.id)
