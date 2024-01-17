@@ -41,7 +41,7 @@ public class CommentRepositoryForCursorImpl implements CommentRepositoryForCurso
 						MemberInfo.class,
 						member.id,
 						member.nickname.nickname,
-						member.profileImage,
+						member.socialInfo.profileImage,
 						member.levelPoint
 					),
 					comment.id,

@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.member.domain.vo.Introduction;
+import com.programmers.lime.domains.member.domain.vo.Role;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,11 +31,11 @@ public class MemberModifier {
 	}
 
 	@Transactional
-	public void modifyPassword(
+	public void modifyRole(
 		final Member member,
-		final String encodedPassword
+		final Role role
 	) {
-		member.updatePassword(encodedPassword);
+		member.updateRole(role);
 	}
 
 	@Transactional

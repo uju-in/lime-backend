@@ -1,8 +1,12 @@
 package com.programmers.lime.global.config.security.jwt;
 
+import static com.programmers.lime.domains.member.api.MemberController.*;
+import static org.springframework.http.HttpHeaders.*;
+
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -12,8 +16,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtService {
@@ -104,5 +111,37 @@ public class JwtService {
 	private Key getSignInKey(final String secretKey) {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
+	}
+
+	public void sendAccessToken(
+		final HttpServletResponse response,
+		final String accessToken
+	) {
+		response.setStatus(HttpServletResponse.SC_OK);
+
+		response.setHeader("Authorization", accessToken);
+		log.info("재발급된 Access Token : {}", accessToken);
+	}
+
+	public void sendAccessAndRefreshToken(
+		final HttpServletResponse response,
+		final String accessToken,
+		final String refreshToken
+	){
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.setHeader("Authorization", accessToken);
+
+		final ResponseCookie cookie = ResponseCookie.from("refresh-token", refreshToken)
+			.maxAge(COOKIE_AGE_SECONDS)
+			.secure(true)
+			.httpOnly(true)
+			.sameSite("None")
+			.path("/")
+			.build();
+
+		response.addHeader("Authorization", "Bearer " + accessToken);
+		response.addHeader(SET_COOKIE, String.valueOf(cookie));
+
+		log.info("Access Token, Refresh 설정 완료");
 	}
 }

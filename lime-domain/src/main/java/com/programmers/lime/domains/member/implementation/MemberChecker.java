@@ -19,10 +19,4 @@ public class MemberChecker {
 			throw new BusinessException(ErrorCode.MEMBER_NICKNAME_DUPLICATE);
 		}
 	}
-
-	public void checkEmailDuplication(final String email) {
-		if (memberRepository.existsByLoginInfoEmail(email)) {
-			throw new BusinessException(ErrorCode.MEMBER_EMAIL_EXIST);
-		}
-	}
 }

@@ -5,13 +5,17 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.programmers.lime.domains.member.domain.Member;
+import com.programmers.lime.domains.member.domain.vo.SocialType;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-	Optional<Member> findByLoginInfoEmail(final String email);
+	Optional<Member> findBySocialInfoEmail(final String email);
 
 	boolean existsByNicknameNickname(final String nickname);
 
 	Optional<Member> findByNicknameNickname(final String nickname);
 
-	boolean existsByLoginInfoEmail(final String email);
+	Optional<Member> findBySocialInfoSocialIdAndSocialInfoSocialType(
+		final String socialId,
+		final SocialType socialType
+	);
 }
