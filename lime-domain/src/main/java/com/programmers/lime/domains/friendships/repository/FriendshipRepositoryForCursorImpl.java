@@ -11,6 +11,7 @@ import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -28,25 +29,7 @@ public class FriendshipRepositoryForCursorImpl implements FriendshipRepositoryFo
 		final String nextCursorId,
 		final int pageSize
 	) {
-		return jpaQueryFactory
-			.select(Projections.constructor(FriendshipSummary.class,
-				Projections.constructor(MemberInfo.class,
-					member.id,
-					member.nickname.nickname,
-					member.profileImage,
-					member.levelPoint
-				),
-				generateCursorId()
-			))
-			.from(friendship)
-			.join(member).on(friendship.fromMemberId.eq(member.id))
-			.where(
-				friendship.toMemberId.eq(getMemberId(nickname)),
-				lessThanNextCursorId(nextCursorId)
-			)
-			.orderBy(friendship.id.desc())
-			.limit(pageSize)
-			.fetch();
+		return findAllByCursor(nickname, nextCursorId, pageSize, friendship.fromMemberId, friendship.toMemberId);
 	}
 
 	@Override
@@ -54,6 +37,16 @@ public class FriendshipRepositoryForCursorImpl implements FriendshipRepositoryFo
 		final String nickname,
 		final String nextCursorId,
 		final int pageSize
+	) {
+		return findAllByCursor(nickname, nextCursorId, pageSize, friendship.toMemberId, friendship.fromMemberId);
+	}
+
+	private List<FriendshipSummary> findAllByCursor(
+		final String nickname,
+		final String nextCursorId,
+		final int pageSize,
+		final NumberPath<Long> memberId,
+		final NumberPath<Long> owner
 	) {
 		return jpaQueryFactory
 			.select(Projections.constructor(FriendshipSummary.class,
@@ -66,9 +59,9 @@ public class FriendshipRepositoryForCursorImpl implements FriendshipRepositoryFo
 				generateCursorId()
 			))
 			.from(friendship)
-			.join(member).on(friendship.toMemberId.eq(member.id))
+			.join(member).on(memberId.eq(member.id))
 			.where(
-				friendship.fromMemberId.eq(getMemberId(nickname)),
+				owner.eq(getMemberId(nickname)),
 				lessThanNextCursorId(nextCursorId)
 			)
 			.orderBy(friendship.id.desc())
