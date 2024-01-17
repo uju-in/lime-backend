@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
-import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.common.model.ItemRemovalList;
 import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
@@ -153,7 +152,10 @@ public class ItemService {
 	) {
 
 		Long memberId = memberUtils.getCurrentMemberId();
-		int totalMemberItemCount = memberItemReader.countByMemberIdAndHobby(memberId, hobby);
+
+		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+
+		int totalMemberItemCount = memberItemReader.countByFolderId(folderId);
 
 		CursorSummary<MemberItemSummary> cursorSummary = memberItemReader.readMemberItem(
 			folderId,
