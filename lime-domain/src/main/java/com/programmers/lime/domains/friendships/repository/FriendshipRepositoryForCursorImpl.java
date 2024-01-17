@@ -23,7 +23,7 @@ public class FriendshipRepositoryForCursorImpl implements FriendshipRepositoryFo
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<FriendshipSummary> findAllByCursor(
+	public List<FriendshipSummary> findFollowerByCursor(
 		final String nickname,
 		final String nextCursorId,
 		final int pageSize

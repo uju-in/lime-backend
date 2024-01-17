@@ -41,6 +41,6 @@ public class FriendshipService {
 		final String nickname,
 		final CursorPageParameters parameters
 	) {
-		return friendshipReader.readByCursor(nickname, parameters);
+		return friendshipReader.readFollowerByCursor(nickname, parameters);
 	}
 }

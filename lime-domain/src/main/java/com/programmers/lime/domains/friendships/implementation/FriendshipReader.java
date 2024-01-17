@@ -34,12 +34,12 @@ public class FriendshipReader {
 	}
 
 	@Transactional(readOnly = true)
-	public CursorSummary<FriendshipSummary> readByCursor(
+	public CursorSummary<FriendshipSummary> readFollowerByCursor(
 		final String nickname,
 		final CursorPageParameters parameters
 	) {
 		final int pageSize = getPageSize(parameters);
-		final List<FriendshipSummary> followerSummaries = friendshipRepository.findAllByCursor(
+		final List<FriendshipSummary> followerSummaries = friendshipRepository.findFollowerByCursor(
 			nickname,
 			parameters.cursorId(),
 			pageSize
