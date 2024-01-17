@@ -129,7 +129,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "나의 아이템 목록 조회", description = "나의 아이템 목록을 조회 합니다.")
+	@Operation(summary = "나의 아이템 폴더 상세 조회", description = "나의 아이템 폴더를 상세 조회 합니다.")
 	@GetMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
 		@PathVariable final Long folderId,
