@@ -65,14 +65,7 @@ public class ItemService {
 	public MemberItemCreateServiceResponse createMemberItems(
 		final MemberItemIdRegistry memberItemIdRegistry
 	) {
-		List<String> items = memberItemIdRegistry.itemIds().stream()
-			.map(itemReader::read)
-			.map(Item::getName)
-			.toList();
-
-		for (String itemName : items) {
-			itemRanking.increasePoint(itemName, 1);
-		}
+		updateItemRanking(memberItemIdRegistry);
 
 		memberItemFolderValidator.validateItemHobbyEqualsFolderHobby(
 			memberItemIdRegistry.itemIds(),
@@ -87,6 +80,17 @@ public class ItemService {
 		);
 
 		return new MemberItemCreateServiceResponse(memberItemIds);
+	}
+
+	private void updateItemRanking(final MemberItemIdRegistry memberItemIdRegistry) {
+		List<String> items = memberItemIdRegistry.itemIds().stream()
+			.map(itemReader::read)
+			.map(Item::getName)
+			.toList();
+
+		for (String itemName : items) {
+			itemRanking.increasePoint(itemName, 1);
+		}
 	}
 
 	public ItemGetServiceResponse getItem(final Long itemId) {
