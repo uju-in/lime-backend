@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
-import com.programmers.lime.domains.member.domain.Member;
 
 public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, MemberItemRepositoryForCursor {
 
@@ -50,4 +49,6 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 		final Hobby hobby,
 		final Long memberId
 	);
+
+	int countByFolderId(Long folderId);
 }

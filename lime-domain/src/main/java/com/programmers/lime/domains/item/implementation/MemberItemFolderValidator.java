@@ -24,12 +24,12 @@ public class MemberItemFolderValidator {
 	private final ItemReader itemReader;
 
 	public void validateExsitMemberItemFolder(
-		final Long id,
+		final Long memberItemFolderId,
 		final Long memberId
 	) {
 		boolean isExsistMemberItemFolder = memberItemFolderRepository.
 			existsMemberItemFolderByIdAndMemberId(
-				id,
+				memberItemFolderId,
 				memberId
 			);
 

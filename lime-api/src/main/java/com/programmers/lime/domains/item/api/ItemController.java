@@ -123,12 +123,9 @@ public class ItemController {
 	@GetMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
 		@PathVariable final Long folderId,
-		@RequestParam final String hobbyName,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		Hobby hobby = Hobby.from(hobbyName);
 		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
-			hobby,
 			folderId,
 			request.toParameters()
 		);

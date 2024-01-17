@@ -148,17 +148,15 @@ public class ItemService {
 	}
 
 	public MemberItemGetServiceResponse getMemberItemsByCursor(
-		final Hobby hobby,
 		final Long folderId,
 		final CursorPageParameters parameters
 	) {
+
 		Long memberId = memberUtils.getCurrentMemberId();
 		int totalMemberItemCount = memberItemReader.countByMemberIdAndHobby(memberId, hobby);
 
 		CursorSummary<MemberItemSummary> cursorSummary = memberItemReader.readMemberItem(
-			hobby,
 			folderId,
-			memberId,
 			parameters
 		);
 
