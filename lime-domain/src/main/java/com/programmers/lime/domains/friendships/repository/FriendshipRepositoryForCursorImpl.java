@@ -53,7 +53,7 @@ public class FriendshipRepositoryForCursorImpl implements FriendshipRepositoryFo
 				Projections.constructor(MemberInfo.class,
 					member.id,
 					member.nickname.nickname,
-					member.profileImage,
+					member.socialInfo.profileImage,
 					member.levelPoint
 				),
 				generateCursorId()
