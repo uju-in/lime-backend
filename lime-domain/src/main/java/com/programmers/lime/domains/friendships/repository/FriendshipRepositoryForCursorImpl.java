@@ -5,7 +5,7 @@ import static com.programmers.lime.domains.member.domain.QMember.*;
 
 import java.util.List;
 
-import com.programmers.lime.domains.friendships.model.FollowerSummary;
+import com.programmers.lime.domains.friendships.model.FriendshipSummary;
 import com.programmers.lime.domains.member.model.MemberInfo;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
@@ -23,13 +23,13 @@ public class FriendshipRepositoryForCursorImpl implements FriendshipRepositoryFo
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<FollowerSummary> findAllByCursor(
+	public List<FriendshipSummary> findAllByCursor(
 		final String nickname,
 		final String nextCursorId,
 		final int pageSize
 	) {
 		return jpaQueryFactory
-			.select(Projections.constructor(FollowerSummary.class,
+			.select(Projections.constructor(FriendshipSummary.class,
 				Projections.constructor(MemberInfo.class,
 					member.id,
 					member.nickname.nickname,

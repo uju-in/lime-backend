@@ -7,7 +7,7 @@ import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.domains.friendships.implementation.FriendshipAppender;
 import com.programmers.lime.domains.friendships.implementation.FriendshipReader;
 import com.programmers.lime.domains.friendships.implementation.FriendshipRemover;
-import com.programmers.lime.domains.friendships.model.FollowerSummary;
+import com.programmers.lime.domains.friendships.model.FriendshipSummary;
 import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.global.util.MemberUtils;
 
@@ -37,7 +37,7 @@ public class FriendshipService {
 		friendshipRemover.remove(toMemberId, fromMemberId);
 	}
 
-	public CursorSummary<FollowerSummary> getFollower(
+	public CursorSummary<FriendshipSummary> getFollower(
 		final String nickname,
 		final CursorPageParameters parameters
 	) {

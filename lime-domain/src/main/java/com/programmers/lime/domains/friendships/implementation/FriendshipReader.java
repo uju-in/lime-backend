@@ -9,7 +9,7 @@ import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.cursor.CursorUtils;
 import com.programmers.lime.domains.friendships.domain.Friendship;
-import com.programmers.lime.domains.friendships.model.FollowerSummary;
+import com.programmers.lime.domains.friendships.model.FriendshipSummary;
 import com.programmers.lime.domains.friendships.repository.FriendshipRepository;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
@@ -34,12 +34,12 @@ public class FriendshipReader {
 	}
 
 	@Transactional(readOnly = true)
-	public CursorSummary<FollowerSummary> readByCursor(
+	public CursorSummary<FriendshipSummary> readByCursor(
 		final String nickname,
 		final CursorPageParameters parameters
 	) {
 		final int pageSize = getPageSize(parameters);
-		final List<FollowerSummary> followerSummaries = friendshipRepository.findAllByCursor(
+		final List<FriendshipSummary> followerSummaries = friendshipRepository.findAllByCursor(
 			nickname,
 			parameters.cursorId(),
 			pageSize

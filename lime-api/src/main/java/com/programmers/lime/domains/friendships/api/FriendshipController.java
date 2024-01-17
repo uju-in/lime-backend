@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.lime.common.cursor.CursorSummary;
-import com.programmers.lime.domains.friendships.api.dto.response.FollowerGetByCursorResponse;
+import com.programmers.lime.domains.friendships.api.dto.response.FriendshipGetByCursorResponse;
 import com.programmers.lime.domains.friendships.application.FriendshipService;
-import com.programmers.lime.domains.friendships.model.FollowerSummary;
+import com.programmers.lime.domains.friendships.model.FriendshipSummary;
 import com.programmers.lime.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,15 +45,15 @@ public class FriendshipController {
 
 	@Operation(summary = "팔로워 목록 조회", description = "회원을 팔로우한 사람들의 목록을 조회한다.")
 	@GetMapping("/follower/{nickname}")
-	public ResponseEntity<FollowerGetByCursorResponse> getFollower(
+	public ResponseEntity<FriendshipGetByCursorResponse> getFollower(
 		@PathVariable final String nickname,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
-		final CursorSummary<FollowerSummary> cursorSummary = friendshipService.getFollower(
+		final CursorSummary<FriendshipSummary> cursorSummary = friendshipService.getFollower(
 			nickname,
 			request.toParameters()
 		);
-		final FollowerGetByCursorResponse response = FollowerGetByCursorResponse.from(cursorSummary);
+		final FriendshipGetByCursorResponse response = FriendshipGetByCursorResponse.from(cursorSummary);
 
 		return ResponseEntity.ok(response);
 	}
