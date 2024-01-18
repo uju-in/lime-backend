@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.lime.domains.bucket.implementation.BucketReader;
 import com.programmers.lime.domains.bucket.model.BucketProfile;
+import com.programmers.lime.domains.friendships.implementation.FriendshipCounter;
 import com.programmers.lime.domains.inventory.implementation.InventoryReader;
 import com.programmers.lime.domains.inventory.model.InventoryProfile;
 import com.programmers.lime.domains.member.domain.vo.SocialType;
@@ -28,6 +29,7 @@ public class MemberReader {
 	private final MemberRepository memberRepository;
 	private final BucketReader bucketReader;
 	private final InventoryReader inventoryReader;
+	private final FriendshipCounter friendshipCounter;
 
 	public Member read(final Long memberId) {
 		return memberRepository.findById(memberId)
@@ -45,11 +47,13 @@ public class MemberReader {
 	}
 
 	public MyPage readMyPage(final Member member) {
-		MemberProfile memberProfile = MemberProfile.from(member);
+		final long followerCount = friendshipCounter.countFollower(member.getId());
+		final long followingCount = friendshipCounter.countFollowing(member.getId());
+		final MemberProfile memberProfile = MemberProfile.from(member, followerCount, followingCount);
 
-		List<BucketProfile> bucketProfiles = bucketReader.readBucketProfile(member.getId());
+		final List<BucketProfile> bucketProfiles = bucketReader.readBucketProfile(member.getId());
 
-		List<InventoryProfile> inventoryProfiles = inventoryReader.readInventoryProfile(member.getId());
+		final List<InventoryProfile> inventoryProfiles = inventoryReader.readInventoryProfile(member.getId());
 
 		return new MyPage(memberProfile, bucketProfiles, inventoryProfiles);
 	}
