@@ -1,4 +1,4 @@
-package com.programmers.lime.domains.auth;
+package com.programmers.lime.global.config.security;
 
 import java.util.Collections;
 import java.util.Map;
@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import com.programmers.lime.domains.auth.CustomOauth2User;
 import com.programmers.lime.domains.auth.dto.OAuthAttributes;
 import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.member.implementation.MemberAppender;

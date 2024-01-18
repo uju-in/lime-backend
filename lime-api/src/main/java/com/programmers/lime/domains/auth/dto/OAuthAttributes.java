@@ -68,7 +68,8 @@ public class OAuthAttributes {
 			.oauth2UserInfo(new KakaoOAuth2UserInfo(attributes))
 			.build();
 	}
-	public static OAuthAttributes ofGoogle(
+
+	private static OAuthAttributes ofGoogle(
 		final String userNameAttributeName,
 		final Map<String, Object> attributes
 	) {

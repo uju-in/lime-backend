@@ -22,7 +22,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginFailureHandler;
 import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginSuccessHandler;
-import com.programmers.lime.domains.auth.OAuth2UserService;
 import com.programmers.lime.global.config.security.jwt.JwtAuthenticationFilter;
 import com.programmers.lime.global.config.security.jwt.JwtService;
 
@@ -74,8 +73,7 @@ public class SecurityConfiguration {
 					.requestMatchers("/api/{nickname}/buckets/**").permitAll()
 
 					.requestMatchers("/api/hobbies").permitAll()
-
-					.requestMatchers("/login").permitAll() //추가
+					.requestMatchers("/login").permitAll()
 
 					.anyRequest().authenticated()
 			)
