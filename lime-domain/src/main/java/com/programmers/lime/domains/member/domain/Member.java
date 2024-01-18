@@ -80,7 +80,7 @@ public class Member extends BaseEntity {
 		final LocalDate startDate = introduction.getStartDate();
 		final LocalDate now = LocalDate.now();
 
-		return ChronoUnit.MONTHS.between(startDate, now);
+		return ChronoUnit.YEARS.between(startDate, now);
 	}
 
 	public String getContent() {
