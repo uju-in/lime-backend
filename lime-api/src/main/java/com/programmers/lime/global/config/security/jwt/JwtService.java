@@ -129,7 +129,6 @@ public class JwtService {
 		final String refreshToken
 	){
 		response.setStatus(HttpServletResponse.SC_OK);
-		response.setHeader("Authorization", accessToken);
 
 		final ResponseCookie cookie = ResponseCookie.from("refresh-token", refreshToken)
 			.maxAge(COOKIE_AGE_SECONDS)
