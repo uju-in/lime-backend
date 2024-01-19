@@ -3,6 +3,8 @@ package com.programmers.lime.domains.member.domain;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.lime.domains.member.domain.vo.Role;
+import com.programmers.lime.domains.member.domain.vo.SocialInfo;
+import com.programmers.lime.domains.member.domain.vo.SocialType;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -11,12 +13,14 @@ import lombok.NoArgsConstructor;
 public class MemberBuilder {
 
 	public static Member build(final Long memberId) {
-		Member member = Member.builder()
-			.nickname("nickname")
-			.email("email@naver.com")
-			.password("password")
-			.role(Role.USER)
-			.build();
+		final SocialInfo socialInfo = new SocialInfo(
+			"357935205",
+			"test@test.com",
+			"1.png",
+			SocialType.NAVER,
+			Role.USER
+		);
+		final Member member = new Member(socialInfo, "nickname");
 
 		setMemberId(member, memberId);
 
