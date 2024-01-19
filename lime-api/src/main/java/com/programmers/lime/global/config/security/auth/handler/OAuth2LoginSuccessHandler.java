@@ -62,7 +62,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 	) throws IOException {
 		String accessToken = jwtService.generateAccessToken(String.valueOf(oauth2User.getMemberId()));
 		response.addCookie(new Cookie("access-token", accessToken));
-		response.sendRedirect("/api/members/profile"); //인적사항을 입력하는 곳으로 리다이렉트시킴
+		response.sendRedirect("http:localhost:3000/join"); //인적사항을 입력하는 곳으로 리다이렉트시킴
 
 		jwtService.sendAccessToken(response, accessToken);
 	}
