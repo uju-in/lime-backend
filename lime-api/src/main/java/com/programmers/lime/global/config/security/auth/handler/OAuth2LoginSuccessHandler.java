@@ -17,6 +17,7 @@ import com.programmers.lime.domains.auth.CustomOauth2User;
 import com.programmers.lime.global.config.security.jwt.JwtService;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -45,10 +46,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 			if (oauth2User.getRole() == Role.GUEST) {
 				log.info("기본 인적사항은 업데이트 하지 않은 유저");
-				String accessToken = jwtService.generateAccessToken(String.valueOf(oauth2User.getMemberId()));
-				response.addHeader("Authorization", "Bearer " + accessToken);
-				response.sendRedirect("/api/members/profile"); //인적사항을 입력하는 곳으로 리다이렉트시킴
-				jwtService.sendAccessToken(response, accessToken);
+				signUpSuccess(response, oauth2User);
 			} else {
 				log.info("기본 인적사항이 등록된 유저");
 				loginSuccess(response, oauth2User);
@@ -56,6 +54,17 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	private void signUpSuccess(
+		final HttpServletResponse response,
+		final CustomOauth2User oauth2User
+	) throws IOException {
+		String accessToken = jwtService.generateAccessToken(String.valueOf(oauth2User.getMemberId()));
+		response.addCookie(new Cookie("access-token", accessToken));
+		response.sendRedirect("/api/members/profile"); //인적사항을 입력하는 곳으로 리다이렉트시킴
+
+		jwtService.sendAccessToken(response, accessToken);
 	}
 
 	private void loginSuccess(
