@@ -19,7 +19,6 @@ import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorPageParametersBuilder;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.cursor.CursorUtils;
-import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.model.MemberItemSummary;
 import com.programmers.lime.domains.item.model.MemberItemSummaryBuilder;
 import com.programmers.lime.domains.item.repository.MemberItemRepository;
@@ -45,16 +44,12 @@ class MemberItemReaderTest {
 	@DisplayName("커서를 이용해 나의 아이템 목록 조회한다.")
 	void readByCursor(final CursorPageParameters parameters) {
 		// given
-		Hobby hobby = Hobby.BASEBALL;
-		Long memberId = 1L;
 		List<MemberItemSummary> memberItemSummaries = MemberItemSummaryBuilder.buildMany();
 		CursorSummary<MemberItemSummary> cursorSummaries = CursorUtils.getCursorSummaries(memberItemSummaries);
 
 		int pageSize = parameters.size() == null ? DEFAULT_PAGE_SIZE : parameters.size();
 		given(memberItemRepository.findMemberItemsByCursor(
-				hobby,
 				1L,
-				memberId,
 				parameters.cursorId(),
 				pageSize
 			)
@@ -62,9 +57,7 @@ class MemberItemReaderTest {
 
 		// when
 		CursorSummary<MemberItemSummary> actualCursorSummary = memberItemReader.readMemberItem(
-			hobby,
 			1L,
-			memberId,
 			parameters
 		);
 

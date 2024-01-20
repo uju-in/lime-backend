@@ -43,4 +43,8 @@ public class MemberItemFolder extends BaseEntity {
 		this.memberId = Objects.requireNonNull(memberId);
 		this.hobby = Objects.requireNonNull(hobby);
 	}
+
+	public void modifyFolderName(final String folderName) {
+		this.name = folderName;
+	}
 }

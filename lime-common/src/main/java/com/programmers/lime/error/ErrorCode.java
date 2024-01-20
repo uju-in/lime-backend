@@ -79,6 +79,8 @@ public enum ErrorCode {
 	MEMBER_ITEM_NOT_FOUND("MEMBER_ITEM_001", "나의 아이템을 찾을 수 없습니다."),
 	MEMBER_NOT_MINE("MEMBER_ITEM_002", "아이템 담기에 없는 아이템 입니다."),
 	MEMBER_ITEM_ALREADY_EXIST("MEMBER_ITEM_003", "이미 존재하는 아이템 입니다."),
+	MEMBER_ITEM_HOBBY_NOT_EQUAL_TO_FOLDER_HOBBY("MEMBER_ITEM_004", "나의 아이템 취미와 폴더의 취미가 다릅니다."),
+	MEMBER_ITEM_ID_LIST_IS_EMPTY("MEMBER_ITEM_005", "나의 아이템 목록이 비어있습니다."),
 
 	//Inventory
 	INVENTORY_NOT_FOUND("INVENTORY_001", "인벤토리를 찾을 수 없습니다."),
@@ -106,7 +108,11 @@ public enum ErrorCode {
 	// Crawler
 	CRAWLER_NAVER_BAD_REQUEST("CRAWLER", "네이버 크롤러에서 파싱할 수 없는 URL 입니다."),
 	CRAWLER_COUPANG_BAD_REQUEST("CRAWLER", "쿠팡 크롤러에서 파싱할 수 없는 URL 입니다."),
-	CRAWLER_DANAWA_BAD_REQUEST("CRAWLER", "다나와 크롤러에서 파싱할 수 없는 URL 입니다.");
+	CRAWLER_DANAWA_BAD_REQUEST("CRAWLER", "다나와 크롤러에서 파싱할 수 없는 URL 입니다."),
+
+	// MemberItemFolder
+	MEMBER_ITEM_FOLDER_NOT_FOUND("MEMBER_ITEM_FOLDER_001", "폴더를 찾을 수 없습니다."),
+	MEMBER_ITEM_FOLDER_NOT_MINE("MEMBER_ITEM_FOLDER_002", "나의 아이템 폴더가 아닙니다.");
 
 	private static final Map<String, ErrorCode> ERROR_CODE_MAP;
 

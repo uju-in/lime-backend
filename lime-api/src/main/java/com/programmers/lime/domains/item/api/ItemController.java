@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
-import com.programmers.lime.domains.item.api.dto.request.MemberItemAddRequest;
+import com.programmers.lime.domains.item.api.dto.request.MemberItemCreateRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemDeleteRequest;
-import com.programmers.lime.domains.item.api.dto.response.ItemAddResponse;
+import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderCreateRequest;
+import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderUpdateRequest;
+import com.programmers.lime.domains.item.api.dto.response.MemberItemCreateResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetNamesResponse;
@@ -25,7 +28,8 @@ import com.programmers.lime.domains.item.api.dto.response.MemberItemFolderGetByC
 import com.programmers.lime.domains.item.api.dto.response.MemberItemGetByCursorResponse;
 import com.programmers.lime.domains.item.application.ItemEnrollService;
 import com.programmers.lime.domains.item.application.ItemService;
-import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.lime.domains.item.application.MemberItemFolderService;
+import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
@@ -48,6 +52,8 @@ public class ItemController {
 
 	private final ItemService itemService;
 
+	private final MemberItemFolderService memberItemFolderService;
+
 	@Operation(summary = "아이템 등록", description = "ItemEnrollRequest 을 이용하여 아이템을 등록합니다.")
 	@PostMapping("/enroll")
 	public ResponseEntity<ItemEnrollResponse> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
@@ -59,11 +65,13 @@ public class ItemController {
 
 	@Operation(summary = "아이템 담기", description = "MemberItemAddRequest을 이용하여 사용자에 아이템을 담기 합니다.")
 	@PostMapping("/myitems")
-	public ResponseEntity<ItemAddResponse> addItems(@Valid @RequestBody final MemberItemAddRequest request) {
-		ItemAddServiceResponse serviceResponse = itemService.addItem(
+	public ResponseEntity<MemberItemCreateResponse> createMemberItems(
+		@Valid @RequestBody final MemberItemCreateRequest request
+	) {
+		MemberItemCreateServiceResponse serviceResponse = itemService.createMemberItems(
 			request.toMemberItemIdRegistry()
 		);
-		ItemAddResponse response = ItemAddResponse.from(serviceResponse);
+		MemberItemCreateResponse response = MemberItemCreateResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
@@ -79,8 +87,11 @@ public class ItemController {
 
 	@Operation(summary = "나의 아이템 목록에서 삭제", description = "itemId을 이용하여 나의 아이템 목록에서 삭제 합니다.")
 	@DeleteMapping("/myitems")
-	public ResponseEntity<Void> deleteMyItem(@ModelAttribute @Valid final MemberItemDeleteRequest request) {
+	public ResponseEntity<Void> deleteMyItem(
+		@ModelAttribute @Valid final MemberItemDeleteRequest request
+	) {
 		itemService.removeMemberItems(
+			request.folderId(),
 			request.toItemRemovalList()
 		);
 
@@ -111,34 +122,13 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "나의 아이템 폴더 조회", description = "나의 아이템 폴더 목록을 조회 합니다.")
-	@GetMapping("/myitems/folders")
-	public ResponseEntity<MemberItemFolderGetByCursorResponse> getMemberItemFoldersByCursor(
-		@RequestParam final String hobbyName,
-		@ModelAttribute("request") @Valid final CursorRequest request
-	) {
-		Hobby hobby = Hobby.from(hobbyName);
-		MemberItemFolderGetServiceResponse memberItemFolderByCursor = itemService.getMemberItemFolderByCursor(
-			hobby,
-			request.toParameters()
-		);
-
-		MemberItemFolderGetByCursorResponse response = MemberItemFolderGetByCursorResponse
-			.from(memberItemFolderByCursor);
-
-		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "나의 아이템 폴더 상세 조회", description = "나의 아이템 폴더를 상세 조회 합니다.")
+	@Operation(summary = "나의 아이템 목록 조회", description = "나의 아이템 목록을 조회 합니다.")
 	@GetMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
 		@PathVariable final Long folderId,
-		@RequestParam final String hobbyName,
 		@ModelAttribute("request") @Valid final CursorRequest request
 	) {
-		Hobby hobby = Hobby.from(hobbyName);
 		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
-			hobby,
 			folderId,
 			request.toParameters()
 		);
@@ -153,5 +143,80 @@ public class ItemController {
 		ItemGetRankingResponse response = ItemGetRankingResponse.from(itemService.getRanking());
 
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "나의 아이템 폴더 조회", description = "나의 아이템 폴더 목록을 조회 합니다.")
+	@GetMapping("/myitems/folders")
+	public ResponseEntity<MemberItemFolderGetByCursorResponse> getMemberItemFoldersByCursor(
+		@RequestParam final String hobbyName,
+		@ModelAttribute("request") @Valid final CursorRequest request
+	) {
+		Hobby hobby = Hobby.from(hobbyName);
+		MemberItemFolderGetServiceResponse memberItemFolderByCursor = memberItemFolderService.getMemberItemFolderByCursor(
+			hobby,
+			request.toParameters()
+		);
+
+		MemberItemFolderGetByCursorResponse response = MemberItemFolderGetByCursorResponse
+			.from(memberItemFolderByCursor);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "나의 아이템 폴더 생성", description = "나의 아이템 폴더를 생성 합니다.")
+	@PostMapping("/myitems/folders")
+	public ResponseEntity<Void> addMemberItemFolder(
+		@RequestBody @Valid final MemberItemFolderCreateRequest request
+	) {
+		Hobby hobby = Hobby.from(request.hobbyName());
+		memberItemFolderService.createMemberItemFolder(
+			request.folderName(),
+			hobby
+		);
+
+		return ResponseEntity.ok().build();
+	}
+	@Operation(summary = "나의 아이템 폴더 상세 조회", description = "나의 아이템 폴더를 상세 조회 합니다.")
+	@GetMapping("/myitems/folders/{folderId}")
+	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
+    @PathVariable final Long folderId,
+		@RequestParam final String hobbyName,
+		@ModelAttribute("request") @Valid final CursorRequest request
+	) {
+		Hobby hobby = Hobby.from(hobbyName);
+		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
+			hobby,
+			folderId,
+			request.toParameters()
+		);
+		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(serviceResponse);
+
+		return ResponseEntity.ok(response);
+	}
+  
+  @Operation(summary = "나의 아이템 폴더 수정", description = "나의 아이템 폴더를 수정 합니다.")
+	@PutMapping("/myitems/folders/{folderId}")
+	public ResponseEntity<Void> modifyMemberItemFolder(
+		@PathVariable final Long folderId,
+		@RequestBody @Valid final MemberItemFolderUpdateRequest request
+	) {
+		memberItemFolderService.modifyMemberItemFolder(
+			folderId,
+			request.folderName()
+		);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "나의 아이템 폴더 삭제", description = "나의 아이템 폴더를 삭제 합니다.")
+	@DeleteMapping("/myitems/folders/{folderId}")
+	public ResponseEntity<Void> removeMemberItemFolder(
+		@PathVariable final Long folderId
+	) {
+		memberItemFolderService.removeMemberItemFolder(
+			folderId
+		);
+
+		return ResponseEntity.ok().build();
 	}
 }

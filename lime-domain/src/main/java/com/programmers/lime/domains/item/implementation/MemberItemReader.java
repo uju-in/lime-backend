@@ -67,21 +67,26 @@ public class MemberItemReader {
 	}
 
 	public CursorSummary<MemberItemSummary> readMemberItem(
-		final Hobby hobby,
 		final Long folderId,
-		final Long memberId,
 		final CursorPageParameters parameters
 	) {
 		int size = getPageSize(parameters);
 		List<MemberItemSummary> memberItemsByCursor = memberItemRepository.findMemberItemsByCursor(
-			hobby,
 			folderId,
-			memberId,
 			parameters.cursorId(),
 			size
 		);
 
 		return CursorUtils.getCursorSummaries(memberItemsByCursor);
+	}
+
+	public MemberItem readByItemIdAndFolderId(
+		final Long itemId,
+		final Long folderId
+	) {
+		Item item = itemReader.read(itemId);
+		return memberItemRepository.findMemberItemByFolderIdAndItem(folderId, item)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_ITEM_NOT_FOUND));
 	}
 
 	private int getPageSize(final CursorPageParameters parameters) {
@@ -102,5 +107,11 @@ public class MemberItemReader {
 			return memberItemRepository.countByMemberId(memberId);
 		}
 		return memberItemRepository.countByHobbyAndMemberId(hobby, memberId);
+	}
+
+	public int countByFolderId(
+		final Long folderId
+	) {
+		return memberItemRepository.countByFolderId(folderId);
 	}
 }

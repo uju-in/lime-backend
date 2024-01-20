@@ -1,8 +1,7 @@
-package com.programmers.lime.domains.item.application;
+package com.programmers.lime.domains.item.implementation;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
 
