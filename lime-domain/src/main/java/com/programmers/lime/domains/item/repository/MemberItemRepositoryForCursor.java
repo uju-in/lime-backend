@@ -17,9 +17,7 @@ public interface MemberItemRepositoryForCursor {
 	);
 
 	List<MemberItemSummary> findMemberItemsByCursor(
-		final Hobby hobby,
 		final Long folderId,
-		final Long memberId,
 		final String cursorId,
 		final int pageSize
 	);

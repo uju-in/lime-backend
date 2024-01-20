@@ -28,7 +28,7 @@ public class MemberItemAppender {
 	 * 서버 최적화를 위해 이 부분은 입력받은 item 리스트를 그대로 반환할 수 있지만 앞의 내용을 고려하면 좋겠습니다.
 	 */
 	@Transactional
-	public List<Long> addMemberItems(
+	public List<Long> appendMemberItems(
 		final List<Long> itemIds,
 		final Long folderId,
 		final Long memberId

@@ -64,17 +64,14 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 
 	@Override
 	public List<MemberItemSummary> findMemberItemsByCursor(
-		final Hobby hobby,
 		final Long folderId,
-		final Long memberId,
 		final String cursorId,
 		final int pageSize
 	) {
 		List<Long> itemIdsFromMemberItem = jpaQueryFactory.select(memberItem.item.id)
 			.from(memberItem)
 			.where(
-				memberItem.folderId.eq(folderId),
-				memberItem.memberId.eq(memberId)
+				memberItem.folderId.eq(folderId)
 			)
 			.stream()
 			.toList();
@@ -94,7 +91,6 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 			).from(item)
 			.where(
 				cursorIdConditionFromMemberItem(cursorId),
-				hobbyCondition(hobby),
 				item.id.in(itemIdsFromMemberItem)
 			).orderBy(new OrderSpecifier<>(Order.DESC, item.createdAt))
 			.limit(pageSize)

@@ -19,4 +19,8 @@ public class MemberItemRemover {
 		MemberItem memberItem = memberItemReader.read(memberItemId);
 		memberItemRepository.delete(memberItem);
 	}
+
+	public void removeByMemberId(final Long memberId) {
+		memberItemRepository.deleteByMemberId(memberId);
+	}
 }

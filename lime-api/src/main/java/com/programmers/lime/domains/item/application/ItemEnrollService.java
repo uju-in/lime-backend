@@ -1,15 +1,13 @@
 package com.programmers.lime.domains.item.application;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
-import com.programmers.lime.common.model.ItemIdRegistry;
 import com.programmers.lime.crawling.ItemCrawlerResult;
 import com.programmers.lime.crawling.WebCrawler;
 import com.programmers.lime.crawling.WebSite;
 import com.programmers.lime.domains.item.application.dto.ItemEnrollServiceRequest;
 import com.programmers.lime.domains.item.implementation.ItemAppender;
+import com.programmers.lime.domains.item.implementation.ItemEnrollValidator;
 import com.programmers.lime.domains.item.model.ItemCrawlerInfo;
 import com.programmers.lime.redis.implement.ItemRanking;
 

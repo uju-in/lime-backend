@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
-import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.common.model.ItemRemovalList;
-import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
+import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
-import com.programmers.lime.domains.item.application.dto.MemberItemFolderGetServiceResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
@@ -21,12 +19,11 @@ import com.programmers.lime.domains.item.implementation.ItemFinder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemChecker;
-import com.programmers.lime.domains.item.implementation.MemberItemFolderReader;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderValidator;
 import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
-import com.programmers.lime.domains.item.model.MemberItemFolderCursorSummary;
 import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
 import com.programmers.lime.domains.item.model.MemberItemSummary;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
@@ -45,8 +42,6 @@ public class ItemService {
 
 	private final MemberItemChecker memberItemChecker;
 
-	private final ItemReader itemReader;
-
 	private final ReviewStatistics reviewStatistics;
 
 	private final MemberItemReader memberItemReader;
@@ -57,17 +52,37 @@ public class ItemService {
 
 	private final ItemCursorReader itemCursorReader;
 
-	private final MemberUtils memberUtils;
-
 	private final ItemRanking itemRanking;
 
 	private final ReviewReader reviewReader;
 
-	private final MemberItemFolderReader memberItemFolderReader;
+	private final MemberUtils memberUtils;
 
-	public ItemAddServiceResponse addItem(
+	private final MemberItemFolderValidator memberItemFolderValidator;
+
+	private final ItemReader itemReader;
+
+	public MemberItemCreateServiceResponse createMemberItems(
 		final MemberItemIdRegistry memberItemIdRegistry
 	) {
+		updateItemRanking(memberItemIdRegistry);
+
+		memberItemFolderValidator.validateItemHobbyEqualsFolderHobby(
+			memberItemIdRegistry.itemIds(),
+			memberItemIdRegistry.folderId()
+		);
+
+		Long memberId = memberUtils.getCurrentMemberId();
+		List<Long> memberItemIds = memberItemAppender.appendMemberItems(
+			memberItemIdRegistry.itemIds(),
+			memberItemIdRegistry.folderId(),
+			memberId
+		);
+
+		return new MemberItemCreateServiceResponse(memberItemIds);
+	}
+
+	private void updateItemRanking(final MemberItemIdRegistry memberItemIdRegistry) {
 		List<String> items = memberItemIdRegistry.itemIds().stream()
 			.map(itemReader::read)
 			.map(Item::getName)
@@ -76,15 +91,6 @@ public class ItemService {
 		for (String itemName : items) {
 			itemRanking.increasePoint(itemName, 1);
 		}
-
-		Long memberId = memberUtils.getCurrentMemberId();
-		List<Long> memberItemIds = memberItemAppender.addMemberItems(
-			memberItemIdRegistry.itemIds(),
-			memberItemIdRegistry.folderId(),
-			memberId
-		);
-
-		return new ItemAddServiceResponse(memberItemIds);
 	}
 
 	public ItemGetServiceResponse getItem(final Long itemId) {
@@ -108,11 +114,16 @@ public class ItemService {
 			.build();
 	}
 
-	public void removeMemberItems(final ItemRemovalList itemRemovalList) {
+	public void removeMemberItems(
+		final Long folderId,
+		final ItemRemovalList itemRemovalList
+	) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
+		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+
 		for (Long itemId : itemRemovalList.itemIds()) {
-			MemberItem memberItem = memberItemReader.read(itemId, memberId);
+			MemberItem memberItem = memberItemReader.readByItemIdAndFolderId(itemId, folderId);
 			memberItemRemover.remove(memberItem.getId());
 		}
 	}
@@ -141,37 +152,22 @@ public class ItemService {
 	}
 
 	public MemberItemGetServiceResponse getMemberItemsByCursor(
-		final Hobby hobby,
 		final Long folderId,
 		final CursorPageParameters parameters
 	) {
+
 		Long memberId = memberUtils.getCurrentMemberId();
-		int totalMemberItemCount = memberItemReader.countByMemberIdAndHobby(memberId, hobby);
+
+		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+
+		int totalMemberItemCount = memberItemReader.countByFolderId(folderId);
 
 		CursorSummary<MemberItemSummary> cursorSummary = memberItemReader.readMemberItem(
-			hobby,
 			folderId,
-			memberId,
 			parameters
 		);
 
 		return new MemberItemGetServiceResponse(cursorSummary, totalMemberItemCount);
-	}
-
-	public MemberItemFolderGetServiceResponse getMemberItemFolderByCursor(
-			final Hobby hobby,
-			final CursorPageParameters parameters
-	) {
-		Long memberId = memberUtils.getCurrentMemberId();
-		int totalMemberItemFolderCount = memberItemFolderReader.countByMemberIdAndHobby(memberId, hobby);
-
-		CursorSummary<MemberItemFolderCursorSummary> cursorSummary = memberItemFolderReader.readMemberItemFolderByCursor(
-			hobby,
-			memberId,
-			parameters
-		);
-
-		return new MemberItemFolderGetServiceResponse(cursorSummary, totalMemberItemFolderCount);
 	}
 
 
