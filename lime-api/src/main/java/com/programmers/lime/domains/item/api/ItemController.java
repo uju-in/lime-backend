@@ -122,21 +122,6 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "나의 아이템 목록 조회", description = "나의 아이템 목록을 조회 합니다.")
-	@GetMapping("/myitems/folders/{folderId}")
-	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItemsByCursor(
-		@PathVariable final Long folderId,
-		@ModelAttribute("request") @Valid final CursorRequest request
-	) {
-		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
-			folderId,
-			request.toParameters()
-		);
-		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(serviceResponse);
-
-		return ResponseEntity.ok(response);
-	}
-
 	@Operation(summary = "랭킹 조회", description = "랭킹을 TOP10까지 조회합니다.")
 	@GetMapping("/ranking")
 	public ResponseEntity<ItemGetRankingResponse> getRanking() {
