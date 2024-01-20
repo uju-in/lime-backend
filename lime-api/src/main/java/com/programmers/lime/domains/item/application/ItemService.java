@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.Hobby;
-import com.programmers.lime.common.model.ItemIdRegistry;
 import com.programmers.lime.common.model.ItemRemovalList;
 import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
+import com.programmers.lime.domains.item.application.dto.MemberItemFolderGetServiceResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
@@ -21,10 +21,13 @@ import com.programmers.lime.domains.item.implementation.ItemFinder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemChecker;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderReader;
 import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
+import com.programmers.lime.domains.item.model.MemberItemFolderCursorSummary;
+import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
 import com.programmers.lime.domains.item.model.MemberItemSummary;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
 import com.programmers.lime.domains.review.implementation.ReviewStatistics;
@@ -60,8 +63,12 @@ public class ItemService {
 
 	private final ReviewReader reviewReader;
 
-	public ItemAddServiceResponse addItem(final ItemIdRegistry itemIdRegistry) {
-		List<String> items = itemIdRegistry.itemIds().stream()
+	private final MemberItemFolderReader memberItemFolderReader;
+
+	public ItemAddServiceResponse addItem(
+		final MemberItemIdRegistry memberItemIdRegistry
+	) {
+		List<String> items = memberItemIdRegistry.itemIds().stream()
 			.map(itemReader::read)
 			.map(Item::getName)
 			.toList();
@@ -71,7 +78,11 @@ public class ItemService {
 		}
 
 		Long memberId = memberUtils.getCurrentMemberId();
-		List<Long> memberItemIds = memberItemAppender.addMemberItems(itemIdRegistry.itemIds(), memberId);
+		List<Long> memberItemIds = memberItemAppender.addMemberItems(
+			memberItemIdRegistry.itemIds(),
+			memberItemIdRegistry.folderId(),
+			memberId
+		);
 
 		return new ItemAddServiceResponse(memberItemIds);
 	}
@@ -131,6 +142,7 @@ public class ItemService {
 
 	public MemberItemGetServiceResponse getMemberItemsByCursor(
 		final Hobby hobby,
+		final Long folderId,
 		final CursorPageParameters parameters
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
@@ -138,12 +150,30 @@ public class ItemService {
 
 		CursorSummary<MemberItemSummary> cursorSummary = memberItemReader.readMemberItem(
 			hobby,
+			folderId,
 			memberId,
 			parameters
 		);
 
 		return new MemberItemGetServiceResponse(cursorSummary, totalMemberItemCount);
 	}
+
+	public MemberItemFolderGetServiceResponse getMemberItemFolderByCursor(
+			final Hobby hobby,
+			final CursorPageParameters parameters
+	) {
+		Long memberId = memberUtils.getCurrentMemberId();
+		int totalMemberItemFolderCount = memberItemFolderReader.countByMemberIdAndHobby(memberId, hobby);
+
+		CursorSummary<MemberItemFolderCursorSummary> cursorSummary = memberItemFolderReader.readMemberItemFolderByCursor(
+			hobby,
+			memberId,
+			parameters
+		);
+
+		return new MemberItemFolderGetServiceResponse(cursorSummary, totalMemberItemFolderCount);
+	}
+
 
 	public List<ItemRankingServiceResponse> getRanking() {
 		return itemRanking.viewRanking();

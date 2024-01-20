@@ -30,10 +30,11 @@ public class MemberItemAppender {
 	@Transactional
 	public List<Long> addMemberItems(
 		final List<Long> itemIds,
+		final Long folderId,
 		final Long memberId
 	) {
 		List<Item> items = getItems(itemIds);
-		List<MemberItem> memberItems = getMemberItems(memberId, items);
+		List<MemberItem> memberItems = getMemberItems(memberId, folderId, items);
 		List<MemberItem> savedMemberItems = memberItemRepository.saveAll(memberItems);
 
 		return savedMemberItems.stream()
@@ -44,13 +45,14 @@ public class MemberItemAppender {
 
 	private List<MemberItem> getMemberItems(
 		final Long memberId,
+		final Long folderId,
 		final List<Item> items
 	) {
 		memberItemValidator.validateExistMemberItem(memberId, items);
 
 		return items.stream()
 			.map(
-				item -> new MemberItem(memberId, item)
+				item -> new MemberItem(memberId, item, folderId)
 			).toList();
 	}
 

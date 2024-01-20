@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.programmers.lime.IntegrationTest;
-import com.programmers.lime.common.model.ItemIdRegistry;
-import com.programmers.lime.common.model.ItemIdRegistryBuilder;
 import com.programmers.lime.domains.item.application.dto.ItemAddServiceResponse;
 import com.programmers.lime.domains.item.domain.setup.ItemSetup;
 import com.programmers.lime.domains.item.implementation.MemberItemValidator;
+import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
+import com.programmers.lime.domains.item.model.MemberItemIdRegistryBuilder;
 import com.programmers.lime.global.util.MemberUtils;
 
 class ItemServiceTest extends IntegrationTest {
@@ -39,14 +39,14 @@ class ItemServiceTest extends IntegrationTest {
 		// memberSetup이 만들어지면 변경할 예정
 		doNothing().when(memberItemValidator).validateExistMemberItem(any(), any());
 
-		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.build();
-		ItemAddServiceResponse expectedResponse = new ItemAddServiceResponse(itemIdRegistry.itemIds());
+		MemberItemIdRegistry memberItemIdRegistryBuilder = MemberItemIdRegistryBuilder.build();
+		ItemAddServiceResponse expectedResponse = new ItemAddServiceResponse(memberItemIdRegistryBuilder.itemIds());
 
-		itemIdRegistry.itemIds()
+		memberItemIdRegistryBuilder.itemIds()
 			.forEach(itemId -> itemSetup.saveOne(itemId));
 
 		// when
-		ItemAddServiceResponse actualResponse = itemService.addItem(itemIdRegistry);
+		ItemAddServiceResponse actualResponse = itemService.addItem(memberItemIdRegistryBuilder);
 
 		// then
 		assertThat(actualResponse)

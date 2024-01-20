@@ -13,7 +13,7 @@ public class MemberItemBuilder {
 	public static MemberItem build() {
 		Long memberId = 1L;
 		Item item = ItemBuilder.build();
-		MemberItem memberItem = new MemberItem(memberId, item);
+		MemberItem memberItem = new MemberItem(memberId, item, 1L);
 		setItemId(memberItem, 1L);
 
 		return memberItem;

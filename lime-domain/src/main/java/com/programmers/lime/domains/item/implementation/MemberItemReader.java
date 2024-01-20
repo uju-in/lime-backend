@@ -68,12 +68,14 @@ public class MemberItemReader {
 
 	public CursorSummary<MemberItemSummary> readMemberItem(
 		final Hobby hobby,
+		final Long folderId,
 		final Long memberId,
 		final CursorPageParameters parameters
 	) {
 		int size = getPageSize(parameters);
 		List<MemberItemSummary> memberItemsByCursor = memberItemRepository.findMemberItemsByCursor(
 			hobby,
+			folderId,
 			memberId,
 			parameters.cursorId(),
 			size
