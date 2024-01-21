@@ -1,5 +1,8 @@
 package com.programmers.lime.domains.member.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.programmers.lime.domains.member.domain.vo.Role;
@@ -36,5 +39,14 @@ public class MemberBuilder {
 			"id",
 			id
 		);
+	}
+
+	public static List<Member> buildMany(final int size) {
+		List<Member> members = new ArrayList<>();
+		for (int i = 1; i < size + 1; i++) {
+			members.add(build((long)i));
+		}
+
+		return members;
 	}
 }

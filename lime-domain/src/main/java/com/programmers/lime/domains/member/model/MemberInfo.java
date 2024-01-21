@@ -3,21 +3,24 @@ package com.programmers.lime.domains.member.model;
 import com.programmers.lime.domains.member.domain.Level;
 import com.programmers.lime.domains.member.domain.Member;
 
+import lombok.Builder;
+
+@Builder
 public record MemberInfo(
 	Long memberId,
-	String nickName,
+	String nickname,
 	String profileImage,
 	int level
 ) {
 
 	public MemberInfo(
 		final Long memberId,
-		final String nickName,
+		final String nickname,
 		final String profileImage,
 		final int level
 	) {
 		this.memberId = memberId;
-		this.nickName = nickName;
+		this.nickname = nickname;
 		this.profileImage = profileImage;
 		this.level = Level.from(level);
 	}
