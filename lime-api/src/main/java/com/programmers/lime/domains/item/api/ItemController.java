@@ -130,24 +130,6 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "나의 아이템 폴더 조회", description = "나의 아이템 폴더 목록을 조회 합니다.")
-	@GetMapping("/myitems/folders")
-	public ResponseEntity<MemberItemFolderGetByCursorResponse> getMemberItemFoldersByCursor(
-		@RequestParam final String hobbyName,
-		@ModelAttribute("request") @Valid final CursorRequest request
-	) {
-		Hobby hobby = Hobby.from(hobbyName);
-		MemberItemFolderGetServiceResponse memberItemFolderByCursor = memberItemFolderService.getMemberItemFolderByCursor(
-			hobby,
-			request.toParameters()
-		);
-
-		MemberItemFolderGetByCursorResponse response = MemberItemFolderGetByCursorResponse
-			.from(memberItemFolderByCursor);
-
-		return ResponseEntity.ok(response);
-	}
-
 	@Operation(summary = "나의 아이템 폴더 생성", description = "나의 아이템 폴더를 생성 합니다.")
 	@PostMapping("/myitems/folders")
 	public ResponseEntity<Void> addMemberItemFolder(
@@ -161,22 +143,8 @@ public class ItemController {
 
 		return ResponseEntity.ok().build();
 	}
-	@Operation(summary = "나의 아이템 폴더 상세 조회", description = "나의 아이템 폴더를 상세 조회 합니다.")
-	@GetMapping("/myitems/folders/{folderId}")
-	public ResponseEntity<MemberItemGetByCursorResponse> getMemberItem(
-    	@PathVariable final Long folderId,
-		@ModelAttribute("request") @Valid final CursorRequest request
-	) {
-		MemberItemGetServiceResponse serviceResponse = itemService.getMemberItemsByCursor(
-			folderId,
-			request.toParameters()
-		);
-		MemberItemGetByCursorResponse response = MemberItemGetByCursorResponse.from(serviceResponse);
 
-		return ResponseEntity.ok(response);
-	}
-  
-  @Operation(summary = "나의 아이템 폴더 수정", description = "나의 아이템 폴더를 수정 합니다.")
+  	@Operation(summary = "나의 아이템 폴더 수정", description = "나의 아이템 폴더를 수정 합니다.")
 	@PutMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<Void> modifyMemberItemFolder(
 		@PathVariable final Long folderId,
