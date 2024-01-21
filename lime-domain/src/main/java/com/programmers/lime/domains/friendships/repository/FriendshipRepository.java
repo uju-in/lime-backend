@@ -5,19 +5,20 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.programmers.lime.domains.friendships.domain.Friendship;
+import com.programmers.lime.domains.member.domain.Member;
 
 public interface FriendshipRepository extends JpaRepository<Friendship, Long>, FriendshipRepositoryForCursor {
-	Optional<Friendship> findByToMemberIdAndFromMemberId(
-		final Long toMemberId,
-		final Long fromMemberId
+	Optional<Friendship> findByToMemberAndFromMember(
+		final Member toMember,
+		final Member fromMember
 	);
 
-	long countByToMemberId(final Long memberId);
+	long countByToMember(final Member member);
 
-	long countByFromMemberId(final Long memberId);
+	long countByFromMember(final Member member);
 
-	boolean existsByToMemberIdAndFromMemberId(
-		final Long toMemberId,
-		final Long fromMemberId
+	boolean existsByToMemberAndFromMember(
+		final Member toMember,
+		final Member fromMember
 	);
 }

@@ -8,6 +8,7 @@ import com.programmers.lime.domains.friendships.implementation.FriendshipAppende
 import com.programmers.lime.domains.friendships.implementation.FriendshipReader;
 import com.programmers.lime.domains.friendships.implementation.FriendshipRemover;
 import com.programmers.lime.domains.friendships.model.FriendshipSummary;
+import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.global.util.MemberUtils;
 
@@ -24,17 +25,17 @@ public class FriendshipService {
 	private final MemberReader memberReader;
 
 	public void follow(final String nickname) {
-		final Long fromMemberId = memberUtils.getCurrentMemberId();
-		final Long toMemberId = memberReader.readByNickname(nickname).getId();
+		final Member fromMember = memberUtils.getCurrentMember();
+		final Member toMember = memberReader.readByNickname(nickname);
 
-		friendshipAppender.append(toMemberId, fromMemberId);
+		friendshipAppender.append(toMember, fromMember);
 	}
 
 	public void unfollow(final String nickname) {
-		final Long fromMemberId = memberUtils.getCurrentMemberId();
-		final Long toMemberId = memberReader.readByNickname(nickname).getId();
+		final Member fromMember = memberUtils.getCurrentMember();
+		final Member toMember = memberReader.readByNickname(nickname);
 
-		friendshipRemover.remove(toMemberId, fromMemberId);
+		friendshipRemover.remove(toMember, fromMember);
 	}
 
 	public CursorSummary<FriendshipSummary> getFollower(

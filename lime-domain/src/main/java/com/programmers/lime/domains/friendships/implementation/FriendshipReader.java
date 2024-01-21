@@ -11,6 +11,7 @@ import com.programmers.lime.common.cursor.CursorUtils;
 import com.programmers.lime.domains.friendships.domain.Friendship;
 import com.programmers.lime.domains.friendships.model.FriendshipSummary;
 import com.programmers.lime.domains.friendships.repository.FriendshipRepository;
+import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
 
@@ -26,10 +27,10 @@ public class FriendshipReader {
 
 	@Transactional(readOnly = true)
 	public Friendship read(
-		final Long toMemberId,
-		final Long fromMemberId
+		final Member toMember,
+		final Member fromMember
 	) {
-		return friendshipRepository.findByToMemberIdAndFromMemberId(toMemberId, fromMemberId)
+		return friendshipRepository.findByToMemberAndFromMember(toMember, fromMember)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.FRIENDSHIP_NOT_FOUND));
 	}
 

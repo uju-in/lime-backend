@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.programmers.lime.domains.friendships.domain.Friendship;
 import com.programmers.lime.domains.friendships.repository.FriendshipRepository;
+import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
 
@@ -16,14 +17,14 @@ public class FriendshipAppender {
 	private final FriendshipRepository friendshipRepository;
 
 	public Friendship append(
-		final Long toMemberId,
-		final Long fromMemberId
+		final Member toMember,
+		final Member fromMember
 	) {
-		if (friendshipRepository.existsByToMemberIdAndFromMemberId(toMemberId, fromMemberId)) {
+		if (friendshipRepository.existsByToMemberAndFromMember(toMember, fromMember)) {
 			throw new EntityNotFoundException(ErrorCode.FRIENDSHIP_ALREADY_EXISTS);
 		}
 
-		final Friendship friendship = new Friendship(toMemberId, fromMemberId);
+		final Friendship friendship = new Friendship(toMember, fromMember);
 
 		return friendshipRepository.save(friendship);
 	}

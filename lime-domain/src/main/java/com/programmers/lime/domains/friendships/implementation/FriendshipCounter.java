@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.lime.domains.friendships.repository.FriendshipRepository;
+import com.programmers.lime.domains.member.domain.Member;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,12 +15,12 @@ public class FriendshipCounter {
 	private final FriendshipRepository friendshipRepository;
 
 	@Transactional(readOnly = true)
-	public long countFollower(final Long memberId) {
-		return friendshipRepository.countByToMemberId(memberId);
+	public long countFollower(final Member member) {
+		return friendshipRepository.countByToMember(member);
 	}
 
 	@Transactional(readOnly = true)
-	public long countFollowing(final Long memberId) {
-		return friendshipRepository.countByFromMemberId(memberId);
+	public long countFollowing(final Member member) {
+		return friendshipRepository.countByFromMember(member);
 	}
 }

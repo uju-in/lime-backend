@@ -11,8 +11,8 @@ import com.programmers.lime.domains.bucket.model.BucketProfile;
 import com.programmers.lime.domains.friendships.implementation.FriendshipCounter;
 import com.programmers.lime.domains.inventory.implementation.InventoryReader;
 import com.programmers.lime.domains.inventory.model.InventoryProfile;
-import com.programmers.lime.domains.member.domain.vo.SocialType;
 import com.programmers.lime.domains.member.domain.Member;
+import com.programmers.lime.domains.member.domain.vo.SocialType;
 import com.programmers.lime.domains.member.model.MemberProfile;
 import com.programmers.lime.domains.member.model.MyPage;
 import com.programmers.lime.domains.member.repository.MemberRepository;
@@ -47,8 +47,8 @@ public class MemberReader {
 	}
 
 	public MyPage readMyPage(final Member member) {
-		final long followerCount = friendshipCounter.countFollower(member.getId());
-		final long followingCount = friendshipCounter.countFollowing(member.getId());
+		final long followerCount = friendshipCounter.countFollower(member);
+		final long followingCount = friendshipCounter.countFollowing(member);
 		final MemberProfile memberProfile = MemberProfile.from(member, followerCount, followingCount);
 
 		final List<BucketProfile> bucketProfiles = bucketReader.readBucketProfile(member.getId());
