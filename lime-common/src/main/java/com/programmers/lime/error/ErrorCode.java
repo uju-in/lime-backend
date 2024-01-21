@@ -112,6 +112,7 @@ public enum ErrorCode {
 
 	// Friendship
 	FRIENDSHIP_NOT_FOUND("FRIENDSHIP_001", "친구 관계를 찾을 수 없습니다."),
+	FRIENDSHIP_ALREADY_EXISTS("FRIENDSHIP_002", "이미 친구 관계가 존재합니다."),
 	;
 
 	private static final Map<String, ErrorCode> ERROR_CODE_MAP;

@@ -15,4 +15,9 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long>, F
 	long countByToMemberId(final Long memberId);
 
 	long countByFromMemberId(final Long memberId);
+
+	boolean existsByToMemberIdAndFromMemberId(
+		final Long toMemberId,
+		final Long fromMemberId
+	);
 }
