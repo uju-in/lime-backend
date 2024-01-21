@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import com.programmers.lime.domains.friendships.domain.Friendship;
 import com.programmers.lime.domains.friendships.repository.FriendshipRepository;
 import com.programmers.lime.domains.member.domain.Member;
-import com.programmers.lime.error.EntityNotFoundException;
+import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class FriendshipAppender {
 		final Member fromMember
 	) {
 		if (friendshipRepository.existsByToMemberAndFromMember(toMember, fromMember)) {
-			throw new EntityNotFoundException(ErrorCode.FRIENDSHIP_ALREADY_EXISTS);
+			throw new BusinessException(ErrorCode.FRIENDSHIP_ALREADY_EXISTS);
 		}
 
 		final Friendship friendship = new Friendship(toMember, fromMember);
