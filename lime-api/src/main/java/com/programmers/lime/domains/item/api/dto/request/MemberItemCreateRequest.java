@@ -14,7 +14,6 @@ public record MemberItemCreateRequest(
 	List<Long> itemIds,
 
 	@Schema(description = "아이템 폴더 id", example = "1")
-	@NotNull(message = "아이템 폴더 id는 필수 값 입니다.")
 	Long folderId
 ) {
 	public MemberItemIdRegistry toMemberItemIdRegistry() {

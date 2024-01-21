@@ -42,6 +42,10 @@ public class MemberItemFolderValidator {
 		final List<Long> itemIds,
 		final Long folderId
 	) {
+		if(folderId == null) {
+			return;
+		}
+
 		if(itemIds.size() == 0) {
 			throw new BusinessException(ErrorCode.MEMBER_ITEM_ID_LIST_IS_EMPTY);
 		}

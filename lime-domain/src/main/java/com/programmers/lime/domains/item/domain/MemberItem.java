@@ -45,6 +45,6 @@ public class MemberItem extends BaseEntity {
 	) {
 		this.memberId = Objects.requireNonNull(memberId);
 		this.item = Objects.requireNonNull(item);
-		this.folderId = Objects.requireNonNull(folderId);
+		this.folderId = folderId;
 	}
 }
