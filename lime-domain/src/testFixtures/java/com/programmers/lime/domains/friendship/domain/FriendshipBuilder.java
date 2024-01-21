@@ -1,4 +1,4 @@
-package com.programmers.lime.domains.friendship;
+package com.programmers.lime.domains.friendship.domain;
 
 import org.springframework.test.util.ReflectionTestUtils;
 

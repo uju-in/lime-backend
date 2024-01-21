@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.programmers.lime.domains.friendship.FriendshipBuilder;
+import com.programmers.lime.domains.friendship.domain.FriendshipBuilder;
 import com.programmers.lime.domains.friendships.domain.Friendship;
 import com.programmers.lime.domains.friendships.repository.FriendshipRepository;
 import com.programmers.lime.domains.member.domain.Member;
