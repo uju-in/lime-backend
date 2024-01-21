@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class FriendshipSummaryBuilder {
 	public static List<FriendshipSummary> buildFollower(final List<Friendship> friendships) {
 		final List<FriendshipSummary> friendshipSummaries = new ArrayList<>();
-		friendships.stream().forEach(friendship -> {
+		friendships.forEach(friendship -> {
 			final MemberInfo memberInfo = MemberInfo.builder()
 				.memberId(friendship.getFromMember().getId())
 				.nickname(friendship.getFromMember().getNickname())
@@ -30,7 +30,7 @@ public class FriendshipSummaryBuilder {
 
 	public static List<FriendshipSummary> buildFollowing(final List<Friendship> friendships) {
 		final List<FriendshipSummary> friendshipSummaries = new ArrayList<>();
-		friendships.stream().forEach(friendship -> {
+		friendships.forEach(friendship -> {
 			final MemberInfo memberInfo = MemberInfo.builder()
 				.memberId(friendship.getToMember().getId())
 				.nickname(friendship.getToMember().getNickname())
