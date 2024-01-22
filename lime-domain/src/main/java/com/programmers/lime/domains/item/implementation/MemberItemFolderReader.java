@@ -25,30 +25,6 @@ public class MemberItemFolderReader {
 	private final MemberItemFolderRepository memberItemFolderRepository;
 	private static final int DEFAULT_PAGE_SIZE = 20;
 
-	public int countByMemberIdAndHobby(
-		final Long memberId,
-		final Hobby hobby
-	) {
-		return memberItemFolderRepository.countByHobbyAndMemberId(hobby, memberId);
-	}
-
-	public CursorSummary<MemberItemFolderCursorSummary> readMemberItemFolderByCursor(
-		final Hobby hobby,
-		final Long memberId,
-		final CursorPageParameters parameters
-	) {
-		int size = getPageSize(parameters);
-		List<MemberItemFolderCursorSummary> memberItemFoldersByCursor =
-			memberItemFolderRepository.findMemberItemFoldersByCursor(
-				memberId,
-				hobby,
-				parameters.cursorId(),
-				size
-			);
-
-		return CursorUtils.getCursorSummaries(memberItemFoldersByCursor);
-	}
-
 	private int getPageSize(final CursorPageParameters parameters) {
 		Integer parameterSize = parameters.size();
 

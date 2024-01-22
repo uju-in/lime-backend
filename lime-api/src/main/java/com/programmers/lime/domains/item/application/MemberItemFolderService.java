@@ -22,8 +22,6 @@ public class MemberItemFolderService {
 
 	private final MemberItemFolderAppender memberItemFolderAppender;
 
-	private final MemberItemFolderReader memberItemFolderReader;
-
 	private final MemberItemFolderModifier memberItemFolderModifier;
 
 	private final MemberItemFolderValidator memberItemFolderValidator;
@@ -31,22 +29,6 @@ public class MemberItemFolderService {
 	private final MemberItemFolderRemover memberItemFolderRemover;
 
 	private final MemberUtils memberUtils;
-
-	public MemberItemFolderGetServiceResponse getMemberItemFolderByCursor(
-		final Hobby hobby,
-		final CursorPageParameters parameters
-	) {
-		Long memberId = memberUtils.getCurrentMemberId();
-		int totalMemberItemFolderCount = memberItemFolderReader.countByMemberIdAndHobby(memberId, hobby);
-
-		CursorSummary<MemberItemFolderCursorSummary> cursorSummary = memberItemFolderReader.readMemberItemFolderByCursor(
-			hobby,
-			memberId,
-			parameters
-		);
-
-		return new MemberItemFolderGetServiceResponse(cursorSummary, totalMemberItemFolderCount);
-	}
 
 	public void createMemberItemFolder(
 		final String folderName,
