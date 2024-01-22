@@ -83,9 +83,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		final String accessToken
 	) {
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-		response.setHeader("Location", "http:localhost:3000/join");
+		response.setHeader("Location", "http://localhost:3000/join");
 		try {
-			response.sendRedirect("http:localhost:3000/join" + "?accessToken=" + accessToken);
+			response.sendRedirect("http://localhost:3000/join" + "?accessToken=" + accessToken);
 		} catch (IOException e){
 			throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
@@ -99,9 +99,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		final String refreshToken
 	){
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-		response.setHeader("Location", "http:localhost:3000/");
+		response.setHeader("Location", "http://localhost:3000/");
 		try {
-			String redirectURL = URLEncoder.encode("http:localhost:3000/" + "?accessToken=" + accessToken
+			String redirectURL = URLEncoder.encode("http://localhost:3000/" + "?accessToken=" + accessToken
 				+ "&memberId=" + member.getId() + "&nickname=" + member.getNickname(), "UTF-8");
 			response.sendRedirect(redirectURL);
 		} catch (IOException e){
