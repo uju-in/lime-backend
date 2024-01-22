@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemCreateRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemDeleteRequest;
@@ -132,10 +131,8 @@ public class ItemController {
 	public ResponseEntity<Void> addMemberItemFolder(
 		@RequestBody @Valid final MemberItemFolderCreateRequest request
 	) {
-		Hobby hobby = Hobby.from(request.hobbyName());
 		memberItemFolderService.createMemberItemFolder(
-			request.folderName(),
-			hobby
+			request.folderName()
 		);
 
 		return ResponseEntity.ok().build();

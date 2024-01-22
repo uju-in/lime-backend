@@ -70,11 +70,6 @@ public class ItemService {
 	) {
 		updateItemRanking(memberItemIdRegistry);
 
-		memberItemFolderValidator.validateItemHobbyEqualsFolderHobby(
-			memberItemIdRegistry.itemIds(),
-			memberItemIdRegistry.folderId()
-		);
-
 		Long memberId = memberUtils.getCurrentMemberId();
 		List<Long> memberItemIds = memberItemAppender.appendMemberItems(
 			memberItemIdRegistry.itemIds(),
