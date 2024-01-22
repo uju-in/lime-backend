@@ -34,4 +34,8 @@ public class ReviewReader {
 	) {
 		return reviewRepository.existsReviewByMemberIdAndItemId(memberId, itemId);
 	}
+
+	public int countReviewByItemId(final Long itemId) {
+		return reviewRepository.countReviewByItemId(itemId);
+	}
 }

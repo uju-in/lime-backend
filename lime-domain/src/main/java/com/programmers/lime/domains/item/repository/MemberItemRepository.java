@@ -21,6 +21,7 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 
 	List<MemberItem> findByMemberId(Long memberId);
 
+	List<MemberItem> findByFolderIdAndMemberId(Long folderId, Long memberId);
 	void deleteByMemberId(Long memberId);
 
 	@Query(
@@ -47,10 +48,13 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 			  	WHERE i.hobby = :hobby AND mi.memberId = :memberId
 			"""
 	)
+
 	int countByHobbyAndMemberId(
 		final Hobby hobby,
 		final Long memberId
 	);
 
-	int countByFolderId(Long folderId);
+	int countById(Long id);
+
+	List<MemberItem> findByFolderId(Long folderId);
 }

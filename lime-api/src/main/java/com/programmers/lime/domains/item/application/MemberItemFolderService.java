@@ -48,7 +48,10 @@ public class MemberItemFolderService {
 		return new MemberItemFolderGetServiceResponse(cursorSummary, totalMemberItemFolderCount);
 	}
 
-	public void createMemberItemFolder(final String folderName, final Hobby hobby) {
+	public void createMemberItemFolder(
+		final String folderName,
+		final Hobby hobby
+	) {
 		Long memberId = memberUtils.getCurrentMemberId();
 		memberItemFolderAppender.append(folderName, memberId, hobby);
 	}

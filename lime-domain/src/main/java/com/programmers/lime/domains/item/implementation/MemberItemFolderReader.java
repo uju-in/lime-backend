@@ -65,4 +65,10 @@ public class MemberItemFolderReader {
 		return memberItemFolderRepository.findById(folderId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_ITEM_FOLDER_NOT_FOUND));
 	}
+
+	public List<MemberItemFolder> readMemberItemFoldersByMemberId(
+		final Long memberId
+	) {
+		return memberItemFolderRepository.findMemberItemFoldersByMemberId(memberId);
+	}
 }

@@ -24,8 +24,7 @@ import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorRespons
 import com.programmers.lime.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetRankingResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetResponse;
-import com.programmers.lime.domains.item.api.dto.response.MemberItemFolderGetByCursorResponse;
-import com.programmers.lime.domains.item.api.dto.response.MemberItemGetByCursorResponse;
+import com.programmers.lime.domains.item.api.dto.response.MemberItemObjectGetResponse;
 import com.programmers.lime.domains.item.application.ItemEnrollService;
 import com.programmers.lime.domains.item.application.ItemService;
 import com.programmers.lime.domains.item.application.MemberItemFolderService;
@@ -33,8 +32,6 @@ import com.programmers.lime.domains.item.application.dto.MemberItemCreateService
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
-import com.programmers.lime.domains.item.application.dto.MemberItemFolderGetServiceResponse;
-import com.programmers.lime.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.lime.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -168,5 +165,17 @@ public class ItemController {
 		);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "나의 아이템 오브젝트 목록 조회", description = "나의 아이템 오브젝트 목록을 조회 합니다.")
+	@GetMapping("/myitems")
+	public ResponseEntity<MemberItemObjectGetResponse> getMemberItemObjects(
+		@RequestParam(required = false) final Long folderId
+	) {
+		MemberItemObjectGetResponse response = itemService.getMemberItems(
+			folderId
+		);
+
+		return ResponseEntity.ok(response);
 	}
 }

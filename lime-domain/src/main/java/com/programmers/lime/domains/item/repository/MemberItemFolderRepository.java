@@ -1,5 +1,7 @@
 package com.programmers.lime.domains.item.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.programmers.lime.common.model.Hobby;
@@ -14,4 +16,6 @@ public interface MemberItemFolderRepository
 	);
 
 	boolean existsMemberItemFolderByIdAndMemberId(Long id, Long memberId);
+
+	List<MemberItemFolder> findMemberItemFoldersByMemberId(Long memberId);
 }

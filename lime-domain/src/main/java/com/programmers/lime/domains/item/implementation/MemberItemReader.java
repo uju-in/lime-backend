@@ -66,6 +66,13 @@ public class MemberItemReader {
 		);
 	}
 
+	public List<MemberItem> memberItemsByFolderIdAndMemberId(
+		final Long folderId,
+		final Long memberId
+	) {
+		return memberItemRepository.findByFolderIdAndMemberId(folderId, memberId);
+	}
+
 	public CursorSummary<MemberItemSummary> readMemberItem(
 		final Long folderId,
 		final CursorPageParameters parameters
@@ -109,9 +116,11 @@ public class MemberItemReader {
 		return memberItemRepository.countByHobbyAndMemberId(hobby, memberId);
 	}
 
-	public int countByFolderId(
-		final Long folderId
-	) {
-		return memberItemRepository.countByFolderId(folderId);
+	public int countMyItem(final Long myItemId) {
+		return memberItemRepository.countById(myItemId);
+	}
+
+	public List<MemberItem> readByFolderId(final Long folderId) {
+		return memberItemRepository.findByFolderId(folderId);
 	}
 }

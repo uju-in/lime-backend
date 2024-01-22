@@ -27,13 +27,17 @@ public class MemberItemFolderValidator {
 		final Long memberItemFolderId,
 		final Long memberId
 	) {
+		if (memberItemFolderId == null) {
+			return;
+		}
+
 		boolean isExsistMemberItemFolder = memberItemFolderRepository.
 			existsMemberItemFolderByIdAndMemberId(
 				memberItemFolderId,
 				memberId
 			);
 
-		if(!isExsistMemberItemFolder) {
+		if (!isExsistMemberItemFolder) {
 			throw new BusinessException(ErrorCode.MEMBER_ITEM_FOLDER_NOT_FOUND);
 		}
 	}
@@ -42,15 +46,15 @@ public class MemberItemFolderValidator {
 		final List<Long> itemIds,
 		final Long folderId
 	) {
-		if(folderId == null) {
+		if (folderId == null) {
 			return;
 		}
 
-		if(itemIds.size() == 0) {
+		if (itemIds.size() == 0) {
 			throw new BusinessException(ErrorCode.MEMBER_ITEM_ID_LIST_IS_EMPTY);
 		}
 
-		for(Long itemId : itemIds) {
+		for (Long itemId : itemIds) {
 			Item item = itemReader.read(itemId);
 			Hobby itemHobby = item.getHobby();
 
