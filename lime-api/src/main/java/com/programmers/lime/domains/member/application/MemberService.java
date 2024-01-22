@@ -64,15 +64,15 @@ public class MemberService {
 		final Introduction introduction
 	) {
 		final Member member = memberUtils.getCurrentMember();
-		if (member.getRole().equals(Role.GUEST)){
+		if (member.getRole().equals(Role.GUEST)) {
 			memberModifier.modifyRole(member, Role.USER);
 		}
 
 		memberModifier.modifyProfile(member, nickname, introduction);
 	}
 
-	public void checkNickname(final String nickname) {
-		memberChecker.checkNicknameDuplication(nickname);
+	public boolean checkNickname(final String nickname) {
+		return memberChecker.checkNicknameDuplication(nickname);
 	}
 
 	public MyPage getMyPage(final String nickname) {

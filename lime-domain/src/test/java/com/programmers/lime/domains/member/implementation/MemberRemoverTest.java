@@ -38,7 +38,7 @@ class MemberRemoverTest {
 		final Member member = MemberBuilder.build(1L);
 
 		// when
-		memberRemover.remove(member);
+		memberRemover.removeProfileImage(member);
 
 		// then
 		assertThat(member.getProfileImage()).isNull();
