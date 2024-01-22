@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 
 public record MemberUpdateProfileRequest(
 	@Schema(description = "닉네임", example = "킹왕짱오리")
-	@Size(min = 3, max = 25, message = "닉네임은 3글자에서 25글자 사이여야 합니다.")
+	@Size(min = 1, max = 25, message = "닉네임은 3글자에서 25글자 사이여야 합니다.")
 	@Pattern(regexp = "^[A-Za-z0-9_가-힣]+$", message = "닉네임은 영어 대소문자, 한글, 숫자 그리고 언더스코어만 허용합니다.")
 	@NotNull(message = "닉네임은 필수 값입니다.")
 	String nickname,
