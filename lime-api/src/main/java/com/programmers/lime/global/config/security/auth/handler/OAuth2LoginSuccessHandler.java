@@ -101,9 +101,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 		response.setHeader("Location", "http://localhost:3000/");
 		try {
-			String redirectURL = URLEncoder.encode("http://localhost:3000/" + "?accessToken=" + accessToken
-				+ "&memberId=" + member.getId() + "&nickname=" + member.getNickname(), "UTF-8");
-			response.sendRedirect(redirectURL);
+			String redirectURL = URLEncoder.encode(member.getNickname(), "UTF-8");
+			response.sendRedirect("http://localhost:3000/" + "?accessToken=" + accessToken
+				+ "&memberId=" + member.getId() + "&nickname=" + redirectURL);
 		} catch (IOException e){
 			throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
