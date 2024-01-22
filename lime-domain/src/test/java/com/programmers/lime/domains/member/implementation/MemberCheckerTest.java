@@ -1,7 +1,6 @@
 package com.programmers.lime.domains.member.implementation;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.programmers.lime.domains.member.repository.MemberRepository;
-import com.programmers.lime.error.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
 class MemberCheckerTest {
@@ -36,8 +34,11 @@ class MemberCheckerTest {
 			given(memberRepository.existsByNicknameNickname(anyString()))
 				.willReturn(false);
 
-			// when & then
-			assertDoesNotThrow(() -> memberChecker.checkNicknameDuplication(nickname));
+			// when
+			final boolean result = memberChecker.checkNicknameDuplication(nickname);
+
+			// then
+			assertThat(result).isFalse();
 		}
 
 		@Test
@@ -49,11 +50,11 @@ class MemberCheckerTest {
 			given(memberRepository.existsByNicknameNickname(anyString()))
 				.willReturn(true);
 
-			// when & then
-			assertThatThrownBy(
-				() -> memberChecker.checkNicknameDuplication(nickname)
-			)
-				.isInstanceOf(BusinessException.class);
+			// when
+			final boolean result = memberChecker.checkNicknameDuplication(nickname);
+
+			// then
+			assertThat(result).isTrue();
 		}
 	}
 }
