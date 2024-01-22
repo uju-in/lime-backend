@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Nickname {
 
-	public static final int MIN_NICKNAME_LENGTH = 3;
+	public static final int MIN_NICKNAME_LENGTH = 1;
 	public static final int MAX_NICKNAME_LENGTH = 25;
 	public static final Pattern NICKNAME_PATTERN = Pattern.compile("^[A-Za-z0-9_가-힣]+$");
 
