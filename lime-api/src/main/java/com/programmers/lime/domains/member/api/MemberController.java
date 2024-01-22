@@ -1,6 +1,5 @@
 package com.programmers.lime.domains.member.api;
 
-
 import java.io.IOException;
 
 import org.springframework.http.ResponseEntity;
@@ -93,9 +92,10 @@ public class MemberController {
 	public ResponseEntity<MemberCheckNicknameResponse> checkNickname(
 		@Valid @RequestBody final MemberCheckNicknameRequest request
 	) {
-		memberService.checkNickname(request.nickname());
+		final boolean isDuplicated = memberService.checkNickname(request.nickname());
+		final MemberCheckNicknameResponse response = new MemberCheckNicknameResponse(isDuplicated);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "마이페이지 조회", description = "닉네임을 이용하여 마이페이지를 조회합니다.")
