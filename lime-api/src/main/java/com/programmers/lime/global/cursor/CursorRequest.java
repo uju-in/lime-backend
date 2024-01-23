@@ -10,7 +10,10 @@ public record CursorRequest(
 	String cursorId,
 
 	@Schema(description = "페이징 사이즈입니다", example = "10")
-	Integer size
+	Integer size,
+
+	@Schema(description = "아이템 정렬 방식입니다", example = "REVIEW_COUNT_ASC")
+	String itemSortCondition
 
 ) {
 	public CursorPageParameters toParameters() {

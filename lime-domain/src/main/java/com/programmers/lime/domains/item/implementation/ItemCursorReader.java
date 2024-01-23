@@ -10,6 +10,7 @@ import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.cursor.CursorUtils;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
+import com.programmers.lime.domains.item.model.ItemSortCondition;
 import com.programmers.lime.domains.item.repository.ItemRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,8 @@ public class ItemCursorReader {
 
 	public CursorSummary<ItemCursorSummary> readByCursor(
 		final String keyword,
-		final CursorPageParameters parameters
+		final CursorPageParameters parameters,
+		final ItemSortCondition itemSortCondition
 	) {
 		String trimmedKeyword = keyword.trim();
 
@@ -41,7 +43,8 @@ public class ItemCursorReader {
 		List<ItemCursorSummary> itemCursorSummaries = itemRepository.findAllByCursor(
 			trimmedKeyword,
 			parameters.cursorId(),
-			pageSize
+			pageSize,
+			itemSortCondition
 		);
 
 		return CursorUtils.getCursorSummaries(itemCursorSummaries);

@@ -111,7 +111,8 @@ public class ItemController {
 	) {
 		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
-			request.toParameters()
+			request.toParameters(),
+			request.itemSortCondition()
 		);
 		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
 

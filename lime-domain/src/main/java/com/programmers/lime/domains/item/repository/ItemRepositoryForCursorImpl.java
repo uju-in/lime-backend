@@ -1,6 +1,7 @@
 package com.programmers.lime.domains.item.repository;
 
 import static com.programmers.lime.domains.item.domain.QItem.*;
+import static com.programmers.lime.domains.review.domain.QReview.*;
 import static com.querydsl.core.group.GroupBy.*;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
+import com.programmers.lime.domains.item.model.ItemSortCondition;
 import com.programmers.lime.domains.item.model.ItemSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
@@ -33,7 +35,8 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 	public List<ItemCursorSummary> findAllByCursor(
 		final String keyword,
 		final String cursorId,
-		final int pageSize
+		final int pageSize,
+		final ItemSortCondition itemSortCondition
 	) {
 		return jpaQueryFactory
 			.select(
@@ -53,7 +56,9 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			.where(
 				cursorIdCondition(cursorId),
 				item.name.contains(keyword)
-			).orderBy(decrease(), item.id.desc())
+			).orderBy(orderBySortCondition(itemSortCondition), item.id.desc())
+			.groupBy(item.id)
+			.leftJoin(review).on(item.id.eq(review.itemId))
 			.limit(pageSize)
 			.fetch();
 	}
@@ -99,6 +104,16 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			.when(item.id.in(itemIdsFromInventory))
 			.then(true)
 			.otherwise(false);
+	}
+
+	private OrderSpecifier<?> orderBySortCondition(ItemSortCondition itemSortCondition) {
+		return switch (itemSortCondition) {
+			case REVIEW_COUNT_DESC -> new OrderSpecifier<>(Order.DESC, review.count());
+			case REVIEW_RATING_DESC -> new OrderSpecifier<>(Order.DESC, review.rating.avg());
+			case PRICE_LOW_TO_HIGH -> new OrderSpecifier<>(Order.ASC, item.price);
+			case PRICE_HIGH_TO_LOW -> new OrderSpecifier<>(Order.DESC, item.price);
+			default -> new OrderSpecifier<>(Order.DESC, item.createdAt);
+		};
 	}
 
 	private OrderSpecifier<LocalDateTime> decrease() {

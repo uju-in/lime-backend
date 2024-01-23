@@ -25,6 +25,7 @@ import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
+import com.programmers.lime.domains.item.model.ItemSortCondition;
 import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
 import com.programmers.lime.domains.item.model.MemberItemFavoriteInfo;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
@@ -134,11 +135,15 @@ public class ItemService {
 
 	public ItemGetByCursorServiceResponse getItemsByCursor(
 		final String keyword,
-		final CursorPageParameters parameters
+		final CursorPageParameters parameters,
+		final String itemSortCondition
 	) {
+		ItemSortCondition sortCondition = ItemSortCondition.from(itemSortCondition);
+
 		CursorSummary<ItemCursorSummary> itemCursorSummaryCursorSummary = itemCursorReader.readByCursor(
 			keyword,
-			parameters
+			parameters,
+			sortCondition
 		);
 
 		int itemTotalCount = itemReader.getItemTotalCountByKeyword(keyword);
