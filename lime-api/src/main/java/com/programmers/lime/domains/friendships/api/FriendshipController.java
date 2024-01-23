@@ -43,7 +43,7 @@ public class FriendshipController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "팔로워 목록 조회", description = "회원을 팔로우한 사람들의 목록을 조회한다.")
+	@Operation(summary = "팔로워 목록 조회", description = "회원의 팔로워 목록을 조회한다.")
 	@GetMapping("/follower/{nickname}")
 	public ResponseEntity<FriendshipGetByCursorResponse> getFollower(
 		@PathVariable final String nickname,
@@ -58,7 +58,7 @@ public class FriendshipController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "팔로잉 목록 조회", description = "회원이 팔로우한 사람들의 목록을 조회한다.")
+	@Operation(summary = "팔로잉 목록 조회", description = "회원의 팔로잉 목록을 조회한다.")
 	@GetMapping("/following/{nickname}")
 	public ResponseEntity<FriendshipGetByCursorResponse> getFollowing(
 		@PathVariable final String nickname,
