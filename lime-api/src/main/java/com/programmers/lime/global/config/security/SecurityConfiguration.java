@@ -19,7 +19,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.programmers.lime.domains.auth.OAuth2UserService;
 import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginFailureHandler;
 import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginSuccessHandler;
