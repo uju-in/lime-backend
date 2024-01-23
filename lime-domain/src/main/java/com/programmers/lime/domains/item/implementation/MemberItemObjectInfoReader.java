@@ -1,15 +1,15 @@
 package com.programmers.lime.domains.item.implementation;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 import com.programmers.lime.common.model.ObjectType;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
+import com.programmers.lime.domains.item.model.MemberItemMetadata;
 import com.programmers.lime.domains.item.model.MemberItemObjectInfo;
+import com.programmers.lime.domains.item.model.MemberItemObjectMetadata;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class MemberItemObjectInfoReader implements IObjectReader {
 			.toList();
 	}
 
-	public MemberItemObjectInfo mapToMemberItemObjectInfo(final MemberItem memberItem) {
+	private MemberItemObjectInfo mapToMemberItemObjectInfo(final MemberItem memberItem) {
 		return MemberItemObjectInfo.builder()
 			.objectId(memberItem.getId())
 			.originalName(memberItem.getItem().getName())
@@ -41,18 +41,22 @@ public class MemberItemObjectInfoReader implements IObjectReader {
 			.build();
 	}
 
-	public Map<String, Serializable> toMetadata(final MemberItem memberItem) {
+	private MemberItemObjectMetadata toMetadata(final MemberItem memberItem) {
 		Item item = memberItem.getItem();
 		int myItemCount = memberItemReader.countMyItem(item.getId());
 		int reviewCount = reviewReader.countReviewByItemId(item.getId());
+		int price = item.getPrice();
 
-		return Map.of(
-			"itemId", item.getId(),
-			"hobby", item.getHobby(),
-			"itemUrl", item.getUrl(),
-			"imageUrl", item.getImage(),
-			"myItemCount", myItemCount,
-			"reviewCount", reviewCount
-		);
+		return MemberItemObjectMetadata.builder().memberItemMetadata(
+			MemberItemMetadata.builder()
+				.itemId(item.getId())
+				.hobby(item.getHobby())
+				.itemUrl(item.getUrl())
+				.imageUrl(item.getImage())
+				.myItemCount(myItemCount)
+				.reviewCount(reviewCount)
+				.price(price)
+				.build()
+		).build();
 	}
 }

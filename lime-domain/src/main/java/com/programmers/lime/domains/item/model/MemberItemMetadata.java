@@ -1,0 +1,17 @@
+package com.programmers.lime.domains.item.model;
+
+import com.programmers.lime.common.model.Hobby;
+
+import lombok.Builder;
+
+@Builder
+public record MemberItemMetadata (
+	Long itemId,
+	Hobby hobby,
+	String itemUrl,
+	String imageUrl,
+	int price,
+	int myItemCount,
+	int reviewCount
+){
+}

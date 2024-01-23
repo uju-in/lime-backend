@@ -1,8 +1,6 @@
 package com.programmers.lime.domains.item.model;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 import com.programmers.lime.common.model.ObjectType;
 
@@ -15,6 +13,6 @@ public record MemberItemObjectInfo (
 	ObjectType type,
 	LocalDateTime createdAt,
 	LocalDateTime modifiedAt,
-	Map<String, Serializable> metadata
+	MemberItemObjectMetadata metadata
 ) {
 }

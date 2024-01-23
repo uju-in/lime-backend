@@ -1,10 +1,8 @@
 package com.programmers.lime.domains.item.implementation;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -13,7 +11,9 @@ import com.programmers.lime.common.model.ObjectType;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
 import com.programmers.lime.domains.item.domain.MemberItemFolder;
+import com.programmers.lime.domains.item.model.MemberItemFolderMetadata;
 import com.programmers.lime.domains.item.model.MemberItemObjectInfo;
+import com.programmers.lime.domains.item.model.MemberItemObjectMetadata;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,7 +55,7 @@ public class MemberItemFolderObjectInfoReader implements IObjectReader {
 			.build();
 	}
 
-	public Map<String, Serializable> toMetadata(final MemberItemFolder memberItemFolder) {
+	public MemberItemObjectMetadata toMetadata(final MemberItemFolder memberItemFolder) {
 
 		List<MemberItem> memberItems = memberItemReader.readByFolderId(memberItemFolder.getId());
 		ArrayList<String> imageUrls = memberItems.stream()
@@ -64,8 +64,8 @@ public class MemberItemFolderObjectInfoReader implements IObjectReader {
 			.map(Item::getImage)
 			.collect(Collectors.toCollection(ArrayList::new));
 
-		return Map.of(
-			"imageUrls", imageUrls
-		);
+		return MemberItemObjectMetadata.builder()
+			.memberItemFolderMetadata(new MemberItemFolderMetadata(imageUrls))
+			.build();
 	}
 }
