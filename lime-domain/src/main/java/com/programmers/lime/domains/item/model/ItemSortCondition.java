@@ -27,7 +27,7 @@ public enum ItemSortCondition {
 
 	public static ItemSortCondition from(String sortCondition) {
 		if (sortCondition == null) {
-			throw new BusinessException(ErrorCode.ITEM_BAD_SORT_CONDITION);
+			return null;
 		}
 
 		if (SORT_CONDITION_MAP.containsKey(sortCondition)) {

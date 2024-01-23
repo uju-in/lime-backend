@@ -107,6 +107,9 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 	}
 
 	private OrderSpecifier<?> orderBySortCondition(ItemSortCondition itemSortCondition) {
+
+		if (itemSortCondition == null) return new OrderSpecifier<>(Order.DESC, item.createdAt);
+
 		return switch (itemSortCondition) {
 			case REVIEW_COUNT_DESC -> new OrderSpecifier<>(Order.DESC, review.count());
 			case REVIEW_RATING_DESC -> new OrderSpecifier<>(Order.DESC, review.rating.avg());
