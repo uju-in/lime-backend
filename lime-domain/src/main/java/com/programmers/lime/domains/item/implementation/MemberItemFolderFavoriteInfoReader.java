@@ -44,7 +44,7 @@ public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 			.toList();
 	}
 
-	public MemberItemFavoriteInfo mapToMemberItemObjectInfo(final MemberItemFolder memberItemFolder) {
+	private MemberItemFavoriteInfo mapToMemberItemObjectInfo(final MemberItemFolder memberItemFolder) {
 		return MemberItemFavoriteInfo.builder()
 			.favoriteId(memberItemFolder.getId())
 			.originalName(memberItemFolder.getName())
@@ -55,7 +55,7 @@ public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 			.build();
 	}
 
-	public MemberItemFavoriteMetadata toMetadata(final MemberItemFolder memberItemFolder) {
+	private MemberItemFavoriteMetadata toMetadata(final MemberItemFolder memberItemFolder) {
 
 		List<MemberItem> memberItems = memberItemReader.readByFolderId(memberItemFolder.getId());
 		ArrayList<String> imageUrls = memberItems.stream()
