@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.programmers.lime.domains.auth.OAuth2UserService;
 import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginFailureHandler;
 import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginSuccessHandler;
@@ -56,6 +57,9 @@ public class SecurityConfiguration {
 					.requestMatchers("/api/members/check/email").permitAll()
 					.requestMatchers("/api/members/mypage/{nickname}").permitAll()
 					.requestMatchers("/api/members/refresh").permitAll()
+
+					.requestMatchers("/api/friendships/follower/**").permitAll()
+					.requestMatchers("/api/friendships/following/**").permitAll()
 
 					.requestMatchers(HttpMethod.GET, "/api/votes").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/votes/{voteId}").permitAll()

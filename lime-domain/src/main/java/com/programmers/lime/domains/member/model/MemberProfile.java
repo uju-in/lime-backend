@@ -13,9 +13,15 @@ public record MemberProfile(
 	String hobby,
 	long career,
 	String content,
-	String mbti
+	String mbti,
+	long followerCount,
+	long followingCount
 ) {
-	public static MemberProfile from(final Member member) {
+	public static MemberProfile from(
+		final Member member,
+		final long followerCount,
+		final long followingCount
+	) {
 		return MemberProfile.builder()
 			.memberId(member.getId())
 			.nickname(member.getNickname())
@@ -25,6 +31,8 @@ public record MemberProfile(
 			.career(member.getCareer())
 			.content(member.getContent())
 			.mbti(member.getMbti())
+			.followerCount(followerCount)
+			.followingCount(followingCount)
 			.build();
 	}
 }
