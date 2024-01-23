@@ -48,7 +48,6 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 			  	WHERE i.hobby = :hobby AND mi.memberId = :memberId
 			"""
 	)
-
 	int countByHobbyAndMemberId(
 		final Hobby hobby,
 		final Long memberId
