@@ -7,19 +7,19 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.lime.common.model.ObjectType;
+import com.programmers.lime.common.model.FavoriteType;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
 import com.programmers.lime.domains.item.domain.MemberItemFolder;
 import com.programmers.lime.domains.item.model.MemberItemFolderMetadata;
-import com.programmers.lime.domains.item.model.MemberItemObjectInfo;
-import com.programmers.lime.domains.item.model.MemberItemObjectMetadata;
+import com.programmers.lime.domains.item.model.MemberItemFavoriteInfo;
+import com.programmers.lime.domains.item.model.MemberItemFavoriteMetadata;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class MemberItemFolderObjectInfoReader implements IObjectReader {
+public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 
 	private final MemberItemFolderReader memberItemFolderReader;
 	private static final int DEFAULT_IMAGE_SIZE = 3;
@@ -32,7 +32,7 @@ public class MemberItemFolderObjectInfoReader implements IObjectReader {
 	 * 따라서 readObject는 root folder 일 때(folderId == null)만 memberItemFolder 를 읽어온다.
 	 * */
 	@Override
-	public List<MemberItemObjectInfo> readObjects(final Long folderId, final Long memberId) {
+	public List<MemberItemFavoriteInfo> readFavorites(final Long folderId, final Long memberId) {
 
 		if (folderId != null) {
 			return Collections.emptyList();
@@ -44,18 +44,18 @@ public class MemberItemFolderObjectInfoReader implements IObjectReader {
 			.toList();
 	}
 
-	public MemberItemObjectInfo mapToMemberItemObjectInfo(final MemberItemFolder memberItemFolder) {
-		return MemberItemObjectInfo.builder()
-			.objectId(memberItemFolder.getId())
+	public MemberItemFavoriteInfo mapToMemberItemObjectInfo(final MemberItemFolder memberItemFolder) {
+		return MemberItemFavoriteInfo.builder()
+			.favoriteId(memberItemFolder.getId())
 			.originalName(memberItemFolder.getName())
-			.type(ObjectType.FOLDER)
+			.type(FavoriteType.FOLDER)
 			.createdAt(memberItemFolder.getCreatedAt())
 			.metadata(toMetadata(memberItemFolder))
 			.modifiedAt(memberItemFolder.getModifiedAt())
 			.build();
 	}
 
-	public MemberItemObjectMetadata toMetadata(final MemberItemFolder memberItemFolder) {
+	public MemberItemFavoriteMetadata toMetadata(final MemberItemFolder memberItemFolder) {
 
 		List<MemberItem> memberItems = memberItemReader.readByFolderId(memberItemFolder.getId());
 		ArrayList<String> imageUrls = memberItems.stream()
@@ -64,7 +64,7 @@ public class MemberItemFolderObjectInfoReader implements IObjectReader {
 			.map(Item::getImage)
 			.collect(Collectors.toCollection(ArrayList::new));
 
-		return MemberItemObjectMetadata.builder()
+		return MemberItemFavoriteMetadata.builder()
 			.memberItemFolderMetadata(new MemberItemFolderMetadata(imageUrls))
 			.build();
 	}

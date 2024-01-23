@@ -20,13 +20,13 @@ import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemChecker;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderValidator;
-import com.programmers.lime.domains.item.implementation.MemberItemObjectReader;
+import com.programmers.lime.domains.item.implementation.MemberItemFavoriteReader;
 import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
 import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
-import com.programmers.lime.domains.item.model.MemberItemObjectInfo;
+import com.programmers.lime.domains.item.model.MemberItemFavoriteInfo;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
 import com.programmers.lime.domains.review.implementation.ReviewStatistics;
 import com.programmers.lime.global.util.MemberUtils;
@@ -63,7 +63,7 @@ public class ItemService {
 
 	private final ItemReader itemReader;
 
-	private final MemberItemObjectReader memberItemObjectReader;
+	private final MemberItemFavoriteReader memberItemFavoriteReader;
 
 	public MemberItemCreateServiceResponse createMemberItems(
 		final MemberItemIdRegistry memberItemIdRegistry
@@ -155,9 +155,9 @@ public class ItemService {
 		Long memberId = memberUtils.getCurrentMemberId();
 
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
-		List<MemberItemObjectInfo> memberItemObjectInfos = memberItemObjectReader.readObjects(folderId, memberId);
+		List<MemberItemFavoriteInfo> memberItemFavoriteInfos = memberItemFavoriteReader.readObjects(folderId, memberId);
 
-		return new MemberItemObjectGetResponse(memberItemObjectInfos.size(), memberItemObjectInfos);
+		return new MemberItemObjectGetResponse(memberItemFavoriteInfos.size(), memberItemFavoriteInfos);
 	}
 
 

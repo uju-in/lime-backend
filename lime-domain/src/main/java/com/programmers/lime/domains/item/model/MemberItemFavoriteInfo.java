@@ -2,17 +2,17 @@ package com.programmers.lime.domains.item.model;
 
 import java.time.LocalDateTime;
 
-import com.programmers.lime.common.model.ObjectType;
+import com.programmers.lime.common.model.FavoriteType;
 
 import lombok.Builder;
 
 @Builder
-public record MemberItemObjectInfo (
-	Long objectId,
+public record MemberItemFavoriteInfo(
+	Long favoriteId,
 	String originalName,
-	ObjectType type,
+	FavoriteType type,
 	LocalDateTime createdAt,
 	LocalDateTime modifiedAt,
-	MemberItemObjectMetadata metadata
+	MemberItemFavoriteMetadata metadata
 ) {
 }
