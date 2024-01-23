@@ -2,13 +2,10 @@ package com.programmers.lime.domains.item.domain;
 
 import java.util.Objects;
 
-import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,14 +31,9 @@ public class MemberItemFolder extends BaseEntity {
 	@Column(name = "member_id", nullable = false)
 	private Long memberId;
 
-	@Column(name = "hobby", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private Hobby hobby;
-
-	public MemberItemFolder(final String name, final Long memberId, final Hobby hobby) {
+	public MemberItemFolder(final String name, final Long memberId) {
 		this.name = Objects.requireNonNull(name);
 		this.memberId = Objects.requireNonNull(memberId);
-		this.hobby = Objects.requireNonNull(hobby);
 	}
 
 	public void modifyFolderName(final String folderName) {

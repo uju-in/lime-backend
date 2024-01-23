@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.ItemRemovalList;
+import com.programmers.lime.domains.item.api.dto.response.MemberItemObjectGetResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
-import com.programmers.lime.domains.item.application.dto.MemberItemGetServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
 import com.programmers.lime.domains.item.implementation.ItemCursorReader;
@@ -20,12 +20,13 @@ import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemChecker;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderValidator;
+import com.programmers.lime.domains.item.implementation.MemberItemFavoriteReader;
 import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
 import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
-import com.programmers.lime.domains.item.model.MemberItemSummary;
+import com.programmers.lime.domains.item.model.MemberItemFavoriteInfo;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
 import com.programmers.lime.domains.review.implementation.ReviewStatistics;
 import com.programmers.lime.global.util.MemberUtils;
@@ -62,15 +63,12 @@ public class ItemService {
 
 	private final ItemReader itemReader;
 
+	private final MemberItemFavoriteReader memberItemFavoriteReader;
+
 	public MemberItemCreateServiceResponse createMemberItems(
 		final MemberItemIdRegistry memberItemIdRegistry
 	) {
 		updateItemRanking(memberItemIdRegistry);
-
-		memberItemFolderValidator.validateItemHobbyEqualsFolderHobby(
-			memberItemIdRegistry.itemIds(),
-			memberItemIdRegistry.folderId()
-		);
 
 		Long memberId = memberUtils.getCurrentMemberId();
 		List<Long> memberItemIds = memberItemAppender.appendMemberItems(
@@ -151,23 +149,15 @@ public class ItemService {
 		);
 	}
 
-	public MemberItemGetServiceResponse getMemberItemsByCursor(
-		final Long folderId,
-		final CursorPageParameters parameters
+	public MemberItemObjectGetResponse getMemberItems(
+		final Long folderId
 	) {
-
 		Long memberId = memberUtils.getCurrentMemberId();
 
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+		List<MemberItemFavoriteInfo> memberItemFavoriteInfos = memberItemFavoriteReader.readObjects(folderId, memberId);
 
-		int totalMemberItemCount = memberItemReader.countByFolderId(folderId);
-
-		CursorSummary<MemberItemSummary> cursorSummary = memberItemReader.readMemberItem(
-			folderId,
-			parameters
-		);
-
-		return new MemberItemGetServiceResponse(cursorSummary, totalMemberItemCount);
+		return new MemberItemObjectGetResponse(memberItemFavoriteInfos.size(), memberItemFavoriteInfos);
 	}
 
 

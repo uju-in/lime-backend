@@ -24,6 +24,9 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // json ignore 사용하기 위해 추가
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 test {
