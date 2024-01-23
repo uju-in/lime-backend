@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.ItemRemovalList;
-import com.programmers.lime.domains.item.api.dto.response.MemberItemObjectGetResponse;
+import com.programmers.lime.domains.item.api.dto.response.MemberItemFavoritesGetResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
@@ -149,7 +149,7 @@ public class ItemService {
 		);
 	}
 
-	public MemberItemObjectGetResponse getMemberItems(
+	public MemberItemFavoritesGetResponse getMemberItemFavorites(
 		final Long folderId
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
@@ -157,7 +157,7 @@ public class ItemService {
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
 		List<MemberItemFavoriteInfo> memberItemFavoriteInfos = memberItemFavoriteReader.readObjects(folderId, memberId);
 
-		return new MemberItemObjectGetResponse(memberItemFavoriteInfos.size(), memberItemFavoriteInfos);
+		return new MemberItemFavoritesGetResponse(memberItemFavoriteInfos.size(), memberItemFavoriteInfos);
 	}
 
 

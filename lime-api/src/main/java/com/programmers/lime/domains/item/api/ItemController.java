@@ -23,7 +23,7 @@ import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorRespons
 import com.programmers.lime.domains.item.api.dto.response.ItemGetNamesResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetRankingResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetResponse;
-import com.programmers.lime.domains.item.api.dto.response.MemberItemObjectGetResponse;
+import com.programmers.lime.domains.item.api.dto.response.MemberItemFavoritesGetResponse;
 import com.programmers.lime.domains.item.application.ItemEnrollService;
 import com.programmers.lime.domains.item.application.ItemService;
 import com.programmers.lime.domains.item.application.MemberItemFolderService;
@@ -59,7 +59,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "아이템 담기", description = "MemberItemAddRequest을 이용하여 사용자에 아이템을 담기 합니다.")
+	@Operation(summary = "찜 목록에 아이템 넣기", description = "MemberItemAddRequest을 이용하여 사용자의 찜 목록에 아이템 담기 합니다.")
 	@PostMapping("/myitems")
 	public ResponseEntity<MemberItemCreateResponse> createMemberItems(
 		@Valid @RequestBody final MemberItemCreateRequest request
@@ -81,7 +81,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "나의 아이템 목록에서 삭제", description = "itemId을 이용하여 나의 아이템 목록에서 삭제 합니다.")
+	@Operation(summary = "나의 아이템 찜 목록에서 삭제", description = "itemId을 이용하여 찜 목록에서 삭제 합니다.")
 	@DeleteMapping("/myitems")
 	public ResponseEntity<Void> deleteMyItem(
 		@ModelAttribute @Valid final MemberItemDeleteRequest request
@@ -126,7 +126,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "나의 아이템 폴더 생성", description = "나의 아이템 폴더를 생성 합니다.")
+	@Operation(summary = "찜 목록폴더 생성", description = "찜 목록 폴더를 생성 합니다.")
 	@PostMapping("/myitems/folders")
 	public ResponseEntity<Void> addMemberItemFolder(
 		@RequestBody @Valid final MemberItemFolderCreateRequest request
@@ -138,7 +138,7 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-  	@Operation(summary = "나의 아이템 폴더 수정", description = "나의 아이템 폴더를 수정 합니다.")
+  	@Operation(summary = "찜 목록 폴더 수정", description = "찜 목록 폴더를 수정 합니다.")
 	@PutMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<Void> modifyMemberItemFolder(
 		@PathVariable final Long folderId,
@@ -152,7 +152,7 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "나의 아이템 폴더 삭제", description = "나의 아이템 폴더를 삭제 합니다.")
+	@Operation(summary = "찜 목록 폴더 삭제", description = "찜 목록 폴더를 삭제 합니다.")
 	@DeleteMapping("/myitems/folders/{folderId}")
 	public ResponseEntity<Void> removeMemberItemFolder(
 		@PathVariable final Long folderId
@@ -164,12 +164,12 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "나의 아이템 오브젝트 목록 조회", description = "나의 아이템 오브젝트 목록을 조회 합니다.")
+	@Operation(summary = "찜 목록 조회", description = "찜 목록을 조회 합니다.")
 	@GetMapping("/myitems")
-	public ResponseEntity<MemberItemObjectGetResponse> getMemberItemObjects(
+	public ResponseEntity<MemberItemFavoritesGetResponse> getMemberItemObjects(
 		@RequestParam(required = false) final Long folderId
 	) {
-		MemberItemObjectGetResponse response = itemService.getMemberItems(
+		MemberItemFavoritesGetResponse response = itemService.getMemberItemFavorites(
 			folderId
 		);
 

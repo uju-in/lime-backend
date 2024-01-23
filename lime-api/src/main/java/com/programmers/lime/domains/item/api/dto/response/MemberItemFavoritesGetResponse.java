@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.programmers.lime.domains.item.model.MemberItemFavoriteInfo;
 
-public record MemberItemObjectGetResponse(
+public record MemberItemFavoritesGetResponse(
 	int totalCount,
 	List<MemberItemFavoriteInfo> favoriteInfos
 ){
