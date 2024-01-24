@@ -5,12 +5,14 @@ import java.util.List;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
+import com.programmers.lime.domains.item.model.ItemSortCondition;
 
 public interface ItemRepositoryForCursor {
 	List<ItemCursorSummary> findAllByCursor(
 		String keyword,
 		String cursorId,
-		int pageSize
+		int pageSize,
+		final ItemSortCondition itemSortCondition
 	);
 
 	List<InventoryReviewItemSummary> findReviewedItemByCursor(

@@ -11,7 +11,6 @@ public record CursorRequest(
 
 	@Schema(description = "페이징 사이즈입니다", example = "10")
 	Integer size
-
 ) {
 	public CursorPageParameters toParameters() {
 		return new CursorPageParameters(cursorId, size);

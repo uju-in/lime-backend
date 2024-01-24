@@ -107,11 +107,13 @@ public class ItemController {
 	@GetMapping("/search")
 	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
 		@RequestParam final String keyword,
-		@ModelAttribute("request") @Valid final CursorRequest request
+		@ModelAttribute("request") @Valid final CursorRequest request,
+		@RequestParam(required = false) final String itemSortCondition
 	) {
 		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
-			request.toParameters()
+			request.toParameters(),
+			itemSortCondition
 		);
 		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
 
