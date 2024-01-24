@@ -11,7 +11,7 @@ public record MemberItemMetadata (
 	String itemUrl,
 	String imageUrl,
 	int price,
-	int myItemCount,
+	int favoriteCount,
 	int reviewCount
 ){
 }

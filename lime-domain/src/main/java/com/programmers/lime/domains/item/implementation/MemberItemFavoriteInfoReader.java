@@ -43,7 +43,7 @@ public class MemberItemFavoriteInfoReader implements IFavoriteReader {
 
 	private MemberItemFavoriteMetadata toMetadata(final MemberItem memberItem) {
 		Item item = memberItem.getItem();
-		int myItemCount = memberItemReader.countMyItem(item.getId());
+		int favoriteCount = memberItemReader.countByItemId(item.getId());
 		int reviewCount = reviewReader.countReviewByItemId(item.getId());
 		int price = item.getPrice();
 
@@ -53,7 +53,7 @@ public class MemberItemFavoriteInfoReader implements IFavoriteReader {
 				.hobby(item.getHobby())
 				.itemUrl(item.getUrl())
 				.imageUrl(item.getImage())
-				.myItemCount(myItemCount)
+				.favoriteCount(favoriteCount)
 				.reviewCount(reviewCount)
 				.price(price)
 				.build()

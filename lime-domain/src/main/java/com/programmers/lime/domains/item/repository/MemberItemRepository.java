@@ -55,7 +55,5 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 		final Long memberId
 	);
 
-	int countById(Long id);
-
 	List<MemberItem> findByFolderId(Long folderId);
 }
