@@ -102,10 +102,7 @@ public class ItemService {
 		Long memberId = memberUtils.getCurrentMemberId();
 
 		isMemberItem = memberItemChecker.existMemberItemByMemberId(memberId, item);
-
-		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
-		ItemInfo itemInfo = ItemInfo.from(item);
-
+		double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
 		boolean isReviewed = reviewReader.existsReviewByMemberIdAndItemId(memberId, itemId);
 		int favoriteCount = memberItemReader.countByItemId(itemId);
 
