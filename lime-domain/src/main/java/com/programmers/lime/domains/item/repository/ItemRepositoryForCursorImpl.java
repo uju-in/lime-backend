@@ -1,6 +1,7 @@
 package com.programmers.lime.domains.item.repository;
 
 import static com.programmers.lime.domains.item.domain.QItem.*;
+import static com.programmers.lime.domains.item.domain.QMemberItem.*;
 import static com.programmers.lime.domains.review.domain.QReview.*;
 import static com.querydsl.core.group.GroupBy.*;
 
@@ -9,10 +10,12 @@ import java.util.List;
 
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.inventory.model.InventoryReviewItemSummary;
-import com.programmers.lime.domains.item.model.ItemCursorSummary;
+import com.programmers.lime.domains.item.model.FavoriteInfoForItemSummary;
+import com.programmers.lime.domains.item.model.ItemCursorIdInfo;
 import com.programmers.lime.domains.item.model.ItemInfo;
+import com.programmers.lime.domains.item.model.ItemInfoForItemSummary;
 import com.programmers.lime.domains.item.model.ItemSortCondition;
-import com.programmers.lime.domains.item.model.ItemSummary;
+import com.programmers.lime.domains.item.model.ReviewInfoForItemSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -32,7 +35,7 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<ItemCursorSummary> findAllByCursor(
+	public List<ItemCursorIdInfo> getItemIdsByCursor(
 		final String keyword,
 		final String cursorId,
 		final int pageSize,
@@ -42,16 +45,9 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 		return jpaQueryFactory
 			.select(
 				Projections.constructor(
-					ItemCursorSummary.class,
-					generateItemCursorId(),
-					Projections.constructor(
-						ItemSummary.class,
-						item.id,
-						item.name,
-						item.price,
-						item.image,
-						item.createdAt
-					)
+					ItemCursorIdInfo.class,
+					item.id,
+					generateItemCursorId()
 				)
 			).from(item)
 			.where(
@@ -62,6 +58,55 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			.groupBy(item.id)
 			.leftJoin(review).on(item.id.eq(review.itemId))
 			.limit(pageSize)
+			.fetch();
+	}
+
+	@Override
+	public List<ItemInfoForItemSummary> getItemInfosByItemIds(final List<Long> itemIds) {
+		return jpaQueryFactory
+			.select(
+				Projections.constructor(
+					ItemInfoForItemSummary.class,
+					item.id,
+					item.name,
+					item.price,
+					item.image
+				)
+			).from(item)
+			.where(
+				item.id.in(itemIds)
+			).fetch();
+	}
+
+	@Override
+	public List<ReviewInfoForItemSummary> getReviewInfosByItemIds(final List<Long> itemIds) {
+		return jpaQueryFactory
+			.select(
+				Projections.constructor(ReviewInfoForItemSummary.class,
+					item.id,
+					review.id.count()
+				)
+			).from(item)
+			.where(
+				item.id.in(itemIds)
+			).leftJoin(review).on(item.id.eq(review.itemId))
+			.groupBy(item.id)
+			.fetch();
+	}
+
+	@Override
+	public List<FavoriteInfoForItemSummary> getFavoriteInfosByItemIds(final List<Long> itemIds) {
+		return jpaQueryFactory
+			.select(
+				Projections.constructor(FavoriteInfoForItemSummary.class,
+					item.id,
+					memberItem.id.count()
+				)
+			).from(item)
+			.where(
+				item.id.in(itemIds)
+			).leftJoin(memberItem).on(item.eq(memberItem.item))
+			.groupBy(item.id)
 			.fetch();
 	}
 
