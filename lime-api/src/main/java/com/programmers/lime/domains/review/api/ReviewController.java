@@ -1,5 +1,7 @@
 package com.programmers.lime.domains.review.api;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.programmers.lime.domains.review.api.dto.request.ReviewCreateRequest;
 import com.programmers.lime.domains.review.api.dto.request.ReviewUpdateRequest;
@@ -39,9 +43,10 @@ public class ReviewController {
 	@PostMapping()
 	public ResponseEntity<ReviewCreateResponse> createReview(
 		@PathVariable final Long itemId,
-		@Valid @RequestBody final ReviewCreateRequest request
+		@Valid @ModelAttribute final ReviewCreateRequest request,
+		@RequestPart(value = "multipartReviewImages", required = false) final List<MultipartFile> multipartReviewImages
 	) {
-		reviewService.createReview(itemId, request.toReviewContent());
+		reviewService.createReview(itemId, request.toReviewContent(), multipartReviewImages);
 		ReviewCreateResponse response = new ReviewCreateResponse(itemId);
 
 		return ResponseEntity.ok(response);
