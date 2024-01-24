@@ -9,10 +9,11 @@ import com.programmers.lime.domains.item.model.ItemSortCondition;
 
 public interface ItemRepositoryForCursor {
 	List<ItemCursorSummary> findAllByCursor(
-		String keyword,
-		String cursorId,
-		int pageSize,
-		final ItemSortCondition itemSortCondition
+		final String keyword,
+		final String cursorId,
+		final int pageSize,
+		final ItemSortCondition itemSortCondition,
+		final Hobby hobby
 	);
 
 	List<InventoryReviewItemSummary> findReviewedItemByCursor(

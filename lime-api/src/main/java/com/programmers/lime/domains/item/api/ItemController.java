@@ -108,12 +108,14 @@ public class ItemController {
 	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
 		@RequestParam final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request,
-		@RequestParam(required = false) final String itemSortCondition
+		@RequestParam(required = false) final String itemSortCondition,
+		@RequestParam(required = false) final String hobbyName
 	) {
 		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
 			request.toParameters(),
-			itemSortCondition
+			itemSortCondition,
+			hobbyName
 		);
 		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
 

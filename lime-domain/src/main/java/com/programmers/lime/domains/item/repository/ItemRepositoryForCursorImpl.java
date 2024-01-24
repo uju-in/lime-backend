@@ -36,7 +36,8 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 		final String keyword,
 		final String cursorId,
 		final int pageSize,
-		final ItemSortCondition itemSortCondition
+		final ItemSortCondition itemSortCondition,
+		final Hobby hobby
 	) {
 		return jpaQueryFactory
 			.select(
@@ -55,7 +56,8 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			).from(item)
 			.where(
 				cursorIdCondition(cursorId),
-				item.name.contains(keyword)
+				item.name.contains(keyword),
+				hobbyCondition(hobby)
 			).orderBy(orderBySortCondition(itemSortCondition), item.id.desc())
 			.groupBy(item.id)
 			.leftJoin(review).on(item.id.eq(review.itemId))
