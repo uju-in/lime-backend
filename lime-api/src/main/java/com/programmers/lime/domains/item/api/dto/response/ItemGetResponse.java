@@ -11,8 +11,9 @@ public record ItemGetResponse(
 	String itemUrl,
 	Double itemAvgRate,
 	boolean isMemberItem,
-	boolean isReviewed
-) {
+	boolean isReviewed,
+	int favoriteCount
+	) {
 	public static ItemGetResponse from(final ItemGetServiceResponse response) {
 		return ItemGetResponse.builder()
 			.itemInfo(response.itemInfo())

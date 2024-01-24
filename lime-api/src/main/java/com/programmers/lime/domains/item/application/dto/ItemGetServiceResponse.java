@@ -10,6 +10,7 @@ public record ItemGetServiceResponse(
 	String itemUrl,
 	Double itemAvgRate,
 	boolean isMemberItem,
-	boolean isReviewed
-) {
+	boolean isReviewed,
+	int favoriteCount
+	) {
 }
