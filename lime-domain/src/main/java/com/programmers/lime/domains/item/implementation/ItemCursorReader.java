@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.cursor.CursorUtils;
+import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemSortCondition;
 import com.programmers.lime.domains.item.repository.ItemRepository;
@@ -26,7 +27,8 @@ public class ItemCursorReader {
 	public CursorSummary<ItemCursorSummary> readByCursor(
 		final String keyword,
 		final CursorPageParameters parameters,
-		final ItemSortCondition itemSortCondition
+		final ItemSortCondition itemSortCondition,
+		final Hobby hobby
 	) {
 		String trimmedKeyword = keyword.trim();
 
@@ -44,7 +46,8 @@ public class ItemCursorReader {
 			trimmedKeyword,
 			parameters.cursorId(),
 			pageSize,
-			itemSortCondition
+			itemSortCondition,
+			hobby
 		);
 
 		return CursorUtils.getCursorSummaries(itemCursorSummaries);

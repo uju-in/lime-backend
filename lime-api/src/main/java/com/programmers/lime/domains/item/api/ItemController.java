@@ -94,7 +94,7 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "키워드로 아이템 이름 목록 조회", description = "키워드를 이용하여 아이템 이름 목록 조회 합니다")
+	@Operation(summary = "아이템 이름 목록 조회", description = "키워드를 이용하여 아이템 이름 목록 조회 합니다")
 	@GetMapping("/item-names")
 	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
 		ItemGetNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
@@ -103,17 +103,19 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "아이템 검색 및 목록조회", description = "키워드를 이용하여 아이템 검색 및 목록조회 합니다.")
+	@Operation(summary = "아이템 목록조회", description = "키워드, 취미를 이용하여 아이템 목록조회 합니다.")
 	@GetMapping("/search")
 	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
 		@RequestParam final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request,
-		@RequestParam(required = false) final String itemSortCondition
+		@RequestParam(required = false) final String itemSortCondition,
+		@RequestParam(required = false) final String hobbyName
 	) {
 		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
 			keyword,
 			request.toParameters(),
-			itemSortCondition
+			itemSortCondition,
+			hobbyName
 		);
 		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
 

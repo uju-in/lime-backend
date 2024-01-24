@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
+import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.common.model.ItemRemovalList;
 import com.programmers.lime.domains.item.api.dto.response.MemberItemFavoritesGetResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
@@ -136,14 +137,18 @@ public class ItemService {
 	public ItemGetByCursorServiceResponse getItemsByCursor(
 		final String keyword,
 		final CursorPageParameters parameters,
-		final String itemSortCondition
+		final String itemSortCondition,
+		final String hobbyName
 	) {
+		Hobby hobby = Hobby.from(hobbyName);
+
 		ItemSortCondition sortCondition = ItemSortCondition.from(itemSortCondition);
 
 		CursorSummary<ItemCursorSummary> itemCursorSummaryCursorSummary = itemCursorReader.readByCursor(
 			keyword,
 			parameters,
-			sortCondition
+			sortCondition,
+			hobby
 		);
 
 		int itemTotalCount = itemReader.getItemTotalCountByKeyword(keyword);
