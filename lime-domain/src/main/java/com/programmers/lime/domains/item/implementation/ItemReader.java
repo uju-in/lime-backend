@@ -46,13 +46,13 @@ public class ItemReader {
 		return itemRepository.existsItemsByUrl(itemURL);
 	}
 
-	public int getItemTotalCountByKeyword(final String keyword) {
+	public int getItemTotalCountByKeyword(final String keyword, final Hobby hobby) {
 		String trimmedKeyword = keyword.trim();
 
 		if (trimmedKeyword.isEmpty()) {
 			return 0;
 		}
 
-		return itemRepository.countItemByKeyword(trimmedKeyword);
+		return itemRepository.countItemByKeywordAndHobby(trimmedKeyword, hobby);
 	}
 }

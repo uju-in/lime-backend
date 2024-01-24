@@ -151,7 +151,7 @@ public class ItemService {
 			hobby
 		);
 
-		int itemTotalCount = itemReader.getItemTotalCountByKeyword(keyword);
+		int itemTotalCount = itemReader.getItemTotalCountByKeyword(keyword, hobby);
 
 		return new ItemGetByCursorServiceResponse(
 			itemTotalCount,
