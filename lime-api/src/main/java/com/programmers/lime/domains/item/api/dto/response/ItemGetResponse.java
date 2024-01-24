@@ -9,10 +9,11 @@ import lombok.Builder;
 public record ItemGetResponse(
 	ItemInfo itemInfo,
 	String itemUrl,
-	Double itemAvgRate,
+	double itemAvgRate,
 	boolean isMemberItem,
-	boolean isReviewed
-) {
+	boolean isReviewed,
+	int favoriteCount
+	) {
 	public static ItemGetResponse from(final ItemGetServiceResponse response) {
 		return ItemGetResponse.builder()
 			.itemInfo(response.itemInfo())
@@ -20,6 +21,7 @@ public record ItemGetResponse(
 			.itemAvgRate(response.itemAvgRate())
 			.isMemberItem(response.isMemberItem())
 			.isReviewed(response.isReviewed())
+			.favoriteCount(response.favoriteCount())
 			.build();
 	}
 }

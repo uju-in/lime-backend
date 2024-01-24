@@ -97,19 +97,21 @@ public class ItemService {
 		boolean isMemberItem;
 
 		Item item = itemReader.read(itemId);
-		Long memberId = memberUtils.getCurrentMemberId();
-		isMemberItem = memberItemChecker.existMemberItemByMemberId(memberId, item);
-
-		Double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
 		ItemInfo itemInfo = ItemInfo.from(item);
 
+		Long memberId = memberUtils.getCurrentMemberId();
+
+		isMemberItem = memberItemChecker.existMemberItemByMemberId(memberId, item);
+		double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
 		boolean isReviewed = reviewReader.existsReviewByMemberIdAndItemId(memberId, itemId);
+		int favoriteCount = memberItemReader.countByItemId(itemId);
 
 		return ItemGetServiceResponse.builder()
 			.itemInfo(itemInfo)
 			.isMemberItem(isMemberItem)
 			.itemUrl(item.getUrl())
 			.itemAvgRate(itemAvgRating)
+			.favoriteCount(favoriteCount)
 			.isReviewed(isReviewed)
 			.build();
 	}

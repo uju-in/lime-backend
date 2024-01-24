@@ -116,11 +116,11 @@ public class MemberItemReader {
 		return memberItemRepository.countByHobbyAndMemberId(hobby, memberId);
 	}
 
-	public int countMyItem(final Long myItemId) {
-		return memberItemRepository.countById(myItemId);
-	}
-
 	public List<MemberItem> readByFolderId(final Long folderId) {
 		return memberItemRepository.findByFolderId(folderId);
+	}
+
+	public int countByItemId(final Long itemId) {
+		return memberItemRepository.countByItemId(itemId);
 	}
 }
