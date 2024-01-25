@@ -47,6 +47,7 @@ public enum ErrorCode {
 	ITEM_NOT_FOUND("ITEM_002", "요청한 아이템은 찾을 수 없습니다."),
 	ITEM_URL_ALREADY_EXIST("ITEM_003", "이미 존재하는 아이템 URL 입니다."),
 	ITEM_BAD_SORT_CONDITION("ITEM_004", "잘못된 아이템 정렬 조건 입니다."),
+	NOT_FOUND_WHILE_READING_ITEM_SUMMARY("ITEM_005", "ITEM_SUMMARY를 만들기 위한 정보를 찾을 수 없습니다."),
 
 	// REVIEW
 	REVIEW_NOT_FOUND("REVIEW_001", "해당하는 리뷰는 찾을 수 없습니다."),

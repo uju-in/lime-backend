@@ -1,7 +1,8 @@
 package com.programmers.lime.domains.item.model;
 
 import java.util.List;
-import java.util.stream.LongStream;
+
+import com.programmers.lime.common.cursor.CursorIdBuilder;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -11,14 +12,14 @@ public class ItemCursorSummaryBuilder {
 
 	public static ItemCursorSummary build(final Long id) {
 		return new ItemCursorSummary(
-			"202301010000000000000" + id,
+			CursorIdBuilder.build(id),
 			ItemSummaryBuilder.build(id)
 		);
 	}
 
-	public static List<ItemCursorSummary> buildMany() {
-		return LongStream.range(1, 11)
-			.mapToObj(ItemCursorSummaryBuilder::build)
-			.toList();
+	public static List<ItemCursorSummary> buildMany(List<Long> ids) {
+		return ids.stream().map(
+			ItemCursorSummaryBuilder::build
+		).toList();
 	}
 }
