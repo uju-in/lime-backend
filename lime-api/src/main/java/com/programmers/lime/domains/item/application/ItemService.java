@@ -105,6 +105,7 @@ public class ItemService {
 		double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
 		boolean isReviewed = reviewReader.existsReviewByMemberIdAndItemId(memberId, itemId);
 		int favoriteCount = memberItemReader.countByItemId(itemId);
+		int reviewCount = reviewReader.countReviewByItemId(itemId);
 
 		return ItemGetServiceResponse.builder()
 			.itemInfo(itemInfo)
@@ -113,6 +114,7 @@ public class ItemService {
 			.itemAvgRate(itemAvgRating)
 			.favoriteCount(favoriteCount)
 			.isReviewed(isReviewed)
+			.reviewCount(reviewCount)
 			.build();
 	}
 

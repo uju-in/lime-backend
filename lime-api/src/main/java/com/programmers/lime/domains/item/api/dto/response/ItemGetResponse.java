@@ -12,7 +12,8 @@ public record ItemGetResponse(
 	double itemAvgRate,
 	boolean isMemberItem,
 	boolean isReviewed,
-	int favoriteCount
+	int favoriteCount,
+	int reviewCount
 	) {
 	public static ItemGetResponse from(final ItemGetServiceResponse response) {
 		return ItemGetResponse.builder()
@@ -22,6 +23,7 @@ public record ItemGetResponse(
 			.isMemberItem(response.isMemberItem())
 			.isReviewed(response.isReviewed())
 			.favoriteCount(response.favoriteCount())
+			.reviewCount(response.reviewCount())
 			.build();
 	}
 }
