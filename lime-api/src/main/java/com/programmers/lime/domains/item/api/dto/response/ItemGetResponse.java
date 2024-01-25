@@ -13,7 +13,8 @@ public record ItemGetResponse(
 	boolean isMemberItem,
 	boolean isReviewed,
 	int favoriteCount,
-	int reviewCount
+	int reviewCount,
+	String hobbyName
 	) {
 	public static ItemGetResponse from(final ItemGetServiceResponse response) {
 		return ItemGetResponse.builder()
@@ -24,6 +25,7 @@ public record ItemGetResponse(
 			.isReviewed(response.isReviewed())
 			.favoriteCount(response.favoriteCount())
 			.reviewCount(response.reviewCount())
+			.hobbyName(response.hobbyName())
 			.build();
 	}
 }

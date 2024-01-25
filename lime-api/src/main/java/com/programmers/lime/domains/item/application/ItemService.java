@@ -115,6 +115,7 @@ public class ItemService {
 			.favoriteCount(favoriteCount)
 			.isReviewed(isReviewed)
 			.reviewCount(reviewCount)
+			.hobbyName(item.getHobby().getName())
 			.build();
 	}
 

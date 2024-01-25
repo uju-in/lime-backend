@@ -12,6 +12,7 @@ public record ItemGetServiceResponse(
 	boolean isMemberItem,
 	boolean isReviewed,
 	int favoriteCount,
-	int reviewCount
+	int reviewCount,
+	String hobbyName
 	) {
 }
