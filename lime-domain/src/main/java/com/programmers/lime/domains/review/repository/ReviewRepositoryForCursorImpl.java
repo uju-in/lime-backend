@@ -2,12 +2,16 @@ package com.programmers.lime.domains.review.repository;
 
 import static com.programmers.lime.domains.member.domain.QMember.*;
 import static com.programmers.lime.domains.review.domain.QReview.*;
+import static com.programmers.lime.domains.review.domain.QReviewImage.*;
+import static com.querydsl.core.group.GroupBy.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.lime.domains.member.model.MemberInfo;
-import com.programmers.lime.domains.review.model.ReviewCursorSummary;
+import com.programmers.lime.domains.review.model.MemberInfoWithReviewId;
+import com.programmers.lime.domains.review.model.ReviewCursorIdInfo;
+import com.programmers.lime.domains.review.model.ReviewSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -27,34 +31,20 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<ReviewCursorSummary> findAllByCursor(
+	public List<ReviewCursorIdInfo> findAllByCursor(
 		final Long itemId,
-		final Long memberId,
 		final String cursorId,
 		final int pageSize
 	) {
 		return jpaQueryFactory
 			.select(
 				Projections.constructor(
-					ReviewCursorSummary.class,
-					generateCursorId(),
-					Projections.constructor(
-						MemberInfo.class,
-						member.id,
-						member.nickname.nickname,
-						member.socialInfo.profileImage,
-						member.levelPoint
-					),
+					ReviewCursorIdInfo.class,
 					review.id,
-					review.rating,
-					review.content,
-					memberIdCondition(memberId),
-					review.createdAt,
-					review.modifiedAt
+					generateCursorId()
 				)
 			)
 			.from(review)
-			.join(member).on(review.memberId.eq(member.id))
 			.where(
 				cursorIdCondition(cursorId),
 				review.itemId.eq(itemId)
@@ -62,6 +52,55 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 			.limit(pageSize)
 			.orderBy(decrease(), review.id.desc())
 			.fetch();
+	}
+
+	@Override
+	public List<MemberInfoWithReviewId> getMemberInfos(final List<Long> reviewIds) {
+		return jpaQueryFactory
+			.select(
+				Projections.constructor(
+					MemberInfoWithReviewId.class,
+					review.id,
+					Projections.constructor(
+						MemberInfo.class,
+						member.id,
+						member.nickname.nickname,
+						member.socialInfo.profileImage,
+						member.levelPoint
+					)
+				)
+			)
+			.from(review)
+			.where(review.id.in(reviewIds))
+			.leftJoin(member).on(review.memberId.eq(member.id))
+			.fetch();
+	}
+
+	@Override
+	public List<ReviewSummary> getReviewSummaries(final List<Long> reviewIds) {
+		return jpaQueryFactory
+			.select(
+				review
+			)
+			.from(review)
+			.where(review.id.in(reviewIds))
+			.leftJoin(reviewImage).on(review.eq(reviewImage.review))
+			.transform(
+				groupBy(review.id)
+					.list(
+						Projections.constructor(
+							ReviewSummary.class,
+							review.id,
+							review.rating,
+							review.content,
+							list(
+								reviewImage.imageUrl
+							),
+							review.createdAt,
+							review.modifiedAt
+						)
+					)
+			);
 	}
 
 	@Override
@@ -76,15 +115,6 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 
 	private OrderSpecifier<LocalDateTime> decrease() {
 		return new OrderSpecifier<>(Order.DESC, review.createdAt);
-	}
-
-	private BooleanExpression memberIdCondition(final Long memberId) {
-		if (memberId == null) {
-			// memberId가 null인 경우(사용자가 로그인 하지 않은 경우) false 반환
-			return Expressions.asBoolean(false).isTrue();
-		}
-
-		return review.memberId.eq(memberId);
 	}
 
 	private BooleanExpression cursorIdCondition(final String cursorId) {
