@@ -1,10 +1,14 @@
 package com.programmers.lime.domains.review.domain;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -19,17 +23,18 @@ public class ReviewImage {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "review_id", nullable = false)
-	private Long reviewId;
+	@ManyToOne
+	@JoinColumn(name = "review_id", nullable = false)
+	private Review review;
 
 	@Column(name = "image_url", nullable = false)
 	private String imageUrl;
 
 	public ReviewImage(
-		final Long reviewId,
+		final Review review,
 		final String imageUrl
 	) {
-		this.reviewId = reviewId;
-		this.imageUrl = imageUrl;
+		this.review = Objects.requireNonNull(review);
+		this.imageUrl = Objects.requireNonNull(imageUrl);
 	}
 }

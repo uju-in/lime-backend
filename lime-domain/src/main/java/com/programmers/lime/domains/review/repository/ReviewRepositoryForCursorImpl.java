@@ -84,7 +84,7 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 			)
 			.from(review)
 			.where(review.id.in(reviewIds))
-			.leftJoin(reviewImage).on(review.id.eq(reviewImage.reviewId))
+			.leftJoin(reviewImage).on(review.eq(reviewImage.review))
 			.transform(
 				groupBy(review.id)
 					.list(
