@@ -73,7 +73,8 @@ class ReviewCursorReaderTest {
 		given(reviewRepository.findAllByCursor(
 				itemId,
 				parameters.cursorId(),
-				pageSize
+				pageSize,
+			null
 			)
 		).willReturn(reviewCursorIdInfos);
 
@@ -87,7 +88,8 @@ class ReviewCursorReaderTest {
 		CursorSummary<ReviewCursorSummary> actualReviewCursorSummary = reviewCursorReader.readByCursor(
 			itemId,
 			memberId,
-			parameters
+			parameters,
+			null
 		);
 
 		// then

@@ -5,12 +5,12 @@ import static com.programmers.lime.domains.review.domain.QReview.*;
 import static com.programmers.lime.domains.review.domain.QReviewImage.*;
 import static com.querydsl.core.group.GroupBy.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.lime.domains.member.model.MemberInfo;
 import com.programmers.lime.domains.review.model.MemberInfoWithReviewId;
 import com.programmers.lime.domains.review.model.ReviewCursorIdInfo;
+import com.programmers.lime.domains.review.model.ReviewSortCondition;
 import com.programmers.lime.domains.review.model.ReviewSummary;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
@@ -34,23 +34,28 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 	public List<ReviewCursorIdInfo> findAllByCursor(
 		final Long itemId,
 		final String cursorId,
-		final int pageSize
+		final int pageSize,
+		ReviewSortCondition reviewSortCondition
 	) {
+		if(reviewSortCondition == null) {
+			reviewSortCondition = ReviewSortCondition.NEWEST;
+		}
+
 		return jpaQueryFactory
 			.select(
 				Projections.constructor(
 					ReviewCursorIdInfo.class,
 					review.id,
-					generateCursorId()
+					generateCursorId(reviewSortCondition)
 				)
 			)
 			.from(review)
 			.where(
-				cursorIdCondition(cursorId),
+				cursorIdCondition(cursorId, reviewSortCondition),
 				review.itemId.eq(itemId)
 			)
 			.limit(pageSize)
-			.orderBy(decrease(), review.id.desc())
+			.orderBy(orderBySortCondition(reviewSortCondition), orderByIdSortCondition(reviewSortCondition))
 			.fetch();
 	}
 
@@ -113,27 +118,60 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 			.fetchFirst());
 	}
 
-	private OrderSpecifier<LocalDateTime> decrease() {
-		return new OrderSpecifier<>(Order.DESC, review.createdAt);
+	private OrderSpecifier<?> orderBySortCondition(ReviewSortCondition reviewSortCondition) {
+		return switch (reviewSortCondition) {
+			case LOWEST_RATE -> new OrderSpecifier<>(Order.ASC, review.rating);
+			case HIGHEST_RATE -> new OrderSpecifier<>(Order.DESC, review.rating);
+			default -> new OrderSpecifier<>(Order.DESC, review.createdAt);
+		};
 	}
 
-	private BooleanExpression cursorIdCondition(final String cursorId) {
+	private OrderSpecifier<?> orderByIdSortCondition(ReviewSortCondition reviewSortCondition) {
+		return switch (reviewSortCondition) {
+			case LOWEST_RATE -> new OrderSpecifier<>(Order.ASC, review.id);
+			case HIGHEST_RATE -> new OrderSpecifier<>(Order.DESC, review.id);
+			default -> new OrderSpecifier<>(Order.DESC, review.id);
+		};
+	}
+
+	private BooleanExpression cursorIdCondition(final String cursorId, final ReviewSortCondition reviewSortCondition) {
 		if (cursorId == null) {
 			return null;
 		}
 
-		return generateCursorId().lt(cursorId);
+		return switch (reviewSortCondition) {
+			case LOWEST_RATE -> generateCursorId(reviewSortCondition).gt(cursorId);
+			case HIGHEST_RATE -> generateCursorId(reviewSortCondition).lt(cursorId);
+			default -> generateCursorId(reviewSortCondition).lt(cursorId);
+		};
 	}
 
-	public StringExpression generateCursorId() {
-		StringTemplate dateCursor = Expressions.stringTemplate(
-			"DATE_FORMAT({0}, {1})",
-			review.createdAt,
-			ConstantImpl.create("%Y%m%d%H%i%s")
-		);
+	public StringExpression generateCursorId(ReviewSortCondition reviewSortCondition) {
+		return switch (reviewSortCondition) {
+			case LOWEST_RATE -> concatWithLpadZero(review.rating.stringValue(), review.id.stringValue());
+			case HIGHEST_RATE -> concatWithLpadZero(review.rating.stringValue(), review.id.stringValue());
+			default -> {
+				StringTemplate dateStr = Expressions.stringTemplate(
+					"DATE_FORMAT({0}, {1})",
+					review.createdAt,
+					ConstantImpl.create("%Y%m%d%H%i%s")
+				);
+				yield dateStr.concat(lpadWithZero(review.id.stringValue()));
+			}
+		};
+	}
 
-		return dateCursor.concat(StringExpressions.lpad(
-			review.id.stringValue(), 8, '0'
-		));
+	// str1 문자열을 8자리로 만들고, 앞에 0으로 채움
+	// str2 문자열을 8자리로 만들고, 앞에 0으로 채움
+	// str1 + str2 반환 (총 16자리)
+	public StringExpression concatWithLpadZero(final StringExpression str1, final StringExpression str2) {
+		return lpadWithZero(str1).concat(lpadWithZero(str2));
+	}
+
+	// str 문자열을 8자리로 만들고, 앞에 0으로 채움
+	public StringExpression lpadWithZero(final StringExpression str) {
+		return StringExpressions.lpad(
+			str, 8, '0'
+		);
 	}
 }

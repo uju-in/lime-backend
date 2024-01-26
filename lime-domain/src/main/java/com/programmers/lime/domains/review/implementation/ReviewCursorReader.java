@@ -14,6 +14,7 @@ import com.programmers.lime.domains.member.model.MemberInfo;
 import com.programmers.lime.domains.review.model.MemberInfoWithReviewId;
 import com.programmers.lime.domains.review.model.ReviewCursorIdInfo;
 import com.programmers.lime.domains.review.model.ReviewCursorSummary;
+import com.programmers.lime.domains.review.model.ReviewSortCondition;
 import com.programmers.lime.domains.review.model.ReviewSummary;
 import com.programmers.lime.domains.review.repository.ReviewRepository;
 
@@ -30,14 +31,16 @@ public class ReviewCursorReader {
 	public CursorSummary<ReviewCursorSummary> readByCursor(
 		final Long itemId,
 		final Long memberId,
-		final CursorPageParameters parameters
+		final CursorPageParameters parameters,
+		final ReviewSortCondition sortCondition
 	) {
 		int pageSize = getPageSize(parameters);
 
 		List<ReviewCursorIdInfo> reviewCursorIdInfos = reviewRepository.findAllByCursor(
 			itemId,
 			parameters.cursorId(),
-			pageSize
+			pageSize,
+			sortCondition
 		);
 
 		List<ReviewCursorSummary> reviewCursorSummaries = getReviewCursorSummaries(reviewCursorIdInfos, memberId);
