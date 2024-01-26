@@ -16,6 +16,8 @@ public record ReviewSummary(
 
 	List<String> imageUrls,
 
+	Long likeCount,
+
 	LocalDateTime createdAt,
 
 	LocalDateTime updatedAt

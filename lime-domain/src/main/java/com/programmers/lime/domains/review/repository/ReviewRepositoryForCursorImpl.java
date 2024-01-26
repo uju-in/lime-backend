@@ -3,7 +3,9 @@ package com.programmers.lime.domains.review.repository;
 import static com.programmers.lime.domains.member.domain.QMember.*;
 import static com.programmers.lime.domains.review.domain.QReview.*;
 import static com.programmers.lime.domains.review.domain.QReviewImage.*;
+import static com.programmers.lime.domains.review.domain.QReviewLike.*;
 import static com.querydsl.core.group.GroupBy.*;
+import static com.querydsl.core.types.ExpressionUtils.*;
 
 import java.util.List;
 
@@ -84,27 +86,21 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 	@Override
 	public List<ReviewSummary> getReviewSummaries(final List<Long> reviewIds) {
 		return jpaQueryFactory
-			.select(
-				review
-			)
-			.from(review)
+			.selectFrom(review)
 			.where(review.id.in(reviewIds))
 			.leftJoin(reviewImage).on(review.eq(reviewImage.review))
-			.transform(
-				groupBy(review.id)
-					.list(
-						Projections.constructor(
-							ReviewSummary.class,
-							review.id,
-							review.rating,
-							review.content,
-							list(
-								reviewImage.imageUrl
-							),
-							review.createdAt,
-							review.modifiedAt
-						)
-					)
+			.leftJoin(reviewLike).on(review.eq(reviewLike.review))
+			.groupBy(review.id, reviewImage.imageUrl, reviewLike)
+			.transform(groupBy(review.id)
+				.list(Projections.constructor(ReviewSummary.class,
+					review.id,
+					review.rating,
+					review.content,
+					list(reviewImage.imageUrl),
+					count(reviewLike),
+					review.createdAt,
+					review.modifiedAt
+				))
 			);
 	}
 
