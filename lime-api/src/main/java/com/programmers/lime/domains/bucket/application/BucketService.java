@@ -55,8 +55,7 @@ public class BucketService {
 	) {
 		validateEmptyRegistry(registry);
 
-		Long memberId = memberUtils.getCurrentMemberId();
-		bucketModifier.modify(memberId, bucketId, bucketInfo, registry);
+		bucketModifier.modify(bucketId, bucketInfo, registry);
 	}
 
 	/** 버킷 삭제 */
