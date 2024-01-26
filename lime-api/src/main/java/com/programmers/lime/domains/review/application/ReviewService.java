@@ -23,6 +23,7 @@ import com.programmers.lime.domains.review.implementation.ReviewRemover;
 import com.programmers.lime.domains.review.implementation.ReviewStatistics;
 import com.programmers.lime.domains.review.model.ReviewContent;
 import com.programmers.lime.domains.review.model.ReviewCursorSummary;
+import com.programmers.lime.domains.review.model.ReviewSortCondition;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
 import com.programmers.lime.global.level.PayPoint;
@@ -90,14 +91,17 @@ public class ReviewService {
 
 	public ReviewGetByCursorServiceResponse getReviewsByCursor(
 		final Long itemId,
-		final CursorPageParameters parameters
+		final CursorPageParameters parameters,
+		final String reviewSortCondition
 	) {
+		ReviewSortCondition sortCondition = ReviewSortCondition.from(reviewSortCondition);
 		int reviewCount = reviewStatistics.getReviewCount(itemId);
 		Long memberId = memberUtils.getCurrentMemberId();
 		CursorSummary<ReviewCursorSummary> cursorSummary = reviewCursorReader.readByCursor(
 			itemId,
 			memberId,
-			parameters
+			parameters,
+			sortCondition
 		);
 
 		return new ReviewGetByCursorServiceResponse(reviewCount, cursorSummary);

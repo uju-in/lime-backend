@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,11 +70,13 @@ public class ReviewController {
 	@GetMapping()
 	public ResponseEntity<ReviewGetByCursorResponse> getReviewsByCursor(
 		@PathVariable final Long itemId,
-		@ModelAttribute("request") @Valid final CursorRequest request
+		@ModelAttribute("request") @Valid final CursorRequest request,
+		@RequestParam(required = false) final String reviewSortCondition
 	) {
 		ReviewGetByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
 			itemId,
-			request.toParameters()
+			request.toParameters(),
+			reviewSortCondition
 		);
 
 		ReviewGetByCursorResponse response = ReviewGetByCursorResponse.from(serviceResponse);
