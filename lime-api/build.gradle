@@ -18,6 +18,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework:spring-tx'
+
 
     implementation project(':lime-domain')
     implementation project(':lime-common')
@@ -34,7 +36,7 @@ dependencies {
     // 테스트 관련
     testImplementation(testFixtures(project(':lime-domain')))
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    
+
     // Cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation "com.github.ben-manes.caffeine:caffeine:3.1.8"
