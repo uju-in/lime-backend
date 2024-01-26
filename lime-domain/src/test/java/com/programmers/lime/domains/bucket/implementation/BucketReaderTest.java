@@ -3,6 +3,7 @@ package com.programmers.lime.domains.bucket.implementation;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.cursor.CursorUtils;
 import com.programmers.lime.common.model.Hobby;
+import com.programmers.lime.common.model.ItemIdRegistry;
 import com.programmers.lime.domains.bucket.domain.Bucket;
 import com.programmers.lime.domains.bucket.domain.BucketBuilder;
 import com.programmers.lime.domains.bucket.domain.BucketInfo;
@@ -26,6 +28,7 @@ import com.programmers.lime.domains.bucket.model.BucketMemberItemSummaryBuilder;
 import com.programmers.lime.domains.bucket.model.BucketProfile;
 import com.programmers.lime.domains.bucket.model.BucketSummary;
 import com.programmers.lime.domains.bucket.model.BucketSummaryBuilder;
+import com.programmers.lime.domains.bucket.repository.BucketItemRepository;
 import com.programmers.lime.domains.bucket.repository.BucketRepository;
 import com.programmers.lime.domains.item.domain.ItemBuilder;
 import com.programmers.lime.domains.item.domain.MemberItem;
@@ -36,6 +39,9 @@ import com.programmers.lime.domains.item.model.ItemInfo;
 
 @ExtendWith(MockitoExtension.class)
 public class BucketReaderTest {
+
+	@Mock
+	private BucketItemRepository bucketItemRepository;
 
 	@Mock
 	private BucketRepository bucketRepository;
@@ -59,10 +65,10 @@ public class BucketReaderTest {
 			.map(item -> ItemInfo.from(item))
 			.toList();
 
-		given(bucketRepository.findById(anyLong()))
-			.willReturn(Optional.of(bucket));
-		given(itemReader.read(anyLong()))
-			.willReturn(ItemBuilder.build());
+		given(bucketItemRepository.findAllByBucketId(anyLong()))
+			.willReturn(BucketBuilder.buildBucketItems(bucketId,new ItemIdRegistry(Arrays.asList(1L,2L,3L,4L))));
+		given(bucketRepository.findById(anyLong())).willReturn(Optional.of(bucket));
+		given(itemReader.readAll(anyList())).willReturn(ItemBuilder.buildMany());
 
 		//when
 		BucketGetServiceResponse response = bucketReader.readDetail(bucketId);
@@ -149,13 +155,10 @@ public class BucketReaderTest {
 		CursorPageParameters parameters = new CursorPageParameters(null, 2); // 이후 생성된 model로 대체 예정
 		List<MemberItem> memberItems = MemberItemBuilder.buildMany();
 
-		Bucket bucket = BucketBuilder.build();
-
 		List<BucketMemberItemSummary> expectSummaries = BucketMemberItemSummaryBuilder.buildMany(3);
 		CursorSummary<BucketMemberItemSummary> expectCursorSummary = CursorUtils.getCursorSummaries(expectSummaries);
 
 		given(memberItemReader.readByMemberId(anyLong())).willReturn(memberItems);
-		given(bucketRepository.findByIdAndMemberId(anyLong(), anyLong())).willReturn(Optional.of(bucket));
 		given(memberItemReader.readBucketMemberItem(
 			anyList(),
 			anyList(),

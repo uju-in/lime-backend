@@ -21,6 +21,7 @@ import com.programmers.lime.domains.bucket.domain.Bucket;
 import com.programmers.lime.domains.bucket.domain.BucketBuilder;
 import com.programmers.lime.domains.bucket.domain.BucketInfo;
 import com.programmers.lime.domains.bucket.domain.BucketItem;
+import com.programmers.lime.domains.bucket.repository.BucketItemRepository;
 import com.programmers.lime.domains.bucket.repository.BucketRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,6 +29,9 @@ public class BucketModifierTest {
 
 	@Mock
 	private BucketRepository bucketRepository;
+
+	@Mock
+	private BucketItemRepository bucketItemRepository;
 
 	@Mock
 	private BucketRemover bucketRemover;
@@ -45,7 +49,6 @@ public class BucketModifierTest {
 	@DisplayName("버킷 수정에 성공한다.")
 	void modifyBucket() {
 		//given
-		Long memberId = 1L;
 		Long bucketId = 1L;
 
 		BucketInfo updateBucketInfo = BucketBuilder.buildBucketInfo(
@@ -53,24 +56,22 @@ public class BucketModifierTest {
 			"운동장위의무법자",
 			200000
 		);
+
 		Bucket updateBucket = BucketBuilder.build(updateBucketInfo);
 		ItemIdRegistry updateItemRegistry = ItemIdRegistryBuilder.build(Arrays.asList(4L, 5L));
-		List<BucketItem> updateBucketItems = BucketBuilder.buildBucketItems(updateItemRegistry);
+		List<BucketItem> updateBucketItems = BucketBuilder.buildBucketItems(updateBucket.getId(), updateItemRegistry);
 
 		// 수정을 위해 기존 bucketItem 제거
 		Bucket existBucket = BucketBuilder.build();
-		given(bucketReader.read(anyLong(), anyLong()))
-			.willReturn(existBucket);
-		doNothing().when(bucketRemover)
-			.removeBucketItems(anyLong());
 
-		given(bucketAppender.createBucketItems(updateItemRegistry))
-			.willReturn(updateBucketItems);
-		given(bucketRepository.save(any(Bucket.class)))
-			.willReturn(updateBucket);
+		given(bucketReader.read(anyLong())).willReturn(existBucket);
+		doNothing().when(bucketRemover).removeBucketItems(anyLong());
+
+		given(bucketAppender.createBucketItems(updateItemRegistry, updateBucket.getId())).willReturn(updateBucketItems);
+		given(bucketRepository.save(any(Bucket.class))).willReturn(updateBucket);
 
 		//when
-		bucketModifier.modify(memberId, bucketId, updateBucketInfo, updateItemRegistry);
+		bucketModifier.modify(bucketId, updateBucketInfo, updateItemRegistry);
 
 		//then
 		assertThat(updateBucket.getBucketInfo()).usingRecursiveComparison().isEqualTo(updateBucketInfo);
