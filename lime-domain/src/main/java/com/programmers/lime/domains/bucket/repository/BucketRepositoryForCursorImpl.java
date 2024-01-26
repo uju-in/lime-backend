@@ -47,10 +47,12 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 			.limit(pageSize)
 			.fetch();
 
+
 		return jpaQueryFactory
 			.selectFrom(bucketItem)
-			.join(item).on(bucketItem.item.id.eq(item.id))
-			.where(bucketItem.bucket.id.in(bucketIds))
+			.join(item).on(bucketItem.itemId.eq(item.id))
+			.join(bucket).on(bucketItem.bucketId.eq(bucket.id))
+			.where(bucketItem.itemId.in(bucketIds))
 			.orderBy(decrease())
 			.transform(groupBy(bucket.id)
 				.list(Projections.constructor(BucketSummary.class,
@@ -58,7 +60,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 						bucket.id,
 						bucket.bucketInfo.name,
 						bucket.bucketInfo.budget,
-						sum(bucketItem.item.price),
+						sum(item.price),
 						bucket.createdAt,
 						list(Projections.constructor(ItemImage.class,
 							item.id,
