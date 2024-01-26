@@ -2,6 +2,7 @@ package com.programmers.lime.domains.comment.application;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
@@ -19,7 +20,7 @@ import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.sse.SsePayload;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
-import com.programmers.lime.global.level.PayPoint;
+import com.programmers.lime.global.event.point.PointEvent;
 import com.programmers.lime.global.util.MemberUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,8 @@ public class CommentService {
 	private final MemberUtils memberUtils;
 	private final ApplicationEventPublisher applicationEventPublisher;
 
-	@PayPoint(5)
-	public Long createComment(
+	@Transactional
+	public void createComment(
 		final Long feedId,
 		final String content
 	) {
@@ -48,8 +49,7 @@ public class CommentService {
 		SsePayload ssePayload = CommentCreateEvent.toSsePayload(commentWriter.getNickname(), comment);
 
 		applicationEventPublisher.publishEvent(ssePayload);
-
-		return commentWriter.getId();
+		applicationEventPublisher.publishEvent(new PointEvent(commentWriter.getId(), 5));
 	}
 
 	public void modifyComment(
@@ -89,8 +89,8 @@ public class CommentService {
 		return new CommentGetCursorServiceResponse(cursorSummary, totalCommentCount);
 	}
 
-	@PayPoint(20)
-	public Long adoptComment(
+	@Transactional
+	public void adoptComment(
 		final Long feedId,
 		final Long commentId
 	) {
@@ -111,7 +111,6 @@ public class CommentService {
 		}
 
 		commentModifier.adopt(comment);
-
-		return comment.getMemberId();
+		applicationEventPublisher.publishEvent(new PointEvent(comment.getMemberId(), 20));
 	}
 }
