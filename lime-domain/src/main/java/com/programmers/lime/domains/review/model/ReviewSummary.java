@@ -22,4 +22,19 @@ public record ReviewSummary(
 
 	LocalDateTime updatedAt
 ) {
+
+	public static ReviewSummary of(
+		final ReviewInfo reviewInfo,
+		final List<String> imageUrls
+	) {
+		return ReviewSummary.builder()
+			.reviewId(reviewInfo.reviewId())
+			.rate(reviewInfo.rate())
+			.content(reviewInfo.content())
+			.imageUrls(imageUrls)
+			.likeCount(reviewInfo.likeCount())
+			.createdAt(reviewInfo.createdAt())
+			.updatedAt(reviewInfo.updatedAt())
+			.build();
+	}
 }

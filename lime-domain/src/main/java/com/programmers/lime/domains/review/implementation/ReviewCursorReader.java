@@ -14,6 +14,8 @@ import com.programmers.lime.domains.member.model.MemberInfo;
 import com.programmers.lime.domains.review.model.MemberInfoWithReviewId;
 import com.programmers.lime.domains.review.model.ReviewCursorIdInfo;
 import com.programmers.lime.domains.review.model.ReviewCursorSummary;
+import com.programmers.lime.domains.review.model.ReviewImageInfo;
+import com.programmers.lime.domains.review.model.ReviewInfo;
 import com.programmers.lime.domains.review.model.ReviewSortCondition;
 import com.programmers.lime.domains.review.model.ReviewSummary;
 import com.programmers.lime.domains.review.repository.ReviewRepository;
@@ -59,9 +61,14 @@ public class ReviewCursorReader {
 			.toList();
 
 		// 리뷰 아이디를 이용하여 리뷰 정보를 가져옴
-		Map<Long, ReviewSummary> reviewSummaryMap = reviewRepository.getReviewSummaries(reviewIds)
+		Map<Long, ReviewInfo> reviewInfoMap = reviewRepository.getReviewInfo(reviewIds)
 			.stream()
-			.collect(Collectors.toMap(ReviewSummary::reviewId, Function.identity()));
+			.collect(Collectors.toMap(ReviewInfo::reviewId, Function.identity()));
+
+		// 리뷰 아이디를 이용하여 리뷰 이미지 정보를 가져옴
+		Map<Long, ReviewImageInfo> reviewImageInfoMap = reviewRepository.getReviewImageInfos(reviewIds)
+			.stream()
+			.collect(Collectors.toMap(ReviewImageInfo::reviewId, Function.identity()));
 
 		// 리뷰 아이디를 이용하여 멤버 정보를 가져옴
 		Map<Long, MemberInfoWithReviewId> memberInfoMap = reviewRepository.getMemberInfos(reviewIds)
@@ -71,7 +78,9 @@ public class ReviewCursorReader {
 
 		return reviewCursorIdInfos.stream()
 			.map(reviewCursorIdInfo -> {
-				ReviewSummary reviewSummary = reviewSummaryMap.get(reviewCursorIdInfo.reviewId());
+				ReviewInfo reviewInfo = reviewInfoMap.get(reviewCursorIdInfo.reviewId());
+				ReviewImageInfo reviewImageInfo = reviewImageInfoMap.get(reviewCursorIdInfo.reviewId());
+				ReviewSummary reviewSummary = ReviewSummary.of(reviewInfo, reviewImageInfo.imageUrls());
 				MemberInfoWithReviewId memberInfoWithReviewId = memberInfoMap.get(reviewCursorIdInfo.reviewId());
 				MemberInfo memberInfo = memberInfoWithReviewId.memberInfo();
 
