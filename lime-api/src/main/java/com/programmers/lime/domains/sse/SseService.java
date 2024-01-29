@@ -1,6 +1,5 @@
 package com.programmers.lime.domains.sse;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -24,10 +23,10 @@ public class SseService {
 		Long receiverId = SecurityUtils.getCurrentMemberId();
 
 		//observer 등록
-		SseEmitter sseEmitter = alarmManager.registerObserver(receiverId, alarmSubject);
+		SseEmitter sseEmitter = alarmManager.registerManager(receiverId, alarmSubject);
 
 		//최초 연결 시점에는 더미 데이터 전송
-		alarmManager.notifyObserver(new SsePayload("dummy", receiverId, DUMMY_DATA));
+		alarmManager.notifyManager(new SsePayload("dummy", receiverId, DUMMY_DATA));
 
 		return sseEmitter;
 

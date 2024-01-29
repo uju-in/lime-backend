@@ -1,13 +1,18 @@
 package com.programmers.lime.domains.sse;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Component
 public class AlarmManagerImpl implements AlarmManager {
 
+	private final Map<Long, AlarmSubject> observers = new ConcurrentHashMap<>();
+
 	@Override
-	public SseEmitter registerObserver(
+	public SseEmitter registerManager(
 		final Long receiverId,
 		final AlarmSubject o
 	) {
@@ -18,7 +23,7 @@ public class AlarmManagerImpl implements AlarmManager {
 	}
 
 	@Override
-	public void notifyObserver(final SsePayload ssePayload) {
+	public void notifyManager(final SsePayload ssePayload) {
 		AlarmSubject o = observers.get(ssePayload.receiverId());
 		o.send(ssePayload);
 	}

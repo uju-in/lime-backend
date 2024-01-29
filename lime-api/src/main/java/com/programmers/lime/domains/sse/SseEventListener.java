@@ -15,6 +15,6 @@ public class SseEventListener {
 	@TransactionalEventListener
 	@Async
 	public void sendSseEmitter(final SsePayload ssePayload) {
-		iAlarmSubject.notifyObserver(ssePayload);
+		iAlarmSubject.notifyManager(ssePayload);
 	}
 }

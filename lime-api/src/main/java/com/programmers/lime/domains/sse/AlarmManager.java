@@ -1,15 +1,10 @@
 package com.programmers.lime.domains.sse;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface AlarmManager {
 
-	Map<Long, AlarmSubject> observers = new ConcurrentHashMap<>();
+	SseEmitter registerManager(Long receiverId, AlarmSubject o);
 
-	SseEmitter registerObserver(Long receiverId, AlarmSubject o);
-
-	void notifyObserver(SsePayload ssePayload);
+	void notifyManager(SsePayload ssePayload);
 }
