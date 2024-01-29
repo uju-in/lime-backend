@@ -22,7 +22,6 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 	List<MemberItem> findByMemberId(Long memberId);
 
 	List<MemberItem> findByFolderIdAndMemberId(Long folderId, Long memberId);
-	void deleteByMemberId(Long memberId);
 
 	int countByItemId(Long itemId);
 
