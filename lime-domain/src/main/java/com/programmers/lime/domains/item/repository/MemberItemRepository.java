@@ -55,5 +55,7 @@ public interface MemberItemRepository extends JpaRepository<MemberItem, Long>, M
 		final Long memberId
 	);
 
+	boolean existsMemberItemByIdAndMemberId(Long memberItemId, Long memberId);
+
 	List<MemberItem> findByFolderId(Long folderId);
 }

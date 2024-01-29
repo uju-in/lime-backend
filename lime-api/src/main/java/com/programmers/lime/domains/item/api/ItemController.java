@@ -81,19 +81,6 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "나의 아이템 찜 목록에서 삭제", description = "itemId을 이용하여 찜 목록에서 삭제 합니다.")
-	@DeleteMapping("/myitems")
-	public ResponseEntity<Void> deleteMyItem(
-		@ModelAttribute @Valid final MemberItemDeleteRequest request
-	) {
-		itemService.removeMemberItems(
-			request.folderId(),
-			request.toItemRemovalList()
-		);
-
-		return ResponseEntity.ok().build();
-	}
-
 	@Operation(summary = "아이템 이름 목록 조회", description = "키워드를 이용하여 아이템 이름 목록 조회 합니다")
 	@GetMapping("/item-names")
 	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
