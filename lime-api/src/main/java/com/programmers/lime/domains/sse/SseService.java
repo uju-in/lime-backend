@@ -1,5 +1,6 @@
 package com.programmers.lime.domains.sse;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -14,19 +15,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class SseService {
-	private static final String DUMMY_DATA = "connected";
-	private final ConcreteAlarmSubject concreteAlarmSubject;
-	private final ObserverComment observerComment;
+	private static final Map<String, Object> DUMMY_DATA = Map.of("dummy", "dummy");
 
-	public void subscribe() {
+	private final AlarmManager alarmManager;
+	private final AlarmSubject alarmSubject;
+
+	public SseEmitter subscribe() {
 		Long receiverId = SecurityUtils.getCurrentMemberId();
 
-		//observer관리자 생성
 		//observer 등록
-		concreteAlarmSubject.registerObserver(receiverId, observerComment);
+		SseEmitter sseEmitter = alarmManager.registerObserver(receiverId, alarmSubject);
 
 		//최초 연결 시점에는 더미 데이터 전송
-		concreteAlarmSubject.notifyObserver(new SsePayload("dummy", receiverId, Map.of("dummy", DUMMY_DATA)));
+		alarmManager.notifyObserver(new SsePayload("dummy", receiverId, DUMMY_DATA));
+
+		return sseEmitter;
 
 	}
 }
