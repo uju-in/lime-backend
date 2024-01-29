@@ -1,5 +1,7 @@
 package com.programmers.lime.domains.item.application;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.programmers.lime.domains.item.implementation.MemberItemFolderAppender;
@@ -45,5 +47,15 @@ public class MemberItemFolderService {
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
 
 		memberItemFolderRemover.remove(memberId, folderId);
+	}
+
+	public void removeMemberItemFolders(final List<Long> folderIds) {
+		if (folderIds == null) {
+			return;
+		}
+
+		for(Long folderId : folderIds) {
+			removeMemberItemFolder(folderId);
+		}
 	}
 }
