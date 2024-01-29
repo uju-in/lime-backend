@@ -9,49 +9,40 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
 @Slf4j
-@Getter
-public class ObserverComment implements IAlarmObserver {
+@Component
+public class CommentSubject implements AlarmSubject {
 	private static final Long DEFAULT_TIMEOUT = 6000 * 1000L; // 60초
 
-	// private final ConcreteAlarmSubject alarmSubject; //조합활용
-
 	@Override
-	public void create(final Long receiverId) {
+	public SseEmitter create(final Long receiverId) {
 		SseEmitter sseEmitter = new SseEmitter(DEFAULT_TIMEOUT);
 		UUID uuid = UUID.randomUUID();
 
-		// IAlarmObserver iAlarmObserver = alarmSubject.observers.get(receiverId);
-		// iAlarmObserver.emitter.put(uuid.getMostSignificantBits(), sseEmitter);
 		this.emitter.put(uuid.getMostSignificantBits(), sseEmitter);
 
 		sseEmitter.onTimeout(sseEmitter::complete);
 		sseEmitter.onCompletion(
 			() -> {
-				log.error("SSE 연결이 종료되었습니다. userId : {}", receiverId);
-				// iAlarmObserver.emitter.remove(uuid.getMostSignificantBits());
+				log.info("SSE 연결이 종료되었습니다. userId : {}", receiverId);
 				this.emitter.remove(uuid.getMostSignificantBits());
 			}
 		);
 		sseEmitter.onError(
 			(e) -> {
-				log.error("SSE 연결이 종료되었습니다. userId : {}", receiverId);
-				// iAlarmObserver.emitter.remove(uuid.getMostSignificantBits());
+				log.error("오류로 인해 SSE 연결이 종료되었습니다. userId : {}", receiverId);
 				this.emitter.remove(uuid.getMostSignificantBits());
 			}
 		);
+		return sseEmitter;
 	}
 
 	@Override
 	public void send(
 		final SsePayload payload
 	) {
-		// IAlarmObserver iAlarmObserver = alarmSubject.observers.get(payload.receiverId());
 		if (this.emitter == null) {
 			log.error("SSE를 구독하지 않은 유저입니다. userId : {}", payload.receiverId());
 			return;
@@ -61,7 +52,7 @@ public class ObserverComment implements IAlarmObserver {
 			(id, emitter) -> {
 				try {
 					emitter.send(payload.data());
-					log.error("알람을 보냈습니다. userId : {}", payload.receiverId());
+					log.info("알람을 보냈습니다. userId : {}", payload.receiverId());
 				} catch (Exception e) {
 					log.error("알람을 보내는 과정에서 오류가 발생했습니다.");
 				}
@@ -74,7 +65,7 @@ public class ObserverComment implements IAlarmObserver {
 		this.emitter.forEach((emitterId, emitter) -> {
 			try {
 				emitter.send(event().comment("heartbeat"));
-				log.error("heartbeat을 보냈습니다. userId : {}", 1);
+				log.info("heartbeat을 보냈습니다.");
 			} catch (IOException e) {
 				emitter.complete();
 			}

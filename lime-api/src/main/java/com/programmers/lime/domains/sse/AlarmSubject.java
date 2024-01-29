@@ -5,9 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-public interface IAlarmObserver {
+public interface AlarmSubject {
 	Map<Long, SseEmitter> emitter = new ConcurrentHashMap<>();
 
-	void create(Long receiverId);
+	SseEmitter create(Long receiverId);
 	void send(SsePayload ssePayload);
 }
