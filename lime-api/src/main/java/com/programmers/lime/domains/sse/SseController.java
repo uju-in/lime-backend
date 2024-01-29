@@ -18,11 +18,13 @@ public class SseController {
 	private final SseService sseService;
 
 	@GetMapping(value = "/subscribe", produces = "text/event-stream;charset=utf-8")
-	public ResponseEntity<SseEmitter> subscribe(HttpServletResponse response) {
+	public ResponseEntity<Void> subscribe(HttpServletResponse response) {
 		response.setHeader(HttpHeaders.CONNECTION, "keep-alive");
 		response.setHeader(HttpHeaders.CONTENT_TYPE, "text/event-stream;charset=utf-8");
 		response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache, no-transform");
 
-		return ResponseEntity.ok(sseService.subscribe());
+		sseService.subscribe();
+
+		return ResponseEntity.ok().build();
 	}
 }
