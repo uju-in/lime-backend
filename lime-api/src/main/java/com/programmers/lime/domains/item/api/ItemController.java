@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.lime.domains.item.api.dto.request.FavoriteItemDeleteRequest;
 import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemCreateRequest;
-import com.programmers.lime.domains.item.api.dto.request.MemberItemDeleteRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderCreateRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderUpdateRequest;
 import com.programmers.lime.domains.item.api.dto.response.MemberItemCreateResponse;
@@ -143,14 +143,13 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "찜 목록 폴더 삭제", description = "찜 목록 폴더를 삭제 합니다.")
-	@DeleteMapping("/myitems/folders/{folderId}")
-	public ResponseEntity<Void> removeMemberItemFolder(
-		@PathVariable final Long folderId
+	@Operation(summary = "찜 항목 제거", description = "찜 목록으로 부터 아이템이나 폴더를 제거 합니다.")
+	@DeleteMapping("/myitems")
+	public ResponseEntity<Void> removeFavorite(
+		@ModelAttribute @Valid final FavoriteItemDeleteRequest request
 	) {
-		memberItemFolderService.removeMemberItemFolder(
-			folderId
-		);
+		itemService.removeMemberItems(request.itemIds());
+		memberItemFolderService.removeMemberItemFolders(request.folderIds());
 
 		return ResponseEntity.ok().build();
 	}

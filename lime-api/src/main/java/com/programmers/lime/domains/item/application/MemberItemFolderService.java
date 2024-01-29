@@ -50,7 +50,7 @@ public class MemberItemFolderService {
 	}
 
 	public void removeMemberItemFolders(final List<Long> folderIds) {
-		if (folderIds == null) {
+		if (folderIds == null || folderIds.isEmpty()) {
 			return;
 		}
 

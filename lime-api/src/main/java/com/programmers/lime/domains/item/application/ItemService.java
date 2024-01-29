@@ -123,6 +123,11 @@ public class ItemService {
 	public void removeMemberItems(
 		final List<Long> memberItemIds
 	) {
+
+		if(memberItemIds == null || memberItemIds.isEmpty()) {
+			return;
+		}
+
 		Long memberId = memberUtils.getCurrentMemberId();
 
 		memberItemValidator.validateExistMemberIdAndMemberItemId(memberId, memberItemIds);
