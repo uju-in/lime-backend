@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.programmers.lime.domains.review.model.MemberInfoWithReviewId;
 import com.programmers.lime.domains.review.model.ReviewCursorIdInfo;
+import com.programmers.lime.domains.review.model.ReviewImageInfo;
+import com.programmers.lime.domains.review.model.ReviewInfo;
 import com.programmers.lime.domains.review.model.ReviewSortCondition;
-import com.programmers.lime.domains.review.model.ReviewSummary;
 
 public interface ReviewRepositoryForCursor {
 	List<ReviewCursorIdInfo> findAllByCursor(
@@ -17,7 +18,9 @@ public interface ReviewRepositoryForCursor {
 
 	List<MemberInfoWithReviewId> getMemberInfos(List<Long> reviewIds);
 
-	List<ReviewSummary> getReviewSummaries(List<Long> reviewIds);
+	List<ReviewImageInfo> getReviewImageInfos(List<Long> reviewIds);
+
+	List<ReviewInfo> getReviewInfo(List<Long> reviewIds);
 
 	int getReviewCount(Long itemId);
 }
