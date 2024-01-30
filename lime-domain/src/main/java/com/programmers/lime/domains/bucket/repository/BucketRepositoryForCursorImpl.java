@@ -52,7 +52,7 @@ public class BucketRepositoryForCursorImpl implements BucketRepositoryForCursor 
 			.selectFrom(bucketItem)
 			.join(item).on(bucketItem.itemId.eq(item.id))
 			.join(bucket).on(bucketItem.bucketId.eq(bucket.id))
-			.where(bucketItem.itemId.in(bucketIds))
+			.where(bucketItem.bucketId.in(bucketIds))
 			.orderBy(decrease())
 			.transform(groupBy(bucket.id)
 				.list(Projections.constructor(BucketSummary.class,
