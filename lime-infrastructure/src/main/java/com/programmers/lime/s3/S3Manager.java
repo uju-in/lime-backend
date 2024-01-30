@@ -3,6 +3,7 @@ package com.programmers.lime.s3;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -43,11 +44,10 @@ public class S3Manager {
 		final String directory,
 		final String fileName
 	) {
-		final String fileNameWithDir = directory + "/" + fileName;
+		final String fileNameWithDir = getFileNameWithDir(directory, fileName);
 		putS3(uploadFile, fileNameWithDir);
 		removeNewFile(uploadFile);
 	}
-
 	private void putS3(
 		final File uploadFile,
 		final String fileName
@@ -80,7 +80,16 @@ public class S3Manager {
 		final String directory,
 		final String fileName
 	) {
-		final String fileNameWithDir = directory + "/" + fileName;
+		final String fileNameWithDir = getFileNameWithDir(directory, fileName);
 		amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileNameWithDir));
+	}
+
+	public URL getUrl(String directory, String fileName) {
+		String fileNameWithDir = getFileNameWithDir(directory, fileName);
+		return amazonS3.getUrl(bucket, fileNameWithDir);
+	}
+
+	private String getFileNameWithDir(final String directory, final String fileName) {
+		return directory + "/" + fileName;
 	}
 }

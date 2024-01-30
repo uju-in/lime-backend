@@ -11,6 +11,8 @@ public record ItemGetServiceResponse(
 	Double itemAvgRate,
 	boolean isMemberItem,
 	boolean isReviewed,
-	int favoriteCount
+	int favoriteCount,
+	int reviewCount,
+	String hobbyName
 	) {
 }

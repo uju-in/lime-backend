@@ -14,6 +14,10 @@ public record ItemSummary(
 
 	String image,
 
-	LocalDateTime createdAt
+	LocalDateTime createdAt,
+
+	Long reviewCount,
+
+	Long favoriteCount
 ) {
 }

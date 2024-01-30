@@ -1,7 +1,5 @@
 package com.programmers.lime.domains.review.model;
 
-import java.time.LocalDateTime;
-
 import com.programmers.lime.common.cursor.CursorIdParser;
 import com.programmers.lime.domains.member.model.MemberInfo;
 
@@ -13,16 +11,8 @@ public record ReviewCursorSummary(
 
 	MemberInfo memberInfo,
 
-	Long reviewId,
+	ReviewSummary reviewSummary,
 
-	int rate,
-
-	String content,
-
-	boolean isReviewed,
-
-	LocalDateTime createdAt,
-
-	LocalDateTime updatedAt
-) implements CursorIdParser {
+	boolean isReviewed
+	) implements CursorIdParser {
 }

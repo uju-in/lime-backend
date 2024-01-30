@@ -27,6 +27,7 @@ public enum ErrorCode {
 	INVALID_REQUEST_FILED_TYPE("COMMON_011", "잘못된 요청 필드 타입입니다."),
 	EXPIRED_REFRESH_TOKEN("COMMON_012", "Refresh Token이 만료되었습니다."),
 	INVALID_REFRESH_TOKEN("COMMON_013", "Refresh Token이 유효하지 않습니다."),
+	S3_UPLOAD_FAIL("COMMON_014", "S3 업로드에 실패했습니다."),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -47,11 +48,15 @@ public enum ErrorCode {
 	ITEM_NOT_FOUND("ITEM_002", "요청한 아이템은 찾을 수 없습니다."),
 	ITEM_URL_ALREADY_EXIST("ITEM_003", "이미 존재하는 아이템 URL 입니다."),
 	ITEM_BAD_SORT_CONDITION("ITEM_004", "잘못된 아이템 정렬 조건 입니다."),
+	NOT_FOUND_WHILE_READING_ITEM_SUMMARY("ITEM_005", "ITEM_SUMMARY를 만들기 위한 정보를 찾을 수 없습니다."),
 
 	// REVIEW
 	REVIEW_NOT_FOUND("REVIEW_001", "해당하는 리뷰는 찾을 수 없습니다."),
 	REVIEW_NOT_EQUAL_ITEM("REVIEW_002", "리뷰 아이디와 아이템 아이디가 일치하지 않습니다."),
 	REVIEW_NOT_MINE("REVIEW_003", "리뷰 작성자와 로그인한 회원아이디가 일치하지 않습니다."),
+	REVIEW_BAD_SORT_CONDITION("REVIEW_004", "잘못된 리뷰 정렬 조건 입니다."),
+	ALREADY_REVIEW_LIKED("REVIEW_005", "이미 리뷰를 좋아요 했습니다."),
+	NOT_REVIEW_LIKED("REVIEW_006", "좋아요를 누르지 않은 리뷰입니다."),
 
 	// Vote
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),

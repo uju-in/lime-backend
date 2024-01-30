@@ -1,7 +1,5 @@
 package com.programmers.lime.domains.item.model;
 
-import java.time.LocalDateTime;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -11,10 +9,11 @@ public class ItemSummaryBuilder {
 	public static ItemSummary build(final Long id) {
 		return ItemSummary.builder()
 			.id(id)
-			.name("아이템")
-			.price(10000)
-			.image("https://www.naver.com//image")
-			.createdAt(LocalDateTime.of(2023, 1, 1, 0, 0, 0))
+			.name("name" + id)
+			.price(id.intValue())
+			.image("image" + id)
+			.favoriteCount(id)
+			.reviewCount(id)
 			.build();
 	}
 }

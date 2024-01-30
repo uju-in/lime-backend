@@ -1,6 +1,15 @@
 package com.programmers.lime.domains.review.application;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
@@ -15,14 +24,20 @@ import com.programmers.lime.domains.review.implementation.ReviewRemover;
 import com.programmers.lime.domains.review.implementation.ReviewStatistics;
 import com.programmers.lime.domains.review.model.ReviewContent;
 import com.programmers.lime.domains.review.model.ReviewCursorSummary;
-import com.programmers.lime.global.level.PayPoint;
+import com.programmers.lime.domains.review.model.ReviewSortCondition;
+import com.programmers.lime.error.BusinessException;
+import com.programmers.lime.error.ErrorCode;
+import com.programmers.lime.global.event.point.PointEvent;
 import com.programmers.lime.global.util.MemberUtils;
+import com.programmers.lime.s3.S3Manager;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
+
+	private static final String DIRECTORY = "review-images";
 
 	private final ReviewAppender reviewAppender;
 	private final ReviewModifier reviewModifier;
@@ -32,16 +47,36 @@ public class ReviewService {
 	private final ReviewStatistics reviewStatistics;
 	private final MemberUtils memberUtils;
 	private final ReviewReader reviewReader;
+	private final S3Manager s3Manager;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
-	@PayPoint(15)
-	public Long createReview(
+	@Transactional
+	public void createReview(
 		final Long itemId,
-		final ReviewContent reviewContent
+		final ReviewContent reviewContent,
+		final List<MultipartFile> multipartReviewImages
 	) {
-		Long memberId = memberUtils.getCurrentMemberId();
-		reviewAppender.append(itemId, memberId, reviewContent);
+		List<String> reviewImageURLs = uploadReviewImages(multipartReviewImages);
 
-		return memberId;
+		Long memberId = memberUtils.getCurrentMemberId();
+		reviewAppender.append(itemId, memberId, reviewContent, reviewImageURLs);
+		applicationEventPublisher.publishEvent(new PointEvent(memberId, 15));
+	}
+
+	private List<String> uploadReviewImages(final List<MultipartFile> multipartReviewImages) {
+		return multipartReviewImages.stream()
+			.map(multipartFile -> {
+				try {
+					String fileType = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+					String imageName = UUID.randomUUID() + fileType;
+					s3Manager.uploadFile(multipartFile, DIRECTORY, imageName);
+
+					return s3Manager.getUrl(DIRECTORY, imageName).toString();
+				} catch (IOException e) {
+					throw new BusinessException(ErrorCode.S3_UPLOAD_FAIL);
+				}
+			})
+			.collect(Collectors.toList());
 	}
 
 	public void updateReview(
@@ -57,14 +92,17 @@ public class ReviewService {
 
 	public ReviewGetByCursorServiceResponse getReviewsByCursor(
 		final Long itemId,
-		final CursorPageParameters parameters
+		final CursorPageParameters parameters,
+		final String reviewSortCondition
 	) {
+		ReviewSortCondition sortCondition = ReviewSortCondition.from(reviewSortCondition);
 		int reviewCount = reviewStatistics.getReviewCount(itemId);
 		Long memberId = memberUtils.getCurrentMemberId();
 		CursorSummary<ReviewCursorSummary> cursorSummary = reviewCursorReader.readByCursor(
 			itemId,
 			memberId,
-			parameters
+			parameters,
+			sortCondition
 		);
 
 		return new ReviewGetByCursorServiceResponse(reviewCount, cursorSummary);

@@ -105,6 +105,7 @@ public class ItemService {
 		double itemAvgRating = reviewStatistics.getReviewAvgByItemId(itemId);
 		boolean isReviewed = reviewReader.existsReviewByMemberIdAndItemId(memberId, itemId);
 		int favoriteCount = memberItemReader.countByItemId(itemId);
+		int reviewCount = reviewReader.countReviewByItemId(itemId);
 
 		return ItemGetServiceResponse.builder()
 			.itemInfo(itemInfo)
@@ -113,6 +114,8 @@ public class ItemService {
 			.itemAvgRate(itemAvgRating)
 			.favoriteCount(favoriteCount)
 			.isReviewed(isReviewed)
+			.reviewCount(reviewCount)
+			.hobbyName(item.getHobby().getName())
 			.build();
 	}
 
@@ -142,10 +145,11 @@ public class ItemService {
 		final String itemSortCondition,
 		final String hobbyName
 	) {
+		// 입력 받은 string을 enum으로 변환 (hobbyName, itemSortCondition)
 		Hobby hobby = Hobby.from(hobbyName);
-
 		ItemSortCondition sortCondition = ItemSortCondition.from(itemSortCondition);
 
+		// 요청한 조건에 해당하는 아이템 중 size 만큼 커서 아이디와 아이템 아이디를 가져옴
 		CursorSummary<ItemCursorSummary> itemCursorSummaryCursorSummary = itemCursorReader.readByCursor(
 			keyword,
 			parameters,
@@ -153,6 +157,7 @@ public class ItemService {
 			hobby
 		);
 
+		// 요청한 조건에 해당하는 모든 아이템의 수를 itemTotalCount에 저장
 		int itemTotalCount = itemReader.getItemTotalCountByKeyword(keyword, hobby);
 
 		return new ItemGetByCursorServiceResponse(

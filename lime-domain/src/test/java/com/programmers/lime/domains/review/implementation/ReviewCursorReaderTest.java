@@ -21,8 +21,18 @@ import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.cursor.CursorUtils;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.ItemBuilder;
+import com.programmers.lime.domains.member.domain.MemberInfoWithReviewIdBuilder;
+import com.programmers.lime.domains.review.ReviewCursorIdInfoBuilder;
 import com.programmers.lime.domains.review.ReviewCursorSummaryBuilder;
+import com.programmers.lime.domains.review.ReviewImageInfoBuilder;
+import com.programmers.lime.domains.review.ReviewInfoBuilder;
+import com.programmers.lime.domains.review.ReviewSummaryBuilder;
+import com.programmers.lime.domains.review.model.MemberInfoWithReviewId;
+import com.programmers.lime.domains.review.model.ReviewCursorIdInfo;
 import com.programmers.lime.domains.review.model.ReviewCursorSummary;
+import com.programmers.lime.domains.review.model.ReviewImageInfo;
+import com.programmers.lime.domains.review.model.ReviewInfo;
+import com.programmers.lime.domains.review.model.ReviewSummary;
 import com.programmers.lime.domains.review.repository.ReviewRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,27 +60,52 @@ class ReviewCursorReaderTest {
 		// given
 		Item item = ItemBuilder.build();
 		Long itemId = item.getId();
-		Long memberId = 1L;
+		Long memberId = 0L;
 
-		List<ReviewCursorSummary> reviewCursorSummaries = ReviewCursorSummaryBuilder.buildMany();
+		List<ReviewCursorIdInfo> reviewCursorIdInfos = ReviewCursorIdInfoBuilder.buildMany();
+
+		List<Long> reviewIds = reviewCursorIdInfos.stream().map(ReviewCursorIdInfo::reviewId).toList();
+
+		List<MemberInfoWithReviewId> memberInfoWithReviewIds = MemberInfoWithReviewIdBuilder.buildMany(reviewIds);
+
+		List<ReviewInfo> reviewInfos = ReviewInfoBuilder.buildMany(reviewIds);
+
+		List<ReviewImageInfo> reviewImageInfos = ReviewImageInfoBuilder.buildMany(reviewIds);
+
+		List<ReviewSummary> reviewSummaries = ReviewSummaryBuilder.buildMany(reviewInfos, reviewImageInfos);
+
+		List<ReviewCursorSummary> reviewCursorSummaries = ReviewCursorSummaryBuilder.buildMany(
+			reviewIds, reviewSummaries
+		);
 
 		CursorSummary<ReviewCursorSummary> expectedReviewCursorSummary = CursorUtils
 			.getCursorSummaries(reviewCursorSummaries);
 
+
 		int pageSize = parameters.size() == null ? DEFAULT_PAGE_SIZE : parameters.size();
 		given(reviewRepository.findAllByCursor(
 				itemId,
-				memberId,
 				parameters.cursorId(),
-				pageSize
+				pageSize,
+			null
 			)
-		).willReturn(reviewCursorSummaries);
+		).willReturn(reviewCursorIdInfos);
+
+		given(reviewRepository.getMemberInfos(reviewIds))
+			.willReturn(memberInfoWithReviewIds);
+
+		given(reviewRepository.getReviewInfo(reviewIds))
+			.willReturn(reviewInfos);
+
+		given(reviewRepository.getReviewImageInfos(reviewIds))
+			.willReturn(reviewImageInfos);
 
 		// when
 		CursorSummary<ReviewCursorSummary> actualReviewCursorSummary = reviewCursorReader.readByCursor(
 			itemId,
 			memberId,
-			parameters
+			parameters,
+			null
 		);
 
 		// then

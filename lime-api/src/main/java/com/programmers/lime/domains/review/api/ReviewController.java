@@ -1,5 +1,7 @@
 package com.programmers.lime.domains.review.api;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.programmers.lime.domains.review.api.dto.request.ReviewCreateRequest;
 import com.programmers.lime.domains.review.api.dto.request.ReviewUpdateRequest;
@@ -17,6 +22,7 @@ import com.programmers.lime.domains.review.api.dto.response.ReviewCreateResponse
 import com.programmers.lime.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.lime.domains.review.api.dto.response.ReviewGetResponse;
 import com.programmers.lime.domains.review.api.dto.response.ReviewModifyResponse;
+import com.programmers.lime.domains.review.application.ReviewLikeService;
 import com.programmers.lime.domains.review.application.ReviewService;
 import com.programmers.lime.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 import com.programmers.lime.domains.review.application.dto.ReviewGetServiceResponse;
@@ -34,14 +40,16 @@ import lombok.RequiredArgsConstructor;
 public class ReviewController {
 
 	private final ReviewService reviewService;
+	private final ReviewLikeService reviewLikeService;
 
 	@Operation(summary = "아이템 리뷰 등록", description = "itemId, ReviewCreateRequest을 이용하여 아이템 리뷰를 등록 합니다.")
 	@PostMapping()
 	public ResponseEntity<ReviewCreateResponse> createReview(
 		@PathVariable final Long itemId,
-		@Valid @RequestBody final ReviewCreateRequest request
+		@Valid @ModelAttribute final ReviewCreateRequest request,
+		@RequestPart(value = "multipartReviewImages", required = false) final List<MultipartFile> multipartReviewImages
 	) {
-		reviewService.createReview(itemId, request.toReviewContent());
+		reviewService.createReview(itemId, request.toReviewContent(), multipartReviewImages);
 		ReviewCreateResponse response = new ReviewCreateResponse(itemId);
 
 		return ResponseEntity.ok(response);
@@ -64,11 +72,13 @@ public class ReviewController {
 	@GetMapping()
 	public ResponseEntity<ReviewGetByCursorResponse> getReviewsByCursor(
 		@PathVariable final Long itemId,
-		@ModelAttribute("request") @Valid final CursorRequest request
+		@ModelAttribute("request") @Valid final CursorRequest request,
+		@RequestParam(required = false) final String reviewSortCondition
 	) {
 		ReviewGetByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
 			itemId,
-			request.toParameters()
+			request.toParameters(),
+			reviewSortCondition
 		);
 
 		ReviewGetByCursorResponse response = ReviewGetByCursorResponse.from(serviceResponse);
@@ -97,5 +107,27 @@ public class ReviewController {
 		ReviewGetResponse response = ReviewGetResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "아이템 리뷰 좋아요", description = "reviewId을 이용하여 아이템 리뷰를 좋아요 합니다.")
+	@PostMapping("/{reviewId}/like")
+	public ResponseEntity<Void> likeReview(
+		@PathVariable final Long itemId,
+		@PathVariable final Long reviewId
+	) {
+		reviewLikeService.like(itemId, reviewId);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "아이템 리뷰 좋아요 취소", description = "reviewId을 이용하여 아이템 리뷰를 좋아요 취소 합니다.")
+	@DeleteMapping("/{reviewId}/like")
+	public ResponseEntity<Void> cancelLikedReview(
+		@PathVariable final Long itemId,
+		@PathVariable final Long reviewId
+	) {
+		reviewLikeService.unlike(itemId, reviewId);
+
+		return ResponseEntity.ok().build();
 	}
 }
