@@ -18,6 +18,7 @@ import com.programmers.lime.domains.review.application.dto.ReviewGetServiceRespo
 import com.programmers.lime.domains.review.domain.Review;
 import com.programmers.lime.domains.review.implementation.ReviewAppender;
 import com.programmers.lime.domains.review.implementation.ReviewCursorReader;
+import com.programmers.lime.domains.review.implementation.ReviewImageAppender;
 import com.programmers.lime.domains.review.implementation.ReviewModifier;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
 import com.programmers.lime.domains.review.implementation.ReviewRemover;
@@ -49,6 +50,7 @@ public class ReviewService {
 	private final ReviewReader reviewReader;
 	private final S3Manager s3Manager;
 	private final ApplicationEventPublisher applicationEventPublisher;
+	private final ReviewImageAppender reviewImageAppender;
 
 	@Transactional
 	public void createReview(
@@ -56,15 +58,27 @@ public class ReviewService {
 		final ReviewContent reviewContent,
 		final List<MultipartFile> multipartReviewImages
 	) {
-		List<String> reviewImageURLs = uploadReviewImages(multipartReviewImages);
-
 		Long memberId = memberUtils.getCurrentMemberId();
-		reviewAppender.append(itemId, memberId, reviewContent, reviewImageURLs);
+		reviewAppender.append(itemId, memberId, reviewContent);
+
 		applicationEventPublisher.publishEvent(new PointEvent(memberId, 15));
+
+		List<String> reviewImageURLs = uploadReviewImages(multipartReviewImages);
+		reviewImageAppender.append(itemId, reviewImageURLs);
 	}
 
 	private List<String> uploadReviewImages(final List<MultipartFile> multipartReviewImages) {
+		if(multipartReviewImages == null || multipartReviewImages.isEmpty()) {
+			return List.of();
+		}
+
 		return multipartReviewImages.stream()
+			.filter(multipartFile -> {
+				if(multipartFile.getOriginalFilename() == null) {
+					return false;
+				}
+				return !multipartFile.getOriginalFilename().isEmpty();
+			})
 			.map(multipartFile -> {
 				try {
 					String fileType = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
