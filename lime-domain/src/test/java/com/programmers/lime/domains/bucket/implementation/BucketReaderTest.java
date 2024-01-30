@@ -22,6 +22,7 @@ import com.programmers.lime.common.model.ItemIdRegistry;
 import com.programmers.lime.domains.bucket.domain.Bucket;
 import com.programmers.lime.domains.bucket.domain.BucketBuilder;
 import com.programmers.lime.domains.bucket.domain.BucketInfo;
+import com.programmers.lime.domains.bucket.domain.BucketItem;
 import com.programmers.lime.domains.bucket.model.BucketGetServiceResponse;
 import com.programmers.lime.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.lime.domains.bucket.model.BucketMemberItemSummaryBuilder;
@@ -65,8 +66,13 @@ public class BucketReaderTest {
 			.map(item -> ItemInfo.from(item))
 			.toList();
 
+		List<BucketItem> bucketItems = BucketBuilder.buildBucketItems(
+			bucketId,
+			new ItemIdRegistry(Arrays.asList(1L, 2L, 3L, 4L))
+		);
+
 		given(bucketItemRepository.findAllByBucketId(anyLong()))
-			.willReturn(BucketBuilder.buildBucketItems(bucketId,new ItemIdRegistry(Arrays.asList(1L,2L,3L,4L))));
+			.willReturn(bucketItems);
 		given(bucketRepository.findById(anyLong())).willReturn(Optional.of(bucket));
 		given(itemReader.readAll(anyList())).willReturn(ItemBuilder.buildMany());
 

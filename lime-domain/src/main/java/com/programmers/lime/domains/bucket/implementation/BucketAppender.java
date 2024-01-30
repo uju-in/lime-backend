@@ -53,9 +53,7 @@ public class BucketAppender {
 			return registry.itemIds().stream()
 				.distinct()
 				.map(itemId -> {
-					BucketItem bucketItem = new BucketItem(itemId, bucketId);
-
-					return bucketItem;
+					return new BucketItem(itemId, bucketId);
 				}).toList();
 		}
 
