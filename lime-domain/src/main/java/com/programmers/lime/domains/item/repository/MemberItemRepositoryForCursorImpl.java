@@ -11,6 +11,7 @@ import com.programmers.lime.domains.bucket.model.BucketMemberItemSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
 import com.programmers.lime.domains.item.model.MemberItemSummary;
 import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -97,9 +98,9 @@ public class MemberItemRepositoryForCursorImpl implements MemberItemRepositoryFo
 			.fetch();
 	}
 
-	private BooleanExpression isSelected(final List<Long> itemIdsFromBucketItem) {
+	private Expression<Boolean> isSelected(final List<Long> itemIdsFromBucketItem) {
 		if (itemIdsFromBucketItem == null) {
-			return Expressions.asBoolean(false).isTrue();
+			return Expressions.constant(false);
 		}
 
 		return new CaseBuilder()

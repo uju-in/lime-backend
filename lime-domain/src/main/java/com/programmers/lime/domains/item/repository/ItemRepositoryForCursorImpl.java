@@ -17,6 +17,7 @@ import com.programmers.lime.domains.item.model.ItemInfoForItemSummary;
 import com.programmers.lime.domains.item.model.ItemSortCondition;
 import com.programmers.lime.domains.item.model.ReviewInfoForItemSummary;
 import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -142,9 +143,9 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			);
 	}
 
-	private BooleanExpression isSelected(final List<Long> itemIdsFromInventory) {
+	private Expression<Boolean> isSelected(final List<Long> itemIdsFromInventory) {
 		if (itemIdsFromInventory == null) {
-			return Expressions.asBoolean(false).isTrue();
+			return Expressions.constant(false);
 		}
 
 		return new CaseBuilder()
