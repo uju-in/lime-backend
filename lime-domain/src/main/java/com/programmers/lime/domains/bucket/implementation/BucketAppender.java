@@ -10,9 +10,12 @@ import com.programmers.lime.common.model.ItemIdRegistry;
 import com.programmers.lime.domains.bucket.domain.Bucket;
 import com.programmers.lime.domains.bucket.domain.BucketInfo;
 import com.programmers.lime.domains.bucket.domain.BucketItem;
+import com.programmers.lime.domains.bucket.repository.BucketItemRepository;
 import com.programmers.lime.domains.bucket.repository.BucketRepository;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.implementation.ItemReader;
+import com.programmers.lime.error.BusinessException;
+import com.programmers.lime.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BucketAppender {
 
+	private final BucketItemRepository bucketItemRepository;
 	private final BucketRepository bucketRepository;
 	private final ItemReader itemReader;
 
@@ -30,24 +34,29 @@ public class BucketAppender {
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
-		List<BucketItem> bucketItems = createBucketItems(registry);
-
 		Bucket bucket = new Bucket(bucketInfo, memberId);
-		bucketItems.forEach(bucket::addBucketItem);
+		Long bucketId = bucketRepository.save(bucket).getId();
 
-		return bucketRepository.save(bucket).getId();
+		List<BucketItem> bucketItems = createBucketItems(registry,bucketId);
+
+		bucketItemRepository.saveAll(bucketItems);
+
+		return bucketId;
 	}
 
 	/** 버킷 아이템 생성 */
-	public List<BucketItem> createBucketItems(final ItemIdRegistry registry) {
-		return registry.itemIds().stream()
-			.distinct()
-			.map(itemId -> {
-				Item item = itemReader.read(itemId);
-				BucketItem bucketItem = new BucketItem(item);
+	public List<BucketItem> createBucketItems(
+		final ItemIdRegistry registry,
+		final Long bucketId
+	) {
+		if(itemReader.existsAll(registry.itemIds())){
+			return registry.itemIds().stream()
+				.distinct()
+				.map(itemId -> {
+					return new BucketItem(itemId, bucketId);
+				}).toList();
+		}
 
-				return bucketItem;
-			})
-			.collect(Collectors.toList());
+		throw new BusinessException(ErrorCode.ITEM_NOT_FOUND);
 	}
 }

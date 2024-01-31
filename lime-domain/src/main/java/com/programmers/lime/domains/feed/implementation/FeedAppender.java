@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.lime.domains.bucket.domain.Bucket;
+import com.programmers.lime.domains.bucket.domain.BucketItem;
 import com.programmers.lime.domains.bucket.implementation.BucketReader;
 import com.programmers.lime.domains.feed.domain.Feed;
 import com.programmers.lime.domains.feed.domain.FeedItem;
@@ -38,9 +39,7 @@ public class FeedAppender {
 		final FeedCreateServiceRequest request
 	) {
 		Bucket bucket = bucketReader.read(request.bucketId(), memberId);
-		List<Long> itemIds = bucket.getBucketItems().stream()
-			.map(bucketItem -> bucketItem.getItem().getId())
-			.toList();
+		List<Long> itemIds = bucketReader.getItemIds(bucket.getId());
 		List<FeedItem> feedItems = createFeedItems(itemIds);
 
 		Feed feed = Feed.builder()

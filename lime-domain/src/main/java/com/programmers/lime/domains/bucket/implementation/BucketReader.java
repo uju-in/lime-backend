@@ -65,8 +65,8 @@ public class BucketReader {
 	}
 
 	/** 버킷 아이템 정보 조회 */
-	public List<BucketItem> bucketItemRead(final Long bucketId) {
-		return bucketItemRepository.findByBucketId(bucketId);
+	public List<BucketItem> readBucketItems(final Long bucketId) {
+		return bucketItemRepository.findAllByBucketId(bucketId);
 	}
 
 	/** 버킷 조회와 수정을 위한 MemberItem 커서 조회 */
@@ -81,17 +81,14 @@ public class BucketReader {
 		List<Long> itemIdsFromMemberItem = memberItemReader.readByMemberId(memberId).stream()
 			.map(memberItem -> memberItem.getItem().getId())
 			.toList();
-		List<Long> itemIdsFromBucketItem = null;
+		List<Long> itemIds = null;
 
 		if (bucketId != null) {
-			Bucket bucket = read(bucketId, memberId);
-			itemIdsFromBucketItem = bucket.getBucketItems().stream()
-				.map(bucketItem -> bucketItem.getItem().getId())
-				.toList();
+			itemIds = getItemIds(bucketId);
 		}
 
 		List<BucketMemberItemSummary> summaries = memberItemReader.readBucketMemberItem(
-			itemIdsFromBucketItem,
+			itemIds,
 			itemIdsFromMemberItem,
 			hobby,
 			memberId,
@@ -123,16 +120,19 @@ public class BucketReader {
 	/** 버킷 정보 상세 조회 */
 	public BucketGetServiceResponse readDetail(final Long bucketId) {
 		Bucket bucket = read(bucketId);
-		List<ItemInfo> itemInfos = bucket.getBucketItems().stream()
-			.map(bucketItem -> itemReader.read(bucketItem.getItem().getId()))
+		List<Long> itemIds = getItemIds(bucketId);
+
+		List<ItemInfo> itemInfos = itemReader.readAll(itemIds).stream()
 			.map(item -> ItemInfo.from(item))
 			.toList();
+
 		int totalPrice = itemInfos.stream()
 			.mapToInt(ItemInfo::price)
 			.sum();
 
 		return BucketGetServiceResponse.of(bucket, totalPrice, itemInfos);
 	}
+
 
 	/** 마이페이지를 위한 버킷 프로필 조회 (3개) */
 	public List<BucketProfile> readBucketProfile(final Long memberId) {
@@ -146,7 +146,7 @@ public class BucketReader {
 
 		return selectedBuckets.stream()
 			.map(bucket -> {
-				List<String> itemImages = extractBucketItemImages(bucket);
+				List<String> itemImages = extractBucketItemImages(bucket.getId());
 
 				return BucketProfile.of(bucket, itemImages);
 			})
@@ -164,10 +164,12 @@ public class BucketReader {
 			.toList();
 	}
 
-	private List<String> extractBucketItemImages(final Bucket bucket) {
-		return bucket.getBucketItems().stream()
+	private List<String> extractBucketItemImages(final Long bucketId) {
+		List<BucketItem> bucketItems = readBucketItems(bucketId);
+
+		return bucketItems.stream()
 			.limit(ITEM_IMAGE_LIMIT)
-			.map(BucketItem::getItem)
+			.map(bucketItem -> itemReader.read(bucketItem.getItemId()))
 			.map(Item::getImage)
 			.toList();
 	}
@@ -175,6 +177,14 @@ public class BucketReader {
 	private int getPageSize(final CursorPageParameters parameters) {
 		int pageSize = parameters.size() == null ? DEFAULT_PAGING_SIZE : parameters.size();
 		return pageSize;
+	}
+
+	public List<Long> getItemIds(final Long bucketId) {
+		List<BucketItem> bucketItems = bucketItemRepository.findAllByBucketId(bucketId);
+
+		return bucketItems.stream()
+			.map(bucketItem -> bucketItem.getItemId())
+			.toList();
 	}
 
 	public int countByMemberIdAndHobby(
