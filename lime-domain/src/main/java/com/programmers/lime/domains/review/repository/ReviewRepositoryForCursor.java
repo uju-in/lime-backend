@@ -20,7 +20,7 @@ public interface ReviewRepositoryForCursor {
 
 	List<ReviewImageInfo> getReviewImageInfos(List<Long> reviewIds);
 
-	List<ReviewInfo> getReviewInfo(List<Long> reviewIds);
+	List<ReviewInfo> getReviewInfo(List<Long> reviewIds, Long memberId);
 
 	int getReviewCount(Long itemId);
 }

@@ -16,6 +16,7 @@ import com.programmers.lime.domains.review.model.ReviewCursorIdInfo;
 import com.programmers.lime.domains.review.model.ReviewCursorSummary;
 import com.programmers.lime.domains.review.model.ReviewImageInfo;
 import com.programmers.lime.domains.review.model.ReviewInfo;
+import com.programmers.lime.domains.review.model.ReviewLoginMemberStatus;
 import com.programmers.lime.domains.review.model.ReviewSortCondition;
 import com.programmers.lime.domains.review.model.ReviewSummary;
 import com.programmers.lime.domains.review.repository.ReviewRepository;
@@ -61,7 +62,7 @@ public class ReviewCursorReader {
 			.toList();
 
 		// 리뷰 아이디를 이용하여 리뷰 정보를 가져옴
-		Map<Long, ReviewInfo> reviewInfoMap = reviewRepository.getReviewInfo(reviewIds)
+		Map<Long, ReviewInfo> reviewInfoMap = reviewRepository.getReviewInfo(reviewIds, memberId)
 			.stream()
 			.collect(Collectors.toMap(ReviewInfo::reviewId, Function.identity()));
 
@@ -76,6 +77,7 @@ public class ReviewCursorReader {
 			.collect(Collectors.toMap(MemberInfoWithReviewId::reviewId, Function.identity()));
 
 
+
 		return reviewCursorIdInfos.stream()
 			.map(reviewCursorIdInfo -> {
 				ReviewInfo reviewInfo = reviewInfoMap.get(reviewCursorIdInfo.reviewId());
@@ -84,11 +86,15 @@ public class ReviewCursorReader {
 				MemberInfoWithReviewId memberInfoWithReviewId = memberInfoMap.get(reviewCursorIdInfo.reviewId());
 				MemberInfo memberInfo = memberInfoWithReviewId.memberInfo();
 
+				ReviewLoginMemberStatus reviewLoginMemberStatus = ReviewLoginMemberStatus.of(
+					memberInfo, reviewInfo, memberId
+				);
+
 				return ReviewCursorSummary.builder()
 					.cursorId(reviewCursorIdInfo.cursorId())
 					.reviewSummary(reviewSummary)
 					.memberInfo(memberInfoWithReviewId.memberInfo())
-					.isReviewed(memberInfo.memberId().equals(memberId))
+					.reviewLoginMemberStatus(reviewLoginMemberStatus)
 					.build();
 			})
 			.toList();
