@@ -55,4 +55,8 @@ public class ItemReader {
 
 		return itemRepository.countItemByKeywordAndHobby(trimmedKeyword, hobby);
 	}
+
+	public boolean doesNotExist(final Long itemId) {
+		return !itemRepository.existsById(itemId);
+	}
 }

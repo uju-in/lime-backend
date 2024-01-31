@@ -23,6 +23,7 @@ import com.programmers.lime.domains.vote.model.VoteSortCondition;
 import com.programmers.lime.domains.vote.model.VoteStatusCondition;
 import com.programmers.lime.domains.vote.model.VoteSummary;
 import com.programmers.lime.error.BusinessException;
+import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
 import com.programmers.lime.global.util.MemberUtils;
 import com.programmers.lime.redis.vote.VoteRedis;
@@ -44,6 +45,7 @@ public class VoteService {
 
 	public Long createVote(final VoteCreateServiceRequest request) {
 		final Long memberId = memberUtils.getCurrentMemberId();
+		validateItemIds(request.item1Id(), request.item2Id());
 		final Vote vote = voteAppender.append(memberId, request.toImplRequest());
 
 		final VoteRedis voteRedis = getVoteRedis(vote);
@@ -149,6 +151,19 @@ public class VoteService {
 
 	public List<VoteRedis> rankVote() {
 		return voteRedisManager.getRanking();
+	}
+
+	private void validateItemIds(
+		final Long item1Id,
+		final Long item2Id
+	) {
+		if (item1Id.equals(item2Id)) {
+			throw new BusinessException(ErrorCode.VOTE_ITEM_DUPLICATED);
+		}
+
+		if (itemReader.doesNotExist(item1Id) || itemReader.doesNotExist(item2Id)) {
+			throw new EntityNotFoundException(ErrorCode.ITEM_NOT_FOUND);
+		}
 	}
 
 	private VoteRedis getVoteRedis(final Vote vote) {
