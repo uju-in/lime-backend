@@ -59,6 +59,9 @@ public class ReviewService {
 		final List<MultipartFile> multipartReviewImages
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
+
+		reviewValidator.validIsMemberAlreadyReviewed(itemId, memberId);
+
 		reviewAppender.append(itemId, memberId, reviewContent);
 
 		applicationEventPublisher.publishEvent(new PointEvent(memberId, 15));
