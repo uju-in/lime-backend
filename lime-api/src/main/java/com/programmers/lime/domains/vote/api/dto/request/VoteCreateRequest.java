@@ -4,6 +4,8 @@ import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.vote.application.dto.request.VoteCreateServiceRequest;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -26,7 +28,9 @@ public record VoteCreateRequest(
 	Long item2Id,
 
 	@Schema(description = "최대 투표자 수", example = "100")
-	Integer maximumParticipants
+	@Max(value = 1000, message = "최대 투표자 수는 1000명을 넘을 수 없습니다.")
+	@Min(value = 1, message = "최대 투표자 수는 1명 이상이어야 합니다.")
+	int maximumParticipants
 ) {
 	public VoteCreateServiceRequest toCreateVoteServiceRequest() {
 		return VoteCreateServiceRequest.builder()

@@ -11,7 +11,7 @@ public record VoteCreateServiceRequest(
 	String content,
 	Long item1Id,
 	Long item2Id,
-	Integer maximumParticipants
+	int maximumParticipants
 ) {
 	public VoteCreateImplRequest toImplRequest() {
 		return new VoteCreateImplRequest(hobby, content, item1Id, item2Id, maximumParticipants);
