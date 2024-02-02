@@ -1,6 +1,7 @@
 package com.programmers.lime.domains.review.application;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -72,7 +73,7 @@ public class ReviewService {
 
 	private List<String> uploadReviewImages(final List<MultipartFile> multipartReviewImages) {
 		if(multipartReviewImages == null || multipartReviewImages.isEmpty()) {
-			return List.of();
+			return Collections.emptyList();
 		}
 
 		return multipartReviewImages.stream()
