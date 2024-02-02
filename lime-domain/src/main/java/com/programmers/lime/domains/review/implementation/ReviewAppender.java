@@ -16,20 +16,15 @@ public class ReviewAppender {
 
 	private final ReviewRepository reviewRepository;
 
-	private final ReviewImageAppender reviewImageAppender;
-
 	public Long append(
 		final Long itemId,
 		final Long memberId,
-		final ReviewContent reviewContent,
-		final List<String> reviewImageURLs
+		final ReviewContent reviewContent
 	) {
 		Review review = getReview(memberId, reviewContent, itemId);
 		Review savedReview = reviewRepository.save(review);
 
-		reviewImageAppender.append(savedReview.getId(), reviewImageURLs);
-
-		return review.getId();
+		return savedReview.getId();
 	}
 
 	private Review getReview(

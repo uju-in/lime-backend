@@ -34,4 +34,13 @@ public class ReviewValidator {
 			throw new BusinessException(ErrorCode.REVIEW_NOT_MINE);
 		}
 	}
+
+	public void validIsMemberAlreadyReviewed(
+		final Long itemId,
+		final Long memberId
+	) {
+		if (reviewReader.existsByItemIdAndMemberId(itemId, memberId)) {
+			throw new BusinessException(ErrorCode.REVIEW_ALREADY_EXIST);
+		}
+	}
 }
