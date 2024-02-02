@@ -94,7 +94,7 @@ class ReviewCursorReaderTest {
 		given(reviewRepository.getMemberInfos(reviewIds))
 			.willReturn(memberInfoWithReviewIds);
 
-		given(reviewRepository.getReviewInfo(reviewIds))
+		given(reviewRepository.getReviewInfo(reviewIds, memberId))
 			.willReturn(reviewInfos);
 
 		given(reviewRepository.getReviewImageInfos(reviewIds))

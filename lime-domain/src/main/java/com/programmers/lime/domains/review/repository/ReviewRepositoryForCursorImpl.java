@@ -9,12 +9,14 @@ import static com.querydsl.core.group.GroupBy.*;
 import java.util.List;
 
 import com.programmers.lime.domains.member.model.MemberInfo;
+import com.programmers.lime.domains.review.domain.QReviewLike;
 import com.programmers.lime.domains.review.model.MemberInfoWithReviewId;
 import com.programmers.lime.domains.review.model.ReviewCursorIdInfo;
 import com.programmers.lime.domains.review.model.ReviewImageInfo;
 import com.programmers.lime.domains.review.model.ReviewInfo;
 import com.programmers.lime.domains.review.model.ReviewSortCondition;
 import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -23,6 +25,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.core.types.dsl.StringTemplate;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -103,18 +106,19 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 	}
 
 	@Override
-	public List<ReviewInfo> getReviewInfo(final List<Long> reviewIds) {
+	public List<ReviewInfo> getReviewInfo(final List<Long> reviewIds, final Long memberId) {
 		return jpaQueryFactory
 			.selectFrom(review)
 			.where(review.id.in(reviewIds))
 			.leftJoin(reviewLike).on(review.eq(reviewLike.review))
-			.groupBy(review.id, review.rating, review.content, review.createdAt, review.modifiedAt)
-			.transform(groupBy(review.id, review.rating, review.content, review.createdAt, review.modifiedAt, reviewLike.id.count())
+			.groupBy(reviewLike.review.id, review.id)
+			.transform(groupBy(reviewLike.review.id, review.id)
 				.list(Projections.constructor(ReviewInfo.class,
 					review.id,
 					review.rating,
 					review.content,
 					reviewLike.id.count(),
+					existsReviewLike(memberId),
 					review.createdAt,
 					review.modifiedAt
 				))
@@ -205,5 +209,21 @@ public class ReviewRepositoryForCursorImpl implements ReviewRepositoryForCursor 
 		return StringExpressions.lpad(
 			str, 8, '0'
 		);
+	}
+
+	private Expression<Boolean> existsReviewLike(final Long memberId) {
+
+		// 로그인하지 않은 경우 false를 반환하기 위한 코드
+		if(memberId == null) {
+			return Expressions.constant(false);
+		}
+
+		QReviewLike subReviewLike = new QReviewLike("subReviewLike");
+		return new JPAQuery<>()
+			.select(subReviewLike.id)
+			.from(subReviewLike)
+			.where(subReviewLike.memberId.eq(memberId)
+				.and(subReviewLike.review.id.eq(review.id)))
+			.exists();
 	}
 }
