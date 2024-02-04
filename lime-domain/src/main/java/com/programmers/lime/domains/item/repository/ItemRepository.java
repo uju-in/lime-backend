@@ -17,4 +17,8 @@ public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositor
 
 	@Query("select count(i) from Item i where i.name like %:keyword% and (i.hobby = :hobby or :hobby is null)")
 	int countItemByKeywordAndHobby(@Param("keyword") String keyword, @Param("hobby") Hobby hobby);
+
+	boolean existsAllByIdIn(List<Long> itemIds);
+
+	List<Item> findAllByIdIn(List<Long> itemIds);
 }

@@ -15,6 +15,7 @@ import com.programmers.lime.common.model.ItemIdRegistryBuilder;
 import com.programmers.lime.domains.bucket.domain.Bucket;
 import com.programmers.lime.domains.bucket.domain.BucketBuilder;
 import com.programmers.lime.domains.bucket.domain.BucketInfo;
+import com.programmers.lime.domains.bucket.repository.BucketItemRepository;
 import com.programmers.lime.domains.bucket.repository.BucketRepository;
 import com.programmers.lime.domains.item.domain.ItemBuilder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
@@ -24,6 +25,9 @@ public class BucketAppenderTest {
 
 	@Mock
 	private BucketRepository bucketRepository;
+
+	@Mock
+	private BucketItemRepository bucketItemRepository;
 
 	@Mock
 	private ItemReader itemReader;
@@ -37,15 +41,14 @@ public class BucketAppenderTest {
 		//given
 		Long memberId = 1L;
 		ItemIdRegistry itemIdRegistry = ItemIdRegistryBuilder.build();
-
 		BucketInfo bucketInfo = BucketBuilder.buildBucketInfo();
+
 		Bucket bucket = BucketBuilder.build(bucketInfo);
+		BucketBuilder.buildBucketItems(bucket.getId(), itemIdRegistry);
 		Long expectBucketId = bucket.getId();
 
-		given(bucketRepository.save(any(Bucket.class)))
-			.willReturn(bucket);
-		given(itemReader.read(anyLong()))
-			.willReturn(ItemBuilder.build());
+		given(bucketRepository.save(any(Bucket.class))).willReturn(bucket);
+		given(itemReader.existsAll(anyList())).willReturn(true);
 
 		//when
 		Long actualBucketId = bucketAppender.append(memberId, bucketInfo, itemIdRegistry);

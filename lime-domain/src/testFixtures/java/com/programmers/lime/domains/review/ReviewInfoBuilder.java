@@ -11,6 +11,7 @@ public class ReviewInfoBuilder {
 			.rate(reviewId.intValue() % 5 + 1)
 			.content("content" + reviewId)
 			.reviewId(reviewId)
+			.isLiked(false)
 			.build();
 	}
 

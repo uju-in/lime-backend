@@ -7,14 +7,12 @@ import org.springframework.stereotype.Service;
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.Hobby;
-import com.programmers.lime.common.model.ItemRemovalList;
 import com.programmers.lime.domains.item.api.dto.response.MemberItemFavoritesGetResponse;
 import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetByCursorServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetNamesServiceResponse;
 import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
-import com.programmers.lime.domains.item.domain.MemberItem;
 import com.programmers.lime.domains.item.implementation.ItemCursorReader;
 import com.programmers.lime.domains.item.implementation.ItemFinder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
@@ -24,6 +22,7 @@ import com.programmers.lime.domains.item.implementation.MemberItemFolderValidato
 import com.programmers.lime.domains.item.implementation.MemberItemFavoriteReader;
 import com.programmers.lime.domains.item.implementation.MemberItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
+import com.programmers.lime.domains.item.implementation.MemberItemValidator;
 import com.programmers.lime.domains.item.model.ItemCursorSummary;
 import com.programmers.lime.domains.item.model.ItemInfo;
 import com.programmers.lime.domains.item.model.ItemSortCondition;
@@ -66,6 +65,8 @@ public class ItemService {
 	private final ItemReader itemReader;
 
 	private final MemberItemFavoriteReader memberItemFavoriteReader;
+
+	private final MemberItemValidator memberItemValidator;
 
 	public MemberItemCreateServiceResponse createMemberItems(
 		final MemberItemIdRegistry memberItemIdRegistry
@@ -120,16 +121,19 @@ public class ItemService {
 	}
 
 	public void removeMemberItems(
-		final Long folderId,
-		final ItemRemovalList itemRemovalList
+		final List<Long> memberItemIds
 	) {
+
+		if(memberItemIds == null || memberItemIds.isEmpty()) {
+			return;
+		}
+
 		Long memberId = memberUtils.getCurrentMemberId();
 
-		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+		memberItemValidator.validateExistMemberIdAndMemberItemId(memberId, memberItemIds);
 
-		for (Long itemId : itemRemovalList.itemIds()) {
-			MemberItem memberItem = memberItemReader.readByItemIdAndFolderId(itemId, folderId);
-			memberItemRemover.remove(memberItem.getId());
+		for (Long memberItemId : memberItemIds) {
+			memberItemRemover.remove(memberItemId);
 		}
 	}
 

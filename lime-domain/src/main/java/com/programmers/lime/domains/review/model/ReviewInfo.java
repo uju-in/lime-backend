@@ -15,6 +15,8 @@ public record ReviewInfo(
 
 	Long likeCount,
 
+	boolean isLiked,
+
 	LocalDateTime createdAt,
 
 	LocalDateTime updatedAt

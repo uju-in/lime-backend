@@ -31,9 +31,6 @@ public class BucketBuilder {
 		Bucket bucket = new Bucket(bucketInfo, memberId);
 		setBucketId(bucket);
 
-		List<BucketItem> bucketItems = buildBucketItems(ItemIdRegistryBuilder.build());
-		bucketItems.forEach(bucket::addBucketItem);
-
 		return bucket;
 	}
 
@@ -49,9 +46,9 @@ public class BucketBuilder {
 		return new BucketInfo(Hobby.BASKETBALL, "유러피안 농구", 100000);
 	}
 
-	public static List<BucketItem> buildBucketItems(ItemIdRegistry itemIdRegistry) {
+	public static List<BucketItem> buildBucketItems(Long bucketId, ItemIdRegistry itemIdRegistry) {
 		return itemIdRegistry.itemIds().stream()
-			.map(itemId -> new BucketItem(ItemBuilder.build(itemId)))
+			.map(itemId -> new BucketItem(bucketId,itemId))
 			.toList();
 	}
 

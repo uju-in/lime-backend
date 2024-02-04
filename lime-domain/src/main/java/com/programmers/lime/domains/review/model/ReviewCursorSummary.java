@@ -13,6 +13,6 @@ public record ReviewCursorSummary(
 
 	ReviewSummary reviewSummary,
 
-	boolean isReviewed
+	ReviewLoginMemberStatus reviewLoginMemberStatus
 	) implements CursorIdParser {
 }
