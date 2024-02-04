@@ -56,12 +56,15 @@ public class ItemReader {
 		return itemRepository.countItemByKeywordAndHobby(trimmedKeyword, hobby);
 	}
 
+	public boolean doesNotExist(final Long itemId) {
+		return !itemRepository.existsById(itemId);
+  }
+  
 	public boolean existsAll(final List<Long> itemIds) {
 		return itemRepository.existsAllByIdIn(itemIds);
 	}
 
 	public List<Item> readAll(final List<Long> itemIds) {
 		return itemRepository.findAllByIdIn(itemIds);
-
 	}
 }
