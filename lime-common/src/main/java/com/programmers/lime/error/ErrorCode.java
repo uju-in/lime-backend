@@ -28,6 +28,9 @@ public enum ErrorCode {
 	EXPIRED_REFRESH_TOKEN("COMMON_012", "Refresh Token이 만료되었습니다."),
 	INVALID_REFRESH_TOKEN("COMMON_013", "Refresh Token이 유효하지 않습니다."),
 	S3_UPLOAD_FAIL("COMMON_014", "S3 업로드에 실패했습니다."),
+	S3_DELETE_FAIL("COMMON_015", "S3 삭제에 실패했습니다."),
+	BAD_REVIEW_IMAGE_URL("COMMON_016", "잘못된 리뷰 이미지 URL 입니다."),
+
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -58,6 +61,8 @@ public enum ErrorCode {
 	ALREADY_REVIEW_LIKED("REVIEW_005", "이미 리뷰를 좋아요 했습니다."),
 	NOT_REVIEW_LIKED("REVIEW_006", "좋아요를 누르지 않은 리뷰입니다."),
 	REVIEW_ALREADY_EXIST("REVIEW_007", "이미 리뷰를 작성한 아이템입니다."),
+	REVIEW_IMAGE_NOT_EXIST("REVIEW_008", "리뷰 이미지가 존재하지 않습니다."),
+
 
 	// Vote
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),
