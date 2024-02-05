@@ -63,12 +63,12 @@ public class ReviewService {
 
 		reviewValidator.validIsMemberAlreadyReviewed(itemId, memberId);
 
-		reviewAppender.append(itemId, memberId, reviewContent);
+		Long reviewId = reviewAppender.append(itemId, memberId, reviewContent);
 
 		applicationEventPublisher.publishEvent(new PointEvent(memberId, 15));
 
 		List<String> reviewImageURLs = uploadReviewImages(multipartReviewImages);
-		reviewImageAppender.append(itemId, reviewImageURLs);
+		reviewImageAppender.append(reviewId, reviewImageURLs);
 	}
 
 	private List<String> uploadReviewImages(final List<MultipartFile> multipartReviewImages) {
