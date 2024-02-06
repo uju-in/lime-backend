@@ -44,6 +44,8 @@ dependencies {
     //oauth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // 마이크로미터 프로메테우스 구현체
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' // 엑츄에이터
 }
 
 jar {
