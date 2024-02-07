@@ -172,12 +172,8 @@ public class VoteService {
 
 		return VoteRedis.builder()
 			.id(vote.getId())
-			.content(vote.getContent())
-			.startTime(String.valueOf(vote.getStartTime()))
-			.item1Id(vote.getItem1Id())
-			.item1Name(item1.getName())
-			.item2Id(vote.getItem2Id())
-			.item2Name(item2.getName())
+			.item1Image(item1.getImage())
+			.item2Image(item2.getImage())
 			.build();
 	}
 }

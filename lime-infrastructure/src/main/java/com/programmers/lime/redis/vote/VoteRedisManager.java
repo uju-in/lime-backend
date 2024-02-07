@@ -29,7 +29,7 @@ public class VoteRedisManager {
 
 	public List<VoteRedis> getRanking() {
 		final ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
-		final Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.reverseRangeWithScores(KEY, 0, 9);
+		final Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.reverseRangeWithScores(KEY, 0, 5);
 
 		return typedTuples.stream()
 			.map(VoteRedis::from)

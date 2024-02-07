@@ -7,32 +7,20 @@ import lombok.Builder;
 @Builder
 public record VoteRedis(
 	Long id,
-	String content,
-	String startTime,
-	Long item1Id,
-	String item1Name,
-	Long item2Id,
-	String item2Name,
+	String item1Image,
+	String item2Image,
 	int participants
 ) {
 	public static VoteRedis from(final ZSetOperations.TypedTuple<Object> typedTuple) {
-		final Long id = ((VoteRedis) typedTuple.getValue()).id();
-		final String content = ((VoteRedis) typedTuple.getValue()).content();
-		final String startTime = ((VoteRedis) typedTuple.getValue()).startTime();
-		final Long item1Id = ((VoteRedis) typedTuple.getValue()).item1Id();
-		final String item1Name = ((VoteRedis) typedTuple.getValue()).item1Name();
-		final Long item2Id = ((VoteRedis) typedTuple.getValue()).item2Id();
-		final String item2Name = ((VoteRedis) typedTuple.getValue()).item2Name();
+		final Long id = ((VoteRedis)typedTuple.getValue()).id();
+		final String item1Image = ((VoteRedis)typedTuple.getValue()).item1Image();
+		final String item2Image = ((VoteRedis)typedTuple.getValue()).item2Image();
 		final int participants = typedTuple.getScore().intValue();
 
 		return VoteRedis.builder()
 			.id(id)
-			.content(content)
-			.startTime(startTime)
-			.item1Id(item1Id)
-			.item1Name(item1Name)
-			.item2Id(item2Id)
-			.item2Name(item2Name)
+			.item1Image(item1Image)
+			.item2Image(item2Image)
 			.participants(participants)
 			.build();
 	}
