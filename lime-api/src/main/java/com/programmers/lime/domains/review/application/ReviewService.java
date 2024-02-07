@@ -2,6 +2,7 @@ package com.programmers.lime.domains.review.application;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -67,12 +68,12 @@ public class ReviewService {
 
 		reviewValidator.validIsMemberAlreadyReviewed(itemId, memberId);
 
-		reviewAppender.append(itemId, memberId, reviewContent);
+		Long reviewId = reviewAppender.append(itemId, memberId, reviewContent);
 
 		applicationEventPublisher.publishEvent(new PointEvent(memberId, 15));
 
 		List<String> reviewImageURLs = uploadReviewImages(multipartReviewImages);
-		reviewImageAppender.append(itemId, reviewImageURLs);
+		reviewImageAppender.append(reviewId, reviewImageURLs);
 	}
 
 	private List<String> uploadReviewImages(final List<MultipartFile> multipartReviewImages) {
@@ -101,15 +102,27 @@ public class ReviewService {
 			.collect(Collectors.toList());
 	}
 
+	@Transactional
 	public void updateReview(
 		final Long itemId,
 		final Long reviewId,
-		final ReviewContent reviewContent
+		final ReviewContent reviewContent,
+		final List<String> reviewItemUrlsToRemove,
+		final List<MultipartFile> multipartReviewImages
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
+
 		reviewValidator.validItemReview(itemId, reviewId);
 		reviewValidator.validOwner(reviewId, memberId);
 		reviewModifier.modify(reviewId, reviewContent);
+
+		reviewValidator.validReviewItemUrlsToRemove(reviewId, reviewItemUrlsToRemove);
+		reviewImageRemover.removeReviewImagesImageUrls(reviewItemUrlsToRemove);
+
+		removeByReviewImageUrls(reviewItemUrlsToRemove);
+
+		List<String> reviewImageURLs = uploadReviewImages(multipartReviewImages);
+		reviewImageAppender.append(reviewId, reviewImageURLs);
 	}
 
 	public ReviewGetByCursorServiceResponse getReviewsByCursor(
@@ -141,6 +154,18 @@ public class ReviewService {
 		reviewLikeRemover.deleteByReviewId(reviewId);
 		reviewImageRemover.deleteByReviewId(reviewId);
 		reviewRemover.remove(reviewId);
+	}
+
+	public void removeByReviewImageUrls(final List<String> reviewImageUrls) {
+		try {
+			for (String reviewImageUrl : reviewImageUrls) {
+				s3Manager.deleteObjectByUrl(reviewImageUrl);
+			}
+		} catch (MalformedURLException e) {
+			throw new BusinessException(ErrorCode.BAD_REVIEW_IMAGE_URL);
+		} catch (Exception e) {
+			throw new BusinessException(ErrorCode.S3_DELETE_FAIL);
+		}
 	}
 
 	public ReviewGetServiceResponse getReview(

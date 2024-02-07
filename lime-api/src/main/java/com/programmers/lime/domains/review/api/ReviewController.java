@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -60,9 +59,16 @@ public class ReviewController {
 	public ResponseEntity<ReviewModifyResponse> updateReview(
 		@PathVariable final Long itemId,
 		@PathVariable final Long reviewId,
-		@Valid @RequestBody final ReviewUpdateRequest request
+		@Valid @ModelAttribute final ReviewUpdateRequest request,
+		@RequestPart(value = "multipartReviewImages", required = false) final List<MultipartFile> multipartReviewImages
 	) {
-		reviewService.updateReview(itemId, reviewId, request.toReviewContent());
+		reviewService.updateReview(
+			itemId,
+			reviewId,
+			request.toReviewContent(),
+			request.reviewItemUrlsToRemove(),
+			multipartReviewImages
+		);
 		ReviewModifyResponse response = new ReviewModifyResponse(itemId);
 
 		return ResponseEntity.ok(response);
