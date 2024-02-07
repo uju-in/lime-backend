@@ -57,7 +57,7 @@ public class ReviewValidator {
 			return;
 		}
 
-		if(reviewImageReader.existsReviewImagesByReviewIdAndImageUrls(reviewId, reviewItemUrlsToRemove)) {
+		if(!reviewImageReader.existsReviewImagesByReviewIdAndImageUrls(reviewId, reviewItemUrlsToRemove)) {
 			throw new BusinessException(ErrorCode.REVIEW_IMAGE_NOT_EXIST);
 		}
 	}
