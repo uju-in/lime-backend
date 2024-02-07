@@ -38,6 +38,7 @@ public class VoteManager {
 		final Vote vote,
 		final Long memberId
 	) {
-		voterRepository.deleteByVoteAndMemberId(vote, memberId);
+		final Voter voter = voterReader.read(vote, memberId);
+		voterRepository.delete(voter);
 	}
 }

@@ -71,8 +71,7 @@ public class VoteService {
 
 		voteManager.participate(vote, memberId, itemId);
 
-		final VoteRedis voteRedis = getVoteRedis(vote);
-		voteRedisManager.increasePopularity(voteRedis);
+		voteRedisManager.updateRanking(vote.isVoting(), getVoteRedis(vote));
 	}
 
 	public void cancelVote(final Long voteId) {
@@ -80,6 +79,8 @@ public class VoteService {
 		final Vote vote = voteReader.read(voteId);
 
 		voteManager.cancel(vote, memberId);
+
+		voteRedisManager.decreasePopularity(getVoteRedis(vote));
 	}
 
 	public void deleteVote(final Long voteId) {
@@ -91,6 +92,8 @@ public class VoteService {
 		}
 
 		voteRemover.remove(vote);
+
+		voteRedisManager.remove(getVoteRedis(vote));
 	}
 
 	public VoteGetServiceResponse getVote(final Long voteId) {

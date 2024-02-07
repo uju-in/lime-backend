@@ -28,6 +28,10 @@ public class VoteRedisManager {
 		redisTemplate.opsForZSet().incrementScore(KEY, rankingInfo, 1);
 	}
 
+	public void decreasePopularity(final VoteRedis rankingInfo) {
+		redisTemplate.opsForZSet().incrementScore(KEY, rankingInfo, -1);
+	}
+
 	public List<VoteRedis> getRanking() {
 		final ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
 		final Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.reverseRangeWithScores(KEY, 0, 5);
@@ -39,5 +43,20 @@ public class VoteRedisManager {
 		return typedTuples.stream()
 			.map(VoteRedis::from)
 			.toList();
+	}
+
+	public void remove(final VoteRedis rankingInfo) {
+		redisTemplate.opsForZSet().remove(KEY, rankingInfo);
+	}
+
+	public void updateRanking(
+		final boolean voting,
+		final VoteRedis rankingInfo
+	) {
+		if (voting) {
+			increasePopularity(rankingInfo);
+		} else {
+			remove(rankingInfo);
+		}
 	}
 }

@@ -18,11 +18,6 @@ public interface VoterRepository extends JpaRepository<Voter, Long> {
 		final Long memberId
 	);
 
-	boolean existsByVoteAndMemberId(
-		final Vote vote,
-		final Long memberId
-	);
-
 	void deleteByVoteAndMemberId(
 		final Vote vote,
 		final Long memberId
