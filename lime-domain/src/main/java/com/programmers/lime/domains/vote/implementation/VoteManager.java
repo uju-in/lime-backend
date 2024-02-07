@@ -24,13 +24,21 @@ public class VoteManager {
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = voterReader.read(vote, memberId, itemId);
+		final Voter voter = new Voter(vote, memberId, itemId);
 
 		voter.participate(itemId);
 
 		if (vote.reachMaximumParticipants()) {
 			vote.close(LocalDateTime.now());
 		}
+	}
+
+	@Transactional
+	public void reParticipate(
+		final Long itemId,
+		final Voter voter
+	) {
+		voter.participate(itemId);
 	}
 
 	@Transactional

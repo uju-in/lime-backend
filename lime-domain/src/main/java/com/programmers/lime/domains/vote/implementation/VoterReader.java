@@ -1,5 +1,7 @@
 package com.programmers.lime.domains.vote.implementation;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,13 +29,11 @@ public class VoterReader {
 	}
 
 	@Transactional(readOnly = true)
-	public Voter read(
+	public Optional<Voter> find(
 		final Vote vote,
-		final Long memberId,
-		final Long itemId
+		final Long memberId
 	) {
-		return voterRepository.findByVoteAndMemberId(vote, memberId)
-			.orElseGet(() -> new Voter(vote, memberId, itemId));
+		return voterRepository.findByVoteAndMemberId(vote, memberId);
 	}
 
 	@Transactional(readOnly = true)
