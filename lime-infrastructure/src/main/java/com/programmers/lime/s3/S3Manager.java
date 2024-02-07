@@ -85,12 +85,12 @@ public class S3Manager {
 		amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileNameWithDir));
 	}
 
-	public URL getUrl(String directory, String fileName) {
+	public URL getUrl(final String directory, final String fileName) {
 		String fileNameWithDir = getFileNameWithDir(directory, fileName);
 		return amazonS3.getUrl(bucket, fileNameWithDir);
 	}
 
-	public String extractObjectKeyFromUrl(String urlString) throws MalformedURLException {
+	public String extractObjectKeyFromUrl(final String urlString) throws MalformedURLException {
 		URL url = new URL(urlString);
 		String path = url.getPath();
 
@@ -98,7 +98,7 @@ public class S3Manager {
 		return path.substring(1);
 	}
 
-	public void deleteObjectByUrl(String urlString) throws MalformedURLException {
+	public void deleteObjectByUrl(final String urlString) throws MalformedURLException {
 		String objectKey = extractObjectKeyFromUrl(urlString);
 		deleteFile(bucket, objectKey);
 	}

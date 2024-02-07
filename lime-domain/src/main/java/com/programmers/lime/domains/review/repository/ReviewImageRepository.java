@@ -8,7 +8,7 @@ import com.programmers.lime.domains.review.domain.ReviewImage;
 
 public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> {
 
-	boolean existsReviewImagesByReviewIdAndImageUrl(Long ReviewId, String imageUrl);
+	boolean existsReviewImagesByReviewIdAndImageUrl(final Long ReviewId, final String imageUrl);
 
-	void deleteByImageUrlIn(List<String> reviewImageUrls);
+	void deleteByImageUrlIn(final List<String> reviewImageUrls);
 }
