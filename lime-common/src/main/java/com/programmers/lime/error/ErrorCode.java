@@ -71,6 +71,7 @@ public enum ErrorCode {
 	VOTE_CONTENT_BAD_LENGTH("VOTE_009", "투표 내용은 최대 1000자 입니다."),
 	VOTE_MAXIMUM_PARTICIPANTS("VOTE_010", "최대 투표자 수는 1명 이상 1000명 이하 입니다."),
 	VOTE_ITEM_DUPLICATED("VOTE_011", "투표 아이템이 중복되었습니다."),
+	VOTE_REDIS_NOT_FOUND("VOTE_012", "투표 랭킹을 찾을 수 없습니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),

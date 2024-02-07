@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
+import io.lettuce.core.RedisException;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -30,6 +31,10 @@ public class VoteRedisManager {
 	public List<VoteRedis> getRanking() {
 		final ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
 		final Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.reverseRangeWithScores(KEY, 0, 5);
+
+		if (typedTuples == null) {
+			throw new RedisException("투표 랭킹을 찾을 수 없습니다.");
+		}
 
 		return typedTuples.stream()
 			.map(VoteRedis::from)
