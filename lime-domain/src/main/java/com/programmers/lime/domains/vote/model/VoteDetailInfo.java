@@ -11,6 +11,8 @@ public record VoteDetailInfo(
 	Long id,
 	String content,
 	LocalDateTime startTime,
+	LocalDateTime endTime,
+	int maxParticipants,
 	boolean isVoting,
 	int participants,
 	int item1Votes,
@@ -25,6 +27,8 @@ public record VoteDetailInfo(
 			.id(vote.getId())
 			.content(vote.getContent())
 			.startTime(vote.getStartTime())
+			.endTime(vote.getEndTime())
+			.maxParticipants(vote.getMaximumParticipants())
 			.isVoting(vote.isVoting())
 			.participants(item1Votes + item2Votes)
 			.item1Votes(item1Votes)
