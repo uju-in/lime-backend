@@ -19,7 +19,6 @@ public class ReviewImageReader {
 	public boolean existsReviewImagesByReviewIdAndImageUrls(final Long reviewId, final List<String> reviewImageUrls) {
 		return reviewImageUrls.stream()
 			.map(String::trim)
-			.peek(log::error)
 			.noneMatch(
 				reviewImageUrl ->
 					reviewImageRepository.existsReviewImagesByReviewIdAndImageUrl(reviewId, reviewImageUrl)
