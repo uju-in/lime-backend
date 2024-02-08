@@ -17,6 +17,7 @@ import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemCreateRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderCreateRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderUpdateRequest;
+import com.programmers.lime.domains.item.api.dto.request.MemberItemMoveRequest;
 import com.programmers.lime.domains.item.api.dto.response.MemberItemCreateResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorResponse;
@@ -165,5 +166,18 @@ public class ItemController {
 		);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "찜 이동", description = "찜을 다른 폴더로 이동 합니다.")
+	@PutMapping("/myitems/move")
+	public ResponseEntity<Void> moveMemberItems(
+		@RequestBody @Valid final MemberItemMoveRequest request
+	) {
+		itemService.moveMemberItems(
+			request.folderId(),
+			request.memberItemIds()
+		);
+
+		return ResponseEntity.ok().build();
 	}
 }
