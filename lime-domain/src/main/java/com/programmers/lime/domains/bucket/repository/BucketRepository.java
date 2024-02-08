@@ -17,8 +17,6 @@ public interface BucketRepository extends JpaRepository<Bucket, Long>, BucketRep
 
 	List<Bucket> findAllByMemberId(final Long memberId);
 
-	int countByMemberId(final Long memberId);
-
 	@Query(
 		"""
 				SELECT COUNT(b)

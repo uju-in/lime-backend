@@ -38,4 +38,11 @@ public class ReviewReader {
 	public int countReviewByItemId(final Long itemId) {
 		return reviewRepository.countReviewByItemId(itemId);
 	}
+
+	public boolean existsByItemIdAndMemberId(
+		final Long itemId,
+		final Long memberId
+	) {
+		return reviewRepository.existsByItemIdAndMemberId(itemId, memberId);
+	}
 }

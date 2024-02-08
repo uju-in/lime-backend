@@ -9,6 +9,7 @@ import com.programmers.lime.common.model.ItemIdRegistry;
 import com.programmers.lime.domains.bucket.domain.Bucket;
 import com.programmers.lime.domains.bucket.domain.BucketInfo;
 import com.programmers.lime.domains.bucket.domain.BucketItem;
+import com.programmers.lime.domains.bucket.repository.BucketItemRepository;
 import com.programmers.lime.domains.bucket.repository.BucketRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,25 +21,23 @@ public class BucketModifier {
 	private final BucketAppender bucketAppender;
 	private final BucketRemover bucketRemover;
 	private final BucketReader bucketReader;
+	private final BucketItemRepository bucketItemRepository;
 	private final BucketRepository bucketRepository;
 
 	/** 버킷 수정 */
 	@Transactional
 	public void modify(
-		final Long memberId,
 		final Long bucketId,
 		final BucketInfo bucketInfo,
 		final ItemIdRegistry registry
 	) {
-		Bucket bucket = bucketReader.read(bucketId, memberId);
+		Bucket bucket = bucketReader.read(bucketId);
+		bucket.modifyBucket(bucketInfo);
 
-		bucket.removeBucketItems();
-		bucketRemover.removeBucketItems(bucket.getId());
-
-		List<BucketItem> bucketItems = bucketAppender.createBucketItems(registry);
-		bucket.modifyBucket(bucketInfo, bucket.getMemberId());
-		bucketItems.forEach(bucket::addBucketItem);
+		bucketRemover.removeBucketItems(bucketId);
+		List<BucketItem> bucketItems = bucketAppender.createBucketItems(registry, bucketId);
 
 		bucketRepository.save(bucket);
+		bucketItemRepository.saveAll(bucketItems);
 	}
 }

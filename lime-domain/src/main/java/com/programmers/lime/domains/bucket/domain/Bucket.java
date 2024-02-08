@@ -37,20 +37,12 @@ public class Bucket extends BaseEntity {
 	@Embedded
 	private BucketInfo bucketInfo;
 
-	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
-	private List<BucketItem> bucketItems = new ArrayList<>();
-
 	public Bucket(
 		final BucketInfo bucketInfo,
 		final Long memberId
 	) {
 		this.memberId = memberId;
 		this.bucketInfo = bucketInfo;
-	}
-
-	public void addBucketItem(final BucketItem bucketItem) {
-		bucketItems.add(bucketItem);
-		bucketItem.changeBucket(this);
 	}
 
 	public String getName() {
@@ -65,15 +57,7 @@ public class Bucket extends BaseEntity {
 		return bucketInfo.getBudget();
 	}
 
-	public void modifyBucket(
-		final BucketInfo bucketInfo,
-		final Long memberId
-	) {
-		this.memberId = Objects.requireNonNull(memberId);
+	public void modifyBucket(final BucketInfo bucketInfo) {
 		this.bucketInfo = bucketInfo;
-	}
-
-	public void removeBucketItems() {
-		this.bucketItems.clear();
 	}
 }

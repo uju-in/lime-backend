@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.lime.domains.item.api.dto.request.FavoriteItemDeleteRequest;
 import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemCreateRequest;
-import com.programmers.lime.domains.item.api.dto.request.MemberItemDeleteRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderCreateRequest;
 import com.programmers.lime.domains.item.api.dto.request.MemberItemFolderUpdateRequest;
 import com.programmers.lime.domains.item.api.dto.response.MemberItemCreateResponse;
@@ -52,6 +52,7 @@ public class ItemController {
 
 	@Operation(summary = "아이템 등록", description = "ItemEnrollRequest 을 이용하여 아이템을 등록합니다.")
 	@PostMapping("/enroll")
+
 	public ResponseEntity<ItemEnrollResponse> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
 		Long enrolledItemId = itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
 		ItemEnrollResponse response = new ItemEnrollResponse(enrolledItemId);
@@ -79,19 +80,6 @@ public class ItemController {
 
 		ItemGetResponse response = ItemGetResponse.from(serviceResponse);
 		return ResponseEntity.ok(response);
-	}
-
-	@Operation(summary = "나의 아이템 찜 목록에서 삭제", description = "itemId을 이용하여 찜 목록에서 삭제 합니다.")
-	@DeleteMapping("/myitems")
-	public ResponseEntity<Void> deleteMyItem(
-		@ModelAttribute @Valid final MemberItemDeleteRequest request
-	) {
-		itemService.removeMemberItems(
-			request.folderId(),
-			request.toItemRemovalList()
-		);
-
-		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "아이템 이름 목록 조회", description = "키워드를 이용하여 아이템 이름 목록 조회 합니다")
@@ -156,14 +144,13 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "찜 목록 폴더 삭제", description = "찜 목록 폴더를 삭제 합니다.")
-	@DeleteMapping("/myitems/folders/{folderId}")
-	public ResponseEntity<Void> removeMemberItemFolder(
-		@PathVariable final Long folderId
+	@Operation(summary = "찜 항목 제거", description = "찜 목록으로 부터 아이템이나 폴더를 제거 합니다.")
+	@DeleteMapping("/myitems")
+	public ResponseEntity<Void> removeFavorite(
+		@ModelAttribute @Valid final FavoriteItemDeleteRequest request
 	) {
-		memberItemFolderService.removeMemberItemFolder(
-			folderId
-		);
+		itemService.removeMemberItems(request.itemIds());
+		memberItemFolderService.removeMemberItemFolders(request.folderIds());
 
 		return ResponseEntity.ok().build();
 	}

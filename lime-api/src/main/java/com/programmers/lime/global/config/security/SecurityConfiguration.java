@@ -77,7 +77,7 @@ public class SecurityConfiguration {
 
 					.requestMatchers("/api/hobbies").permitAll()
 					.requestMatchers("/login").permitAll()
-					.requestMatchers("/api/sse/subscribe").permitAll()
+					.requestMatchers("/actuator/**").permitAll()
 					.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session

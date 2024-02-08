@@ -28,6 +28,9 @@ public enum ErrorCode {
 	EXPIRED_REFRESH_TOKEN("COMMON_012", "Refresh Token이 만료되었습니다."),
 	INVALID_REFRESH_TOKEN("COMMON_013", "Refresh Token이 유효하지 않습니다."),
 	S3_UPLOAD_FAIL("COMMON_014", "S3 업로드에 실패했습니다."),
+	S3_DELETE_FAIL("COMMON_015", "S3 삭제에 실패했습니다."),
+	BAD_REVIEW_IMAGE_URL("COMMON_016", "잘못된 리뷰 이미지 URL 입니다."),
+
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -55,6 +58,11 @@ public enum ErrorCode {
 	REVIEW_NOT_EQUAL_ITEM("REVIEW_002", "리뷰 아이디와 아이템 아이디가 일치하지 않습니다."),
 	REVIEW_NOT_MINE("REVIEW_003", "리뷰 작성자와 로그인한 회원아이디가 일치하지 않습니다."),
 	REVIEW_BAD_SORT_CONDITION("REVIEW_004", "잘못된 리뷰 정렬 조건 입니다."),
+	ALREADY_REVIEW_LIKED("REVIEW_005", "이미 리뷰를 좋아요 했습니다."),
+	NOT_REVIEW_LIKED("REVIEW_006", "좋아요를 누르지 않은 리뷰입니다."),
+	REVIEW_ALREADY_EXIST("REVIEW_007", "이미 리뷰를 작성한 아이템입니다."),
+	REVIEW_IMAGE_NOT_EXIST("REVIEW_008", "리뷰 이미지가 존재하지 않습니다."),
+
 
 	// Vote
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),
@@ -66,6 +74,8 @@ public enum ErrorCode {
 	VOTE_BAD_SORT_CONDITION("VOTE_007", "잘못된 sort 파라미터 값입니다."),
 	VOTE_CANNOT_PARTICIPATE("VOTE_008", "종료된 투표에는 참여할 수 없습니다."),
 	VOTE_CONTENT_BAD_LENGTH("VOTE_009", "투표 내용은 최대 1000자 입니다."),
+	VOTE_MAXIMUM_PARTICIPANTS("VOTE_010", "최대 투표자 수는 1명 이상 1000명 이하 입니다."),
+	VOTE_ITEM_DUPLICATED("VOTE_011", "투표 아이템이 중복되었습니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),

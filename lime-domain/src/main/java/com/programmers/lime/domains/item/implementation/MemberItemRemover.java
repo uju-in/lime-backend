@@ -1,5 +1,7 @@
 package com.programmers.lime.domains.item.implementation;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.programmers.lime.domains.item.domain.MemberItem;
@@ -20,7 +22,8 @@ public class MemberItemRemover {
 		memberItemRepository.delete(memberItem);
 	}
 
-	public void removeByMemberId(final Long memberId) {
-		memberItemRepository.deleteByMemberId(memberId);
+	public void removeByFolderId(final Long folderId) {
+		List<MemberItem> memberItems = memberItemReader.readByFolderId(folderId);
+		memberItemRepository.deleteAll(memberItems);
 	}
 }

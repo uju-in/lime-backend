@@ -23,7 +23,7 @@ public class MemberItemFolderRemover {
 		final Long memberId,
 		final Long folderId
 	) {
-		memberItemRemover.removeByMemberId(memberId);
+		memberItemRemover.removeByFolderId(memberId);
 
 		MemberItemFolder memberItemFolder = memberItemFolderReader.read(folderId);
 		memberItemFolderRepository.delete(memberItemFolder);

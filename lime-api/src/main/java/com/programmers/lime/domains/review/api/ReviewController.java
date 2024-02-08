@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -22,6 +21,7 @@ import com.programmers.lime.domains.review.api.dto.response.ReviewCreateResponse
 import com.programmers.lime.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.lime.domains.review.api.dto.response.ReviewGetResponse;
 import com.programmers.lime.domains.review.api.dto.response.ReviewModifyResponse;
+import com.programmers.lime.domains.review.application.ReviewLikeService;
 import com.programmers.lime.domains.review.application.ReviewService;
 import com.programmers.lime.domains.review.application.dto.ReviewGetByCursorServiceResponse;
 import com.programmers.lime.domains.review.application.dto.ReviewGetServiceResponse;
@@ -39,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 public class ReviewController {
 
 	private final ReviewService reviewService;
+	private final ReviewLikeService reviewLikeService;
 
 	@Operation(summary = "아이템 리뷰 등록", description = "itemId, ReviewCreateRequest을 이용하여 아이템 리뷰를 등록 합니다.")
 	@PostMapping()
@@ -58,9 +59,16 @@ public class ReviewController {
 	public ResponseEntity<ReviewModifyResponse> updateReview(
 		@PathVariable final Long itemId,
 		@PathVariable final Long reviewId,
-		@Valid @RequestBody final ReviewUpdateRequest request
+		@Valid @ModelAttribute final ReviewUpdateRequest request,
+		@RequestPart(value = "multipartReviewImages", required = false) final List<MultipartFile> multipartReviewImages
 	) {
-		reviewService.updateReview(itemId, reviewId, request.toReviewContent());
+		reviewService.updateReview(
+			itemId,
+			reviewId,
+			request.toReviewContent(),
+			request.reviewItemUrlsToRemove(),
+			multipartReviewImages
+		);
 		ReviewModifyResponse response = new ReviewModifyResponse(itemId);
 
 		return ResponseEntity.ok(response);
@@ -105,5 +113,27 @@ public class ReviewController {
 		ReviewGetResponse response = ReviewGetResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "아이템 리뷰 좋아요", description = "reviewId을 이용하여 아이템 리뷰를 좋아요 합니다.")
+	@PostMapping("/{reviewId}/like")
+	public ResponseEntity<Void> likeReview(
+		@PathVariable final Long itemId,
+		@PathVariable final Long reviewId
+	) {
+		reviewLikeService.like(itemId, reviewId);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "아이템 리뷰 좋아요 취소", description = "reviewId을 이용하여 아이템 리뷰를 좋아요 취소 합니다.")
+	@DeleteMapping("/{reviewId}/like")
+	public ResponseEntity<Void> cancelLikedReview(
+		@PathVariable final Long itemId,
+		@PathVariable final Long reviewId
+	) {
+		reviewLikeService.unlike(itemId, reviewId);
+
+		return ResponseEntity.ok().build();
 	}
 }

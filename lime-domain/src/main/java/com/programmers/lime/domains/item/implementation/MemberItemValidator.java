@@ -27,4 +27,17 @@ public class MemberItemValidator {
 			throw new BusinessException(ErrorCode.MEMBER_ITEM_ALREADY_EXIST);
 		}
 	}
+
+	public void validateExistMemberIdAndMemberItemId(
+		final Long memberId,
+		final List<Long> memberItemIds
+	) {
+		memberItemIds.forEach(memberItemId -> {
+			boolean isExistsMemberItem = memberItemRepository.existsMemberItemByIdAndMemberId(memberItemId, memberId);
+
+			if (!isExistsMemberItem) {
+				throw new BusinessException(ErrorCode.MEMBER_ITEM_NOT_FOUND);
+			}
+		});
+	}
 }

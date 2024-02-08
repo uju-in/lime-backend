@@ -1,7 +1,4 @@
-package com.programmers.lime.domains.bucket.domain;
-
-import com.programmers.lime.domains.BaseEntity;
-import com.programmers.lime.domains.item.domain.Item;
+package com.programmers.lime.domains.review.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,28 +13,29 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
-@Table(name = "bucket_items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BucketItem extends BaseEntity {
+@Entity
+@Table(name = "review_likes")
+public class ReviewLike {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "item_id")
-	private Long itemId;
+	@Column(name = "member_id")
+	private Long memberId;
 
-	@Column(name = "bucket_id")
-	private Long bucketId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "review_id")
+	private Review review;
 
-	public BucketItem(
-		final Long itemId,
-		final Long bucketId
-	){
-		this.itemId = itemId;
-		this.bucketId = bucketId;
+	public ReviewLike(
+		final Long memberId,
+		final Review review
+	) {
+		this.memberId = memberId;
+		this.review = review;
 	}
 }

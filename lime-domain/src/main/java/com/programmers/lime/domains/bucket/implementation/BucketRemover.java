@@ -26,15 +26,17 @@ public class BucketRemover {
 		final Long bucketId,
 		final Long memberId
 	) {
+		List<BucketItem> bucketItems = bucketReader.readBucketItems(bucketId);
 		Bucket bucket = bucketReader.read(bucketId, memberId);
 
+		bucketItemRepository.deleteAll(bucketItems);
 		bucketRepository.delete(bucket);
 	}
 
 	/** 버킷 아이템 삭제 */
 	public void removeBucketItems(final Long bucketId) {
-		List<BucketItem> bucketItems = bucketReader.bucketItemRead(bucketId);
+		List<BucketItem> bucketItems = bucketReader.readBucketItems(bucketId);
 
-		bucketItems.forEach(bucketItem -> bucketItemRepository.delete(bucketItem));
+		bucketItemRepository.deleteAll(bucketItems);
 	}
 }
