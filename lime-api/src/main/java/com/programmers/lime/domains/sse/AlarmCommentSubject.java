@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class AlarmCommentSubject implements AlarmSubject {
-	private static final Long DEFAULT_TIMEOUT = 6000 * 1000L; // 60초
+	private static final Long DEFAULT_TIMEOUT = 60 * 1000L; // 60초
 
 	private final Map<Long, SseEmitter> emitter = new ConcurrentHashMap<>();
 
