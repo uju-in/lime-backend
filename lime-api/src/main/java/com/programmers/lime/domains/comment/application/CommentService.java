@@ -46,10 +46,10 @@ public class CommentService {
 		final Member commentWriter = memberUtils.getCurrentMember();
 		final Comment comment = commentAppender.append(feedId, content, commentWriter.getId());
 
-		SsePayload ssePayload = CommentCreateEvent.toSsePayload(commentWriter.getNickname(), comment);
-
-		applicationEventPublisher.publishEvent(ssePayload);
 		applicationEventPublisher.publishEvent(new PointEvent(commentWriter.getId(), 5));
+
+		SsePayload ssePayload = CommentCreateEvent.toSsePayload(commentWriter.getNickname(), comment);
+		applicationEventPublisher.publishEvent(ssePayload);
 	}
 
 	public void modifyComment(

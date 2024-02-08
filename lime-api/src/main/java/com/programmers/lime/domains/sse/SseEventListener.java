@@ -1,7 +1,8 @@
 package com.programmers.lime.domains.sse;
 
-import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,13 +10,11 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class SseEventListener {
 
-	private final SseEmitters sseEmitters;
+	private final AlarmManager iAlarmSubject;
 
-	@EventListener
+	@TransactionalEventListener
+	@Async
 	public void sendSseEmitter(final SsePayload ssePayload) {
-		sseEmitters.send(
-			ssePayload.receiverId(),
-			ssePayload.data()
-		);
+		iAlarmSubject.notifyManager(ssePayload);
 	}
 }
