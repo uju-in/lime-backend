@@ -22,6 +22,7 @@ import com.programmers.lime.domains.review.implementation.ReviewAppender;
 import com.programmers.lime.domains.review.implementation.ReviewCursorReader;
 import com.programmers.lime.domains.review.implementation.ReviewImageAppender;
 import com.programmers.lime.domains.review.implementation.ReviewImageRemover;
+import com.programmers.lime.domains.review.implementation.ReviewLikeRemover;
 import com.programmers.lime.domains.review.implementation.ReviewModifier;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
 import com.programmers.lime.domains.review.implementation.ReviewRemover;
@@ -54,6 +55,7 @@ public class ReviewService {
 	private final S3Manager s3Manager;
 	private final ApplicationEventPublisher applicationEventPublisher;
 	private final ReviewImageAppender reviewImageAppender;
+	private final ReviewLikeRemover reviewLikeRemover;
 	private final ReviewImageRemover reviewImageRemover;
 
 	@Transactional
@@ -141,6 +143,7 @@ public class ReviewService {
 		return new ReviewGetByCursorServiceResponse(reviewCount, cursorSummary);
 	}
 
+	@Transactional
 	public void deleteReview(
 		final Long itemId,
 		final Long reviewId
@@ -148,6 +151,8 @@ public class ReviewService {
 		Long memberId = memberUtils.getCurrentMemberId();
 		reviewValidator.validItemReview(itemId, reviewId);
 		reviewValidator.validOwner(reviewId, memberId);
+		reviewLikeRemover.deleteByReviewId(reviewId);
+		reviewImageRemover.deleteByReviewId(reviewId);
 		reviewRemover.remove(reviewId);
 	}
 
