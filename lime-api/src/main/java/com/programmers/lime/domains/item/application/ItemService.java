@@ -185,4 +185,16 @@ public class ItemService {
 	public List<ItemRankingServiceResponse> getRanking() {
 		return itemRanking.viewRanking();
 	}
+
+	public void moveMemberItems(
+		final Long folderId,
+		final List<Long> memberItemIds
+	) {
+		Long memberId = memberUtils.getCurrentMemberId();
+
+		memberItemValidator.validateExistMemberIdAndMemberItemId(memberId, memberItemIds);
+		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
+
+		memberItemAppender.moveMemberItems(folderId, memberItemIds);
+	}
 }
