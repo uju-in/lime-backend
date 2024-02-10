@@ -123,8 +123,8 @@ public class VoteController {
 
 	@Operation(summary = "랭킹 조회", description = "진행 중인 투표의 랭킹을 TOP 10까지 조회합니다.")
 	@GetMapping("/ranking")
-	public ResponseEntity<VoteRankResponse> rankVote() {
-		final List<VoteRedis> voteRanking = voteService.rankVote();
+	public ResponseEntity<VoteRankResponse> rankVote(@RequestParam final String hobby) {
+		final List<VoteRedis> voteRanking = voteService.rankVote(Hobby.from(hobby));
 		final VoteRankResponse response = VoteRankResponse.from(voteRanking);
 
 		return ResponseEntity.ok(response);

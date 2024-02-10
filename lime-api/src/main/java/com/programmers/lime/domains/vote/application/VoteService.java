@@ -51,7 +51,7 @@ public class VoteService {
 		final Vote vote = voteAppender.append(memberId, request.toImplRequest());
 
 		final VoteRedis voteRedis = getVoteRedis(vote);
-		voteRedisManager.addRanking(voteRedis);
+		voteRedisManager.addRanking(vote.getHobby().toString(), voteRedis);
 
 		return vote.getId();
 	}
@@ -84,7 +84,11 @@ public class VoteService {
 				voter -> voteManager.reParticipate(itemId, voter),
 				() -> {
 					voteManager.participate(vote, memberId, itemId);
-					voteRedisManager.updateRanking(vote.isVoting(), getVoteRedis(vote));
+					voteRedisManager.updateRanking(
+						vote.getHobby().toString(),
+						vote.isVoting(),
+						getVoteRedis(vote)
+					);
 				}
 			);
 	}
@@ -95,7 +99,7 @@ public class VoteService {
 
 		voteManager.cancel(vote, memberId);
 
-		voteRedisManager.decreasePopularity(getVoteRedis(vote));
+		voteRedisManager.decreasePopularity(vote.getHobby().toString(), getVoteRedis(vote));
 	}
 
 	public void deleteVote(final Long voteId) {
@@ -108,7 +112,7 @@ public class VoteService {
 
 		voteRemover.remove(vote);
 
-		voteRedisManager.remove(getVoteRedis(vote));
+		voteRedisManager.remove(vote.getHobby().toString(), getVoteRedis(vote));
 	}
 
 	public VoteGetServiceResponse getVote(final Long voteId) {
@@ -167,8 +171,8 @@ public class VoteService {
 		return new VoteGetByKeywordServiceResponse(cursorSummary, totalVoteCount);
 	}
 
-	public List<VoteRedis> rankVote() {
-		return voteRedisManager.getRanking();
+	public List<VoteRedis> rankVote(final Hobby hobby) {
+		return voteRedisManager.getRanking(hobby.toString());
 	}
 
 	private void validateItemIds(
