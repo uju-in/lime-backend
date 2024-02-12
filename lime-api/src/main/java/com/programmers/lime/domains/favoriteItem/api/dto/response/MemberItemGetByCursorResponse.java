@@ -1,8 +1,8 @@
-package com.programmers.lime.domains.item.api.dto.response;
+package com.programmers.lime.domains.favoriteItem.api.dto.response;
 
 import java.util.List;
 
-import com.programmers.lime.domains.item.application.dto.MemberItemGetServiceResponse;
+import com.programmers.lime.domains.favoriteItem.application.dto.MemberItemGetServiceResponse;
 import com.programmers.lime.domains.item.model.MemberItemSummary;
 
 public record MemberItemGetByCursorResponse(

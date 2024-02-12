@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.programmers.lime.IntegrationTest;
-import com.programmers.lime.domains.item.application.dto.MemberItemCreateServiceResponse;
+import com.programmers.lime.domains.favoriteItem.application.FavoriteItemService;
+import com.programmers.lime.domains.favoriteItem.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.domain.setup.ItemSetup;
 import com.programmers.lime.domains.item.implementation.MemberItemValidator;
 import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
@@ -22,7 +23,7 @@ class ItemServiceTest extends IntegrationTest {
 	private ItemSetup itemSetup;
 
 	@Autowired
-	private ItemService itemService;
+	private FavoriteItemService favoriteItemService;
 
 	@MockBean
 	private MemberUtils memberUtils;
@@ -46,7 +47,7 @@ class ItemServiceTest extends IntegrationTest {
 			.forEach(itemId -> itemSetup.saveOne(itemId));
 
 		// when
-		MemberItemCreateServiceResponse actualResponse = itemService.createMemberItems(memberItemIdRegistryBuilder);
+		MemberItemCreateServiceResponse actualResponse = favoriteItemService.createMemberItems(memberItemIdRegistryBuilder);
 
 		// then
 		assertThat(actualResponse)

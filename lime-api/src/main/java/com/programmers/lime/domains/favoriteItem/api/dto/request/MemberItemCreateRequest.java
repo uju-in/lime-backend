@@ -1,4 +1,4 @@
-package com.programmers.lime.domains.item.api.dto.request;
+package com.programmers.lime.domains.favoriteItem.api.dto.request;
 
 import java.util.List;
 

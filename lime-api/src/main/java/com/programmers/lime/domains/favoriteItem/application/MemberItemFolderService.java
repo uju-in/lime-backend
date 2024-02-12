@@ -1,8 +1,9 @@
-package com.programmers.lime.domains.item.application;
+package com.programmers.lime.domains.favoriteItem.application;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.programmers.lime.domains.item.implementation.MemberItemFolderAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderModifier;
@@ -12,7 +13,7 @@ import com.programmers.lime.global.util.MemberUtils;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class MemberItemFolderService {
 
