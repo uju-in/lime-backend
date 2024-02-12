@@ -70,7 +70,7 @@ public class FavoriteItemController {
 	) {
 		favoriteItemService.moveMemberItems(
 			request.folderId(),
-			request.memberItemIds()
+			request.favoriteItemIds()
 		);
 
 		return ResponseEntity.ok().build();
@@ -81,7 +81,7 @@ public class FavoriteItemController {
 	public ResponseEntity<Void> removeFavorite(
 		@ModelAttribute @Valid final FavoriteItemDeleteRequest request
 	) {
-		favoriteItemService.removeMemberItems(request.itemIds());
+		favoriteItemService.removeMemberItems(request.favoriteItemIds());
 		memberItemFolderService.removeMemberItemFolders(request.folderIds());
 
 		return ResponseEntity.ok().build();

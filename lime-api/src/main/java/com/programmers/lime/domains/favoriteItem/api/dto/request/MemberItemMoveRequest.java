@@ -12,6 +12,6 @@ public record MemberItemMoveRequest(
 
 	@Schema(description = "이동할 찜 아이템 목록", example = "[1, 2, 3]")
 	@NotNull(message = "찜 아이템 목록은 필수 값 입니다.")
-	List<Long> memberItemIds
+	List<Long> favoriteItemIds
 ) {
 }

@@ -5,7 +5,7 @@ import com.programmers.lime.common.model.Hobby;
 import lombok.Builder;
 
 @Builder
-public record MemberItemMetadata (
+public record FavoriteItemMetadata(
 	Long itemId,
 	Hobby hobby,
 	String itemUrl,
