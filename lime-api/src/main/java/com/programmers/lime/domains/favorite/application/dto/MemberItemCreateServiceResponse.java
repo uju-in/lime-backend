@@ -1,4 +1,4 @@
-package com.programmers.lime.domains.favoriteItem.application.dto;
+package com.programmers.lime.domains.favorite.application.dto;
 
 import java.util.List;
 

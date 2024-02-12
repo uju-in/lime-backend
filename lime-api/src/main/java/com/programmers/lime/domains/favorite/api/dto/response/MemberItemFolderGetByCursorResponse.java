@@ -1,9 +1,9 @@
-package com.programmers.lime.domains.favoriteItem.api.dto.response;
+package com.programmers.lime.domains.favorite.api.dto.response;
 
 import java.util.List;
 
 import com.programmers.lime.common.cursor.CursorSummary;
-import com.programmers.lime.domains.favoriteItem.application.dto.MemberItemFolderGetServiceResponse;
+import com.programmers.lime.domains.favorite.application.dto.MemberItemFolderGetServiceResponse;
 import com.programmers.lime.domains.item.model.MemberItemFolderCursorSummary;
 
 public record MemberItemFolderGetByCursorResponse (

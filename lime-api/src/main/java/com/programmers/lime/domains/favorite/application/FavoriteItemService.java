@@ -1,11 +1,11 @@
-package com.programmers.lime.domains.favoriteItem.application;
+package com.programmers.lime.domains.favorite.application;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.lime.domains.favoriteItem.api.dto.response.MemberItemFavoritesGetResponse;
-import com.programmers.lime.domains.favoriteItem.application.dto.MemberItemCreateServiceResponse;
+import com.programmers.lime.domains.favorite.api.dto.response.MemberItemFavoritesGetResponse;
+import com.programmers.lime.domains.favorite.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;

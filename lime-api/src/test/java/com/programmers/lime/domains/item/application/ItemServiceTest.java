@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.programmers.lime.IntegrationTest;
-import com.programmers.lime.domains.favoriteItem.application.FavoriteItemService;
-import com.programmers.lime.domains.favoriteItem.application.dto.MemberItemCreateServiceResponse;
+import com.programmers.lime.domains.favorite.application.FavoriteItemService;
+import com.programmers.lime.domains.favorite.application.dto.MemberItemCreateServiceResponse;
 import com.programmers.lime.domains.item.domain.setup.ItemSetup;
 import com.programmers.lime.domains.item.implementation.MemberItemValidator;
 import com.programmers.lime.domains.item.model.MemberItemIdRegistry;

@@ -1,4 +1,4 @@
-package com.programmers.lime.domains.favoriteItem.api;
+package com.programmers.lime.domains.favorite.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,23 +12,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.lime.domains.favoriteItem.api.dto.request.FavoriteItemDeleteRequest;
-import com.programmers.lime.domains.favoriteItem.api.dto.request.MemberItemCreateRequest;
-import com.programmers.lime.domains.favoriteItem.api.dto.request.MemberItemFolderCreateRequest;
-import com.programmers.lime.domains.favoriteItem.api.dto.request.MemberItemFolderUpdateRequest;
-import com.programmers.lime.domains.favoriteItem.api.dto.request.MemberItemMoveRequest;
-import com.programmers.lime.domains.favoriteItem.api.dto.response.MemberItemCreateResponse;
-import com.programmers.lime.domains.favoriteItem.api.dto.response.MemberItemFavoritesGetResponse;
-import com.programmers.lime.domains.favoriteItem.application.FavoriteItemService;
-import com.programmers.lime.domains.favoriteItem.application.MemberItemFolderService;
-import com.programmers.lime.domains.favoriteItem.application.dto.MemberItemCreateServiceResponse;
+import com.programmers.lime.domains.favorite.api.dto.request.FavoriteItemDeleteRequest;
+import com.programmers.lime.domains.favorite.api.dto.request.MemberItemCreateRequest;
+import com.programmers.lime.domains.favorite.api.dto.request.MemberItemFolderCreateRequest;
+import com.programmers.lime.domains.favorite.api.dto.request.MemberItemFolderUpdateRequest;
+import com.programmers.lime.domains.favorite.api.dto.request.MemberItemMoveRequest;
+import com.programmers.lime.domains.favorite.api.dto.response.MemberItemCreateResponse;
+import com.programmers.lime.domains.favorite.api.dto.response.MemberItemFavoritesGetResponse;
+import com.programmers.lime.domains.favorite.application.FavoriteItemService;
+import com.programmers.lime.domains.favorite.application.MemberItemFolderService;
+import com.programmers.lime.domains.favorite.application.dto.MemberItemCreateServiceResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "favorites", description = "찜 API")
+@Tag(name = "favorite", description = "찜 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/items/myitems")

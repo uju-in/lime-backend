@@ -1,8 +1,7 @@
-package com.programmers.lime.domains.favoriteItem.application;
+package com.programmers.lime.domains.favorite.application;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.programmers.lime.domains.item.implementation.MemberItemFolderAppender;
