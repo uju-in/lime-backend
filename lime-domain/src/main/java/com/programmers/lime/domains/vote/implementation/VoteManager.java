@@ -24,7 +24,7 @@ public class VoteManager {
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = voterReader.read(vote, memberId, itemId);
+		final Voter voter = new Voter(vote, memberId, itemId);
 
 		voter.participate(itemId);
 
@@ -34,10 +34,19 @@ public class VoteManager {
 	}
 
 	@Transactional
+	public void reParticipate(
+		final Long itemId,
+		final Voter voter
+	) {
+		voter.participate(itemId);
+	}
+
+	@Transactional
 	public void cancel(
 		final Vote vote,
 		final Long memberId
 	) {
-		voterRepository.deleteByVoteAndMemberId(vote, memberId);
+		final Voter voter = voterReader.read(vote, memberId);
+		voterRepository.delete(voter);
 	}
 }

@@ -2,12 +2,12 @@ package com.programmers.lime.domains.vote.api.dto.response;
 
 import java.util.List;
 
-import com.programmers.lime.redis.vote.VoteRedis;
+import com.programmers.lime.redis.vote.VoteRankingInfo;
 
 public record VoteRankResponse(
-	List<VoteRedis> voteRanking
+	List<VoteRankingInfo> rankingInfos
 ) {
-	public static VoteRankResponse from(final List<VoteRedis> voteRanking) {
-		return new VoteRankResponse(voteRanking);
+	public static VoteRankResponse from(final List<VoteRankingInfo> rankingInfos) {
+		return new VoteRankResponse(rankingInfos);
 	}
 }

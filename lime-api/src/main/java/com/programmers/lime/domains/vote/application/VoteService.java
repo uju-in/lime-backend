@@ -18,6 +18,7 @@ import com.programmers.lime.domains.vote.implementation.VoteAppender;
 import com.programmers.lime.domains.vote.implementation.VoteManager;
 import com.programmers.lime.domains.vote.implementation.VoteReader;
 import com.programmers.lime.domains.vote.implementation.VoteRemover;
+import com.programmers.lime.domains.vote.implementation.VoterReader;
 import com.programmers.lime.domains.vote.model.VoteDetail;
 import com.programmers.lime.domains.vote.model.VoteSortCondition;
 import com.programmers.lime.domains.vote.model.VoteStatusCondition;
@@ -26,7 +27,7 @@ import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
 import com.programmers.lime.global.util.MemberUtils;
-import com.programmers.lime.redis.vote.VoteRedis;
+import com.programmers.lime.redis.vote.VoteRankingInfo;
 import com.programmers.lime.redis.vote.VoteRedisManager;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class VoteService {
 	private final VoteReader voteReader;
 	private final VoteManager voteManager;
 	private final VoteRemover voteRemover;
+	private final VoterReader voterReader;
 	private final MemberUtils memberUtils;
 	private final ItemReader itemReader;
 	private final VoteRedisManager voteRedisManager;
@@ -48,8 +50,8 @@ public class VoteService {
 		validateItemIds(request.item1Id(), request.item2Id());
 		final Vote vote = voteAppender.append(memberId, request.toImplRequest());
 
-		final VoteRedis voteRedis = getVoteRedis(vote);
-		voteRedisManager.addRanking(voteRedis);
+		final VoteRankingInfo rankingInfo = getVoteRedis(vote);
+		voteRedisManager.addRanking(vote.getHobby().toString(), rankingInfo);
 
 		return vote.getId();
 	}
@@ -69,10 +71,26 @@ public class VoteService {
 			throw new BusinessException(ErrorCode.VOTE_NOT_CONTAIN_ITEM);
 		}
 
-		voteManager.participate(vote, memberId, itemId);
+		participate(vote, memberId, itemId);
+	}
 
-		final VoteRedis voteRedis = getVoteRedis(vote);
-		voteRedisManager.increasePopularity(voteRedis);
+	private void participate(
+		final Vote vote,
+		final Long memberId,
+		final Long itemId
+	) {
+		voterReader.find(vote, memberId)
+			.ifPresentOrElse(
+				voter -> voteManager.reParticipate(itemId, voter),
+				() -> {
+					voteManager.participate(vote, memberId, itemId);
+					voteRedisManager.updateRanking(
+						vote.getHobby().toString(),
+						vote.isVoting(),
+						getVoteRedis(vote)
+					);
+				}
+			);
 	}
 
 	public void cancelVote(final Long voteId) {
@@ -80,6 +98,8 @@ public class VoteService {
 		final Vote vote = voteReader.read(voteId);
 
 		voteManager.cancel(vote, memberId);
+
+		voteRedisManager.decreasePopularity(vote.getHobby().toString(), getVoteRedis(vote));
 	}
 
 	public void deleteVote(final Long voteId) {
@@ -91,6 +111,8 @@ public class VoteService {
 		}
 
 		voteRemover.remove(vote);
+
+		voteRedisManager.remove(vote.getHobby().toString(), getVoteRedis(vote));
 	}
 
 	public VoteGetServiceResponse getVote(final Long voteId) {
@@ -149,8 +171,8 @@ public class VoteService {
 		return new VoteGetByKeywordServiceResponse(cursorSummary, totalVoteCount);
 	}
 
-	public List<VoteRedis> rankVote() {
-		return voteRedisManager.getRanking();
+	public List<VoteRankingInfo> rankVote(final Hobby hobby) {
+		return voteRedisManager.getRanking(hobby.toString());
 	}
 
 	private void validateItemIds(
@@ -166,18 +188,14 @@ public class VoteService {
 		}
 	}
 
-	private VoteRedis getVoteRedis(final Vote vote) {
+	private VoteRankingInfo getVoteRedis(final Vote vote) {
 		final Item item1 = itemReader.read(vote.getItem1Id());
 		final Item item2 = itemReader.read(vote.getItem2Id());
 
-		return VoteRedis.builder()
+		return VoteRankingInfo.builder()
 			.id(vote.getId())
-			.content(vote.getContent())
-			.startTime(String.valueOf(vote.getStartTime()))
-			.item1Id(vote.getItem1Id())
-			.item1Name(item1.getName())
-			.item2Id(vote.getItem2Id())
-			.item2Name(item2.getName())
+			.item1Image(item1.getImage())
+			.item2Image(item2.getImage())
 			.build();
 	}
 }
