@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-public record MemberItemFolderMetadata (
+public record FolderMetadata(
 	List<String> imageUrls,
 	int itemCount
 ){
