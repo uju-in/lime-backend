@@ -56,10 +56,11 @@ public class ReviewController {
 	@GetMapping()
 	public ResponseEntity<ReviewGetByCursorResponse> getReviewsByCursor(
 		@ModelAttribute("request") @Valid final CursorRequest request,
-		@RequestParam(required = false) final String reviewSortCondition
+		@RequestParam(required = false) final String reviewSortCondition,
+		@RequestParam final Long itemId
 	) {
 		ReviewGetByCursorServiceResponse serviceResponse = reviewService.getReviewsByCursor(
-			request.itemId(),
+			itemId,
 			request.toParameters(),
 			reviewSortCondition
 		);
