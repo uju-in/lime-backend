@@ -16,25 +16,20 @@ public class ReviewLikeService {
 	private final ReviewLikeAppender reviewLikeAppender;
 	private final ReviewLikeRemover reviewLikeRemover;
 	private final ReviewLikeValidator reviewLikeValidator;
-	private final ReviewValidator reviewValidator;
 	private final MemberUtils memberUtils;
 
 	public void like(
-		final Long itemId,
 		final Long reviewId
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
-		reviewValidator.validItemReview(itemId, reviewId);
 		reviewLikeValidator.validateReviewLike(memberId, reviewId);
 		reviewLikeAppender.append(memberId, reviewId);
 	}
 
 	public void unlike(
-		final Long itemId,
 		final Long reviewId
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
-		reviewValidator.validItemReview(itemId, reviewId);
 		reviewLikeValidator.validateReviewUnlike(memberId, reviewId);
 		reviewLikeRemover.deleteByMemberIdAndReviewId(memberId, reviewId);
 	}
