@@ -104,7 +104,6 @@ public class ReviewService {
 
 	@Transactional
 	public void updateReview(
-		final Long itemId,
 		final Long reviewId,
 		final ReviewContent reviewContent,
 		final List<String> reviewItemUrlsToRemove,
@@ -112,7 +111,6 @@ public class ReviewService {
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
-		reviewValidator.validItemReview(itemId, reviewId);
 		reviewValidator.validOwner(reviewId, memberId);
 		reviewModifier.modify(reviewId, reviewContent);
 
@@ -145,11 +143,9 @@ public class ReviewService {
 
 	@Transactional
 	public void deleteReview(
-		final Long itemId,
 		final Long reviewId
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
-		reviewValidator.validItemReview(itemId, reviewId);
 		reviewValidator.validOwner(reviewId, memberId);
 		reviewLikeRemover.deleteByReviewId(reviewId);
 		reviewImageRemover.deleteByReviewId(reviewId);
@@ -169,10 +165,8 @@ public class ReviewService {
 	}
 
 	public ReviewGetServiceResponse getReview(
-		final Long itemId,
 		final Long reviewId
 	) {
-		reviewValidator.validItemReview(itemId, reviewId);
 		Review review = reviewReader.read(reviewId);
 
 		return new ReviewGetServiceResponse(

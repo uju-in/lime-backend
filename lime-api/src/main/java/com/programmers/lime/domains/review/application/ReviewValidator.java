@@ -20,16 +20,6 @@ public class ReviewValidator {
 
 	private final ReviewImageReader reviewImageReader;
 
-	public void validItemReview(
-		final Long itemId,
-		final Long reviewId
-	) {
-		Review review = reviewReader.read(reviewId);
-		if (!review.containsItem(itemId)) {
-			throw new BusinessException(ErrorCode.REVIEW_NOT_EQUAL_ITEM);
-		}
-	}
-
 	public void validOwner(
 		final Long reviewId,
 		final Long memberId
