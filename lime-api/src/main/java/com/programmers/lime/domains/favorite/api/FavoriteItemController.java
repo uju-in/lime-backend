@@ -28,10 +28,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "favorite", description = "찜 API")
+@Tag(name = "favorites", description = "찜 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/favorite")
+@RequestMapping("/api/favorites")
 public class FavoriteItemController {
 
 	private final FavoriteItemService favoriteItemService;
@@ -39,7 +39,7 @@ public class FavoriteItemController {
 	private final MemberItemFolderService memberItemFolderService;
 
 	@Operation(summary = "찜 ", description = "MemberItemAddRequest을 이용하여 사용자의 찜 목록에 아이템 담기 합니다.")
-	@PostMapping("/item")
+	@PostMapping("/items")
 	public ResponseEntity<MemberItemCreateResponse> createMemberItems(
 		@Valid @RequestBody final MemberItemCreateRequest request
 	) {
@@ -64,7 +64,7 @@ public class FavoriteItemController {
 	}
 
 	@Operation(summary = "찜 아이템 이동", description = "찜 아이템을 다른 폴더로 이동 합니다.")
-	@PutMapping("/item/move")
+	@PutMapping("/items/move")
 	public ResponseEntity<Void> moveMemberItems(
 		@RequestBody @Valid final MemberItemMoveRequest request
 	) {
