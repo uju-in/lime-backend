@@ -31,15 +31,15 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "favorite", description = "찜 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/items/myitems")
+@RequestMapping("/api/favorite")
 public class FavoriteItemController {
 
 	private final FavoriteItemService favoriteItemService;
 
 	private final MemberItemFolderService memberItemFolderService;
 
-	@Operation(summary = "찜 목록에 아이템 넣기", description = "MemberItemAddRequest을 이용하여 사용자의 찜 목록에 아이템 담기 합니다.")
-	@PostMapping()
+	@Operation(summary = "찜 ", description = "MemberItemAddRequest을 이용하여 사용자의 찜 목록에 아이템 담기 합니다.")
+	@PostMapping("/item")
 	public ResponseEntity<MemberItemCreateResponse> createMemberItems(
 		@Valid @RequestBody final MemberItemCreateRequest request
 	) {
@@ -63,8 +63,8 @@ public class FavoriteItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "찜 이동", description = "찜을 다른 폴더로 이동 합니다.")
-	@PutMapping("/move")
+	@Operation(summary = "찜 아이템 이동", description = "찜 아이템을 다른 폴더로 이동 합니다.")
+	@PutMapping("/item/move")
 	public ResponseEntity<Void> moveMemberItems(
 		@RequestBody @Valid final MemberItemMoveRequest request
 	) {
@@ -87,7 +87,7 @@ public class FavoriteItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "찜 목록폴더 생성", description = "찜 목록 폴더를 생성 합니다.")
+	@Operation(summary = "찜 목록 폴더 생성", description = "찜 목록 폴더를 생성 합니다.")
 	@PostMapping("/folders")
 	public ResponseEntity<Void> addMemberItemFolder(
 		@RequestBody @Valid final MemberItemFolderCreateRequest request
@@ -99,7 +99,7 @@ public class FavoriteItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "찜 목록 폴더 수정", description = "찜 목록 폴더를 수정 합니다.")
+	@Operation(summary = "찜 목록 폴더 이름 수정", description = "찜 목록 폴더 이름을 수정 합니다.")
 	@PutMapping("/folders/{folderId}")
 	public ResponseEntity<Void> modifyMemberItemFolder(
 		@PathVariable final Long folderId,
