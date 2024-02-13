@@ -27,7 +27,7 @@ import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
 import com.programmers.lime.global.util.MemberUtils;
-import com.programmers.lime.redis.vote.VoteRedis;
+import com.programmers.lime.redis.vote.VoteRankingInfo;
 import com.programmers.lime.redis.vote.VoteRedisManager;
 
 import lombok.RequiredArgsConstructor;
@@ -50,8 +50,8 @@ public class VoteService {
 		validateItemIds(request.item1Id(), request.item2Id());
 		final Vote vote = voteAppender.append(memberId, request.toImplRequest());
 
-		final VoteRedis voteRedis = getVoteRedis(vote);
-		voteRedisManager.addRanking(vote.getHobby().toString(), voteRedis);
+		final VoteRankingInfo rankingInfo = getVoteRedis(vote);
+		voteRedisManager.addRanking(vote.getHobby().toString(), rankingInfo);
 
 		return vote.getId();
 	}
@@ -171,7 +171,7 @@ public class VoteService {
 		return new VoteGetByKeywordServiceResponse(cursorSummary, totalVoteCount);
 	}
 
-	public List<VoteRedis> rankVote(final Hobby hobby) {
+	public List<VoteRankingInfo> rankVote(final Hobby hobby) {
 		return voteRedisManager.getRanking(hobby.toString());
 	}
 
@@ -188,11 +188,11 @@ public class VoteService {
 		}
 	}
 
-	private VoteRedis getVoteRedis(final Vote vote) {
+	private VoteRankingInfo getVoteRedis(final Vote vote) {
 		final Item item1 = itemReader.read(vote.getItem1Id());
 		final Item item2 = itemReader.read(vote.getItem2Id());
 
-		return VoteRedis.builder()
+		return VoteRankingInfo.builder()
 			.id(vote.getId())
 			.item1Image(item1.getImage())
 			.item2Image(item2.getImage())

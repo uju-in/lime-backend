@@ -21,7 +21,7 @@ public class VoteRedisManager {
 
 	public void addRanking(
 		final String hobby,
-		final VoteRedis rankingInfo
+		final VoteRankingInfo rankingInfo
 	) {
 		redisTemplate.opsForZSet().add(KEY + hobby, rankingInfo, 0);
 		redisTemplate.expire(KEY, 1, TimeUnit.DAYS);
@@ -29,19 +29,19 @@ public class VoteRedisManager {
 
 	public void increasePopularity(
 		final String hobby,
-		final VoteRedis rankingInfo
+		final VoteRankingInfo rankingInfo
 	) {
 		redisTemplate.opsForZSet().incrementScore(KEY + hobby, rankingInfo, 1);
 	}
 
 	public void decreasePopularity(
 		final String hobby,
-		final VoteRedis rankingInfo
+		final VoteRankingInfo rankingInfo
 	) {
 		redisTemplate.opsForZSet().incrementScore(KEY + hobby, rankingInfo, -1);
 	}
 
-	public List<VoteRedis> getRanking(final String hobby) {
+	public List<VoteRankingInfo> getRanking(final String hobby) {
 		final ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
 		final Set<ZSetOperations.TypedTuple<Object>> typedTuples = zSetOperations.reverseRangeWithScores(KEY + hobby,
 			0,
@@ -52,13 +52,13 @@ public class VoteRedisManager {
 		}
 
 		return typedTuples.stream()
-			.map(VoteRedis::from)
+			.map(VoteRankingInfo::from)
 			.toList();
 	}
 
 	public void remove(
 		final String hobby,
-		final VoteRedis rankingInfo
+		final VoteRankingInfo rankingInfo
 	) {
 		redisTemplate.opsForZSet().remove(KEY + hobby, rankingInfo);
 	}
@@ -66,7 +66,7 @@ public class VoteRedisManager {
 	public void updateRanking(
 		final String hobby,
 		final boolean voting,
-		final VoteRedis rankingInfo
+		final VoteRankingInfo rankingInfo
 	) {
 		if (voting) {
 			increasePopularity(hobby, rankingInfo);
