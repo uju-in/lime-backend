@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record FavoriteItemDeleteRequest (
+public record FavoriteRemoveRequest(
 	@Schema(description = "여러 찜한 아이템 id", example = "1, 2, 3")
 	List<Long> favoriteItemIds,
 

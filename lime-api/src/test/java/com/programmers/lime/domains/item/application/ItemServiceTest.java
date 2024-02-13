@@ -10,10 +10,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.programmers.lime.IntegrationTest;
 import com.programmers.lime.domains.favorite.application.FavoriteItemService;
-import com.programmers.lime.domains.favorite.application.dto.MemberItemCreateServiceResponse;
+import com.programmers.lime.domains.favorite.application.dto.FavoriteItemCreateServiceResponse;
 import com.programmers.lime.domains.item.domain.setup.ItemSetup;
 import com.programmers.lime.domains.item.implementation.MemberItemValidator;
-import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
+import com.programmers.lime.domains.item.model.FavoriteItemIdRegistry;
 import com.programmers.lime.domains.item.model.MemberItemIdRegistryBuilder;
 import com.programmers.lime.global.util.MemberUtils;
 
@@ -40,14 +40,16 @@ class ItemServiceTest extends IntegrationTest {
 		// memberSetup이 만들어지면 변경할 예정
 		doNothing().when(memberItemValidator).validateExistMemberItem(any(), any());
 
-		MemberItemIdRegistry memberItemIdRegistryBuilder = MemberItemIdRegistryBuilder.build();
-		MemberItemCreateServiceResponse expectedResponse = new MemberItemCreateServiceResponse(memberItemIdRegistryBuilder.itemIds());
+		FavoriteItemIdRegistry favoriteItemIdRegistryBuilder = MemberItemIdRegistryBuilder.build();
+		FavoriteItemCreateServiceResponse expectedResponse = new FavoriteItemCreateServiceResponse(
+			favoriteItemIdRegistryBuilder.itemIds());
 
-		memberItemIdRegistryBuilder.itemIds()
+		favoriteItemIdRegistryBuilder.itemIds()
 			.forEach(itemId -> itemSetup.saveOne(itemId));
 
 		// when
-		MemberItemCreateServiceResponse actualResponse = favoriteItemService.createMemberItems(memberItemIdRegistryBuilder);
+		FavoriteItemCreateServiceResponse actualResponse = favoriteItemService.createFavoriteItems(
+			favoriteItemIdRegistryBuilder);
 
 		// then
 		assertThat(actualResponse)

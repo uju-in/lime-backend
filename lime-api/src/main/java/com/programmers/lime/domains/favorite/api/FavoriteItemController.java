@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.lime.domains.favorite.api.dto.request.FavoriteItemDeleteRequest;
-import com.programmers.lime.domains.favorite.api.dto.request.MemberItemCreateRequest;
-import com.programmers.lime.domains.favorite.api.dto.request.MemberItemFolderCreateRequest;
-import com.programmers.lime.domains.favorite.api.dto.request.MemberItemFolderUpdateRequest;
+import com.programmers.lime.domains.favorite.api.dto.request.FavoriteRemoveRequest;
+import com.programmers.lime.domains.favorite.api.dto.request.FavoriteItemCreateRequest;
+import com.programmers.lime.domains.favorite.api.dto.request.FolderCreateRequest;
+import com.programmers.lime.domains.favorite.api.dto.request.FolderUpdateRequest;
 import com.programmers.lime.domains.favorite.api.dto.request.MemberItemMoveRequest;
-import com.programmers.lime.domains.favorite.api.dto.response.MemberItemCreateResponse;
-import com.programmers.lime.domains.favorite.api.dto.response.MemberItemFavoritesGetResponse;
+import com.programmers.lime.domains.favorite.api.dto.response.FavoriteItemCreateResponse;
+import com.programmers.lime.domains.favorite.api.dto.response.FavoritesGetResponse;
 import com.programmers.lime.domains.favorite.application.FavoriteItemService;
-import com.programmers.lime.domains.favorite.application.MemberItemFolderService;
-import com.programmers.lime.domains.favorite.application.dto.MemberItemCreateServiceResponse;
+import com.programmers.lime.domains.favorite.application.FolderService;
+import com.programmers.lime.domains.favorite.application.dto.FavoriteItemCreateServiceResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,27 +36,27 @@ public class FavoriteItemController {
 
 	private final FavoriteItemService favoriteItemService;
 
-	private final MemberItemFolderService memberItemFolderService;
+	private final FolderService folderService;
 
 	@Operation(summary = "찜 ", description = "MemberItemAddRequest을 이용하여 사용자의 찜 목록에 아이템 담기 합니다.")
 	@PostMapping("/items")
-	public ResponseEntity<MemberItemCreateResponse> createMemberItems(
-		@Valid @RequestBody final MemberItemCreateRequest request
+	public ResponseEntity<FavoriteItemCreateResponse> createFavoriteItems(
+		@Valid @RequestBody final FavoriteItemCreateRequest request
 	) {
-		MemberItemCreateServiceResponse serviceResponse = favoriteItemService.createMemberItems(
-			request.toMemberItemIdRegistry()
+		FavoriteItemCreateServiceResponse serviceResponse = favoriteItemService.createFavoriteItems(
+			request.toFavoriteItemIdRegistry()
 		);
-		MemberItemCreateResponse response = MemberItemCreateResponse.from(serviceResponse);
+		FavoriteItemCreateResponse response = FavoriteItemCreateResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "찜 목록 조회", description = "찜 목록을 조회 합니다.")
 	@GetMapping()
-	public ResponseEntity<MemberItemFavoritesGetResponse> getMemberItemObjects(
+	public ResponseEntity<FavoritesGetResponse> getFavorites(
 		@RequestParam(required = false) final Long folderId
 	) {
-		MemberItemFavoritesGetResponse response = favoriteItemService.getMemberItemFavorites(
+		FavoritesGetResponse response = favoriteItemService.getFavorites(
 			folderId
 		);
 
@@ -65,10 +65,10 @@ public class FavoriteItemController {
 
 	@Operation(summary = "찜 아이템 이동", description = "찜 아이템을 다른 폴더로 이동 합니다.")
 	@PutMapping("/items/move")
-	public ResponseEntity<Void> moveMemberItems(
+	public ResponseEntity<Void> moveFavoriteItems(
 		@RequestBody @Valid final MemberItemMoveRequest request
 	) {
-		favoriteItemService.moveMemberItems(
+		favoriteItemService.moveFavoriteItems(
 			request.folderId(),
 			request.favoriteItemIds()
 		);
@@ -79,10 +79,10 @@ public class FavoriteItemController {
 	@Operation(summary = "찜 항목 제거", description = "찜 목록으로 부터 아이템이나 폴더를 제거 합니다.")
 	@DeleteMapping()
 	public ResponseEntity<Void> removeFavorite(
-		@ModelAttribute @Valid final FavoriteItemDeleteRequest request
+		@ModelAttribute @Valid final FavoriteRemoveRequest request
 	) {
-		favoriteItemService.removeMemberItems(request.favoriteItemIds());
-		memberItemFolderService.removeMemberItemFolders(request.folderIds());
+		favoriteItemService.removeFavoriteItems(request.favoriteItemIds());
+		folderService.removeFolders(request.folderIds());
 
 		return ResponseEntity.ok().build();
 	}
@@ -90,9 +90,9 @@ public class FavoriteItemController {
 	@Operation(summary = "찜 목록 폴더 생성", description = "찜 목록 폴더를 생성 합니다.")
 	@PostMapping("/folders")
 	public ResponseEntity<Void> addMemberItemFolder(
-		@RequestBody @Valid final MemberItemFolderCreateRequest request
+		@RequestBody @Valid final FolderCreateRequest request
 	) {
-		memberItemFolderService.createMemberItemFolder(
+		folderService.createMemberItemFolder(
 			request.folderName()
 		);
 
@@ -101,11 +101,11 @@ public class FavoriteItemController {
 
 	@Operation(summary = "찜 목록 폴더 이름 수정", description = "찜 목록 폴더 이름을 수정 합니다.")
 	@PutMapping("/folders/{folderId}")
-	public ResponseEntity<Void> modifyMemberItemFolder(
+	public ResponseEntity<Void> modifyFolder(
 		@PathVariable final Long folderId,
-		@RequestBody @Valid final MemberItemFolderUpdateRequest request
+		@RequestBody @Valid final FolderUpdateRequest request
 	) {
-		memberItemFolderService.modifyMemberItemFolder(
+		folderService.modifyFolder(
 			folderId,
 			request.folderName()
 		);

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.programmers.lime.domains.favorite.api.dto.response.MemberItemFavoritesGetResponse;
-import com.programmers.lime.domains.favorite.application.dto.MemberItemCreateServiceResponse;
+import com.programmers.lime.domains.favorite.api.dto.response.FavoritesGetResponse;
+import com.programmers.lime.domains.favorite.application.dto.FavoriteItemCreateServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
@@ -14,7 +14,7 @@ import com.programmers.lime.domains.item.implementation.MemberItemFolderValidato
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.implementation.MemberItemValidator;
 import com.programmers.lime.domains.item.model.MemberItemFavoriteInfo;
-import com.programmers.lime.domains.item.model.MemberItemIdRegistry;
+import com.programmers.lime.domains.item.model.FavoriteItemIdRegistry;
 import com.programmers.lime.global.util.MemberUtils;
 import com.programmers.lime.redis.implement.ItemRanking;
 
@@ -40,23 +40,23 @@ public class FavoriteItemService {
 
 	private final MemberItemFolderValidator memberItemFolderValidator;
 
-	public MemberItemCreateServiceResponse createMemberItems(
-		final MemberItemIdRegistry memberItemIdRegistry
+	public FavoriteItemCreateServiceResponse createFavoriteItems(
+		final FavoriteItemIdRegistry favoriteItemIdRegistry
 	) {
-		updateItemRanking(memberItemIdRegistry);
+		updateItemRanking(favoriteItemIdRegistry);
 
 		Long memberId = memberUtils.getCurrentMemberId();
 		List<Long> memberItemIds = memberItemAppender.appendMemberItems(
-			memberItemIdRegistry.itemIds(),
-			memberItemIdRegistry.folderId(),
+			favoriteItemIdRegistry.itemIds(),
+			favoriteItemIdRegistry.folderId(),
 			memberId
 		);
 
-		return new MemberItemCreateServiceResponse(memberItemIds);
+		return new FavoriteItemCreateServiceResponse(memberItemIds);
 	}
 
-	private void updateItemRanking(final MemberItemIdRegistry memberItemIdRegistry) {
-		List<String> items = memberItemIdRegistry.itemIds().stream()
+	private void updateItemRanking(final FavoriteItemIdRegistry favoriteItemIdRegistry) {
+		List<String> items = favoriteItemIdRegistry.itemIds().stream()
 			.map(itemReader::read)
 			.map(Item::getName)
 			.toList();
@@ -66,7 +66,7 @@ public class FavoriteItemService {
 		}
 	}
 
-	public MemberItemFavoritesGetResponse getMemberItemFavorites(
+	public FavoritesGetResponse getFavorites(
 		final Long folderId
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
@@ -74,10 +74,10 @@ public class FavoriteItemService {
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
 		List<MemberItemFavoriteInfo> memberItemFavoriteInfos = memberItemFavoriteReader.readObjects(folderId, memberId);
 
-		return new MemberItemFavoritesGetResponse(memberItemFavoriteInfos.size(), memberItemFavoriteInfos);
+		return new FavoritesGetResponse(memberItemFavoriteInfos.size(), memberItemFavoriteInfos);
 	}
 
-	public void moveMemberItems(
+	public void moveFavoriteItems(
 		final Long folderId,
 		final List<Long> memberItemIds
 	) {
@@ -89,7 +89,7 @@ public class FavoriteItemService {
 		memberItemAppender.moveMemberItems(folderId, memberItemIds);
 	}
 
-	public void removeMemberItems(
+	public void removeFavoriteItems(
 		final List<Long> memberItemIds
 	) {
 

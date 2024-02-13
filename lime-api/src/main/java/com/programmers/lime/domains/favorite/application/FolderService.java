@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MemberItemFolderService {
+public class FolderService {
 
 	private final MemberItemFolderAppender memberItemFolderAppender;
 
@@ -33,7 +33,7 @@ public class MemberItemFolderService {
 		memberItemFolderAppender.append(folderName, memberId);
 	}
 
-	public void modifyMemberItemFolder(final Long folderId, final String folderName) {
+	public void modifyFolder(final Long folderId, final String folderName) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
@@ -49,7 +49,7 @@ public class MemberItemFolderService {
 		memberItemFolderRemover.remove(memberId, folderId);
 	}
 
-	public void removeMemberItemFolders(final List<Long> folderIds) {
+	public void removeFolders(final List<Long> folderIds) {
 		if (folderIds == null || folderIds.isEmpty()) {
 			return;
 		}
