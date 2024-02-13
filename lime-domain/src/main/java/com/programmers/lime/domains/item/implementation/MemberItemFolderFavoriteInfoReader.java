@@ -65,7 +65,12 @@ public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 			.collect(Collectors.toCollection(ArrayList::new));
 
 		return MemberItemFavoriteMetadata.builder()
-			.memberItemFolderMetadata(new MemberItemFolderMetadata(imageUrls))
+			.memberItemFolderMetadata(
+				MemberItemFolderMetadata.builder()
+					.imageUrls(imageUrls)
+					.itemCount(memberItems.size())
+					.build()
+			)
 			.build();
 	}
 }
