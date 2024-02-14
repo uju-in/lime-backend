@@ -93,7 +93,7 @@ public class VoteController {
 	@GetMapping
 	public ResponseEntity<VoteGetByCursorResponse> getVotesByCursor(
 		@RequestParam final String hobby,
-		@RequestParam(name = "status") final String statusCondition,
+		@RequestParam(required = false, name = "status") final String statusCondition,
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
