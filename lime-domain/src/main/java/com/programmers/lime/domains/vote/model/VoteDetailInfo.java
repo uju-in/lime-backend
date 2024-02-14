@@ -9,6 +9,7 @@ import lombok.Builder;
 @Builder
 public record VoteDetailInfo(
 	Long id,
+	String hobby,
 	String content,
 	LocalDateTime startTime,
 	LocalDateTime endTime,
@@ -26,6 +27,7 @@ public record VoteDetailInfo(
 		return VoteDetailInfo.builder()
 			.id(vote.getId())
 			.content(vote.getContent())
+			.hobby(vote.getHobby().getName())
 			.startTime(vote.getStartTime())
 			.endTime(vote.getEndTime())
 			.maxParticipants(vote.getMaximumParticipants())
