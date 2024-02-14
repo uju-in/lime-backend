@@ -42,7 +42,7 @@ public class BucketItemRepository {
 	}
 
 	public void deleteAll(Long bucketId) {
-		String sql = "DELETE FROM BucketItems WHERE bucket_id = ?";
+		String sql = "DELETE FROM bucket_items WHERE bucket_id = ?";
 
 		jdbcTemplate.batchUpdate(sql,
 			new BatchPreparedStatementSetter() {
@@ -62,7 +62,7 @@ public class BucketItemRepository {
 	}
 
 	public List<BucketItem> findAllByBucketId(final Long bucketId) {
-		String sql = "SELECT * FROM BucketItems WHERE bucket_id = ?";
+		String sql = "SELECT * FROM bucket_items WHERE bucket_id = ?";
 		return jdbcTemplate.query(sql, bucketItemRowMapper(), bucketId);
 	}
 
