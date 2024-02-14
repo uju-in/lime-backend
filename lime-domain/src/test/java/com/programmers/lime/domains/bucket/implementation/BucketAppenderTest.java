@@ -17,7 +17,6 @@ import com.programmers.lime.domains.bucket.domain.BucketBuilder;
 import com.programmers.lime.domains.bucket.domain.BucketInfo;
 import com.programmers.lime.domains.bucket.repository.BucketItemRepository;
 import com.programmers.lime.domains.bucket.repository.BucketRepository;
-import com.programmers.lime.domains.item.domain.ItemBuilder;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 
 @ExtendWith(MockitoExtension.class)
