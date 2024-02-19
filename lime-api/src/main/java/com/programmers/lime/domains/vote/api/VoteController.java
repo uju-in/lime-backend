@@ -44,7 +44,7 @@ public class VoteController {
 
 	private final VoteService voteService;
 
-	@Operation(summary = "투표 생성", description = "VoteCreateRequest 을 이용하여 투표를 생성힙니다.")
+	@Operation(summary = "투표 생성", description = "취미, 투표 내용, 아이템1 id, 아이템2 id, 최대 투표자 수(옵션)를 이용하여 투표를 생성합니다.")
 	@PostMapping
 	public ResponseEntity<VoteCreateResponse> createVote(@Valid @RequestBody final VoteCreateRequest request) {
 		final Long voteId = voteService.createVote(request.toCreateVoteServiceRequest());
@@ -53,7 +53,7 @@ public class VoteController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "투표 참여", description = "VoteId, VoteParticipateRequest 을 이용하여 투표에 참여힙니다.")
+	@Operation(summary = "투표 참여", description = "투표 id와 아이템 id를 이용하여 투표에 (재)참여합니다.")
 	@PostMapping("/{voteId}/participation")
 	public ResponseEntity<Void> participateVote(
 		@PathVariable final Long voteId,
@@ -64,7 +64,7 @@ public class VoteController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "투표 참여 취소", description = "VoteId를 이용하여 투표 참여를 취소합니다.")
+	@Operation(summary = "투표 참여 취소", description = "투표의 참여를 취소합니다.")
 	@DeleteMapping("/{voteId}/cancel")
 	public ResponseEntity<Void> cancelVote(@PathVariable final Long voteId) {
 		voteService.cancelVote(voteId);
@@ -72,7 +72,7 @@ public class VoteController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "투표 삭제", description = "VoteId를 이용하여 투표를 삭제합니다.")
+	@Operation(summary = "투표 삭제", description = "투표를 삭제합니다.")
 	@DeleteMapping("/{voteId}")
 	public ResponseEntity<Void> deleteVote(@PathVariable final Long voteId) {
 		voteService.deleteVote(voteId);
@@ -80,7 +80,7 @@ public class VoteController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "투표 상세 조회", description = "VoteId를 이용하여 투표를 조회합니다.")
+	@Operation(summary = "투표 상세 조회", description = "투표 상세 정보를 조회합니다.")
 	@GetMapping("/{voteId}")
 	public ResponseEntity<VoteGetResponse> getVote(@PathVariable final Long voteId) {
 		final VoteGetServiceResponse serviceResponse = voteService.getVote(voteId);
@@ -89,7 +89,7 @@ public class VoteController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "투표 목록 조회(커서)", description = "취미, 상태 조건, 정렬 조건, 커서 요청 정보를 이용하여 투표를 조회합니다.")
+	@Operation(summary = "투표 목록 조회(커서)", description = "취미, 상태 조건, 정렬 조건, 커서 요청 정보에 해당하는 투표를 조회합니다.")
 	@GetMapping
 	public ResponseEntity<VoteGetByCursorResponse> getVotesByCursor(
 		@RequestParam final String hobby,
@@ -108,7 +108,7 @@ public class VoteController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "투표 검색", description = "keyword를 이용하여 투표를 검색합니다.")
+	@Operation(summary = "투표 검색", description = "투표 아이템명에 키워드가 포함된 투표를 검색합니다.")
 	@GetMapping("/search")
 	public ResponseEntity<VoteGetByKeywordResponse> getVotesByKeyword(
 		@RequestParam final String keyword,
@@ -121,7 +121,7 @@ public class VoteController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "랭킹 조회", description = "진행 중인 투표의 랭킹을 TOP 10까지 조회합니다.")
+	@Operation(summary = "진행 중인 투표 랭킹 조회", description = "진행 중인 투표의 랭킹을 취미별로 TOP 6까지 조회합니다.")
 	@GetMapping("/ranking")
 	public ResponseEntity<VoteRankResponse> rankVote(@RequestParam final String hobby) {
 		final List<VoteRankingInfo> rankingInfos = voteService.rankVote(Hobby.from(hobby));
