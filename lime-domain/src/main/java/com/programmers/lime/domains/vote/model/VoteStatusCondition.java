@@ -15,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum VoteStatusCondition {
-	INPROGRESS("inprogress"),
-	COMPLETED("completed"),
 	POSTED("posted"),
 	PARTICIPATED("participated");
 
@@ -30,6 +28,10 @@ public enum VoteStatusCondition {
 	private final String name;
 
 	public static VoteStatusCondition from(final String name) {
+		if (name == null) {
+			return null;
+		}
+
 		if (STATUS_CONDITION_MAP.containsKey(name)) {
 			return STATUS_CONDITION_MAP.get(name);
 		}

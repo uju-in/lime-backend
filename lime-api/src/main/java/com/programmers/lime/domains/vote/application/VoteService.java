@@ -130,12 +130,8 @@ public class VoteService {
 	) {
 		final Long memberId = memberUtils.getCurrentMemberId();
 
-		if (memberId == null && statusCondition.isRequiredLogin()) {
+		if (memberId == null && statusCondition != null && statusCondition.isRequiredLogin()) {
 			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
-		if (sortCondition.isImpossibleSort(statusCondition)) {
-			throw new BusinessException(ErrorCode.VOTE_CANNOT_SORT);
 		}
 
 		return voteReader.readByCursor(
@@ -160,7 +156,7 @@ public class VoteService {
 
 		final CursorSummary<VoteSummary> cursorSummary = voteReader.readByCursor(
 			null,
-			VoteStatusCondition.COMPLETED,
+			null,
 			VoteSortCondition.RECENT,
 			keyword,
 			parameters,

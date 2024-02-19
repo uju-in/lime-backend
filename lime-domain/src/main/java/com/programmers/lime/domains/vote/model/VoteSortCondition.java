@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum VoteSortCondition {
 	POPULARITY("popularity"),
-	RECENT("recent");
+	RECENT("recent"),
+	CLOSED("closed"),
+	;
 
 	private static final Map<String, VoteSortCondition> SORT_CONDITION_MAP;
 
@@ -37,9 +39,5 @@ public enum VoteSortCondition {
 		}
 
 		throw new BusinessException(ErrorCode.VOTE_BAD_SORT_CONDITION);
-	}
-
-	public boolean isImpossibleSort(final VoteStatusCondition statusCondition) {
-		return this == VoteSortCondition.POPULARITY && statusCondition != VoteStatusCondition.COMPLETED;
 	}
 }
