@@ -1,6 +1,7 @@
 package com.programmers.lime.domains.item.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,5 +31,12 @@ public class MemberItemFolderReader {
 		final Long memberId
 	) {
 		return memberItemFolderRepository.findMemberItemFoldersByMemberId(memberId);
+	}
+
+	public Optional<Long> getIdByMemberIdAndName(
+		final Long memberId,
+		final String folderName
+	) {
+		return memberItemFolderRepository.getIdByMemberIdAndName(memberId, folderName);
 	}
 }

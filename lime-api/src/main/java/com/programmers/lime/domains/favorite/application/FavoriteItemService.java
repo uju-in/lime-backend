@@ -11,6 +11,8 @@ import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemFavoriteReader;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderAppender;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderReader;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderValidator;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.implementation.MemberItemValidator;
@@ -41,19 +43,36 @@ public class FavoriteItemService {
 
 	private final MemberItemFolderValidator memberItemFolderValidator;
 
+	private final MemberItemFolderReader memberItemFolderReader;
+
+	private final MemberItemFolderAppender memberItemFolderAppender;
+
+	private static final String DEFAULT_FOLDER_NAME = "default";
+
 	public FavoriteItemCreateServiceResponse createFavoriteItems(
 		final FavoriteItemIdRegistry favoriteItemIdRegistry
 	) {
 		updateItemRanking(favoriteItemIdRegistry);
 
 		Long memberId = memberUtils.getCurrentMemberId();
+		Long folderId = favoriteItemIdRegistry.folderId();
+		if(folderId == null) {
+			folderId = getOrCreateDefaultFolderId(memberId);
+		}
+
 		List<Long> memberItemIds = memberItemAppender.appendMemberItems(
 			favoriteItemIdRegistry.itemIds(),
-			favoriteItemIdRegistry.folderId(),
+			folderId,
 			memberId
 		);
 
 		return new FavoriteItemCreateServiceResponse(memberItemIds);
+	}
+
+	private Long getOrCreateDefaultFolderId(Long memberId) {
+		return memberItemFolderReader
+			.getIdByMemberIdAndName(memberId, DEFAULT_FOLDER_NAME)
+			.orElseGet(() -> memberItemFolderAppender.append(DEFAULT_FOLDER_NAME, memberId));
 	}
 
 	private void updateItemRanking(final FavoriteItemIdRegistry favoriteItemIdRegistry) {
