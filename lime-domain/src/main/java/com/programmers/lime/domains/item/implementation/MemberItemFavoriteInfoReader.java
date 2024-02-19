@@ -30,6 +30,11 @@ public class MemberItemFavoriteInfoReader implements IFavoriteReader {
 			.toList();
 	}
 
+	@Override
+	public FavoriteType getFavoriteType() {
+		return FavoriteType.ITEM;
+	}
+
 	private MemberItemFavoriteInfo mapToMemberItemObjectInfo(final MemberItem memberItem) {
 		return MemberItemFavoriteInfo.builder()
 			.favoriteId(memberItem.getId())
