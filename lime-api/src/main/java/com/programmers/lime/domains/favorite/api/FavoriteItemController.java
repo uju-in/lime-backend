@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.lime.common.model.FavoriteType;
 import com.programmers.lime.domains.favorite.api.dto.request.FavoriteRemoveRequest;
 import com.programmers.lime.domains.favorite.api.dto.request.FavoriteItemCreateRequest;
 import com.programmers.lime.domains.favorite.api.dto.request.FolderCreateRequest;
@@ -54,10 +55,12 @@ public class FavoriteItemController {
 	@Operation(summary = "찜 목록 조회", description = "찜 목록을 조회 합니다.")
 	@GetMapping()
 	public ResponseEntity<FavoritesGetResponse> getFavorites(
-		@RequestParam(required = false) final Long folderId
+		@RequestParam(required = false) final Long folderId,
+		@RequestParam(required = false) final String favoriteTypeCondition
 	) {
 		FavoritesGetResponse response = favoriteItemService.getFavorites(
-			folderId
+			folderId,
+			FavoriteType.from(favoriteTypeCondition)
 		);
 
 		return ResponseEntity.ok(response);

@@ -44,6 +44,11 @@ public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 			.toList();
 	}
 
+	@Override
+	public FavoriteType getFavoriteType() {
+		return FavoriteType.FOLDER;
+	}
+
 	private MemberItemFavoriteInfo mapToMemberItemObjectInfo(final MemberItemFolder memberItemFolder) {
 		return MemberItemFavoriteInfo.builder()
 			.favoriteId(memberItemFolder.getId())

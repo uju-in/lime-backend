@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.programmers.lime.common.model.FavoriteType;
 import com.programmers.lime.domains.favorite.api.dto.response.FavoritesGetResponse;
 import com.programmers.lime.domains.favorite.application.dto.FavoriteItemCreateServiceResponse;
 import com.programmers.lime.domains.item.domain.Item;
@@ -67,12 +68,14 @@ public class FavoriteItemService {
 	}
 
 	public FavoritesGetResponse getFavorites(
-		final Long folderId
+		final Long folderId,
+		final FavoriteType favoriteTypeCondition
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
-		List<MemberItemFavoriteInfo> memberItemFavoriteInfos = memberItemFavoriteReader.readObjects(folderId, memberId);
+		List<MemberItemFavoriteInfo> memberItemFavoriteInfos =
+			memberItemFavoriteReader.readObjects(folderId, memberId, favoriteTypeCondition);
 
 		return new FavoritesGetResponse(memberItemFavoriteInfos.size(), memberItemFavoriteInfos);
 	}
