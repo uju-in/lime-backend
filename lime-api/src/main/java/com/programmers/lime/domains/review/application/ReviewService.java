@@ -153,6 +153,11 @@ public class ReviewService {
 	}
 
 	public void removeByReviewImageUrls(final List<String> reviewImageUrls) {
+
+		if(reviewImageUrls == null) {
+			return;
+		}
+
 		try {
 			for (String reviewImageUrl : reviewImageUrls) {
 				s3Manager.deleteObjectByUrl(reviewImageUrl);
