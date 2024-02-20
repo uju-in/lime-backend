@@ -20,7 +20,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework:spring-tx'
 
-
     implementation project(':lime-domain')
     implementation project(':lime-common')
     implementation project(':lime-infrastructure')
@@ -37,15 +36,12 @@ dependencies {
     testImplementation(testFixtures(project(':lime-domain')))
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // Cache
+    // cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation "com.github.ben-manes.caffeine:caffeine:3.1.8"
 
-    //oauth2
+    // oauth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // 마이크로미터 프로메테우스 구현체
-    implementation 'org.springframework.boot:spring-boot-starter-actuator' // 엑츄에이터
 }
 
 jar {
