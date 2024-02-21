@@ -189,7 +189,7 @@ public class VoteService {
 		final Item item2 = itemReader.read(vote.getItem2Id());
 
 		return VoteRankingInfo.builder()
-			.id(vote.getId())
+			.id(Long.MAX_VALUE - vote.getId())
 			.item1Image(item1.getImage())
 			.item2Image(item2.getImage())
 			.build();

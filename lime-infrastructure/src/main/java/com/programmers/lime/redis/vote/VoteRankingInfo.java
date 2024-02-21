@@ -12,7 +12,7 @@ public record VoteRankingInfo(
 	int participants
 ) {
 	public static VoteRankingInfo from(final ZSetOperations.TypedTuple<Object> typedTuple) {
-		final Long id = ((VoteRankingInfo)typedTuple.getValue()).id();
+		final Long id = Long.MAX_VALUE - ((VoteRankingInfo)typedTuple.getValue()).id();
 		final String item1Image = ((VoteRankingInfo)typedTuple.getValue()).item1Image();
 		final String item2Image = ((VoteRankingInfo)typedTuple.getValue()).item2Image();
 		final int participants = typedTuple.getScore().intValue();
