@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberItemFolderValidator {
 
 	private final MemberItemFolderRepository memberItemFolderRepository;
+	private static final String DEFAULT_FOLDER_NAME = "default";
 
 	public void validateExsitMemberItemFolder(
 		final Long memberItemFolderId,
@@ -30,6 +31,17 @@ public class MemberItemFolderValidator {
 
 		if (!isExsistMemberItemFolder) {
 			throw new BusinessException(ErrorCode.MEMBER_ITEM_FOLDER_NOT_FOUND);
+		}
+	}
+
+	public void validateFolderName(final String folderName) {
+
+		if (folderName == null || folderName.isEmpty()) {
+			throw new BusinessException(ErrorCode.MEMBER_ITEM_FOLDER_NAME_IS_EMPTY);
+		}
+
+		if (folderName.equals(DEFAULT_FOLDER_NAME)) {
+			throw new BusinessException(ErrorCode.MEMBER_ITEM_FOLDER_NAME_IS_DEFAULT);
 		}
 	}
 }
