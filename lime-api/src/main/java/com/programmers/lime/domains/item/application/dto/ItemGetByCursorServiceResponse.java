@@ -5,7 +5,7 @@ import com.programmers.lime.domains.item.model.ItemCursorSummary;
 
 public record ItemGetByCursorServiceResponse(
 
-	int itemTotalCount,
+	Long itemTotalCount,
 	CursorSummary<ItemCursorSummary> cursorSummary
 ) {
 }

@@ -69,7 +69,7 @@ public class ItemController {
 	@Operation(summary = "아이템 목록조회", description = "키워드, 취미를 이용하여 아이템 목록조회 합니다.")
 	@GetMapping("/search")
 	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
-		@RequestParam final String keyword,
+		@RequestParam(required = false) final String keyword,
 		@ModelAttribute("request") @Valid final CursorRequest request,
 		@RequestParam(required = false) final String itemSortCondition,
 		@RequestParam(required = false) final String hobbyName

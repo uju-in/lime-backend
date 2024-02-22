@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.inventory.model.InventoryReviewItemSummary;
 import com.programmers.lime.domains.item.domain.Item;
+import com.programmers.lime.domains.item.repository.ItemCustomRepository;
 import com.programmers.lime.domains.item.repository.ItemRepository;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
@@ -20,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class ItemReader {
 
 	private final ItemRepository itemRepository;
+
+	private final ItemCustomRepository itemCustomRepository;
 
 	public Item read(final Long itemId) {
 		return itemRepository.findById(itemId)
@@ -46,16 +49,6 @@ public class ItemReader {
 		return itemRepository.existsItemsByUrl(itemURL);
 	}
 
-	public int getItemTotalCountByKeyword(final String keyword, final Hobby hobby) {
-		String trimmedKeyword = keyword.trim();
-
-		if (trimmedKeyword.isEmpty()) {
-			return 0;
-		}
-
-		return itemRepository.countItemByKeywordAndHobby(trimmedKeyword, hobby);
-	}
-
 	public boolean doesNotExist(final Long itemId) {
 		return !itemRepository.existsById(itemId);
   }
@@ -66,5 +59,9 @@ public class ItemReader {
 
 	public List<Item> readAll(final List<Long> itemIds) {
 		return itemRepository.findAllByIdIn(itemIds);
+	}
+
+	public Long getItemTotalCountByKeyword(final String keyword, final Hobby hobby) {
+		return itemCustomRepository.countItem(keyword, hobby);
 	}
 }

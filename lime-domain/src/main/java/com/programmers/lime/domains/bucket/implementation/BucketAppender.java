@@ -1,7 +1,6 @@
 package com.programmers.lime.domains.bucket.implementation;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,6 @@ import com.programmers.lime.domains.bucket.domain.BucketInfo;
 import com.programmers.lime.domains.bucket.domain.BucketItem;
 import com.programmers.lime.domains.bucket.repository.BucketItemRepository;
 import com.programmers.lime.domains.bucket.repository.BucketRepository;
-import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
