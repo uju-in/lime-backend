@@ -1,13 +1,13 @@
 package com.programmers.lime.domains.item.implementation;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.lime.domains.item.domain.MemberItemFolder;
 import com.programmers.lime.domains.item.repository.MemberItemFolderRepository;
+import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
 
@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 public class MemberItemFolderReader {
 
 	private final MemberItemFolderRepository memberItemFolderRepository;
+
+	public final MemberItemFolderAppender memberItemFolderAppender;
 
 	public MemberItemFolder read(
 		final Long folderId
@@ -33,10 +35,24 @@ public class MemberItemFolderReader {
 		return memberItemFolderRepository.findMemberItemFoldersByMemberId(memberId);
 	}
 
-	public Optional<Long> getIdByMemberIdAndName(
+	public List<Long> getIdByMemberIdAndName(
 		final Long memberId,
 		final String folderName
 	) {
 		return memberItemFolderRepository.getIdByMemberIdAndName(memberId, folderName);
+	}
+
+	public Long getDefaultFolderId(final Long memberId, final String defaultFolderName) {
+		List<Long> folderIds = getIdByMemberIdAndName(memberId, defaultFolderName);
+
+		if(folderIds.isEmpty()) {
+			return memberItemFolderAppender.append(defaultFolderName, memberId);
+		}
+
+		if(folderIds.size() > 1) {
+			throw new BusinessException(ErrorCode.FAVORITE_DEFAULT_FOLDER_DUPLICATED);
+		}
+
+		return folderIds.get(0);
 	}
 }

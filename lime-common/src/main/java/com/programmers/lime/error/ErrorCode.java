@@ -125,7 +125,7 @@ public enum ErrorCode {
 	// MemberItemFolder
 	MEMBER_ITEM_FOLDER_NOT_FOUND("MEMBER_ITEM_FOLDER_001", "폴더를 찾을 수 없습니다."),
 	MEMBER_ITEM_FOLDER_NOT_MINE("MEMBER_ITEM_FOLDER_002", "나의 아이템 폴더가 아닙니다."),
-
+	FAVORITE_DEFAULT_FOLDER_DUPLICATED("MEMBER_ITEM_FOLDER_003", "기본 폴더가 중복되었습니다."),
 	// Friendship
 	FRIENDSHIP_NOT_FOUND("FRIENDSHIP_001", "친구 관계를 찾을 수 없습니다."),
 	FRIENDSHIP_ALREADY_EXISTS("FRIENDSHIP_002", "이미 친구 관계가 존재합니다."),
