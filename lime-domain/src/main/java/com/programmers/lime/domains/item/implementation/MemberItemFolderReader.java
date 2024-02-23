@@ -42,6 +42,7 @@ public class MemberItemFolderReader {
 		return memberItemFolderRepository.getIdByMemberIdAndName(memberId, folderName);
 	}
 
+	@Transactional
 	public Long getDefaultFolderId(final Long memberId, final String defaultFolderName) {
 		List<Long> folderIds = getIdByMemberIdAndName(memberId, defaultFolderName);
 
