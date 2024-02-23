@@ -45,6 +45,8 @@ public enum ErrorCode {
 	MEMBER_INTRODUCTION_MBTI_BAD_REQUEST("MEMBER_014", "잘못된 MBTI 값입니다."),
 	MEMBER_INTRODUCTION_FAVORABILITY_BAD_REQUEST("MEMBER_015", "잘못된 선호도 값입니다."),
 	MEMBER_INTRODUCTION_CAREER_BAD_VALUE("MEMBER_016", "경력은 최소 0개월 이상이어야 합니다."),
+	MEMBER_ITEM_FOLDER_NAME_IS_EMPTY("MEMBER_ITEM_FOLDER_005", "폴더 이름은 비어있을 수 없습니다."),
+	MEMBER_ITEM_FOLDER_NAME_IS_DEFAULT("MEMBER_ITEM_FOLDER_006", "폴더 이름은 기본 폴더 이름과 같을 수 없습니다."),
 
 	// Item
 	ITEM_MARKET_NOT_FOUND("ITEM_001", "지원하지 않는 아이템 URL 입니다."),
@@ -125,7 +127,7 @@ public enum ErrorCode {
 	// MemberItemFolder
 	MEMBER_ITEM_FOLDER_NOT_FOUND("MEMBER_ITEM_FOLDER_001", "폴더를 찾을 수 없습니다."),
 	MEMBER_ITEM_FOLDER_NOT_MINE("MEMBER_ITEM_FOLDER_002", "나의 아이템 폴더가 아닙니다."),
-
+	FAVORITE_DEFAULT_FOLDER_DUPLICATED("MEMBER_ITEM_FOLDER_003", "기본 폴더가 중복되었습니다."),
 	// Friendship
 	FRIENDSHIP_NOT_FOUND("FRIENDSHIP_001", "친구 관계를 찾을 수 없습니다."),
 	FRIENDSHIP_ALREADY_EXISTS("FRIENDSHIP_002", "이미 친구 관계가 존재합니다."),

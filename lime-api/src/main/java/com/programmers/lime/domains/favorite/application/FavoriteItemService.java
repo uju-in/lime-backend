@@ -1,6 +1,7 @@
 package com.programmers.lime.domains.favorite.application;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.implementation.ItemReader;
 import com.programmers.lime.domains.item.implementation.MemberItemAppender;
 import com.programmers.lime.domains.item.implementation.MemberItemFavoriteReader;
+import com.programmers.lime.domains.item.implementation.MemberItemFolderReader;
 import com.programmers.lime.domains.item.implementation.MemberItemFolderValidator;
 import com.programmers.lime.domains.item.implementation.MemberItemRemover;
 import com.programmers.lime.domains.item.implementation.MemberItemValidator;
@@ -41,15 +43,24 @@ public class FavoriteItemService {
 
 	private final MemberItemFolderValidator memberItemFolderValidator;
 
+	private final MemberItemFolderReader memberItemFolderReader;
+
+	private static final String DEFAULT_FOLDER_NAME = "default";
+
 	public FavoriteItemCreateServiceResponse createFavoriteItems(
 		final FavoriteItemIdRegistry favoriteItemIdRegistry
 	) {
 		updateItemRanking(favoriteItemIdRegistry);
 
 		Long memberId = memberUtils.getCurrentMemberId();
+		Long folderId = favoriteItemIdRegistry.folderId();
+		if(Objects.isNull(folderId) ) {
+			folderId = memberItemFolderReader.getDefaultFolderId(memberId, DEFAULT_FOLDER_NAME);
+		}
+
 		List<Long> memberItemIds = memberItemAppender.appendMemberItems(
 			favoriteItemIdRegistry.itemIds(),
-			favoriteItemIdRegistry.folderId(),
+			folderId,
 			memberId
 		);
 
