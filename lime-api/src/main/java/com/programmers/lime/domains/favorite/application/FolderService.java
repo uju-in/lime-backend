@@ -30,6 +30,8 @@ public class FolderService {
 		final String folderName
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
+
+		memberItemFolderValidator.validateFolderName(folderName);
 		memberItemFolderAppender.append(folderName, memberId);
 	}
 
