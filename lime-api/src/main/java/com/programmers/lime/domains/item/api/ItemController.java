@@ -1,5 +1,6 @@
 package com.programmers.lime.domains.item.api;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.lime.domains.item.api.dto.request.ItemEnrollRequest;
+import com.programmers.lime.domains.item.api.dto.request.ItemSearchRequest;
 import com.programmers.lime.domains.item.api.dto.response.ItemEnrollResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetByCursorResponse;
 import com.programmers.lime.domains.item.api.dto.response.ItemGetNamesResponse;
@@ -69,16 +71,14 @@ public class ItemController {
 	@Operation(summary = "아이템 목록조회", description = "키워드, 취미를 이용하여 아이템 목록조회 합니다.")
 	@GetMapping("/search")
 	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
-		@RequestParam final String keyword,
-		@ModelAttribute("request") @Valid final CursorRequest request,
-		@RequestParam(required = false) final String itemSortCondition,
-		@RequestParam(required = false) final String hobbyName
+		@ParameterObject @ModelAttribute("request") @Valid final CursorRequest request,
+		@ParameterObject @ModelAttribute @Valid final ItemSearchRequest searchRequest
 	) {
 		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
-			keyword,
+			searchRequest.keyword(),
 			request.toParameters(),
-			itemSortCondition,
-			hobbyName
+			searchRequest.itemSortCondition(),
+			searchRequest.hobbyName()
 		);
 		ItemGetByCursorResponse response = ItemGetByCursorResponse.from(serviceResponse);
 

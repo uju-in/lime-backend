@@ -101,7 +101,7 @@ public class ItemService {
 		);
 
 		// 요청한 조건에 해당하는 모든 아이템의 수를 itemTotalCount에 저장
-		int itemTotalCount = itemReader.getItemTotalCountByKeyword(keyword, hobby);
+		Long itemTotalCount = itemReader.getItemTotalCountByKeyword(keyword, hobby);
 
 		return new ItemGetByCursorServiceResponse(
 			itemTotalCount,
