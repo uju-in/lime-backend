@@ -131,13 +131,20 @@ class VoteServiceTest extends IntegrationTest {
 	@Transactional // 지연 로딩을 위해 필요
 	@Nested
 	class ParticipateVote {
+
+		Long voteId = 1L;
+		Vote vote;
+
+		@BeforeEach
+		void setUp() {
+			vote = voteSetup.saveOne(voteId, 1L, 2L);
+		}
+
 		@Test
 		@DisplayName("투표에 참여한다.")
 		void participateVoteTest() {
 			// given
-			final Long voteId = 1L;
 			final Long itemId = 1L;
-			final Vote vote = voteSetup.saveOne(voteId, 1L, 2L);
 
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(1L);
@@ -161,9 +168,7 @@ class VoteServiceTest extends IntegrationTest {
 		@DisplayName("투표에 재참여한다.")
 		void reParticipateVoteTest() {
 			// given
-			final Long voteId = 1L;
 			final Long itemId = 2L;
-			final Vote vote = voteSetup.saveOne(voteId, 1L, 2L);
 			final Voter voter = voterSetup.saveOne(vote, 1L, 1L);
 
 			given(memberUtils.getCurrentMemberId())
@@ -184,9 +189,6 @@ class VoteServiceTest extends IntegrationTest {
 		@DisplayName("종료된 투표에 참여하려고 하면 예외를 발생시킨다.")
 		void participateVoteWithEndedVoteTest() {
 			// given
-			final Long voteId = 1L;
-			final Vote vote = voteSetup.saveOne(voteId, 1L, 2L);
-
 			vote.close(LocalDateTime.now());
 
 			given(memberUtils.getCurrentMemberId())
@@ -205,9 +207,7 @@ class VoteServiceTest extends IntegrationTest {
 		@DisplayName("투표에 없는 아이템에 참여하려고 하면 예외를 발생시킨다.")
 		void participateVoteWithNotExistItemTest() {
 			// given
-			final Long voteId = 1L;
 			final Long itemId = 3L;
-			voteSetup.saveOne(voteId, 1L, 2L);
 
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(1L);
