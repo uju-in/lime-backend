@@ -47,4 +47,8 @@ public class MemberItem extends BaseEntity {
 		this.item = Objects.requireNonNull(item);
 		this.folderId = folderId;
 	}
+
+	public void moveFolder(final Long folderId) {
+		this.folderId = folderId;
+	}
 }

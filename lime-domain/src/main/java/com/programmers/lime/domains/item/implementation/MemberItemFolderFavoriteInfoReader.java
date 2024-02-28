@@ -11,7 +11,7 @@ import com.programmers.lime.common.model.FavoriteType;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
 import com.programmers.lime.domains.item.domain.MemberItemFolder;
-import com.programmers.lime.domains.item.model.MemberItemFolderMetadata;
+import com.programmers.lime.domains.item.model.FolderMetadata;
 import com.programmers.lime.domains.item.model.MemberItemFavoriteInfo;
 import com.programmers.lime.domains.item.model.MemberItemFavoriteMetadata;
 
@@ -44,6 +44,11 @@ public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 			.toList();
 	}
 
+	@Override
+	public FavoriteType getFavoriteType() {
+		return FavoriteType.FOLDER;
+	}
+
 	private MemberItemFavoriteInfo mapToMemberItemObjectInfo(final MemberItemFolder memberItemFolder) {
 		return MemberItemFavoriteInfo.builder()
 			.favoriteId(memberItemFolder.getId())
@@ -65,7 +70,12 @@ public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 			.collect(Collectors.toCollection(ArrayList::new));
 
 		return MemberItemFavoriteMetadata.builder()
-			.memberItemFolderMetadata(new MemberItemFolderMetadata(imageUrls))
+			.folderMetadata(
+				FolderMetadata.builder()
+					.imageUrls(imageUrls)
+					.itemCount(memberItems.size())
+					.build()
+			)
 			.build();
 	}
 }

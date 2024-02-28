@@ -63,8 +63,8 @@ public class SecurityConfiguration {
 					.requestMatchers(HttpMethod.GET, "/api/votes").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/votes/{voteId}").permitAll()
 
-					.requestMatchers(HttpMethod.GET, "/api/items/{itemId}/reviews").permitAll()
-					.requestMatchers(HttpMethod.GET, "/api/items/{itemId}").permitAll()
+					.requestMatchers("/api/reviews/**").permitAll()
+					.requestMatchers("/api/items/{itemId}").permitAll()
 					.requestMatchers("/api/items/search").permitAll()
 					.requestMatchers("/api/items/item-names").permitAll()
 
@@ -77,7 +77,7 @@ public class SecurityConfiguration {
 
 					.requestMatchers("/api/hobbies").permitAll()
 					.requestMatchers("/login").permitAll()
-
+					.requestMatchers("/actuator/**").permitAll()
 					.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session

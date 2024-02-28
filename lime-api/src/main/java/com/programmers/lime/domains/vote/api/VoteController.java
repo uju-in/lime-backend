@@ -29,7 +29,7 @@ import com.programmers.lime.domains.vote.model.VoteSortCondition;
 import com.programmers.lime.domains.vote.model.VoteStatusCondition;
 import com.programmers.lime.domains.vote.model.VoteSummary;
 import com.programmers.lime.global.cursor.CursorRequest;
-import com.programmers.lime.redis.vote.VoteRedis;
+import com.programmers.lime.redis.vote.VoteRankingInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -93,7 +93,7 @@ public class VoteController {
 	@GetMapping
 	public ResponseEntity<VoteGetByCursorResponse> getVotesByCursor(
 		@RequestParam final String hobby,
-		@RequestParam(name = "status") final String statusCondition,
+		@RequestParam(required = false, name = "status") final String statusCondition,
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute @Valid final CursorRequest request
 	) {
@@ -123,9 +123,9 @@ public class VoteController {
 
 	@Operation(summary = "랭킹 조회", description = "진행 중인 투표의 랭킹을 TOP 10까지 조회합니다.")
 	@GetMapping("/ranking")
-	public ResponseEntity<VoteRankResponse> rankVote() {
-		final List<VoteRedis> voteRanking = voteService.rankVote();
-		final VoteRankResponse response = VoteRankResponse.from(voteRanking);
+	public ResponseEntity<VoteRankResponse> rankVote(@RequestParam final String hobby) {
+		final List<VoteRankingInfo> rankingInfos = voteService.rankVote(Hobby.from(hobby));
+		final VoteRankResponse response = VoteRankResponse.from(rankingInfos);
 
 		return ResponseEntity.ok(response);
 	}

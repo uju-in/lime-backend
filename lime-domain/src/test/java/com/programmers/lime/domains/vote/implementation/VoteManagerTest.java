@@ -29,6 +29,61 @@ class VoteManagerTest {
 	@Mock
 	private VoterRepository voterRepository;
 
+	@Nested
+	@DisplayName("투표 참여 테스트")
+	class ParticipateTest {
+		@Test
+		@DisplayName("투표에 참여한다.")
+		void participateTest() {
+			// given
+			final Vote vote = VoteBuilder.build();
+			final Long memberId = 1L;
+			final Long itemId = 1L;
+
+			// when
+			voteManager.participate(vote, memberId, itemId);
+
+			// then
+			assertThat(vote.getVoters()).hasSize(1);
+			assertThat(vote.isVoting()).isTrue();
+		}
+
+		@Test
+		@DisplayName("투표에 참여하고 참여자가 최대인원이 되면 투표를 종료한다.")
+		void participateAndCloseTest() {
+			// given
+			final Vote vote = VoteBuilder.build();
+			final Long memberId = 1L;
+			final Long itemId = 1L;
+
+			vote.addVoter(VoterBuilder.build(vote, 2L, 1L));
+			vote.addVoter(VoterBuilder.build(vote, 3L, 2L));
+
+			// when
+			voteManager.participate(vote, memberId, itemId);
+
+			// then
+			assertThat(vote.getVoters()).hasSize(3);
+			assertThat(vote.isVoting()).isFalse();
+		}
+	}
+
+	@Test
+	@DisplayName("재참여한다.")
+	void reParticipateTest() {
+		// given
+		final Vote vote = VoteBuilder.build();
+		final Long originSelectedItemId = 1L;
+		final Long newSelectedItemId = 2L;
+		final Voter voter = VoterBuilder.build(vote, 1L, originSelectedItemId);
+
+		// when
+		voteManager.reParticipate(newSelectedItemId, voter);
+
+		// then
+		assertThat(voter.getItemId()).isEqualTo(newSelectedItemId);
+	}
+
 	@Test
 	@DisplayName("투표를 취소한다.")
 	void cancelTest() {
@@ -39,69 +94,14 @@ class VoteManagerTest {
 
 		vote.addVoter(voter);
 
-		will(invocation -> {
-			final Vote givenVote = invocation.getArgument(0);
-			final Long givenMemberId = invocation.getArgument(1);
-			givenVote.getVoters().removeIf(savedVoter -> savedVoter.getMemberId().equals(givenMemberId));
-			return null;
-		}).given(voterRepository).deleteByVoteAndMemberId(any(Vote.class), anyLong());
+		given(voterReader.read(any(Vote.class), anyLong()))
+			.willReturn(voter);
+		doNothing().when(voterRepository).delete(voter);
 
 		// when
 		voteManager.cancel(vote, memberId);
 
 		// then
-		assertThat(vote.getVoters()).doesNotContain(voter);
-	}
-
-	@Nested
-	@DisplayName("투표에")
-	class ParticipateTest {
-
-		@Test
-		@DisplayName("처음 참여한다.")
-		void participateFirstTest() {
-			// given
-			final Vote vote = VoteBuilder.build();
-			final Long memberId = 1L;
-			final Long itemId = 1L;
-			final Voter voter = VoterBuilder.build(vote, memberId, itemId);
-
-			given(voterReader.read(any(Vote.class), anyLong(), anyLong()))
-				.willReturn(voter);
-
-			// when
-			voteManager.participate(vote, memberId, itemId);
-
-			// then
-			assertThat(voter.getVote()).isEqualTo(vote);
-			assertThat(voter.getMemberId()).isEqualTo(memberId);
-			assertThat(voter.getItemId()).isEqualTo(itemId);
-			assertThat(vote.getVoters()).containsOnly(voter);
-		}
-
-		@Test
-		@DisplayName("재참여한다.")
-		void reParticipateTest() {
-			// given
-			final Vote vote = VoteBuilder.build();
-			final Long memberId = 1L;
-			final Long originSelectedItemId = 1L;
-			final Long newSelectedItemId = 2L;
-			final Voter voter = VoterBuilder.build(vote, memberId, originSelectedItemId);
-
-			vote.addVoter(voter);
-
-			given(voterReader.read(any(Vote.class), anyLong(), anyLong()))
-				.willReturn(voter);
-
-			// when
-			voteManager.participate(vote, memberId, newSelectedItemId);
-
-			// then
-			assertThat(voter.getVote()).isEqualTo(vote);
-			assertThat(voter.getMemberId()).isEqualTo(memberId);
-			assertThat(voter.getItemId()).isEqualTo(newSelectedItemId);
-			assertThat(vote.getVoters()).containsOnly(voter);
-		}
+		then(voterRepository).should().delete(voter);
 	}
 }

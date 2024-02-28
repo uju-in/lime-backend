@@ -62,4 +62,14 @@ public class MemberItemAppender {
 			.map(itemReader::read)
 			.toList();
 	}
+
+	public void moveMemberItems(
+		final Long folderId,
+		final List<Long> memberItemIds
+	) {
+		List<MemberItem> memberItems = memberItemRepository.findAllById(memberItemIds);
+		memberItems.forEach(memberItem -> memberItem.moveFolder(folderId));
+
+		memberItemRepository.saveAll(memberItems);
+	}
 }

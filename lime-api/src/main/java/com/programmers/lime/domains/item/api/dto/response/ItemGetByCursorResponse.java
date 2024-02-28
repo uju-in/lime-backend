@@ -8,7 +8,7 @@ import com.programmers.lime.domains.item.model.ItemCursorSummary;
 
 public record ItemGetByCursorResponse(
 	String nextCursorId,
-	int itemTotalCount,
+	Long itemTotalCount,
 	int totalCount,
 	List<ItemCursorSummary> items
 ) {

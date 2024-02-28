@@ -1,20 +1,14 @@
 package com.programmers.lime.domains.bucket.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.BaseEntity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;

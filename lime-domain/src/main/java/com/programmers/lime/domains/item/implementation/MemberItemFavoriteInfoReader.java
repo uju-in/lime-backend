@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.programmers.lime.common.model.FavoriteType;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.MemberItem;
-import com.programmers.lime.domains.item.model.MemberItemMetadata;
+import com.programmers.lime.domains.item.model.FavoriteItemMetadata;
 import com.programmers.lime.domains.item.model.MemberItemFavoriteInfo;
 import com.programmers.lime.domains.item.model.MemberItemFavoriteMetadata;
 import com.programmers.lime.domains.review.implementation.ReviewReader;
@@ -30,6 +30,11 @@ public class MemberItemFavoriteInfoReader implements IFavoriteReader {
 			.toList();
 	}
 
+	@Override
+	public FavoriteType getFavoriteType() {
+		return FavoriteType.ITEM;
+	}
+
 	private MemberItemFavoriteInfo mapToMemberItemObjectInfo(final MemberItem memberItem) {
 		return MemberItemFavoriteInfo.builder()
 			.favoriteId(memberItem.getId())
@@ -47,8 +52,8 @@ public class MemberItemFavoriteInfoReader implements IFavoriteReader {
 		int reviewCount = reviewReader.countReviewByItemId(item.getId());
 		int price = item.getPrice();
 
-		return MemberItemFavoriteMetadata.builder().memberItemMetadata(
-			MemberItemMetadata.builder()
+		return MemberItemFavoriteMetadata.builder().favoriteItemMetadata(
+			FavoriteItemMetadata.builder()
 				.itemId(item.getId())
 				.hobby(item.getHobby())
 				.itemUrl(item.getUrl())

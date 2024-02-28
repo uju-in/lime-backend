@@ -76,7 +76,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			.fetchOne();
 	}
 
-	private  BooleanExpression eqHobby(final Hobby hobby) {
+	private BooleanExpression eqHobby(final Hobby hobby) {
 		if (hobby == null) {
 			return null;
 		}
@@ -88,26 +88,21 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		final VoteStatusCondition statusCondition,
 		final Long memberId
 	) {
+		if (statusCondition == null) {
+			return null;
+		}
+
 		switch (statusCondition) {
-			case INPROGRESS -> {
-				return isInProgress();
-			}
-			case COMPLETED -> {
-				return isCompleted();
-			}
 			case POSTED -> {
 				return isPosted(memberId);
 			}
 			case PARTICIPATED -> {
 				return isParticipatedIn(memberId);
 			}
+			default -> {
+				return null;
+			}
 		}
-
-		return null;
-	}
-
-	private BooleanExpression isInProgress() {
-		return vote.endTime.after(LocalDateTime.now());
 	}
 
 	private BooleanExpression isCompleted() {
@@ -124,11 +119,20 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 	}
 
 	private OrderSpecifier<?> getOrderSpecifierBy(final VoteSortCondition sortCondition) {
-		if (sortCondition == VoteSortCondition.POPULARITY) {
-			return new OrderSpecifier<>(Order.DESC, vote.voters.size());
+		switch (sortCondition) {
+			case POPULARITY -> {
+				return new OrderSpecifier<>(Order.DESC, vote.voters.size());
+			}
+			case RECENT -> {
+				return new OrderSpecifier<>(Order.DESC, vote.createdAt);
+			}
+			case CLOSED -> {
+				return new OrderSpecifier<>(Order.ASC, vote.endTime);
+			}
+			default -> {
+				return null;
+			}
 		}
-
-		return new OrderSpecifier<>(Order.DESC, vote.createdAt);
 	}
 
 	private BooleanExpression containsKeyword(final String keyword) {

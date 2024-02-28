@@ -137,7 +137,7 @@ class VoteReaderTest {
 		// given
 		final int DEFAULT_PAGING_SIZE = 20;
 		final Hobby hobby = Hobby.BASKETBALL;
-		final VoteStatusCondition statusCondition = VoteStatusCondition.COMPLETED;
+		final VoteStatusCondition statusCondition = null;
 		final VoteSortCondition sortCondition = VoteSortCondition.RECENT;
 		final CursorPageParameters parameters = CursorPageParametersBuilder.build();
 		final Long memberId = 1L;

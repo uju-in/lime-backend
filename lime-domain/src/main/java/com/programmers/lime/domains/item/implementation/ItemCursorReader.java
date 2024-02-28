@@ -41,20 +41,9 @@ public class ItemCursorReader {
 		final ItemSortCondition itemSortCondition,
 		final Hobby hobby
 	) {
-		String trimmedKeyword = keyword.trim();
-
-		// 비어 있는 키워드일 경우 빈 리스트 반환
-		if (trimmedKeyword.isEmpty()) {
-			return new CursorSummary<>(
-				null,
-				0,
-				Collections.emptyList()
-			);
-		}
-
 		// 키워드에 해당하는 아이템 아이디와 커서 아이디를 가져옴
 		List<ItemCursorIdInfo> itemCursorIdInfos = itemRepository.getItemIdsByCursor(
-			trimmedKeyword,
+			keyword,
 			parameters.cursorId(),
 			getPageSize(parameters),
 			itemSortCondition,

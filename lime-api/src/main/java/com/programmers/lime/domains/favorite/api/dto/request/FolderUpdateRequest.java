@@ -1,10 +1,10 @@
-package com.programmers.lime.domains.item.api.dto.request;
+package com.programmers.lime.domains.favorite.api.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record MemberItemFolderUpdateRequest(
+public record FolderUpdateRequest(
 
 	@Schema(description = "폴더 이름", example = "농구 취미 폴더")
 	@NotNull(message = "폴더 이름을 입력하지 않았습니다.")

@@ -8,6 +8,8 @@ import java.util.Objects;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.BaseEntity;
 import com.programmers.lime.domains.vote.domain.vo.Content;
+import com.programmers.lime.error.BusinessException;
+import com.programmers.lime.error.ErrorCode;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,6 +33,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "votes")
 public class Vote extends BaseEntity {
 
+	public static final int MIN_PARTICIPANTS = 1;
+	public static final int MAX_PARTICIPANTS = 1000;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -58,11 +62,11 @@ public class Vote extends BaseEntity {
 	@Column(name = "end_time", nullable = false)
 	private LocalDateTime endTime;
 
-	@Column(name = "maximum_participants")
-	private Integer maximumParticipants;
+	@Column(name = "maximum_participants", nullable = false)
+	private int maximumParticipants;
 
 	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
-	private List<Voter> voters = new ArrayList<>();
+	private final List<Voter> voters = new ArrayList<>();
 
 	@Builder
 	private Vote(
@@ -71,8 +75,9 @@ public class Vote extends BaseEntity {
 		final Long item2Id,
 		final Hobby hobby,
 		final String content,
-		final Integer maximumParticipants
+		final int maximumParticipants
 	) {
+		validMaximumParticipants(maximumParticipants);
 		this.memberId = Objects.requireNonNull(memberId);
 		this.item1Id = Objects.requireNonNull(item1Id);
 		this.item2Id = Objects.requireNonNull(item2Id);
@@ -81,6 +86,12 @@ public class Vote extends BaseEntity {
 		this.startTime = LocalDateTime.now();
 		this.endTime = startTime.plusDays(1);
 		this.maximumParticipants = maximumParticipants;
+	}
+
+	private void validMaximumParticipants(final int maximumParticipants) {
+		if (maximumParticipants < MIN_PARTICIPANTS || maximumParticipants > MAX_PARTICIPANTS) {
+			throw new BusinessException(ErrorCode.VOTE_MAXIMUM_PARTICIPANTS);
+		}
 	}
 
 	public String getContent() {
@@ -111,6 +122,6 @@ public class Vote extends BaseEntity {
 	}
 
 	public boolean reachMaximumParticipants() {
-		return this.maximumParticipants != null && this.maximumParticipants == this.voters.size();
+		return this.maximumParticipants == this.voters.size();
 	}
 }

@@ -12,8 +12,14 @@ dependencies {
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    // cloud watch log
-    implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.6.0'
+    // loki를 위한 로그백 의존성
+    implementation("com.github.loki4j:loki-logback-appender:1.4.2")
+
+    // 마이크로미터 프로메테우스 구현체
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 bootJar {

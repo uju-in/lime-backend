@@ -1,5 +1,3 @@
-
-
 ## 1. 🍋 프로젝트 소개
 서비스 링크 : /https://uju-lime.vercel.app/ <br>
 
@@ -47,7 +45,6 @@
 ## 4. 📝 문서화 링크 (테크 스팩, 트러블 슈팅, 개인 내용 정리)
 
 
-
 ## 5. ⚒️ 기술 스택
 
 ### 백엔드
@@ -55,6 +52,6 @@
 
 <img width="1017" alt="스크린샷 2024-02-27 오후 3 35 02" src="https://github.com/uju-in/lime-backend/assets/77893164/e93893d0-d034-4182-9a1c-b32754eb99b6">
 
-## 6. 💫 CICD 파이프라인
+## 6. 💫 CICD 파이프라인, 모니터링
  <img width="2135" alt="스크린샷 2024-02-27 오후 3 34 34" src="https://github.com/uju-in/lime-backend/assets/77893164/aa7cee2a-d85f-41d3-8e00-d8294ad9b3df">
  <img width="985" alt="스크린샷 2024-02-27 오후 3 35 14" src="https://github.com/uju-in/lime-backend/assets/77893164/4b85d934-af44-4bb4-a592-094dac429372">

@@ -53,13 +53,17 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			).from(item)
 			.where(
 				cursorIdCondition(cursorId),
-				item.name.contains(keyword),
+				eqKeyword(keyword),
 				hobbyCondition(hobby)
 			).orderBy(orderBySortCondition(itemSortCondition), item.id.desc())
 			.groupBy(item.id)
 			.leftJoin(review).on(item.id.eq(review.itemId))
 			.limit(pageSize)
 			.fetch();
+	}
+
+	private BooleanExpression eqKeyword(final String keyword) {
+		return keyword != null ? item.name.contains(keyword) : null;
 	}
 
 	@Override

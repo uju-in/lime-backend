@@ -23,4 +23,10 @@ public class ReviewLikeRemover {
 		Review review = reviewReader.read(reviewId);
 		reviewLikeRepository.deleteReviewLikeByMemberIdAndReview(memberId, review);
 	}
+
+	public void deleteByReviewId(
+		final Long reviewId
+	) {
+		reviewLikeRepository.deleteReviewLikeByReviewId(reviewId);
+	}
 }

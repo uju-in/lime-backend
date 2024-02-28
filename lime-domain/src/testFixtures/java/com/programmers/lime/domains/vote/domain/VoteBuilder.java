@@ -23,6 +23,7 @@ public class VoteBuilder {
 			.item2Id(2L)
 			.hobby(Hobby.BASKETBALL)
 			.content("농구공 사려는데 뭐가 더 좋음?")
+			.maximumParticipants(3)
 			.build();
 
 		setVoteId(vote);

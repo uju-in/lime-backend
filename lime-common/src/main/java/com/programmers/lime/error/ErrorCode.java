@@ -28,6 +28,9 @@ public enum ErrorCode {
 	EXPIRED_REFRESH_TOKEN("COMMON_012", "Refresh Token이 만료되었습니다."),
 	INVALID_REFRESH_TOKEN("COMMON_013", "Refresh Token이 유효하지 않습니다."),
 	S3_UPLOAD_FAIL("COMMON_014", "S3 업로드에 실패했습니다."),
+	S3_DELETE_FAIL("COMMON_015", "S3 삭제에 실패했습니다."),
+	BAD_REVIEW_IMAGE_URL("COMMON_016", "잘못된 리뷰 이미지 URL 입니다."),
+
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -42,6 +45,8 @@ public enum ErrorCode {
 	MEMBER_INTRODUCTION_MBTI_BAD_REQUEST("MEMBER_014", "잘못된 MBTI 값입니다."),
 	MEMBER_INTRODUCTION_FAVORABILITY_BAD_REQUEST("MEMBER_015", "잘못된 선호도 값입니다."),
 	MEMBER_INTRODUCTION_CAREER_BAD_VALUE("MEMBER_016", "경력은 최소 0개월 이상이어야 합니다."),
+	MEMBER_ITEM_FOLDER_NAME_IS_EMPTY("MEMBER_ITEM_FOLDER_005", "폴더 이름은 비어있을 수 없습니다."),
+	MEMBER_ITEM_FOLDER_NAME_IS_DEFAULT("MEMBER_ITEM_FOLDER_006", "폴더 이름은 기본 폴더 이름과 같을 수 없습니다."),
 
 	// Item
 	ITEM_MARKET_NOT_FOUND("ITEM_001", "지원하지 않는 아이템 URL 입니다."),
@@ -58,6 +63,8 @@ public enum ErrorCode {
 	ALREADY_REVIEW_LIKED("REVIEW_005", "이미 리뷰를 좋아요 했습니다."),
 	NOT_REVIEW_LIKED("REVIEW_006", "좋아요를 누르지 않은 리뷰입니다."),
 	REVIEW_ALREADY_EXIST("REVIEW_007", "이미 리뷰를 작성한 아이템입니다."),
+	REVIEW_IMAGE_NOT_EXIST("REVIEW_008", "리뷰 이미지가 존재하지 않습니다."),
+
 
 	// Vote
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),
@@ -69,6 +76,10 @@ public enum ErrorCode {
 	VOTE_BAD_SORT_CONDITION("VOTE_007", "잘못된 sort 파라미터 값입니다."),
 	VOTE_CANNOT_PARTICIPATE("VOTE_008", "종료된 투표에는 참여할 수 없습니다."),
 	VOTE_CONTENT_BAD_LENGTH("VOTE_009", "투표 내용은 최대 1000자 입니다."),
+	VOTE_MAXIMUM_PARTICIPANTS("VOTE_010", "최대 투표자 수는 1명 이상 1000명 이하 입니다."),
+	VOTE_ITEM_DUPLICATED("VOTE_011", "투표 아이템이 중복되었습니다."),
+	VOTE_REDIS_NOT_FOUND("VOTE_012", "투표 랭킹을 찾을 수 없습니다."),
+	VOTER_NOT_FOUND("VOTE_013", "투표자를 찾을 수 없습니다."),
 
 	//Bucket
 	BUCKET_NOT_FOUND("BUCKET_001", "버킷을 찾을 수 없습니다."),
@@ -116,10 +127,13 @@ public enum ErrorCode {
 	// MemberItemFolder
 	MEMBER_ITEM_FOLDER_NOT_FOUND("MEMBER_ITEM_FOLDER_001", "폴더를 찾을 수 없습니다."),
 	MEMBER_ITEM_FOLDER_NOT_MINE("MEMBER_ITEM_FOLDER_002", "나의 아이템 폴더가 아닙니다."),
-
+	FAVORITE_DEFAULT_FOLDER_DUPLICATED("MEMBER_ITEM_FOLDER_003", "기본 폴더가 중복되었습니다."),
 	// Friendship
 	FRIENDSHIP_NOT_FOUND("FRIENDSHIP_001", "친구 관계를 찾을 수 없습니다."),
 	FRIENDSHIP_ALREADY_EXISTS("FRIENDSHIP_002", "이미 친구 관계가 존재합니다."),
+
+	// Favorite
+	FAVORITE_TYPE_BAD_REQUEST("FAVORITE_001", "잘못된 favoriteType 파라미터 값입니다."),
 	;
 
 	private static final Map<String, ErrorCode> ERROR_CODE_MAP;
