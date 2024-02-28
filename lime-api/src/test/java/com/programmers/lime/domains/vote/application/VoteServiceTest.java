@@ -72,13 +72,18 @@ class VoteServiceTest extends IntegrationTest {
 				.willReturn(1L);
 
 			willDoNothing()
-				.given(voteRedisManager).addRanking(any(), any());
+				.given(voteRedisManager)
+				.addRanking(String.valueOf(Hobby.BASKETBALL), any(VoteRankingInfo.class));
 
 			// when
 			final Long result = voteService.createVote(request);
 
 			// then
 			assertThat(result).isNotNull();
+
+			// verify
+			then(voteRedisManager).should(times(1))
+				.addRanking(String.valueOf(Hobby.BASKETBALL), any(VoteRankingInfo.class));
 		}
 
 		@Test
@@ -101,6 +106,7 @@ class VoteServiceTest extends IntegrationTest {
 				.isInstanceOf(BusinessException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_ITEM_DUPLICATED);
 
+			// verify
 			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 
@@ -124,6 +130,7 @@ class VoteServiceTest extends IntegrationTest {
 				.isInstanceOf(EntityNotFoundException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.ITEM_NOT_FOUND);
 
+			// verify
 			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 	}
