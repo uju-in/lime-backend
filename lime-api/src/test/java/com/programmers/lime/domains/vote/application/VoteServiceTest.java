@@ -57,7 +57,7 @@ class VoteServiceTest extends IntegrationTest {
 	@Nested
 	class CreateVote {
 		@Test
-		@DisplayName("투표를 생성한다.")
+		@DisplayName("투표를 생성할 수 있다.")
 		void createVoteTest() {
 			// given
 			final VoteCreateServiceRequest request = VoteCreateServiceRequest.builder()
@@ -82,7 +82,7 @@ class VoteServiceTest extends IntegrationTest {
 		}
 
 		@Test
-		@DisplayName("투표 아이템이 똑같다면 예외를 발생시킨다.")
+		@DisplayName("동일한 투표 아이템으로 투표를 생성할 수 없다.")
 		void createVoteWithSameItemTest() {
 			// given
 			final VoteCreateServiceRequest request = VoteCreateServiceRequest.builder()
@@ -105,7 +105,7 @@ class VoteServiceTest extends IntegrationTest {
 		}
 
 		@Test
-		@DisplayName("투표 아이템이 존재하지 않는다면 예외를 발생시킨다.")
+		@DisplayName("존재하지 않는 아이템으로 투표를 생성할 수 없다.")
 		void createVoteWithNotExistItemTest() {
 			// given
 			final VoteCreateServiceRequest request = VoteCreateServiceRequest.builder()
@@ -141,7 +141,7 @@ class VoteServiceTest extends IntegrationTest {
 		}
 
 		@Test
-		@DisplayName("투표에 참여한다.")
+		@DisplayName("투표에 참여할 수 있다.")
 		void participateVoteTest() {
 			// given
 			final Long itemId = 1L;
@@ -165,7 +165,7 @@ class VoteServiceTest extends IntegrationTest {
 		}
 
 		@Test
-		@DisplayName("투표에 재참여한다.")
+		@DisplayName("이미 참여한 투표에 다시 참여할 수 있다.")
 		void reParticipateVoteTest() {
 			// given
 			final Long itemId = 2L;
@@ -186,8 +186,8 @@ class VoteServiceTest extends IntegrationTest {
 		}
 
 		@Test
-		@DisplayName("종료된 투표에 참여하려고 하면 예외를 발생시킨다.")
-		void participateVoteWithEndedVoteTest() {
+		@DisplayName("종료된 투표에 참여할 수 없다.")
+		void participateVoteWithClosedVoteTest() {
 			// given
 			vote.close(LocalDateTime.now());
 
@@ -204,7 +204,7 @@ class VoteServiceTest extends IntegrationTest {
 		}
 
 		@Test
-		@DisplayName("투표에 없는 아이템에 참여하려고 하면 예외를 발생시킨다.")
+		@DisplayName("투표에 없는 아이템으로 참여할 수 없다.")
 		void participateVoteWithNotExistItemTest() {
 			// given
 			final Long itemId = 3L;
