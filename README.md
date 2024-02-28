@@ -1,7 +1,7 @@
 
 
 ## 1. 🍋 프로젝트 소개
-서비스 링크 : https://api.uju-lime.shop <br>
+서비스 링크 : /https://uju-lime.vercel.app/ <br>
 
 <img src="http://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white&link=http://api.uju-lime.shop/swagger-ui/index.html#/)]
   (http://api.uju-lime.shop/swagger-ui/index.html#/)" height="25">
@@ -46,16 +46,15 @@
 
 ## 4. 📝 문서화 링크 (테크 스팩, 트러블 슈팅, 개인 내용 정리)
 
+
+
 ## 5. ⚒️ 기술 스택
 
 ### 백엔드
-<p align="center">
-  <img src="https://github.com/bucket-back/bucket-back-backend/assets/98391539/6535b1c4-46af-4d00-b7ab-3e2fc9fda57c" width="80%" height="80%">
-</p>
+<img src="https://github.com/bucket-back/bucket-back-backend/assets/98391539/6535b1c4-46af-4d00-b7ab-3e2fc9fda57c" width="80%" height="80%">
 
-### 인프라
+<img width="1017" alt="스크린샷 2024-02-27 오후 3 35 02" src="https://github.com/uju-in/lime-backend/assets/77893164/e93893d0-d034-4182-9a1c-b32754eb99b6">
 
-## 6. ⚙️ 아키텍처
-
-## 7. 💫 CICD 파이프라인
-
+## 6. 💫 CICD 파이프라인
+ <img width="2135" alt="스크린샷 2024-02-27 오후 3 34 34" src="https://github.com/uju-in/lime-backend/assets/77893164/aa7cee2a-d85f-41d3-8e00-d8294ad9b3df">
+ <img width="985" alt="스크린샷 2024-02-27 오후 3 35 14" src="https://github.com/uju-in/lime-backend/assets/77893164/4b85d934-af44-4bb4-a592-094dac429372">
