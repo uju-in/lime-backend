@@ -228,4 +228,30 @@ class VoteServiceTest extends IntegrationTest {
 			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 	}
+
+	@Test
+	@DisplayName("투표 참여를 취소할 수 있다.")
+	void cancelVoteTest() {
+		// given
+		final Long voteId = 1L;
+		final Vote vote = voteSetup.saveOne(voteId, 1L, 2L);
+		voterSetup.saveOne(vote, 1L, 1L);
+
+		given(memberUtils.getCurrentMemberId())
+			.willReturn(1L);
+
+		willDoNothing()
+			.given(voteRedisManager)
+			.decreasePopularity(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+
+		// when
+		voteService.cancelVote(voteId);
+
+		// then
+		assertThat(vote.getVoters()).isEmpty();
+
+		// verify
+		then(voteRedisManager).should(times(1))
+			.decreasePopularity(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+	}
 }
