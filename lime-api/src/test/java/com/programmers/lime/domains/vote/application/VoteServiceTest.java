@@ -17,12 +17,15 @@ import com.programmers.lime.IntegrationTest;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.setup.ItemSetup;
+import com.programmers.lime.domains.item.model.ItemInfo;
 import com.programmers.lime.domains.vote.application.dto.request.VoteCreateServiceRequest;
+import com.programmers.lime.domains.vote.application.dto.response.VoteGetServiceResponse;
 import com.programmers.lime.domains.vote.domain.Vote;
 import com.programmers.lime.domains.vote.domain.Voter;
 import com.programmers.lime.domains.vote.domain.setup.VoteSetUp;
 import com.programmers.lime.domains.vote.domain.setup.VoterSetUp;
 import com.programmers.lime.domains.vote.implementation.VoteReader;
+import com.programmers.lime.domains.vote.model.VoteDetailInfo;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
@@ -338,5 +341,17 @@ class VoteServiceTest extends IntegrationTest {
 			// verify
 			then(voteRedisManager).shouldHaveNoInteractions();
 		}
+	}
+
+	@Test
+	@DisplayName("사용자는 투표를 상세 조회할 수 있다.")
+	void readVoteTest() {
+		// when
+		final VoteGetServiceResponse result = voteService.getVote(voteId);
+
+		// then
+		assertThat(result.item1Info()).isEqualTo(ItemInfo.from(item1));
+		assertThat(result.item2Info()).isEqualTo(ItemInfo.from(item2));
+		assertThat(result.voteInfo()).isEqualTo(VoteDetailInfo.of(vote, 0, 0));
 	}
 }
