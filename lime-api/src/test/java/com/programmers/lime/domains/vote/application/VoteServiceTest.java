@@ -21,6 +21,7 @@ import com.programmers.lime.domains.vote.domain.Vote;
 import com.programmers.lime.domains.vote.domain.Voter;
 import com.programmers.lime.domains.vote.domain.setup.VoteSetUp;
 import com.programmers.lime.domains.vote.domain.setup.VoterSetUp;
+import com.programmers.lime.domains.vote.implementation.VoteReader;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
@@ -38,6 +39,9 @@ class VoteServiceTest extends IntegrationTest {
 
 	@Autowired
 	private VoterSetUp voterSetup;
+
+	@Autowired
+	private VoteReader voteReader;
 
 	@Autowired
 	private ItemSetup itemSetup;
@@ -253,5 +257,61 @@ class VoteServiceTest extends IntegrationTest {
 		// verify
 		then(voteRedisManager).should(times(1))
 			.decreasePopularity(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+	}
+
+	@Nested
+	class DeleteVote {
+
+		Long voteId = 1L;
+		Vote vote;
+
+		@BeforeEach
+		void setUp() {
+			vote = voteSetup.saveOne(voteId, 1L, 2L);
+		}
+
+		@Test
+		@DisplayName("투표를 삭제할 수 있다.")
+		void deleteVoteTest() {
+			// given
+			final Long memberId = vote.getMemberId();
+
+			given(memberUtils.getCurrentMemberId())
+				.willReturn(memberId);
+
+			willDoNothing()
+				.given(voteRedisManager)
+				.remove(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+
+			// when
+			voteService.deleteVote(voteId);
+
+			// then
+			assertThatThrownBy(() -> voteReader.read(voteId)) // 삭제된 투표 조회 시 EntityNotFoundException 발생
+				.isInstanceOf(EntityNotFoundException.class)
+				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_NOT_FOUND);
+
+			// verify
+			then(voteRedisManager).should(times(1))
+				.remove(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+		}
+
+		@Test
+		@DisplayName("투표 작성자가 아닌 경우 투표를 삭제할 수 없다.")
+		void deleteVoteWithNotOwnerTest() {
+			// given
+			final Long memberId = 2L;
+
+			given(memberUtils.getCurrentMemberId())
+				.willReturn(memberId);
+
+			// when & then
+			assertThatThrownBy(() -> voteService.deleteVote(voteId))
+				.isInstanceOf(BusinessException.class)
+				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_NOT_OWNER);
+
+			// verify
+			then(voteRedisManager).shouldHaveNoInteractions();
+		}
 	}
 }
