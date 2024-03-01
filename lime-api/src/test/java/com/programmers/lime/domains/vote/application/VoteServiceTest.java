@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.programmers.lime.IntegrationTest;
 import com.programmers.lime.common.model.Hobby;
+import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.setup.ItemSetup;
 import com.programmers.lime.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import com.programmers.lime.domains.vote.domain.Vote;
@@ -52,23 +53,32 @@ class VoteServiceTest extends IntegrationTest {
 	@MockBean
 	private VoteRedisManager voteRedisManager;
 
+	private Item item1;
+	private Item item2;
+	private Vote vote;
+	private Long voteId;
+
 	@BeforeEach
 	void setUp() {
-		itemSetup.saveOne(1L);
-		itemSetup.saveOne(2L);
+		item1 = itemSetup.saveOne(1L);
+		item2 = itemSetup.saveOne(2L);
+		vote = voteSetup.saveOne(1L, item1.getId(), item2.getId());
+		voteId = vote.getId();
 	}
 
 	@Nested
 	class CreateVote {
 		@Test
-		@DisplayName("투표를 생성할 수 있다.")
+		@DisplayName("회원은 투표를 생성할 수 있다.")
 		void createVoteTest() {
 			// given
+			final Long item1Id = item1.getId();
+			final Long item2Id = item2.getId();
 			final VoteCreateServiceRequest request = VoteCreateServiceRequest.builder()
 				.hobby(Hobby.BASKETBALL)
 				.content("농구공 추천 좀 해주세요!")
-				.item1Id(1L)
-				.item2Id(2L)
+				.item1Id(item1Id)
+				.item2Id(item2Id)
 				.maximumParticipants(1000)
 				.build();
 
@@ -77,7 +87,7 @@ class VoteServiceTest extends IntegrationTest {
 
 			willDoNothing()
 				.given(voteRedisManager)
-				.addRanking(String.valueOf(Hobby.BASKETBALL), any(VoteRankingInfo.class));
+				.addRanking(anyString(), any(VoteRankingInfo.class));
 
 			// when
 			final Long result = voteService.createVote(request);
@@ -87,18 +97,26 @@ class VoteServiceTest extends IntegrationTest {
 
 			// verify
 			then(voteRedisManager).should(times(1))
-				.addRanking(String.valueOf(Hobby.BASKETBALL), any(VoteRankingInfo.class));
+				.addRanking(
+					String.valueOf(Hobby.BASKETBALL),
+					VoteRankingInfo.builder()
+						.id(Long.MAX_VALUE - result)
+						.item1Image(item1.getImage())
+						.item2Image(item2.getImage())
+						.build()
+				);
 		}
 
 		@Test
 		@DisplayName("동일한 투표 아이템으로 투표를 생성할 수 없다.")
 		void createVoteWithSameItemTest() {
 			// given
+			final Long sameItemId = item1.getId();
 			final VoteCreateServiceRequest request = VoteCreateServiceRequest.builder()
 				.hobby(Hobby.BASKETBALL)
 				.content("농구공 추천 좀 해주세요!")
-				.item1Id(1L)
-				.item2Id(1L)
+				.item1Id(sameItemId)
+				.item2Id(sameItemId)
 				.maximumParticipants(1000)
 				.build();
 
@@ -118,11 +136,13 @@ class VoteServiceTest extends IntegrationTest {
 		@DisplayName("존재하지 않는 아이템으로 투표를 생성할 수 없다.")
 		void createVoteWithNotExistItemTest() {
 			// given
+			final Long notExistItem1Id = 3L;
+			final Long notExistItem2Id = 4L;
 			final VoteCreateServiceRequest request = VoteCreateServiceRequest.builder()
 				.hobby(Hobby.BASKETBALL)
 				.content("농구공 추천 좀 해주세요!")
-				.item1Id(3L)
-				.item2Id(4L)
+				.item1Id(notExistItem1Id)
+				.item2Id(notExistItem2Id)
 				.maximumParticipants(1000)
 				.build();
 
@@ -142,27 +162,18 @@ class VoteServiceTest extends IntegrationTest {
 	@Transactional // 지연 로딩을 위해 필요
 	@Nested
 	class ParticipateVote {
-
-		Long voteId = 1L;
-		Vote vote;
-
-		@BeforeEach
-		void setUp() {
-			vote = voteSetup.saveOne(voteId, 1L, 2L);
-		}
-
 		@Test
-		@DisplayName("투표에 참여할 수 있다.")
+		@DisplayName("회원은 투표 아이템 중 하나를 선택하여 투표할 수 있다.")
 		void participateVoteTest() {
 			// given
-			final Long itemId = 1L;
+			final Long itemId = vote.getItem1Id();
 
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(1L);
 
 			willDoNothing()
 				.given(voteRedisManager)
-				.updateRanking(eq(String.valueOf(vote.getHobby())), eq(true), any(VoteRankingInfo.class));
+				.updateRanking(anyString(), eq(true), any(VoteRankingInfo.class));
 
 			// when
 			voteService.participateVote(voteId, itemId);
@@ -172,25 +183,35 @@ class VoteServiceTest extends IntegrationTest {
 
 			// verify
 			then(voteRedisManager).should(times(1))
-				.updateRanking(eq(String.valueOf(vote.getHobby())), eq(true), any(VoteRankingInfo.class));
+				.updateRanking(
+					String.valueOf(vote.getHobby()),
+					true,
+					VoteRankingInfo.builder()
+						.id(Long.MAX_VALUE - voteId)
+						.item1Image(item1.getImage())
+						.item2Image(item2.getImage())
+						.build()
+				);
 		}
 
 		@Test
-		@DisplayName("이미 참여한 투표에 다시 참여할 수 있다.")
+		@DisplayName("회원은 이미 참여한 투표에 다시 투표할 수 있다.")
 		void reParticipateVoteTest() {
 			// given
-			final Long itemId = 2L;
-			final Voter voter = voterSetup.saveOne(vote, 1L, 1L);
+			final Long memberId = 1L;
+			final Long selectedItemId = vote.getItem1Id();
+			final Voter voter = voterSetup.saveOne(vote, memberId, selectedItemId);
+			final Long reSelectedItemId = vote.getItem2Id();
 
 			given(memberUtils.getCurrentMemberId())
-				.willReturn(1L);
+				.willReturn(memberId);
 
 			// when
-			voteService.participateVote(voteId, itemId);
+			voteService.participateVote(voteId, reSelectedItemId);
 
 			// then
 			assertThat(vote.getVoters()).hasSize(1);
-			assertThat(voter.getItemId()).isEqualTo(itemId);
+			assertThat(voter.getItemId()).isEqualTo(reSelectedItemId);
 
 			// verify
 			then(voteRedisManager).shouldHaveNoInteractions();
@@ -218,13 +239,13 @@ class VoteServiceTest extends IntegrationTest {
 		@DisplayName("투표에 없는 아이템으로 참여할 수 없다.")
 		void participateVoteWithNotExistItemTest() {
 			// given
-			final Long itemId = 3L;
+			final Long notExistItemId = 3L;
 
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(1L);
 
 			// when & then
-			assertThatThrownBy(() -> voteService.participateVote(voteId, itemId))
+			assertThatThrownBy(() -> voteService.participateVote(voteId, notExistItemId))
 				.isInstanceOf(BusinessException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_NOT_CONTAIN_ITEM);
 
@@ -234,19 +255,18 @@ class VoteServiceTest extends IntegrationTest {
 	}
 
 	@Test
-	@DisplayName("투표 참여를 취소할 수 있다.")
+	@DisplayName("회원은 투표 참여를 취소할 수 있다.")
 	void cancelVoteTest() {
 		// given
-		final Long voteId = 1L;
-		final Vote vote = voteSetup.saveOne(voteId, 1L, 2L);
-		voterSetup.saveOne(vote, 1L, 1L);
+		final Long memberId = 1L;
+		voterSetup.saveOne(vote, memberId, vote.getItem1Id());
 
 		given(memberUtils.getCurrentMemberId())
-			.willReturn(1L);
+			.willReturn(memberId);
 
 		willDoNothing()
 			.given(voteRedisManager)
-			.decreasePopularity(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+			.decreasePopularity(anyString(), any(VoteRankingInfo.class));
 
 		// when
 		voteService.cancelVote(voteId);
@@ -256,22 +276,20 @@ class VoteServiceTest extends IntegrationTest {
 
 		// verify
 		then(voteRedisManager).should(times(1))
-			.decreasePopularity(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+			.decreasePopularity(
+				String.valueOf(vote.getHobby()),
+				VoteRankingInfo.builder()
+					.id(Long.MAX_VALUE - voteId)
+					.item1Image(item1.getImage())
+					.item2Image(item2.getImage())
+					.build()
+			);
 	}
 
 	@Nested
 	class DeleteVote {
-
-		Long voteId = 1L;
-		Vote vote;
-
-		@BeforeEach
-		void setUp() {
-			vote = voteSetup.saveOne(voteId, 1L, 2L);
-		}
-
 		@Test
-		@DisplayName("투표를 삭제할 수 있다.")
+		@DisplayName("투표 생성자는 투표를 삭제할 수 있다.")
 		void deleteVoteTest() {
 			// given
 			final Long memberId = vote.getMemberId();
@@ -281,7 +299,7 @@ class VoteServiceTest extends IntegrationTest {
 
 			willDoNothing()
 				.given(voteRedisManager)
-				.remove(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+				.remove(anyString(), any(VoteRankingInfo.class));
 
 			// when
 			voteService.deleteVote(voteId);
@@ -293,17 +311,24 @@ class VoteServiceTest extends IntegrationTest {
 
 			// verify
 			then(voteRedisManager).should(times(1))
-				.remove(eq(String.valueOf(vote.getHobby())), any(VoteRankingInfo.class));
+				.remove(
+					String.valueOf(vote.getHobby()),
+					VoteRankingInfo.builder()
+						.id(Long.MAX_VALUE - voteId)
+						.item1Image(item1.getImage())
+						.item2Image(item2.getImage())
+						.build()
+				);
 		}
 
 		@Test
-		@DisplayName("투표 작성자가 아닌 경우 투표를 삭제할 수 없다.")
+		@DisplayName("투표 생성자가 아닌 경우 투표를 삭제할 수 없다.")
 		void deleteVoteWithNotOwnerTest() {
 			// given
-			final Long memberId = 2L;
+			final Long notOwnerMemberId = 2L;
 
 			given(memberUtils.getCurrentMemberId())
-				.willReturn(memberId);
+				.willReturn(notOwnerMemberId);
 
 			// when & then
 			assertThatThrownBy(() -> voteService.deleteVote(voteId))
