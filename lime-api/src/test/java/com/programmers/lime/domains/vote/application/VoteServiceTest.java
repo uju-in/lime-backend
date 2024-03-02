@@ -343,15 +343,55 @@ class VoteServiceTest extends IntegrationTest {
 		}
 	}
 
-	@Test
-	@DisplayName("사용자는 투표를 상세 조회할 수 있다.")
-	void readVoteTest() {
-		// when
-		final VoteGetServiceResponse result = voteService.getVote(voteId);
+	@Nested
+	class RaadVote {
+		@Test
+		@DisplayName("사용자는 투표를 상세 조회할 수 있다.")
+			// 사용자는 회원과 비회원을 모두 의미
+		void readVoteTest() {
+			// when
+			final VoteGetServiceResponse result = voteService.getVote(voteId);
 
-		// then
-		assertThat(result.item1Info()).isEqualTo(ItemInfo.from(item1));
-		assertThat(result.item2Info()).isEqualTo(ItemInfo.from(item2));
-		assertThat(result.voteInfo()).isEqualTo(VoteDetailInfo.of(vote, 0, 0));
+			// then
+			assertThat(result.item1Info()).isEqualTo(ItemInfo.from(item1));
+			assertThat(result.item2Info()).isEqualTo(ItemInfo.from(item2));
+			assertThat(result.voteInfo()).isEqualTo(VoteDetailInfo.of(vote, 0, 0));
+			assertThat(result.isOwner()).isFalse();
+			assertThat(result.selectedItemId()).isNull();
+		}
+
+		@Test
+		@DisplayName("회원이 생성한 투표를 상세 조회 시 본인이 생성한 투표임을 확인할 수 있다.")
+		void readVoteWithOwnerTest() {
+			// given
+			final Long memberId = vote.getMemberId();
+
+			given(memberUtils.getCurrentMemberId())
+				.willReturn(memberId);
+
+			// when
+			final VoteGetServiceResponse result = voteService.getVote(voteId);
+
+			// then
+			assertThat(result.isOwner()).isTrue();
+		}
+
+		@Test
+		@DisplayName("회원이 참여한 투표를 상세 조회 시 본인이 선택한 아이템을 확인할 수 있다.")
+		void readVoteWithParticipatedTest() {
+			// given
+			final Long memberId = 1L;
+			final Long selectedItemId = vote.getItem1Id();
+			voterSetup.saveOne(vote, memberId, selectedItemId);
+
+			given(memberUtils.getCurrentMemberId())
+				.willReturn(memberId);
+
+			// when
+			final VoteGetServiceResponse result = voteService.getVote(voteId);
+
+			// then
+			assertThat(result.selectedItemId()).isEqualTo(selectedItemId);
+		}
 	}
 }
