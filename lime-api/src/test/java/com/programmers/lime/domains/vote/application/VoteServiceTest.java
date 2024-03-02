@@ -346,8 +346,7 @@ class VoteServiceTest extends IntegrationTest {
 	@Nested
 	class RaadVote {
 		@Test
-		@DisplayName("사용자는 투표를 상세 조회할 수 있다.")
-			// 사용자는 회원과 비회원을 모두 의미
+		@DisplayName("사용자는 투표를 상세 조회할 수 있다.") // 사용자는 회원과 비회원을 모두 의미
 		void readVoteTest() {
 			// when
 			final VoteGetServiceResponse result = voteService.getVote(voteId);
