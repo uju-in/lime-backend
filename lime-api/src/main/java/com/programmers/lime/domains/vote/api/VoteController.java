@@ -95,7 +95,7 @@ public class VoteController {
 		@RequestParam final String hobby,
 		@RequestParam(required = false, name = "status") final String statusCondition,
 		@RequestParam(required = false, name = "sort") final String sortCondition,
-		@ModelAttribute @Valid final CursorRequest request
+		@ModelAttribute final CursorRequest request
 	) {
 		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
 			Hobby.from(hobby),
@@ -112,7 +112,7 @@ public class VoteController {
 	@GetMapping("/search")
 	public ResponseEntity<VoteGetByKeywordResponse> getVotesByKeyword(
 		@RequestParam final String keyword,
-		@ModelAttribute @Valid final CursorRequest request
+		@ModelAttribute final CursorRequest request
 	) {
 		final VoteGetByKeywordServiceResponse serviceResponse = voteService.getVotesByKeyword(keyword,
 			request.toParameters());
