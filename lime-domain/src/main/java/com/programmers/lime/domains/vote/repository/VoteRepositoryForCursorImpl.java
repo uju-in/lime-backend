@@ -3,7 +3,6 @@ package com.programmers.lime.domains.vote.repository;
 import static com.programmers.lime.domains.item.domain.QItem.*;
 import static com.programmers.lime.domains.vote.domain.QVote.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.lime.common.model.Hobby;
@@ -69,10 +68,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		return jpaQueryFactory
 			.select(vote.count())
 			.from(vote)
-			.where(
-				isCompleted(),
-				containsKeyword(keyword)
-			)
+			.where(containsKeyword(keyword))
 			.fetchOne();
 	}
 
@@ -103,10 +99,6 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 				return null;
 			}
 		}
-	}
-
-	private BooleanExpression isCompleted() {
-		return vote.endTime.before(LocalDateTime.now());
 	}
 
 	private BooleanExpression isPosted(final Long memberId) {
