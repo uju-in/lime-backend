@@ -134,7 +134,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 
 		final List<Long> itemIds = getItemIds(keyword);
 
-		return vote.item1Id.in(itemIds).or(vote.item2Id.in(itemIds));
+		return vote.item1Id.in(itemIds).or(vote.item2Id.in(itemIds)).or(vote.content.content.contains(keyword));
 	}
 
 	private List<Long> getItemIds(final String keyword) {
