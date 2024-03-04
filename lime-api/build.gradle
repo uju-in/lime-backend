@@ -35,7 +35,6 @@ dependencies {
     // 테스트 관련
     testImplementation(testFixtures(project(':lime-domain')))
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'com.h2database:h2'
 
     // cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
