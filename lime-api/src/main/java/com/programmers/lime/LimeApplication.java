@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@ConfigurationPropertiesScan("com.programmers.lime.global.config.security.jwt")
+@ConfigurationPropertiesScan({"com.programmers.lime.global.config.security.jwt", "com.programmers.lime.domains.auth"})
 public class LimeApplication {
 
 	public static void main(String[] args) {
