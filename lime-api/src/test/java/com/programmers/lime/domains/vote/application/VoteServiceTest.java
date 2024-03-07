@@ -21,6 +21,7 @@ import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.setup.ItemSetup;
 import com.programmers.lime.domains.item.model.ItemInfo;
 import com.programmers.lime.domains.vote.application.dto.request.VoteCreateServiceRequest;
+import com.programmers.lime.domains.vote.application.dto.response.VoteGetByKeywordServiceResponse;
 import com.programmers.lime.domains.vote.application.dto.response.VoteGetServiceResponse;
 import com.programmers.lime.domains.vote.domain.Vote;
 import com.programmers.lime.domains.vote.domain.Voter;
@@ -552,6 +553,60 @@ class VoteServiceTest extends IntegrationTest {
 			))
 				.isInstanceOf(BusinessException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.UNAUTHORIZED);
+		}
+	}
+
+	@Nested
+	class GetVotesByKeyword {
+
+		Vote vote2;
+
+		@BeforeEach
+		void setUp() {
+			vote2 = voteSetup.save(Vote.builder()
+				.memberId(1L)
+				.item1Id(item1.getId())
+				.item2Id(item2.getId())
+				.hobby(Hobby.BASKETBALL)
+				.content("농린이 추천템은?")
+				.maximumParticipants(1000)
+				.build());
+		}
+
+		@Test
+		@DisplayName("사용자는 투표 아이템명에 키워드가 포함된 투표 목록을 조회할 수 있다.")
+		void getVotesByItemNameTest() {
+			// given
+			final String keyword = item1.getName();
+
+			// when
+			final VoteGetByKeywordServiceResponse result = voteService.getVotesByKeyword(
+				keyword,
+				new CursorPageParameters(null, 1)
+			);
+
+			// then
+			assertThat(result.voteSummary().summaryCount()).isEqualTo(1);
+			assertThat(result.voteSummary().summaries().get(0).voteInfo().id()).isEqualTo(vote2.getId());
+			assertThat(result.totalVoteCount()).isEqualTo(2);
+		}
+
+		@Test
+		@DisplayName("사용자는 투표 제목에 키워드가 포함된 투표 목록을 조회할 수 있다.")
+		void getVotesByTitleTest() {
+			// given
+			final String keyword = "농린이";
+
+			// when
+			final VoteGetByKeywordServiceResponse result = voteService.getVotesByKeyword(
+				keyword,
+				new CursorPageParameters(null, 1)
+			);
+
+			// then
+			assertThat(result.voteSummary().summaryCount()).isEqualTo(1);
+			assertThat(result.voteSummary().summaries().get(0).voteInfo().id()).isEqualTo(vote2.getId());
+			assertThat(result.totalVoteCount()).isEqualTo(1);
 		}
 	}
 }

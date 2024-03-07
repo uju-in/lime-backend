@@ -23,4 +23,8 @@ public class VoteSetUp {
 
 		return voteRepository.save(vote);
 	}
+
+	public Vote save(final Vote vote) {
+		return voteRepository.save(vote);
+	}
 }
