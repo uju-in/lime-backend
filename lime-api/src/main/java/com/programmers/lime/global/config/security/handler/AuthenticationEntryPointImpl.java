@@ -13,8 +13,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 	@Override
-	public void commence(final HttpServletRequest request, final HttpServletResponse response,
-		final AuthenticationException authException) throws IOException, ServletException {
+	public void commence(
+		final HttpServletRequest request,
+		final HttpServletResponse response,
+		final AuthenticationException authException
+	) throws IOException, ServletException {
 			response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			response.sendRedirect("/join");
 	}
