@@ -1,4 +1,4 @@
-package com.programmers.lime.global.config.security;
+package com.programmers.lime.global.config.security.handler;
 
 import java.io.IOException;
 
