@@ -25,6 +25,8 @@ public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 	private static final int DEFAULT_IMAGE_SIZE = 3;
 
 	private final MemberItemReader memberItemReader;
+	private static final String DEFAULT_FOLDER_NAME = "default";
+
 	/*
 	 *
 	 * folder id 가 null 이면 root folder 를 의미한다.
@@ -33,15 +35,30 @@ public class MemberItemFolderFavoriteInfoReader implements IFavoriteReader {
 	 * */
 	@Override
 	public List<MemberItemFavoriteInfo> readFavorites(final Long folderId, final Long memberId) {
-
 		if (folderId != null) {
 			return Collections.emptyList();
 		}
 
 		List<MemberItemFolder> memberItemFolders = memberItemFolderReader.readMemberItemFoldersByMemberId(memberId);
+		moveDefaultFolderToEnd(memberItemFolders);
+
 		return memberItemFolders.stream()
 			.map(this::mapToMemberItemObjectInfo)
 			.toList();
+	}
+
+	private void moveDefaultFolderToEnd(final List<MemberItemFolder> memberItemFolders) {
+		List<MemberItemFolder> defaultFolders = new ArrayList<>();
+
+		memberItemFolders.removeIf(folder -> {
+			boolean isDefault = DEFAULT_FOLDER_NAME.equals(folder.getName());
+			if (isDefault) {
+				defaultFolders.add(folder);
+			}
+			return isDefault;
+		});
+
+		memberItemFolders.addAll(defaultFolders);
 	}
 
 	@Override
