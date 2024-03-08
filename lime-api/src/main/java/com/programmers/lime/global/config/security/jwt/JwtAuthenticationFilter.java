@@ -62,13 +62,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				final String memberId = jwtService.extractUsername(jwt);
 				final UserDetails principal = makePrincipal(memberId);
 
-				// if(needsProfileUpdate(principal)){
-				// 	// response.setHeader("Location","http://localhost:8080/join");
-				// 	// response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-				// 	// response.sendRedirect("http://localhost:8080/join");
-				//
-				// }
-
 				final UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 					principal,
 					null,
@@ -85,22 +78,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 	}
 
-	// private static boolean needsProfileUpdate(final UserDetails principal) {
-	// 	Collection<? extends GrantedAuthority> authorities = principal.getAuthorities();
-	// 	for(GrantedAuthority authority : authorities){
-	// 		String role = authority.getAuthority();
-	// 		if(role.equals("ROLE_GUEST")){
-	// 			return true;
-	// 		}
-	// 	}
-	// 	return false;
-	// }
-
 	private UserDetails makePrincipal(final String memberId) {
 		return userDetailsService.loadUserByUsername(memberId);
 	}
-
-	// private static UserDetails makePrincipal(final String memberId) {
-	// 	return new User(memberId, "", List.of(new SimpleGrantedAuthority("ROLE_USER")));
-	// }
 }
