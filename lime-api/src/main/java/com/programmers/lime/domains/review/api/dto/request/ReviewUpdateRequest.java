@@ -19,7 +19,7 @@ public record ReviewUpdateRequest(
 	Integer rating,
 
 	@Schema(description = "리뷰 내용", example = "사실 제가 원하는 않은 스타일이에요")
-	@Size(max = 1000, message = "리뷰 내용은 최대 1000자 입니다.")
+	@Size(min = 10, max = 1000, message = "리뷰 내용은 최소 10자, 최대 1000자 입니다.")
 	String content,
 
 	@Schema(description = "삭제할 아이템 url 목록", example = "[https://lime-bucket.kr.object.ncloudstorage.com/review-images/bc17405d-f035-443c-a03c-805146e1f1f1png, https://lime-bucket.kr.object.ncloudstorage.com/review-images/sfewff33-f035-443c-a03c-805146e1f1f1png]")

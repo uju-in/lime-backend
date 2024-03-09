@@ -21,7 +21,7 @@ public record ReviewCreateRequest(
 	Integer rating,
 
 	@Schema(description = "리뷰 내용", example = "제가 원하는 스타일이에요")
-	@Size(max = 1000, message = "리뷰 내용은 최대 1000자 입니다.")
+	@Size(min = 10, max = 1000, message = "리뷰 내용은 최소 10자, 최대 1000자 입니다.")
 	String content
 ) {
 	public ReviewContent toReviewContent() {
