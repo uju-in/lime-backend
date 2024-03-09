@@ -20,7 +20,9 @@ import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -58,7 +60,10 @@ public class MemberReader {
 		return new MyPage(memberProfile, bucketProfiles, inventoryProfiles);
 	}
 
-	public Optional<Member> readBySocialIdAndSocialType(String socialId, SocialType socialType) {
+	public Optional<Member> readBySocialIdAndSocialType(
+		final Long socialId,
+		final SocialType socialType
+	) {
 		return memberRepository.findBySocialInfoSocialIdAndSocialInfoSocialType(socialId, socialType);
 	}
 }

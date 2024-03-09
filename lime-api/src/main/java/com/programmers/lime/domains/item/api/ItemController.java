@@ -42,7 +42,6 @@ public class ItemController {
 
 	@Operation(summary = "아이템 등록", description = "ItemEnrollRequest 을 이용하여 아이템을 등록합니다.")
 	@PostMapping("/enroll")
-
 	public ResponseEntity<ItemEnrollResponse> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
 		Long enrolledItemId = itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
 		ItemEnrollResponse response = new ItemEnrollResponse(enrolledItemId);

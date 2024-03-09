@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class SocialInfo {
 
 	@Column(name = "social_id")
-	private String socialId;
+	private Long socialId;
 
 	@Column(name = "email", nullable = false)
 	private String email;
@@ -33,7 +33,7 @@ public class SocialInfo {
 
 	@Builder
 	public SocialInfo(
-		final String socialId,
+		final Long socialId,
 		final String email,
 		final String profileImage,
 		final SocialType socialType,
