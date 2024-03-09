@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.lime.domains.auth.api.dto.MemberLoginResponse;
 import com.programmers.lime.domains.auth.application.OAuthUserService;
-import com.programmers.lime.domains.member.api.dto.response.MemberLoginResponse;
+import com.programmers.lime.domains.auth.application.dto.MemberLoginServiceResponse;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,10 @@ public class AuthController {
 		@RequestParam final String code,
 		HttpServletResponse response
 	) {
-		MemberLoginResponse loginResponse = oauthUserService.login(code);
-		sendRefreshToken(response, loginResponse);
+		MemberLoginServiceResponse loginServiceResponse = oauthUserService.login(code);
+		sendRefreshToken(response, loginServiceResponse);
 
-		return ResponseEntity.ok(loginResponse);
+		return ResponseEntity.ok(MemberLoginResponse.from(loginServiceResponse));
 	}
 
 	@GetMapping("/join")
@@ -39,7 +40,7 @@ public class AuthController {
 
 	private void sendRefreshToken(
 		final HttpServletResponse response,
-		final MemberLoginResponse loginResponse
+		final MemberLoginServiceResponse loginResponse
 	) {
 		final ResponseCookie cookie = ResponseCookie.from("refresh-token", loginResponse.refreshToken())
 			.maxAge(COOKIE_AGE_SECONDS)
