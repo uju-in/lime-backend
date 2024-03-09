@@ -29,12 +29,12 @@ public class RankingEventListener {
 	@Async
 	@EventListener
 	public void decreasePopularity(final RankingDecreasePopularityEvent event) {
-		voteRedisManager.decreasePopularity(event.hobby(), event.voteRankingInfo());
+		voteRedisManager.updatePopularity(event.hobby(), event.voteRankingInfo(), -1);
 	}
 
 	@Async
 	@EventListener
 	public void deleteRanking(final RankingDeleteEvent event) {
-		voteRedisManager.remove(event.hobby(), event.voteRankingInfo());
+		voteRedisManager.deleteRanking(event.hobby(), event.voteRankingInfo());
 	}
 }

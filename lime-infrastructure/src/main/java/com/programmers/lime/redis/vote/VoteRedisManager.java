@@ -27,18 +27,12 @@ public class VoteRedisManager {
 		redisTemplate.expire(KEY + hobby, 1, TimeUnit.DAYS);
 	}
 
-	public void increasePopularity(
+	public void updatePopularity(
 		final String hobby,
-		final VoteRankingInfo rankingInfo
+		final VoteRankingInfo rankingInfo,
+		final int delta
 	) {
-		redisTemplate.opsForZSet().incrementScore(KEY + hobby, rankingInfo, 1);
-	}
-
-	public void decreasePopularity(
-		final String hobby,
-		final VoteRankingInfo rankingInfo
-	) {
-		redisTemplate.opsForZSet().incrementScore(KEY + hobby, rankingInfo, -1);
+		redisTemplate.opsForZSet().incrementScore(KEY + hobby, rankingInfo, delta);
 	}
 
 	public List<VoteRankingInfo> getRanking(final String hobby) {
@@ -56,7 +50,7 @@ public class VoteRedisManager {
 			.toList();
 	}
 
-	public void remove(
+	public void deleteRanking(
 		final String hobby,
 		final VoteRankingInfo rankingInfo
 	) {
@@ -65,13 +59,13 @@ public class VoteRedisManager {
 
 	public void updateRanking(
 		final String hobby,
-		final boolean voting,
+		final boolean isVoting,
 		final VoteRankingInfo rankingInfo
 	) {
-		if (voting) {
-			increasePopularity(hobby, rankingInfo);
+		if (isVoting) {
+			updatePopularity(hobby, rankingInfo, 1);
 		} else {
-			remove(hobby, rankingInfo);
+			deleteRanking(hobby, rankingInfo);
 		}
 	}
 }
