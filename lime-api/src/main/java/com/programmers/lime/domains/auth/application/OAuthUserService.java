@@ -23,7 +23,7 @@ public class OAuthUserService {
 	private final JwtService jwtService;
 
 	@Transactional
-	public MemberLoginResponse login(String code) {
+	public MemberLoginResponse login(final String code) {
 		String kakaoAccessToken = kakaoOAuthClient.getAccessToken(code);
 		KakaoMemberResponse response = kakaoOAuthClient.getMemberInfo(kakaoAccessToken);
 
