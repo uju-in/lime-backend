@@ -1,11 +1,14 @@
 package com.programmers.lime.domains.member.api.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.lime.domains.member.domain.Member;
 
 public record MemberLoginResponse(
         Long memberId,
 		String nickname,
 		String accessToken,
+
+		@JsonIgnore
 		String refreshToken
 ) {
 	public static MemberLoginResponse from(
