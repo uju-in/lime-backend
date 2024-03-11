@@ -67,7 +67,7 @@ public class SecurityConfiguration {
 					.requestMatchers("/api/hobbies").permitAll()
 					.requestMatchers("/login").permitAll()
 					.requestMatchers("/actuator/**").permitAll()
-					.requestMatchers("/auth/kakao/callback").permitAll()
+					.requestMatchers("/auth/kakao/callback/{code}").permitAll()
 
 					.requestMatchers("/join").permitAll()
 					.anyRequest().hasRole("USER")
