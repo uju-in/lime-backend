@@ -68,7 +68,6 @@ public class SecurityConfiguration {
 					.requestMatchers("/login").permitAll()
 					.requestMatchers("/actuator/**").permitAll()
 					.requestMatchers("/auth/kakao/callback/{code}").permitAll()
-					.requestMatchers("/auth/kakao/**").permitAll()
 
 					.requestMatchers("/join").permitAll()
 					.anyRequest().hasRole("USER")
