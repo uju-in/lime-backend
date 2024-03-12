@@ -24,7 +24,7 @@ public class VoteRedisManager {
 		final VoteRankingInfo rankingInfo
 	) {
 		redisTemplate.opsForZSet().add(KEY + hobby, rankingInfo, 0);
-		redisTemplate.expire(KEY, 1, TimeUnit.DAYS);
+		redisTemplate.expire(KEY + hobby, 1, TimeUnit.DAYS);
 	}
 
 	public void increasePopularity(
