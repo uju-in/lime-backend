@@ -3,6 +3,7 @@ package com.programmers.lime.domains.vote.application;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.programmers.lime.common.cursor.CursorPageParameters;
@@ -26,6 +27,10 @@ import com.programmers.lime.domains.vote.model.VoteSummary;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
+import com.programmers.lime.global.event.ranking.vote.RankingAddEvent;
+import com.programmers.lime.global.event.ranking.vote.RankingDecreasePopularityEvent;
+import com.programmers.lime.global.event.ranking.vote.RankingDeleteEvent;
+import com.programmers.lime.global.event.ranking.vote.RankingUpdateEvent;
 import com.programmers.lime.global.util.MemberUtils;
 import com.programmers.lime.redis.vote.VoteRankingInfo;
 import com.programmers.lime.redis.vote.VoteRedisManager;
@@ -44,14 +49,15 @@ public class VoteService {
 	private final MemberUtils memberUtils;
 	private final ItemReader itemReader;
 	private final VoteRedisManager voteRedisManager;
+	private final ApplicationEventPublisher eventPublisher;
 
 	public Long createVote(final VoteCreateServiceRequest request) {
 		final Long memberId = memberUtils.getCurrentMemberId();
-		validateItemIds(request.item1Id(), request.item2Id());
-		final Vote vote = voteAppender.append(memberId, request.toImplRequest());
 
-		final VoteRankingInfo rankingInfo = getVoteRedis(vote);
-		voteRedisManager.addRanking(vote.getHobby().toString(), rankingInfo);
+		validateItemIds(request.item1Id(), request.item2Id());
+
+		final Vote vote = voteAppender.append(memberId, request.toImplRequest());
+		eventPublisher.publishEvent(new RankingAddEvent(String.valueOf(vote.getHobby()), getVoteRedis(vote)));
 
 		return vote.getId();
 	}
@@ -84,11 +90,7 @@ public class VoteService {
 				voter -> voteManager.reParticipate(itemId, voter),
 				() -> {
 					voteManager.participate(vote, memberId, itemId);
-					voteRedisManager.updateRanking(
-						vote.getHobby().toString(),
-						vote.isVoting(),
-						getVoteRedis(vote)
-					);
+					eventPublisher.publishEvent(new RankingUpdateEvent(String.valueOf(vote.getHobby()), vote.isVoting(), getVoteRedis(vote)));
 				}
 			);
 	}
@@ -98,8 +100,7 @@ public class VoteService {
 		final Vote vote = voteReader.read(voteId);
 
 		voteManager.cancel(vote, memberId);
-
-		voteRedisManager.decreasePopularity(vote.getHobby().toString(), getVoteRedis(vote));
+		eventPublisher.publishEvent(new RankingDecreasePopularityEvent(String.valueOf(vote.getHobby()), getVoteRedis(vote)));
 	}
 
 	public void deleteVote(final Long voteId) {
@@ -111,8 +112,7 @@ public class VoteService {
 		}
 
 		voteRemover.remove(vote);
-
-		voteRedisManager.remove(vote.getHobby().toString(), getVoteRedis(vote));
+		eventPublisher.publishEvent(new RankingDeleteEvent(String.valueOf(vote.getHobby()), getVoteRedis(vote)));
 	}
 
 	public VoteGetServiceResponse getVote(final Long voteId) {

@@ -17,7 +17,7 @@ public class MemberBuilder {
 
 	public static Member build(final Long memberId) {
 		final SocialInfo socialInfo = new SocialInfo(
-			"357935205",
+			357935205L,
 			"test@test.com",
 			"1.png",
 			SocialType.NAVER,

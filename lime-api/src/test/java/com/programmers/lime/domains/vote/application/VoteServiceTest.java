@@ -36,8 +36,6 @@ import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.EntityNotFoundException;
 import com.programmers.lime.error.ErrorCode;
 import com.programmers.lime.global.util.MemberUtils;
-import com.programmers.lime.redis.vote.VoteRankingInfo;
-import com.programmers.lime.redis.vote.VoteRedisManager;
 
 class VoteServiceTest extends IntegrationTest {
 
@@ -58,9 +56,6 @@ class VoteServiceTest extends IntegrationTest {
 
 	@MockBean
 	private MemberUtils memberUtils;
-
-	@MockBean
-	private VoteRedisManager voteRedisManager;
 
 	private Item item1;
 	private Item item2;
@@ -94,26 +89,11 @@ class VoteServiceTest extends IntegrationTest {
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(1L);
 
-			willDoNothing()
-				.given(voteRedisManager)
-				.addRanking(anyString(), any(VoteRankingInfo.class));
-
 			// when
 			final Long result = voteService.createVote(request);
 
 			// then
 			assertThat(result).isNotNull();
-
-			// verify
-			then(voteRedisManager).should(times(1))
-				.addRanking(
-					String.valueOf(Hobby.BASKETBALL),
-					VoteRankingInfo.builder()
-						.id(Long.MAX_VALUE - result)
-						.item1Image(item1.getImage())
-						.item2Image(item2.getImage())
-						.build()
-				);
 		}
 
 		@Test
@@ -136,9 +116,6 @@ class VoteServiceTest extends IntegrationTest {
 			assertThatThrownBy(() -> voteService.createVote(request))
 				.isInstanceOf(BusinessException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_ITEM_DUPLICATED);
-
-			// verify
-			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 
 		@Test
@@ -162,9 +139,6 @@ class VoteServiceTest extends IntegrationTest {
 			assertThatThrownBy(() -> voteService.createVote(request))
 				.isInstanceOf(EntityNotFoundException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.ITEM_NOT_FOUND);
-
-			// verify
-			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 	}
 
@@ -180,27 +154,11 @@ class VoteServiceTest extends IntegrationTest {
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(1L);
 
-			willDoNothing()
-				.given(voteRedisManager)
-				.updateRanking(anyString(), eq(true), any(VoteRankingInfo.class));
-
 			// when
 			voteService.participateVote(voteId, itemId);
 
 			// then
 			assertThat(vote.getVoters()).hasSize(1);
-
-			// verify
-			then(voteRedisManager).should(times(1))
-				.updateRanking(
-					String.valueOf(vote.getHobby()),
-					true,
-					VoteRankingInfo.builder()
-						.id(Long.MAX_VALUE - voteId)
-						.item1Image(item1.getImage())
-						.item2Image(item2.getImage())
-						.build()
-				);
 		}
 
 		@Test
@@ -221,9 +179,6 @@ class VoteServiceTest extends IntegrationTest {
 			// then
 			assertThat(vote.getVoters()).hasSize(1);
 			assertThat(voter.getItemId()).isEqualTo(reSelectedItemId);
-
-			// verify
-			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 
 		@Test
@@ -239,9 +194,6 @@ class VoteServiceTest extends IntegrationTest {
 			assertThatThrownBy(() -> voteService.participateVote(voteId, 1L))
 				.isInstanceOf(BusinessException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_CANNOT_PARTICIPATE);
-
-			// verify
-			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 
 		@Test
@@ -257,9 +209,6 @@ class VoteServiceTest extends IntegrationTest {
 			assertThatThrownBy(() -> voteService.participateVote(voteId, notExistItemId))
 				.isInstanceOf(BusinessException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_NOT_CONTAIN_ITEM);
-
-			// verify
-			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 	}
 
@@ -273,26 +222,11 @@ class VoteServiceTest extends IntegrationTest {
 		given(memberUtils.getCurrentMemberId())
 			.willReturn(memberId);
 
-		willDoNothing()
-			.given(voteRedisManager)
-			.decreasePopularity(anyString(), any(VoteRankingInfo.class));
-
 		// when
 		voteService.cancelVote(voteId);
 
 		// then
 		assertThat(vote.getVoters()).isEmpty();
-
-		// verify
-		then(voteRedisManager).should(times(1))
-			.decreasePopularity(
-				String.valueOf(vote.getHobby()),
-				VoteRankingInfo.builder()
-					.id(Long.MAX_VALUE - voteId)
-					.item1Image(item1.getImage())
-					.item2Image(item2.getImage())
-					.build()
-			);
 	}
 
 	@Nested
@@ -306,10 +240,6 @@ class VoteServiceTest extends IntegrationTest {
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(memberId);
 
-			willDoNothing()
-				.given(voteRedisManager)
-				.remove(anyString(), any(VoteRankingInfo.class));
-
 			// when
 			voteService.deleteVote(voteId);
 
@@ -317,17 +247,6 @@ class VoteServiceTest extends IntegrationTest {
 			assertThatThrownBy(() -> voteReader.read(voteId)) // 삭제된 투표 조회 시 EntityNotFoundException 발생
 				.isInstanceOf(EntityNotFoundException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_NOT_FOUND);
-
-			// verify
-			then(voteRedisManager).should(times(1))
-				.remove(
-					String.valueOf(vote.getHobby()),
-					VoteRankingInfo.builder()
-						.id(Long.MAX_VALUE - voteId)
-						.item1Image(item1.getImage())
-						.item2Image(item2.getImage())
-						.build()
-				);
 		}
 
 		@Test
@@ -343,9 +262,6 @@ class VoteServiceTest extends IntegrationTest {
 			assertThatThrownBy(() -> voteService.deleteVote(voteId))
 				.isInstanceOf(BusinessException.class)
 				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOTE_NOT_OWNER);
-
-			// verify
-			then(voteRedisManager).shouldHaveNoInteractions();
 		}
 	}
 
