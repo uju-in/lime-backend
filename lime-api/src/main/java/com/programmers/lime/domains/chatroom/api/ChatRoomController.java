@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programmers.lime.domains.chat.application.ChatService;
 import com.programmers.lime.domains.chatroom.api.dto.response.ChatRoomGetListResponse;
 import com.programmers.lime.domains.chatroom.application.ChatRoomService;
 import com.programmers.lime.domains.chatroom.application.dto.response.ChatRoomGetServiceListResponse;
@@ -24,7 +25,7 @@ public class ChatRoomController {
 
 	private final ChatRoomService chatRoomService;
 
-	//private final ChatService chatService;
+	private final ChatService chatService;
 
 	@Operation(summary = "채티방 전체 조회", description = "채팅방을 조회합니다.")
 	@GetMapping
@@ -41,7 +42,7 @@ public class ChatRoomController {
 	@PostMapping("/{chatRoomId}/join")
 	public ResponseEntity<Void> joinChatRoom(@PathVariable final Long chatRoomId) {
 		chatRoomService.joinChatRoom(chatRoomId);
-		//chatService.joinChatRoom(chatRoomId);
+		chatService.joinChatRoom(chatRoomId);
 		return ResponseEntity.ok().build();
 	}
 
@@ -57,7 +58,7 @@ public class ChatRoomController {
 	@DeleteMapping("/{chatRoomId}/exit")
 	public ResponseEntity<Void> exitChatRoom(@PathVariable final Long chatRoomId) {
 		chatRoomService.exitChatRoom(chatRoomId);
-		//chatService.sendExitMessageToChatRoom(chatRoomId);
+		chatService.sendExitMessageToChatRoom(chatRoomId);
 		return ResponseEntity.ok().build();
 	}
 }
