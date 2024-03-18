@@ -42,6 +42,11 @@ dependencies {
 
     // configuration processor
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // chat
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.webjars:stomp-websocket:2.3.3'
 }
 
 jar {

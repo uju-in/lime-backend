@@ -71,6 +71,15 @@ public class SecurityConfiguration {
 					.requestMatchers("/auth/kakao/**").permitAll()
 
 					.requestMatchers("/join").permitAll()
+
+					.requestMatchers("/api/chatrooms").permitAll()
+					.requestMatchers("/api/chatrooms/{chatRoomId}/**").permitAll()
+
+					.requestMatchers("/ws-stomp/**").permitAll()
+
+					.requestMatchers("/api/chats").permitAll()
+					.requestMatchers("/api/chats/{chatRoomId}").permitAll()
+
 					.anyRequest().hasRole("USER")
 			)
 			.sessionManagement(session -> session
