@@ -50,11 +50,11 @@ jobs:
 
     - name: docker Hub push
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
-      
-  run-docker-image-on-server:
+
+  run-docker-image-on-server-1:
     if: github.event.pull_request.merged
     needs: build-docker-image
-    runs-on: [ self-hosted, lime-was-server ]
+    runs-on: [ self-hosted, lime-was-server-1 ]
 
     steps:
       - name: docker pull
@@ -69,3 +69,20 @@ jobs:
       - name: delete old docker image
         run: sudo docker system prune -f
 
+  run-docker-image-on-server-2:
+    if: github.event.pull_request.merged
+    needs: build-docker-image
+    runs-on: [ self-hosted, lime-was-server-2 ]
+
+    steps:
+      - name: docker pull
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+
+      - name: docker stop container
+        run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
+
+      - name: docker run new container
+        run: sudo docker run --name lime-image --rm -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+
+      - name: delete old docker image
+        run: sudo docker system prune -f
