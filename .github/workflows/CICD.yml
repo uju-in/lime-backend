@@ -229,17 +229,24 @@ jobs:
         shell: bash
 
   switch-environment:
-    needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2, set-variable-2 ]
+    needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2]
     runs-on: [ self-hosted, loadbalancer-server ]
     if: >
       needs.run-docker-image-on-server-1.outputs.passed == 'true' &&
       needs.run-docker-image-on-server-2.outputs.passed == 'true'
     steps:
+      - name: Check Blue Environment
+        id: check-blue
+        run: |
+          IS_BLUE_ENV=$(sh /usr/local/bin/scripts/is_blue_env.sh)
+          echo "::set-output name=is_blue_env::$IS_BLUE_ENV"
+        shell: bash
+
       - name: Switch to Green Environment
-        if: ${{ needs.setup-environment.outputs.is_blue_env == 'true' }}
+        if: ${{ env.IS_BLUE_ENV == 'true' }}
         run: sh /usr/local/bin/scripts/switch_to_green_env.sh
 
       - name: Switch to Blue Environment
-        if: ${{ needs.setup-environment.outputs.is_blue_env != 'true' }}
+        if: ${{ env.IS_BLUE_ENV != 'true' }}
         run: sh /usr/local/bin/scripts/switch_to_blue_env.sh
 
