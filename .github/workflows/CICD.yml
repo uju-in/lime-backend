@@ -60,10 +60,10 @@ jobs:
           echo "${{ secrets.APPLICATION_INFRA_YML }}" | base64 --decode > lime-infrastructure/src/main/resources/application-infra.yml
           find lime-infrastructure/src
 
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-        with:
-          arguments: clean bootJar
+      ##- name: Build with Gradle
+      ##  uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      ##  with:
+      ##    arguments: clean bootJar
 
       ##- name: docker image build
       ##  run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/lime-image .
@@ -105,7 +105,7 @@ jobs:
             sudo docker stop $RUNNING_CONTAINER
           fi
           echo "Running new container on port $PORT..."
-          sudo docker run --name lime-image --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+          sudo docker run --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
       - name: Test Application Response from /actuator
         id: test_response
@@ -163,7 +163,7 @@ jobs:
             sudo docker stop $RUNNING_CONTAINER
           fi
           echo "Running new container on port $PORT..."
-          sudo docker run --name lime-image --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+          sudo docker run --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
       - name: Test Application Response from /actuator
         id: test_response
