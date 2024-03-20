@@ -1,8 +1,8 @@
-## 1. 🍋 프로젝트 소개
-서비스 링크 : /https://uju-lime.vercel.app/ <br>
-
+# [LIfe - TIme : LIME](https://uju-lime.vercel.app)
 <img src="http://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white&link=http://api.uju-lime.shop/swagger-ui/index.html#/)]
-  (http://api.uju-lime.shop/swagger-ui/index.html#/)" height="25">
+(http://api.uju-lime.shop/swagger-ui/index.html#/)" height="25">
+
+## 1. 🍋 프로젝트 소개
 
 ### 프로젝트 주제
 가지고 싶은 취미 상품을 편리하게 관리하고, 구매 결정에 관해 피드백을 받는 플랫폼 서비스
