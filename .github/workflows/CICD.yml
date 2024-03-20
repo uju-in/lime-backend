@@ -111,5 +111,68 @@ jobs:
             echo "Container on port $PORT stopped."
           else
             echo "No container found running on port $PORT"
+
+  run-docker-image-on-server-2:
+    needs: [ build-docker-image, set-variable ]
+    runs-on: [ self-hosted, lime-was-server-2 ]
+
+    steps:
+      - name: docker pull
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+
+      - name: Run Docker Container
+        run: |
+          PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          
+          # 해당 포트에서 실행 중인 컨테이너 확인
+          RUNNING_CONTAINER=$(sudo docker ps -q --filter "ancestor=${{ secrets.DOCKERHUB_USERNAME }}/lime-image" --filter "publish=$PORT")
+          
+          # 실행 중인 컨테이너가 있다면 중지
+          if [ ! -z "$RUNNING_CONTAINER" ]; then
+            echo "Stopping existing container on port $PORT..."
+            sudo docker stop $RUNNING_CONTAINER
+          fi
+          
+          echo "Running new container on port $PORT..."
+          sudo docker run --name lime-image --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+
+      - name: Test Application Response from /actuator
+        id: test_response
+        continue-on-error: true
+        run: |
+          PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          response=$(curl -s http://localhost:$PORT/actuator)
+          if [[ -z "$response" ]]; then
+            echo "::set-output name=passed::false"
+          else
+            echo "Actuator response received: $response"
+            echo "::set-output name=passed::true"
+          fi
+
+      - name: Stop Docker Container After Test
+        run: |
+          PORT=${{ steps.test_response.outputs.passed == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
+          echo "Stopping Docker container on port $PORT..."
+          container_id=$(sudo docker ps -q --filter "publish=$PORT")
+          if [ ! -z "$container_id" ]; then
+            sudo docker stop $container_id
+            echo "Container on port $PORT stopped."
+          else
+            echo "No container found running on port $PORT"
+
+  switch-environment:
+    needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2 ]
+    runs-on: [ self-hosted, loadbalancer-server ]
+    if: >
+      needs.run-docker-image-on-server-1.outputs.passed == 'true' &&
+      needs.run-docker-image-on-server-2.outputs.passed == 'true'
+    steps:
+      - name: Switch to Green Environment
+        if: ${{ env.IS_BLUE_ENV == 'true' }}
+        run: sh /usr/local/bin/scripts/switch_to_green_env.sh
+
+      - name: Switch to Blue Environment
+        if: ${{ env.IS_BLUE_ENV != 'true' }}
+        run: sh /usr/local/bin/scripts/switch_to_blue_env.sh
     
 
