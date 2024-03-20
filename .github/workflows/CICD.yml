@@ -60,13 +60,13 @@ jobs:
           echo "${{ secrets.APPLICATION_INFRA_YML }}" | base64 --decode > lime-infrastructure/src/main/resources/application-infra.yml
           find lime-infrastructure/src
 
-      ##- name: Build with Gradle
-      ##  uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      ##  with:
-      ##    arguments: clean bootJar
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: clean bootJar
 
-      ##- name: docker image build
-      ##  run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/lime-image .
+      - name: docker image build
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/lime-image .
 
       - name: docker login
         uses: docker/login-action@v2
@@ -74,8 +74,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      ##- name: docker Hub push
-      ##  run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+      - name: docker Hub push
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
   run-docker-image-on-server-1:
     needs: [ build-docker-image, set-variable ]
