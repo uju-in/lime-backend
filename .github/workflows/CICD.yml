@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   set-variable:
-    runs-on: [self-hosted, loadbalancer-server] # Self-hosted, 'loadbalancer-server' 라벨을 가진 서버에서 실행
+    runs-on: [self-hosted, loadbalancer-server]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,4 +29,19 @@ jobs:
       - name: Print Environment
         run: |
           echo "IS_BLUE_ENV is ${{ env.IS_BLUE_ENV }}"
+
+      - name: Output GREEN_PORT and run switch_to_green_env.sh
+        if: env.IS_BLUE_ENV == 'false'
+        run: |
+          echo "BLUE_PORT is ${{ secrets.BLUE_PORT }}"
+          sh /usr/local/bin/scripts/switch_to_blue_env.sh
+        shell: bash
+
+      - name: Output BLUE_PORT and run switch_to_blue_env.sh
+        if: env.IS_BLUE_ENV == 'true'
+        run: |
+          echo "GREEN_PORT is ${{ secrets.GREEN_PORT }}"
+          sh /usr/local/bin/scripts/switch_to_green_env.sh
+        shell: bash
+
 
