@@ -73,6 +73,8 @@ jobs:
   run-docker-image-on-server-1:
     needs: [ build-docker-image, set-variable ]
     runs-on: [ self-hosted, lime-was-server-1 ]
+    outputs:
+      passed: ${{ steps.test_response.outputs.passed }}
 
     steps:
       - name: docker pull
@@ -132,6 +134,8 @@ jobs:
   run-docker-image-on-server-2:
     needs: [ build-docker-image, set-variable ]
     runs-on: [ self-hosted, lime-was-server-2 ]
+    outputs:
+      passed: ${{ steps.test_response.outputs.passed }}
 
     steps:
       - name: docker pull
