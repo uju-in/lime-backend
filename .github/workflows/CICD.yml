@@ -87,11 +87,6 @@ jobs:
       - name: docker pull
         run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
-      - name: Print if Environment is Blue
-        run: |
-          echo "IS_BLUE_ENV is ${{ needs.set-variable.outputs.is_blue_env }}"
-        shell: bash
-
       - name: Run Docker Container
         run: |
           PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
@@ -179,7 +174,7 @@ jobs:
           echo "Testing application response from /actuator on port $PORT..."
           for i in {1..24}; do # 최대 1분(120초) 동안 5초 간격으로 반복
             echo "Attempt1 $i..."
-            response=$(curl -v http://localhost:$PORT/actuator || true)
+            response=$(curl -s http://localhost:$PORT/actuator || true)
             echo "Attempt2 $i..."
             if [[ -z "$response" ]]; then
               echo "No response yet. Waiting for 5 seconds..."
