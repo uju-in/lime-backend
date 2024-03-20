@@ -206,3 +206,4 @@ jobs:
       - name: Switch to Blue Environment
         if: ${{ env.IS_BLUE_ENV != 'true' }}
         run: sh /usr/local/bin/scripts/switch_to_blue_env.sh
+
