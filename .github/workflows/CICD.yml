@@ -99,9 +99,8 @@ jobs:
         run: |
           PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           success=false
-          sleep 60
           for i in {1..12}; do # 최대 1분(120초) 동안 5초 간격으로 반복
-            response=$(curl -s http://localhost:$PORT/actuator)
+            response=$(curl -s http://localhost:$PORT/actuator || true)
             if [[ -z "$response" ]]; then
               echo "No response yet. Waiting for 5 seconds..."
               sleep 5
@@ -157,10 +156,9 @@ jobs:
           PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           success=false
           echo "Testing application response from /actuator on port $PORT..."
-          sleep 60
           for i in {1..24}; do # 최대 1분(120초) 동안 5초 간격으로 반복
             echo "Attempt1 $i..."
-            response=$(curl -v http://localhost:$PORT/actuator)
+            response=$(curl -v http://localhost:$PORT/actuator || true)
             echo "Attempt2 $i..."
             if [[ -z "$response" ]]; then
               echo "No response yet. Waiting for 5 seconds..."
