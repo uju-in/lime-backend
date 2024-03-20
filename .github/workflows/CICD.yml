@@ -89,7 +89,7 @@ jobs:
           if [ ! -z "$RUNNING_CONTAINER" ]; then
             echo "Stopping existing container on port $PORT..."
             sudo docker stop $RUNNING_CONTAINER
-          
+          fi
           echo "Running new container on port $PORT..."
           sudo docker run --name lime-image --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
@@ -133,6 +133,7 @@ jobs:
           if [ ! -z "$RUNNING_CONTAINER" ]; then
             echo "Stopping existing container on port $PORT..."
             sudo docker stop $RUNNING_CONTAINER
+          fi
           echo "Running new container on port $PORT..."
           sudo docker run --name lime-image --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
