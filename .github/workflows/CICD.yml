@@ -30,18 +30,47 @@ jobs:
         run: |
           echo "IS_BLUE_ENV is ${{ env.IS_BLUE_ENV }}"
 
-      - name: Output GREEN_PORT and run switch_to_green_env.sh
-        if: env.IS_BLUE_ENV == 'false'
-        run: |
-          echo "BLUE_PORT is ${{ secrets.BLUE_PORT }}"
-          sh /usr/local/bin/scripts/switch_to_blue_env.sh
-        shell: bash
+  run-docker-image-on-server-1:
+    if: github.event.pull_request.merged
+    needs: build-docker-image
+    runs-on: [ self-hosted, lime-was-server-1 ]
 
-      - name: Output BLUE_PORT and run switch_to_blue_env.sh
-        if: env.IS_BLUE_ENV == 'true'
-        run: |
-          echo "GREEN_PORT is ${{ secrets.GREEN_PORT }}"
-          sh /usr/local/bin/scripts/switch_to_green_env.sh
-        shell: bash
+    steps:
+      - name: docker pull
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
+      - name: Run Docker Container
+        run: |
+          if [ "${{ env.IS_BLUE_ENV }}" == "true" ]; then
+            echo "Running with GREEN_PORT..."
+            sudo docker run --name lime-image --rm -d -p ${{ secrets.GREEN_PORT }}:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+          else
+            echo "Running with BLUE_PORT..."
+            sudo docker run --name lime-image --rm -d -p ${{ secrets.BLUE_PORT }}:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
+          fi
+
+      - name: Test Application Response from /actuator
+        id: test_response
+        continue-on-error: true
+        run: |
+          PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          response=$(curl -s http://localhost:$PORT/actuator)
+          if [[ -z "$response" ]]; then
+            echo "::set-output name=passed::false"
+          else
+            echo "Actuator response received: $response"
+            echo "::set-output name=passed::true"
+          fi
+
+      - name: Stop Docker Container After Test
+        run: |
+          PORT=${{ steps.test_response.outputs.passed == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
+          echo "Stopping Docker container on port $PORT..."
+          container_id=$(sudo docker ps -q --filter "publish=$PORT")
+          if [ ! -z "$container_id" ]; then
+            sudo docker stop $container_id
+            echo "Container on port $PORT stopped."
+          else
+            echo "No container found running on port $PORT"
+    
 
