@@ -204,30 +204,6 @@ jobs:
             echo "No container found running on port $PORT"
           fi
 
-  set-variable-2:
-    runs-on: [ self-hosted, loadbalancer-server ]
-    outputs:
-      is_blue_env: ${{ steps.check-blue.outputs.is_blue_env }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Check Blue Environment
-        id: check-blue
-        run: |
-          IS_BLUE_ENV=$(sh /usr/local/bin/scripts/is_blue_env.sh)
-          echo "::set-output name=is_blue_env::$IS_BLUE_ENV"
-        shell: bash
-
-      - name: Print if Environment is Blue
-        run: |
-          if [[ "${{ steps.check-blue.outputs.is_blue_env }}" == "true" ]]; then
-            echo "Environment is BLUE"
-          else
-            echo "Environment is NOT BLUE"
-          fi
-        shell: bash
-
   switch-environment:
     needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2]
     runs-on: [ self-hosted, loadbalancer-server ]
@@ -243,10 +219,10 @@ jobs:
         shell: bash
 
       - name: Switch to Green Environment
-        if: ${{ env.IS_BLUE_ENV == 'true' }}
+        if: ${{ steps.check-blue.outputs.is_blue_env == 'true' }}
         run: sh /usr/local/bin/scripts/switch_to_green_env.sh
 
       - name: Switch to Blue Environment
-        if: ${{ env.IS_BLUE_ENV != 'true' }}
+        if: ${{ steps.check-blue.outputs.is_blue_env != 'true' }}
         run: sh /usr/local/bin/scripts/switch_to_blue_env.sh
 
