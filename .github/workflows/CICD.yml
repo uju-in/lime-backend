@@ -83,8 +83,8 @@ jobs:
           PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
 
           # 해당 포트에서 실행 중인 컨테이너 확인
-          RUNNING_CONTAINER=$(sudo docker ps --format '{{.Ports}} {{.ID}}' | grep ":$PORT->" | awk '{print $2}')
-    
+          RUNNING_CONTAINER=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
+          
           # 실행 중인 컨테이너가 있다면 중지
           if [ ! -z "$RUNNING_CONTAINER" ]; then
             echo "Stopping existing container on port $PORT..."
@@ -128,7 +128,7 @@ jobs:
       - name: Run Docker Container
         run: |
           PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
-          RUNNING_CONTAINER=$(sudo docker ps -q --filter "ancestor=${{ secrets.DOCKERHUB_USERNAME }}/lime-image" --filter "publish=$PORT")
+          RUNNING_CONTAINER=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
           # 실행 중인 컨테이너가 있다면 중지
           if [ ! -z "$RUNNING_CONTAINER" ]; then
             echo "Stopping existing container on port $PORT..."
