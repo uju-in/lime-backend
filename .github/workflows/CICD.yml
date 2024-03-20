@@ -159,6 +159,7 @@ jobs:
             echo "Container on port $PORT stopped."
           else
             echo "No container found running on port $PORT"
+          fi
 
   switch-environment:
     needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2 ]
