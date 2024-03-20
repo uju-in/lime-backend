@@ -146,6 +146,7 @@ jobs:
             else
               echo "No container found running on port $TEST_PORT"
             fi
+          fi
 
   run-docker-image-on-server-2:
     needs: [ build-docker-image, set-variable ]
@@ -210,6 +211,7 @@ jobs:
             else
               echo "No container found running on port $TEST_PORT"
             fi
+          fi
 
   ## 모든 테스트가 통과하면 환경을 변경
   switch-environment:
