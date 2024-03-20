@@ -83,8 +83,13 @@ jobs:
           PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
 
           # 해당 포트에서 실행 중인 컨테이너 확인
-          RUNNING_CONTAINER=$(sudo docker ps -q --filter "ancestor=${{ secrets.DOCKERHUB_USERNAME }}/lime-image" --filter "publish=$PORT")
-          sudo docker stop $RUNNING_CONTAINER
+          RUNNING_CONTAINER=$(sudo docker ps --format '{{.Ports}} {{.ID}}' | grep ":$PORT->" | awk '{print $2}')
+    
+          # 실행 중인 컨테이너가 있다면 중지
+          if [ ! -z "$RUNNING_CONTAINER" ]; then
+            echo "Stopping existing container on port $PORT..."
+            sudo docker stop $RUNNING_CONTAINER
+          
           echo "Running new container on port $PORT..."
           sudo docker run --name lime-image --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
@@ -124,7 +129,10 @@ jobs:
         run: |
           PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           RUNNING_CONTAINER=$(sudo docker ps -q --filter "ancestor=${{ secrets.DOCKERHUB_USERNAME }}/lime-image" --filter "publish=$PORT")
-          sudo docker stop $RUNNING_CONTAINER
+          # 실행 중인 컨테이너가 있다면 중지
+          if [ ! -z "$RUNNING_CONTAINER" ]; then
+            echo "Stopping existing container on port $PORT..."
+            sudo docker stop $RUNNING_CONTAINER
           echo "Running new container on port $PORT..."
           sudo docker run --name lime-image --rm -d -p $PORT:8080 ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
