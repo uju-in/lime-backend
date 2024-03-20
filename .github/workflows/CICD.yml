@@ -133,14 +133,20 @@ jobs:
 
       - name: Stop Docker Container After Test
         run: |
-          PORT=${{ steps.test_response.outputs.passed == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
-          echo "Stopping Docker container on port $PORT..."
-          container_id=$(sudo docker ps -q --filter "publish=$PORT")
-          if [ ! -z "$container_id" ]; then
-            sudo docker stop $container_id
-            echo "Container on port $PORT stopped."
+          TEST_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          STOP_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
+          
+          if [[ ${{ steps.test_response.outputs.passed }} == 'true' ]]; then
+            echo "Stopping Docker container on port $STOP_PORT..."
+            container_id=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
+            if [ ! -z "$container_id" ]; then
+              sudo docker stop $container_id
+              echo "Container on port $STOP_PORT stopped."
+            else
+              echo "No container found running on port $STOP_PORT"
+            fi
           else
-            echo "No container found running on port $PORT"
+            echo "Test failed. Not stopping container on port $STOP_PORT."
           fi
 
   run-docker-image-on-server-2:
@@ -194,14 +200,20 @@ jobs:
 
       - name: Stop Docker Container After Test
         run: |
-          PORT=${{ steps.test_response.outputs.passed == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
-          echo "Stopping Docker container on port $PORT..."
-          container_id=$(sudo docker ps -q --filter "publish=$PORT")
-          if [ ! -z "$container_id" ]; then
-            sudo docker stop $container_id
-            echo "Container on port $PORT stopped."
+          TEST_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          STOP_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
+
+          if [[ ${{ steps.test_response.outputs.passed }} == 'true' ]]; then
+            echo "Stopping Docker container on port $STOP_PORT..."
+            container_id=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
+            if [ ! -z "$container_id" ]; then
+              sudo docker stop $container_id
+              echo "Container on port $STOP_PORT stopped."
+            else
+              echo "No container found running on port $STOP_PORT"
+            fi
           else
-            echo "No container found running on port $PORT"
+            echo "Test failed. Not stopping container on port $STOP_PORT."
           fi
 
   switch-environment:
