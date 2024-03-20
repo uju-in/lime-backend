@@ -16,7 +16,7 @@ jobs:
   set-variable:
     runs-on: [self-hosted, loadbalancer-server]
     outputs:
-      is_blue_env: ${{ steps.set-variable.outputs.is_blue_env }}
+      is_blue_env: ${{ steps.check-blue.outputs.is_blue_env }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
