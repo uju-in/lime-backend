@@ -116,6 +116,7 @@ jobs:
             echo "Container on port $PORT stopped."
           else
             echo "No container found running on port $PORT"
+          fi
 
   run-docker-image-on-server-2:
     needs: [ build-docker-image, set-variable ]
