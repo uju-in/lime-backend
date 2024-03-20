@@ -157,8 +157,9 @@ jobs:
           success=false
           echo "Testing application response from /actuator on port $PORT..."
           for i in {1..24}; do # 최대 1분(120초) 동안 5초 간격으로 반복
-            echo "Attempt $i..."
+            echo "Attempt1 $i..."
             response=$(curl -s http://localhost:$PORT/actuator)
+            echo "Attempt2 $i..."
             if [[ -z "$response" ]]; then
               echo "No response yet. Waiting for 5 seconds..."
               sleep 5
