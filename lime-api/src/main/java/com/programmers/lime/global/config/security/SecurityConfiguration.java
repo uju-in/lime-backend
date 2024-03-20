@@ -12,18 +12,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.programmers.lime.domains.member.implementation.MemberReader;
-import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginFailureHandler;
-import com.programmers.lime.global.config.security.auth.handler.OAuth2LoginSuccessHandler;
 import com.programmers.lime.global.config.security.jwt.JwtAuthenticationFilter;
-import com.programmers.lime.global.config.security.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,11 +27,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-	private final OAuth2UserService oAuth2UserService; //추가
-	private final JwtService jwtService; // 추가
-	private final MemberReader memberReader;
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final AuthenticationProvider authenticationProvider;
+	private final AccessDeniedHandler accessDeniedHandler;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
@@ -48,12 +41,8 @@ public class SecurityConfiguration {
 					.requestMatchers("/swagger-ui/**").permitAll()
 					.requestMatchers("/swagger*/**").permitAll()
 					.requestMatchers("/v3/api-docs/**").permitAll()
-					.requestMatchers("/").permitAll()
 
-					.requestMatchers("/api/members/signup").permitAll()
-					.requestMatchers("/api/members/login").permitAll()
 					.requestMatchers("/api/members/check/nickname").permitAll()
-					.requestMatchers("/api/members/check/email").permitAll()
 					.requestMatchers("/api/members/mypage/{nickname}").permitAll()
 					.requestMatchers("/api/members/refresh").permitAll()
 
@@ -78,31 +67,23 @@ public class SecurityConfiguration {
 					.requestMatchers("/api/hobbies").permitAll()
 					.requestMatchers("/login").permitAll()
 					.requestMatchers("/actuator/**").permitAll()
-					.anyRequest().authenticated()
+					.requestMatchers("/auth/kakao/callback/{code}").permitAll()
+					.requestMatchers("/auth/kakao/**").permitAll()
+
+					.requestMatchers("/join").permitAll()
+					.anyRequest().hasRole("USER")
 			)
 			.sessionManagement(session -> session
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			)
 			.authenticationProvider(authenticationProvider)
-			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-		http.oauth2Login(oauth2Configurer -> oauth2Configurer
-			.successHandler(successHandler())
-			.failureHandler(failureHandler())
-			.userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(oAuth2UserService)));
+			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+			.exceptionHandling((exceptions) -> exceptions.accessDeniedHandler(accessDeniedHandler)
+			);
 
 		return http.build();
 	}
 
-	@Bean
-	public AuthenticationFailureHandler failureHandler() {
-		return new OAuth2LoginFailureHandler();
-	}
-
-	@Bean
-	public AuthenticationSuccessHandler successHandler() {
-		return new OAuth2LoginSuccessHandler(jwtService, memberReader);
-	}
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {

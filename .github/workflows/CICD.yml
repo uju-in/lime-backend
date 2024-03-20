@@ -1,6 +1,9 @@
 name: Java CICD with Gradle
 
 on:
+  push:
+    branches:
+      - feature/CICD-test
   pull_request:
     branches:
       - main
@@ -54,12 +57,12 @@ jobs:
   run-docker-image-on-server:
     if: github.event.pull_request.merged
     needs: build-docker-image
-    runs-on: self-hosted
+    runs-on: [ self-hosted, lime-was-server ]
 
     steps:
       - name: docker pull
         run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
-      
+
       - name: docker stop container
         run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
 
@@ -68,3 +71,4 @@ jobs:
 
       - name: delete old docker image
         run: sudo docker system prune -f
+

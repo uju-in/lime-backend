@@ -20,6 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -60,7 +61,7 @@ public class Member extends BaseEntity {
 		this.status = MemberStatus.ACTIVE;
 	}
 
-	public String getSocialId() {
+	public Long getSocialId() {
 		return socialInfo.getSocialId();
 	}
 

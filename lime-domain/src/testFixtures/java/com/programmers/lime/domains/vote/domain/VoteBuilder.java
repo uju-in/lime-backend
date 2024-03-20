@@ -31,6 +31,24 @@ public class VoteBuilder {
 		return vote;
 	}
 
+	public static Vote build(
+		final Long voteId,
+		final Long item1Id,
+		final Long item2Id
+	) {
+		final Vote vote = Vote.builder()
+			.memberId(1L)
+			.item1Id(item1Id)
+			.item2Id(item2Id)
+			.hobby(Hobby.BASKETBALL)
+			.content("농구공 사려는데 뭐가 더 좋음?")
+			.maximumParticipants(3)
+			.build();
+		setVoteId(vote, voteId);
+
+		return vote;
+	}
+
 	public static List<Vote> buildMany(final int size) {
 		final List<Vote> votes = new ArrayList<>();
 		for (int i = 0; i < size; i++) {

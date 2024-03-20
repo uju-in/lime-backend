@@ -44,6 +44,9 @@
 
 ## 4. 📝 문서화 링크 (테크 스팩, 트러블 슈팅, 개인 내용 정리)
 
+| <img src="https://avatars.githubusercontent.com/u/29273437?v=4" width="450" height="150"> | <img src ="https://avatars.githubusercontent.com/u/98391539?v=4" width="450" height="150"> | <img src ="https://avatars.githubusercontent.com/u/77893164?v=4" width="450" height="150"> | <img src ="https://avatars.githubusercontent.com/u/58348662?v=4" width="450" height="150"> | <img src ="https://avatars.githubusercontent.com/u/114549939?v=4" width="450" height="150"> | <img src ="https://github.com/HandmadeCloud/HandmadeCloud/assets/77893164/5415f199-8926-44b7-9e13-598a33f3b3a9" width="450" height="150"> | 
+|:----------------------------------------------------------------:|:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|:------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:|
+|        [BE 강병곤](https://github.com/Curry4182)                    |               [BE 박이슬](https://github.com/Yiseull)                |          [BE 조재현 (팀장)](https://github.com/HandmadeCloud)          |               [FE 진예림](https://github.com/yeeeerim)               |              [FE 박하민](https://github.com/mintmin0320)              |                                                    Design 김시은                                             |
 
 ## 5. ⚒️ 기술 스택
 

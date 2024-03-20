@@ -23,8 +23,8 @@ public class ApplicationConfiguration {
 
 	@Bean
 	public UserDetailsService userDetailsService() {
-		return username -> {
-			Member member = memberReader.read(Long.valueOf(username));
+		return memberId -> {
+			Member member = memberReader.read(Long.valueOf(memberId));
 
 			return new MemberSecurity(member);
 		};

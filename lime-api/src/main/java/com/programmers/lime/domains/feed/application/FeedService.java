@@ -22,6 +22,8 @@ import com.programmers.lime.domains.feed.model.FeedSortCondition;
 import com.programmers.lime.domains.feed.model.FeedUpdateServiceRequest;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
+import com.programmers.lime.global.event.ranking.feed.FeedRankingUpdateEvent;
+import com.programmers.lime.global.event.ranking.feed.FeedRankingUpdateEventListener;
 import com.programmers.lime.global.util.MemberUtils;
 import com.programmers.lime.redis.feed.FeedRedisManager;
 import com.programmers.lime.redis.feed.model.FeedRankingInfo;
@@ -39,6 +41,7 @@ public class FeedService {
 	private final FeedCursorReader feedCursorReader;
 	private final MemberUtils memberUtils;
 	private final FeedRedisManager feedRedisManager;
+	private final FeedRankingUpdateEventListener feedRankingUpdateEventListener;
 
 	/** 피드 생성 */
 	public Long createFeed(final FeedCreateServiceRequest request) {
@@ -113,11 +116,6 @@ public class FeedService {
 		final Long feedId,
 		final int value
 	) {
-		if (feedRedisManager.isFeedExist(feedId)) {
-			feedRedisManager.changePopularity(feedId, value);
-			return;
-		}
-
 		Long memberId = memberUtils.getCurrentMemberId();
 		changePopularity(feedReader.readDetail(feedId, memberId), value);
 	}
@@ -136,7 +134,8 @@ public class FeedService {
 			.likeCount(feedInfo.likeCount())
 			.build();
 
-		feedRedisManager.changePopularity(feedRankingInfo, value);
+		FeedRankingUpdateEvent event = new FeedRankingUpdateEvent(feedRankingInfo, value);
+		feedRankingUpdateEventListener.updateFeedRanking(event);
 	}
 
 	public FeedGetRankingServiceResponse getFeedRanking() {
