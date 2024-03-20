@@ -89,12 +89,12 @@ jobs:
 
       - name: Print if Environment is Blue
         run: |
-          echo "IS_BLUE_ENV is ${{ needs.setup-environment.outputs.is_blue_env }}"
+          echo "IS_BLUE_ENV is ${{ needs.set-variable.outputs.is_blue_env }}"
         shell: bash
 
       - name: Run Docker Container
         run: |
-          PORT=${{ needs.setup-environment.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
 
           # 해당 포트에서 실행 중인 컨테이너 확인
           RUNNING_CONTAINER=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
@@ -111,7 +111,7 @@ jobs:
         id: test_response
         continue-on-error: true
         run: |
-          PORT=${{ needs.setup-environment.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           success=false
           for i in {1..12}; do # 최대 1분(120초) 동안 5초 간격으로 반복
             response=$(curl -s http://localhost:$PORT/actuator || true)
@@ -155,7 +155,7 @@ jobs:
 
       - name: Run Docker Container
         run: |
-          PORT=${{ needs.setup-environment.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           RUNNING_CONTAINER=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
           # 실행 중인 컨테이너가 있다면 중지
           if [ ! -z "$RUNNING_CONTAINER" ]; then
@@ -169,7 +169,7 @@ jobs:
         id: test_response
         continue-on-error: true
         run: |
-          PORT=${{ needs.setup-environment.outputs.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           success=false
           echo "Testing application response from /actuator on port $PORT..."
           for i in {1..24}; do # 최대 1분(120초) 동안 5초 간격으로 반복
