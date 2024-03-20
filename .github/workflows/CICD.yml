@@ -15,6 +15,8 @@ permissions:
 jobs:
   set-variable:
     runs-on: [self-hosted, loadbalancer-server]
+    outputs:
+      IS_BLUE_ENV: ${{ steps.check-blue.outputs.IS_BLUE_ENV }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,12 +25,17 @@ jobs:
         id: check-blue
         run: |
           IS_BLUE_ENV=$(sh /usr/local/bin/scripts/is_blue_env.sh)
-          echo "IS_BLUE_ENV=$IS_BLUE_ENV" >> $GITHUB_ENV
+          echo "::set-output name=is_blue_env::$IS_BLUE_ENV"
         shell: bash
 
-      - name: Print Environment
+      - name: Print if Environment is Blue
         run: |
-          echo "IS_BLUE_ENV is ${{ env.IS_BLUE_ENV }}"
+          if [[ "${{ steps.check-blue.outputs.is_blue_env }}" == "true" ]]; then
+            echo "Environment is BLUE"
+          else
+            echo "Environment is NOT BLUE"
+          fi
+        shell: bash
 
   build-docker-image:
     runs-on: ubuntu-latest
@@ -82,7 +89,7 @@ jobs:
 
       - name: Run Docker Container
         run: |
-          PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          PORT=${{ needs.setup-environment.outputs.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
 
           # 해당 포트에서 실행 중인 컨테이너 확인
           RUNNING_CONTAINER=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
@@ -99,7 +106,7 @@ jobs:
         id: test_response
         continue-on-error: true
         run: |
-          PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          PORT=${{ needs.setup-environment.outputs.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           success=false
           for i in {1..12}; do # 최대 1분(120초) 동안 5초 간격으로 반복
             response=$(curl -s http://localhost:$PORT/actuator || true)
@@ -143,7 +150,7 @@ jobs:
 
       - name: Run Docker Container
         run: |
-          PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          PORT=${{ needs.setup-environment.outputs.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           RUNNING_CONTAINER=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
           # 실행 중인 컨테이너가 있다면 중지
           if [ ! -z "$RUNNING_CONTAINER" ]; then
@@ -157,7 +164,7 @@ jobs:
         id: test_response
         continue-on-error: true
         run: |
-          PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
+          PORT=${{ needs.setup-environment.outputs.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           success=false
           echo "Testing application response from /actuator on port $PORT..."
           for i in {1..24}; do # 최대 1분(120초) 동안 5초 간격으로 반복
@@ -200,10 +207,10 @@ jobs:
       needs.run-docker-image-on-server-2.outputs.passed == 'true'
     steps:
       - name: Switch to Green Environment
-        if: ${{ env.IS_BLUE_ENV == 'true' }}
+        if: ${{ needs.setup-environment.outputs.IS_BLUE_ENV == 'true' }}
         run: sh /usr/local/bin/scripts/switch_to_green_env.sh
 
       - name: Switch to Blue Environment
-        if: ${{ env.IS_BLUE_ENV != 'true' }}
+        if: ${{ needs.setup-environment.outputs.IS_BLUE_ENV != 'true' }}
         run: sh /usr/local/bin/scripts/switch_to_blue_env.sh
 
