@@ -98,13 +98,24 @@ jobs:
         continue-on-error: true
         run: |
           PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
-          response=$(curl -s http://localhost:$PORT/actuator)
-          if [[ -z "$response" ]]; then
+          success=false
+          for i in {1..12}; do # 최대 1분(60초) 동안 5초 간격으로 반복
+            response=$(curl -s http://localhost:$PORT/actuator)
+            if [[ -z "$response" ]]; then
+              echo "No response yet. Waiting for 5 seconds..."
+              sleep 5
+            else
+              echo "Actuator response received: $response"
+              echo "::set-output name=passed::true"
+              success=true
+              break # 성공적으로 응답을 받으면 루프 종료
+            fi
+          done
+
+          if [[ $success == false ]]; then
             echo "::set-output name=passed::false"
-          else
-            echo "Actuator response received: $response"
-            echo "::set-output name=passed::true"
           fi
+      
 
       - name: Stop Docker Container After Test
         run: |
@@ -143,13 +154,24 @@ jobs:
         continue-on-error: true
         run: |
           PORT=${{ env.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
-          response=$(curl -s http://localhost:$PORT/actuator)
-          if [[ -z "$response" ]]; then
+          success=false
+          for i in {1..12}; do # 최대 1분(60초) 동안 5초 간격으로 반복
+            response=$(curl -s http://localhost:$PORT/actuator)
+            if [[ -z "$response" ]]; then
+              echo "No response yet. Waiting for 5 seconds..."
+              sleep 5
+            else
+              echo "Actuator response received: $response"
+              echo "::set-output name=passed::true"
+              success=true
+              break # 성공적으로 응답을 받으면 루프 종료
+            fi
+          done
+
+          if [[ $success == false ]]; then
             echo "::set-output name=passed::false"
-          else
-            echo "Actuator response received: $response"
-            echo "::set-output name=passed::true"
           fi
+      
 
       - name: Stop Docker Container After Test
         run: |
