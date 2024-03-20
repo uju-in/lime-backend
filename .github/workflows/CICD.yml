@@ -229,8 +229,8 @@ jobs:
         shell: bash
 
   switch-environment:
-    needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2 ]
-    runs-on: [ self-hosted, loadbalancer-server, set-variable-2 ]
+    needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2, set-variable-2 ]
+    runs-on: [ self-hosted, loadbalancer-server ]
     if: >
       needs.run-docker-image-on-server-1.outputs.passed == 'true' &&
       needs.run-docker-image-on-server-2.outputs.passed == 'true'
