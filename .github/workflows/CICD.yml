@@ -135,18 +135,26 @@ jobs:
         run: |
           TEST_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           STOP_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
-          
-          if [[ ${{ steps.test_response.outputs.passed }} == 'true' ]]; then
+
+          # 테스트 결과에 따라 컨테이너 중지
+          if [[ ${{ steps.test_response.outputs.passed }} == 'true' ]]; then # 테스트 성공 시
             echo "Stopping Docker container on port $STOP_PORT..."
-            container_id=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
-            if [ ! -z "$container_id" ]; then
+            container_id=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$STOP_PORT->" | awk '{print $1}')
+            if [ ! -z "$container_id" ]; then # 테스트 성공 시 중지할 포트에 실행 중인 컨테이너가 있다면 중지
               sudo docker stop $container_id
               echo "Container on port $STOP_PORT stopped."
             else
               echo "No container found running on port $STOP_PORT"
             fi
-          else
+          else # 테스트 실패 시
             echo "Test failed. Not stopping container on port $STOP_PORT."
+            container_id=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$TEST_PORT->" | awk '{print $1}')
+            if [ ! -z "$container_id" ]; then # 테스트 실패 시 테스트 포트에 실행 중인 컨테이너가 있다면 중지
+              sudo docker stop $container_id
+              echo "Container on port $TEST_PORT stopped."
+            else
+              echo "No container found running on port $TEST_PORT"
+            fi
           fi
 
   run-docker-image-on-server-2:
@@ -203,17 +211,25 @@ jobs:
           TEST_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           STOP_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
 
-          if [[ ${{ steps.test_response.outputs.passed }} == 'true' ]]; then
+          # 테스트 결과에 따라 컨테이너 중지
+          if [[ ${{ steps.test_response.outputs.passed }} == 'true' ]]; then # 테스트 성공 시
             echo "Stopping Docker container on port $STOP_PORT..."
-            container_id=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$PORT->" | awk '{print $1}')
-            if [ ! -z "$container_id" ]; then
+            container_id=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$STOP_PORT->" | awk '{print $1}')
+            if [ ! -z "$container_id" ]; then # 테스트 성공 시 중지할 포트에 실행 중인 컨테이너가 있다면 중지
               sudo docker stop $container_id
               echo "Container on port $STOP_PORT stopped."
             else
               echo "No container found running on port $STOP_PORT"
             fi
-          else
+          else # 테스트 실패 시
             echo "Test failed. Not stopping container on port $STOP_PORT."
+            container_id=$(sudo docker ps --filter "status=running" --format '{{.ID}} {{.Ports}}' | grep ":$TEST_PORT->" | awk '{print $1}')
+            if [ ! -z "$container_id" ]; then # 테스트 실패 시 테스트 포트에 실행 중인 컨테이너가 있다면 중지
+              sudo docker stop $container_id
+              echo "Container on port $TEST_PORT stopped."
+            else
+              echo "No container found running on port $TEST_PORT"
+            fi
           fi
 
   switch-environment:
