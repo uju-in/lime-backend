@@ -87,6 +87,15 @@ jobs:
       - name: docker pull
         run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
+      - name: Print if Environment is Blue
+        run: |
+          if [[ "${{ needs.setup-environment.outputs.IS_BLUE_ENV }}" == "true" ]]; then
+            echo "Environment is BLUE"
+          else
+            echo "Environment is NOT BLUE"
+          fi
+        shell: bash
+
       - name: Run Docker Container
         run: |
           PORT=${{ needs.setup-environment.outputs.IS_BLUE_ENV == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
