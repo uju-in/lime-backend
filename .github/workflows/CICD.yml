@@ -131,7 +131,7 @@ jobs:
           fi
       
 
-      - name: Stop Docker Container After Test
+      - name: Stop TEST Docker Container If Test Failed
         run: |
           TEST_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           STOP_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
@@ -196,7 +196,7 @@ jobs:
             echo "::set-output name=passed::false"
           fi
 
-      - name: Stop Docker Container After Test
+      - name: Stop TEST Docker Container If Test Failed
         run: |
           TEST_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           STOP_PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.BLUE_PORT || secrets.GREEN_PORT }}
