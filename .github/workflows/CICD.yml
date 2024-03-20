@@ -25,7 +25,7 @@ jobs:
         id: check-blue
         run: |
           IS_BLUE_ENV=$(sh /usr/local/bin/scripts/is_blue_env.sh)
-          echo "::set-output name=is_blue_env::$IS_BLUE_ENV"
+          echo "::set-output name=IS_BLUE_ENV::$IS_BLUE_ENV"
         shell: bash
 
       - name: Print if Environment is Blue
