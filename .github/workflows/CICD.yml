@@ -16,7 +16,7 @@ jobs:
   set-variable:
     runs-on: [self-hosted, loadbalancer-server]
     outputs:
-      IS_BLUE_ENV: ${{ steps.check-blue.outputs.IS_BLUE_ENV }}
+      is_blue_env: ${{ steps.check-blue.outputs.is_blue_env }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -89,11 +89,7 @@ jobs:
 
       - name: Print if Environment is Blue
         run: |
-          if [[ "${{ needs.setup-environment.outputs.IS_BLUE_ENV }}" == "true" ]]; then
-            echo "Environment is BLUE"
-          else
-            echo "Environment is NOT BLUE"
-          fi
+          echo "IS_BLUE_ENV is ${{ needs.setup-environment.outputs.is_blue_env }}"
         shell: bash
 
       - name: Run Docker Container
