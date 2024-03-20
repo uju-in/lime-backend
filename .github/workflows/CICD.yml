@@ -31,7 +31,6 @@ jobs:
           echo "IS_BLUE_ENV is ${{ env.IS_BLUE_ENV }}"
 
   build-docker-image:
-    if: github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -72,7 +71,6 @@ jobs:
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/lime-image
 
   run-docker-image-on-server-1:
-    if: github.event.pull_request.merged
     needs: build-docker-image
     runs-on: [ self-hosted, lime-was-server-1 ]
 
