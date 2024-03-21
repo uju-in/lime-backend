@@ -380,8 +380,11 @@ class VoteServiceTest extends IntegrationTest {
 			// then
 			assertThat(result.summaries()).hasSize(3);
 			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote2Id);
+			assertThat(result.summaries().get(0).voteInfo().participants()).isEqualTo(2);
 			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote3Id);
+			assertThat(result.summaries().get(1).voteInfo().participants()).isEqualTo(1);
 			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(voteId);
+			assertThat(result.summaries().get(2).voteInfo().participants()).isEqualTo(0);
 		}
 
 		@Test
@@ -427,6 +430,9 @@ class VoteServiceTest extends IntegrationTest {
 
 			// then
 			assertThat(result.summaries()).hasSize(3);
+			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3Id);
+			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
+			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(voteId);
 		}
 
 		@Test
