@@ -109,6 +109,6 @@ public class Vote extends BaseEntity {
 	}
 
 	public boolean reachMaximumParticipants(final int participants) {
-		return this.maximumParticipants == participants;
+		return this.maximumParticipants <= participants;
 	}
 }

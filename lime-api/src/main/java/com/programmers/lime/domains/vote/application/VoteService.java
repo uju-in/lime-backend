@@ -36,7 +36,9 @@ import com.programmers.lime.redis.vote.VoteRankingInfo;
 import com.programmers.lime.redis.vote.VoteRedisManager;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class VoteService {
@@ -46,6 +48,7 @@ public class VoteService {
 	private final VoteManager voteManager;
 	private final VoteRemover voteRemover;
 	private final VoterReader voterReader;
+	private final VoteLockManager voteLockManager;
 	private final MemberUtils memberUtils;
 	private final ItemReader itemReader;
 	private final VoteRedisManager voteRedisManager;
@@ -89,7 +92,11 @@ public class VoteService {
 			.ifPresentOrElse(
 				voter -> voteManager.reParticipate(itemId, voter),
 				() -> {
-					voteManager.participate(vote, memberId, itemId);
+					try {
+						voteLockManager.participate(vote, memberId, itemId);
+					} catch (InterruptedException e) {
+						log.info("투표 참여 중 락 획득 실패, voteId={}, memberId={}", vote.getId(), memberId);
+					}
 					eventPublisher.publishEvent(new RankingUpdateEvent(String.valueOf(vote.getHobby()), vote.isVoting(), getVoteRedis(vote)));
 				}
 			);
