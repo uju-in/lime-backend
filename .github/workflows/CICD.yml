@@ -30,7 +30,7 @@ jobs:
 
       - name: Print if Environment is Blue
         run: |
-          if [[ "${{ steps.set-variable.outputs.is_blue_env }}" == "true" ]]; then
+          if [[ "${{ steps.check-blue.outputs.is_blue_env }}" == "true" ]]; then
             echo "Environment is BLUE"
           else
             echo "Environment is NOT BLUE"
