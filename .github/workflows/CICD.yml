@@ -212,11 +212,11 @@ jobs:
   switch-environment:
     needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2]
     runs-on: [ self-hosted, loadbalancer-server ]
+    outputs:
+      is_blue_env: ${{ steps.check-blue.outputs.is_blue_env }}
     if: >
       needs.run-docker-image-on-server-1.outputs.passed == 'true' &&
       needs.run-docker-image-on-server-2.outputs.passed == 'true'
-    outputs:
-      is_blue_env: ${{ steps.check-blue.is_blue_env }}
     steps:
       - name: Check Blue Environment
         id: check-blue
