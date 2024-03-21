@@ -216,7 +216,7 @@ jobs:
       needs.run-docker-image-on-server-1.outputs.passed == 'true' &&
       needs.run-docker-image-on-server-2.outputs.passed == 'true'
     outputs:
-      myOutputVar: ${{ steps.check-blue.is_blue_env }}
+      is_blue_env: ${{ steps.check-blue.is_blue_env }}
     steps:
       - name: Check Blue Environment
         id: check-blue
