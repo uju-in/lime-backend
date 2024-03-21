@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,7 @@ import com.programmers.lime.domains.vote.domain.Voter;
 import com.programmers.lime.domains.vote.domain.setup.VoteSetUp;
 import com.programmers.lime.domains.vote.domain.setup.VoterSetUp;
 import com.programmers.lime.domains.vote.implementation.VoteReader;
+import com.programmers.lime.domains.vote.implementation.VoterReader;
 import com.programmers.lime.domains.vote.model.VoteDetailInfo;
 import com.programmers.lime.domains.vote.model.VoteSortCondition;
 import com.programmers.lime.domains.vote.model.VoteStatusCondition;
@@ -50,6 +52,9 @@ class VoteServiceTest extends IntegrationTest {
 
 	@Autowired
 	private VoteReader voteReader;
+
+	@Autowired
+	private VoterReader voterReader;
 
 	@Autowired
 	private ItemSetup itemSetup;
@@ -150,15 +155,17 @@ class VoteServiceTest extends IntegrationTest {
 		void participateVoteTest() {
 			// given
 			final Long itemId = vote.getItem1Id();
+			final Long memberId = 1L;
 
 			given(memberUtils.getCurrentMemberId())
-				.willReturn(1L);
+				.willReturn(memberId);
 
 			// when
 			voteService.participateVote(voteId, itemId);
 
 			// then
-			assertThat(vote.getVoters()).hasSize(1);
+			final Voter voter = voterReader.read(voteId, memberId);
+			assertThat(voter.getItemId()).isEqualTo(itemId);
 		}
 
 		@Test
@@ -167,7 +174,7 @@ class VoteServiceTest extends IntegrationTest {
 			// given
 			final Long memberId = 1L;
 			final Long selectedItemId = vote.getItem1Id();
-			final Voter voter = voterSetup.saveOne(vote, memberId, selectedItemId);
+			voterSetup.saveOne(voteId, memberId, selectedItemId);
 			final Long reSelectedItemId = vote.getItem2Id();
 
 			given(memberUtils.getCurrentMemberId())
@@ -177,7 +184,7 @@ class VoteServiceTest extends IntegrationTest {
 			voteService.participateVote(voteId, reSelectedItemId);
 
 			// then
-			assertThat(vote.getVoters()).hasSize(1);
+			final Voter voter = voterReader.read(voteId, memberId);
 			assertThat(voter.getItemId()).isEqualTo(reSelectedItemId);
 		}
 
@@ -217,7 +224,7 @@ class VoteServiceTest extends IntegrationTest {
 	void cancelVoteTest() {
 		// given
 		final Long memberId = 1L;
-		voterSetup.saveOne(vote, memberId, vote.getItem1Id());
+		voterSetup.saveOne(voteId, memberId, vote.getItem1Id());
 
 		given(memberUtils.getCurrentMemberId())
 			.willReturn(memberId);
@@ -226,7 +233,8 @@ class VoteServiceTest extends IntegrationTest {
 		voteService.cancelVote(voteId);
 
 		// then
-		assertThat(vote.getVoters()).isEmpty();
+		final Optional<Voter> voter = voterReader.find(voteId, memberId);
+		assertThat(voter.isEmpty()).isTrue();
 	}
 
 	@Nested
@@ -303,7 +311,7 @@ class VoteServiceTest extends IntegrationTest {
 			// given
 			final Long memberId = 1L;
 			final Long selectedItemId = vote.getItem1Id();
-			voterSetup.saveOne(vote, memberId, selectedItemId);
+			voterSetup.saveOne(voteId, memberId, selectedItemId);
 
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(memberId);
@@ -319,13 +327,13 @@ class VoteServiceTest extends IntegrationTest {
 	@Nested
 	class GetVotesByCursor {
 
-		Vote vote2;
-		Vote vote3;
+		Long vote2Id = 2L;
+		Long vote3Id = 3L;
 
 		@BeforeEach
 		void setUp() {
-			vote2 = voteSetup.saveOne(2L, item1.getId(), item2.getId());
-			vote3 = voteSetup.saveOne(3L, item1.getId(), item2.getId());
+			voteSetup.saveOne(vote2Id, item1.getId(), item2.getId());
+			voteSetup.saveOne(vote3Id, item1.getId(), item2.getId());
 		}
 
 		@Test
@@ -345,9 +353,9 @@ class VoteServiceTest extends IntegrationTest {
 
 			// then
 			assertThat(result.summaries()).hasSize(3);
-			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3.getId());
-			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2.getId());
-			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(vote.getId());
+			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3Id);
+			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
+			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(voteId);
 		}
 
 		@Test
@@ -357,9 +365,9 @@ class VoteServiceTest extends IntegrationTest {
 			final Hobby hobby = Hobby.BASKETBALL;
 			final VoteSortCondition sortCondition = VoteSortCondition.POPULARITY;
 
-			voterSetup.saveOne(vote2, 1L, vote.getItem1Id());
-			voterSetup.saveOne(vote2, 2L, vote.getItem1Id());
-			voterSetup.saveOne(vote3, 1L, vote.getItem1Id());
+			voterSetup.saveOne(vote2Id, 1L, vote.getItem1Id());
+			voterSetup.saveOne(vote2Id, 2L, vote.getItem1Id());
+			voterSetup.saveOne(vote3Id, 1L, vote.getItem1Id());
 
 			// when
 			final CursorSummary<VoteSummary> result = voteService.getVotesByCursor(
@@ -371,9 +379,9 @@ class VoteServiceTest extends IntegrationTest {
 
 			// then
 			assertThat(result.summaries()).hasSize(3);
-			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote2.getId());
-			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote3.getId());
-			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(vote.getId());
+			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote2Id);
+			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote3Id);
+			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(voteId);
 		}
 
 		@Test
@@ -393,9 +401,9 @@ class VoteServiceTest extends IntegrationTest {
 
 			// then
 			assertThat(result.summaries()).hasSize(3);
-			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote.getId());
-			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2.getId());
-			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(vote3.getId());
+			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(voteId);
+			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
+			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(vote3Id);
 		}
 
 		@Test
@@ -429,8 +437,8 @@ class VoteServiceTest extends IntegrationTest {
 			final VoteStatusCondition statusCondition = VoteStatusCondition.PARTICIPATED;
 			final Long memberId = 1L;
 
-			voterSetup.saveOne(vote2, memberId, vote.getItem1Id());
-			voterSetup.saveOne(vote3, memberId, vote.getItem1Id());
+			voterSetup.saveOne(vote2Id, memberId, vote.getItem1Id());
+			voterSetup.saveOne(vote3Id, memberId, vote.getItem1Id());
 
 			given(memberUtils.getCurrentMemberId())
 				.willReturn(memberId);
@@ -445,8 +453,8 @@ class VoteServiceTest extends IntegrationTest {
 
 			// then
 			assertThat(result.summaries()).hasSize(2);
-			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3.getId());
-			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2.getId());
+			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3Id);
+			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
 		}
 
 		@Test
