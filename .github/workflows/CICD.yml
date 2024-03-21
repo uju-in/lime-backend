@@ -30,7 +30,7 @@ jobs:
 
       - name: Print if Environment is Blue
         run: |
-          if [[ "${{ steps.set-variable.outputs.is_blue_env }}" == "true" ]]; then
+          if [[ "${{ steps.check-blue.outputs.is_blue_env }}" == "true" ]]; then
             echo "Environment is BLUE"
           else
             echo "Environment is NOT BLUE"
@@ -108,7 +108,7 @@ jobs:
         run: |
           PORT=${{ needs.set-variable.outputs.is_blue_env == 'true' && secrets.GREEN_PORT || secrets.BLUE_PORT }}
           success=false
-          for i in {1..12}; do # 최대 1분(120초) 동안 5초 간격으로 반복
+          for i in {1..24}; do # 최대 1분(120초) 동안 5초 간격으로 반복
             response=$(curl -s http://localhost:$PORT/actuator || true)
             if [[ -z "$response" ]]; then
               echo "No response yet. Waiting for 5 seconds..."
@@ -208,15 +208,14 @@ jobs:
             fi
           fi
 
-  ## 모든 테스트가 통과하면 환경을 변경
   switch-environment:
     needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2]
     runs-on: [ self-hosted, loadbalancer-server ]
+    outputs:
+      is_blue_env: ${{ steps.check-blue.outputs.is_blue_env }}
     if: >
       needs.run-docker-image-on-server-1.outputs.passed == 'true' &&
       needs.run-docker-image-on-server-2.outputs.passed == 'true'
-    outputs:
-      myOutputVar: ${{ steps.check-blue.is_blue_env }}
     steps:
       - name: Check Blue Environment
         id: check-blue
@@ -233,7 +232,6 @@ jobs:
         if: ${{ steps.check-blue.outputs.is_blue_env != 'true' }}
         run: sh /usr/local/bin/scripts/switch_to_blue_env.sh
 
-  ## 모든 테스트가 통과하면 기존 컨테이너를 중지
   stop-exist-container-in-was-1:
     needs: [ run-docker-image-on-server-1, run-docker-image-on-server-2, switch-environment ]
     runs-on: [ self-hosted, lime-was-server-1 ]
