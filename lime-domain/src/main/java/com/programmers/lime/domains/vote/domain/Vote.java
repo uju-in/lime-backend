@@ -1,8 +1,6 @@
 package com.programmers.lime.domains.vote.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import com.programmers.lime.common.model.Hobby;
@@ -11,7 +9,6 @@ import com.programmers.lime.domains.vote.domain.vo.Content;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -20,7 +17,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -65,9 +61,6 @@ public class Vote extends BaseEntity {
 	@Column(name = "maximum_participants", nullable = false)
 	private int maximumParticipants;
 
-	@OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
-	private final List<Voter> voters = new ArrayList<>();
-
 	@Builder
 	private Vote(
 		final Long memberId,
@@ -102,12 +95,6 @@ public class Vote extends BaseEntity {
 		return item1Id.equals(itemId) || item2Id.equals(itemId);
 	}
 
-	public void addVoter(final Voter voter) {
-		if (!this.voters.contains(voter)) {
-			this.voters.add(voter);
-		}
-	}
-
 	public boolean isOwner(final Long memberId) {
 		return this.memberId.equals(memberId);
 	}
@@ -121,7 +108,7 @@ public class Vote extends BaseEntity {
 		this.endTime = now;
 	}
 
-	public boolean reachMaximumParticipants() {
-		return this.maximumParticipants == this.voters.size();
+	public boolean reachMaximumParticipants(final int participants) {
+		return this.maximumParticipants == participants;
 	}
 }

@@ -31,7 +31,6 @@ public class VoteReader {
 
 	public static final int DEFAULT_PAGING_SIZE = 20;
 
-	private final VoteCounter voteCounter;
 	private final VoteRepository voteRepository;
 	private final VoterReader voterReader;
 	private final ItemReader itemReader;
@@ -53,12 +52,12 @@ public class VoteReader {
 		final ItemInfo item1Info = getItemInfo(item1Id);
 		final ItemInfo item2Info = getItemInfo(item2Id);
 
-		final int item1Votes = voteCounter.count(vote, item1Id);
-		final int item2Votes = voteCounter.count(vote, item2Id);
+		final int item1Votes = voterReader.count(voteId, item1Id);
+		final int item2Votes = voterReader.count(voteId, item2Id);
 		final VoteDetailInfo voteInfo = VoteDetailInfo.of(vote, item1Votes, item2Votes);
 
 		final boolean isOwner = vote.isOwner(memberId);
-		final Long selectedItemId = voterReader.readItemId(vote, memberId);
+		final Long selectedItemId = voterReader.readItemId(voteId, memberId);
 
 		return VoteDetail.builder()
 			.item1Info(item1Info)

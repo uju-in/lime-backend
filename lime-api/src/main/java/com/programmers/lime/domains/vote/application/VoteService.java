@@ -85,7 +85,7 @@ public class VoteService {
 		final Long memberId,
 		final Long itemId
 	) {
-		voterReader.find(vote, memberId)
+		voterReader.find(vote.getId(), memberId)
 			.ifPresentOrElse(
 				voter -> voteManager.reParticipate(itemId, voter),
 				() -> {
@@ -99,7 +99,7 @@ public class VoteService {
 		final Long memberId = memberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
-		voteManager.cancel(vote, memberId);
+		voteManager.cancel(voteId, memberId);
 		eventPublisher.publishEvent(new RankingDecreasePopularityEvent(String.valueOf(vote.getHobby()), getVoteRedis(vote)));
 	}
 
@@ -162,7 +162,7 @@ public class VoteService {
 			parameters,
 			null
 		);
-		final long totalVoteCount = voteReader.countByKeyword(keyword);
+		final long totalVoteCount = voteReader.countByKeyword(keyword); // 키워드를 가진 아이템 쿼리 두 번 나감 -> 리팩토링
 
 		return new VoteGetByKeywordServiceResponse(cursorSummary, totalVoteCount);
 	}

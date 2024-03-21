@@ -10,14 +10,14 @@ public record VoteInfo(
 	String content,
 	LocalDateTime startTime,
 	boolean isVoting,
-	int participants
+	long participants
 ) {
 	public VoteInfo(
 		final Long id,
 		final String content,
 		final LocalDateTime startTime,
 		final LocalDateTime endTime,
-		final int participants
+		final long participants
 	) {
 		this(id, content, startTime, isVoting(endTime), participants);
 	}

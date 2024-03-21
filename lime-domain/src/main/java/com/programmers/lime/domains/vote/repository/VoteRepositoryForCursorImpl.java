@@ -2,6 +2,7 @@ package com.programmers.lime.domains.vote.repository;
 
 import static com.programmers.lime.domains.item.domain.QItem.*;
 import static com.programmers.lime.domains.vote.domain.QVote.*;
+import static com.programmers.lime.domains.vote.domain.QVoter.*;
 
 import java.util.List;
 
@@ -45,21 +46,22 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 					vote.content.content,
 					vote.startTime,
 					vote.endTime,
-					vote.voters.size()
+					voter.count().as("participants")
 				),
 				vote.item1Id,
 				vote.item2Id,
 				generateCursorId(sortCondition)
 			))
 			.from(vote)
+			.leftJoin(voter).on(voter.voteId.eq(vote.id))
 			.where(
 				eqHobby(hobby),
 				getExpressionBy(statusCondition, memberId),
 				containsKeyword(keyword),
 				lessThanNextCursorId(sortCondition, nextCursorId)
 			)
-			.orderBy(getOrderSpecifierBy(sortCondition),
-				vote.id.desc())
+			.groupBy(vote.id)
+			.orderBy(getOrderSpecifierBy(sortCondition), vote.id.desc())
 			.limit(pageSize)
 			.fetch();
 	}
@@ -106,14 +108,13 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 	}
 
 	private BooleanExpression isParticipatedIn(final Long memberId) {
-		return vote.voters.any()
-			.memberId.eq(memberId);
+		return voter.voteId.eq(vote.id).and(voter.memberId.eq(memberId));
 	}
 
 	private OrderSpecifier<?> getOrderSpecifierBy(final VoteSortCondition sortCondition) {
 		switch (sortCondition) {
 			case POPULARITY -> {
-				return new OrderSpecifier<>(Order.DESC, vote.voters.size());
+				return new OrderSpecifier<>(Order.DESC, getVoterCount());
 			}
 			case RECENT -> {
 				return new OrderSpecifier<>(Order.DESC, vote.createdAt);
@@ -125,6 +126,10 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 				return null;
 			}
 		}
+	}
+
+	private NumberExpression<Long> getVoterCount() {
+		return voter.voteId.eq(vote.id).count();
 	}
 
 	private BooleanExpression containsKeyword(final String keyword) {
@@ -158,7 +163,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 
 	private StringExpression generateCursorId(final VoteSortCondition sortCondition) {
 		if (sortCondition == VoteSortCondition.POPULARITY) {
-			final NumberExpression<Integer> popularity = vote.voters.size();
+			final NumberExpression<Long> popularity = getVoterCount();
 
 			return StringExpressions.lpad(
 				popularity.stringValue(), 8, '0'

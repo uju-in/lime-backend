@@ -24,11 +24,11 @@ public class VoteManager {
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = new Voter(vote, memberId, itemId);
+		final Voter voter = new Voter(vote.getId(), memberId, itemId);
+		voterRepository.save(voter);
 
-		voter.participate(itemId);
-
-		if (vote.reachMaximumParticipants()) {
+		final int participants = voterReader.count(vote.getId());
+		if (vote.reachMaximumParticipants(participants)) {
 			vote.close(LocalDateTime.now());
 		}
 	}
@@ -43,10 +43,9 @@ public class VoteManager {
 
 	@Transactional
 	public void cancel(
-		final Vote vote,
+		final Long voteId,
 		final Long memberId
 	) {
-		final Voter voter = voterReader.read(vote, memberId);
-		voterRepository.delete(voter);
+		voterRepository.deleteByVoteIdAndMemberId(voteId, memberId);
 	}
 }
