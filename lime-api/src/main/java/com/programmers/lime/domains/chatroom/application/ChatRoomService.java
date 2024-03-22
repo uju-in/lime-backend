@@ -45,7 +45,7 @@ public class ChatRoomService {
 		);
 	}
 
-	public void joinChatRoom(Long chatRoomId) {
+	public void joinChatRoom(final Long chatRoomId) {
 
 		Long memberId = SecurityUtils.getCurrentMemberId();
 
@@ -64,7 +64,7 @@ public class ChatRoomService {
 		return chatRoomMemberReader.countChatRoomMembersByChatRoomId(chatRoomId);
 	}
 
-	public void exitChatRoom(Long chatRoomId) {
+	public void exitChatRoom(final Long chatRoomId) {
 		Long memberId = SecurityUtils.getCurrentMemberId();
 
 		Set<String> sessionIdsByMemberAndRoom = chatSessionRedisManager.getSessionIdsByMemberAndRoom(
