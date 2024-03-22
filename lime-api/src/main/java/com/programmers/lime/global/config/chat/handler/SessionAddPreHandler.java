@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class SessionAddPreHandler implements ChannelInterceptor{
+public class SessionAddPreHandler implements ChannelInterceptor {
 
 	private final ApplicationEventPublisher eventPublisher;
 
@@ -37,14 +37,14 @@ public class SessionAddPreHandler implements ChannelInterceptor{
 	) {
 		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 		StompCommand command = stompHandlerManager.getCommand(accessor);
-		if(command != StompCommand.CONNECT) {
+		if (command != StompCommand.CONNECT) {
 			return message;
 		}
 
 		// 지정된 MessageDomainType이 없다면 예외를 발생시킵니다.
 		MessageDomainType messageDomainType = getMessageDomainType(accessor);
 
-		if(messageDomainType == MessageDomainType.CHAT) {
+		if (messageDomainType == MessageDomainType.CHAT) {
 			String memberIdStr = accessor.getUser().getName();
 			Long memberId = Long.valueOf(memberIdStr);
 
@@ -56,7 +56,7 @@ public class SessionAddPreHandler implements ChannelInterceptor{
 				memberId
 			);
 
-			if(!result) {
+			if (!result) {
 				throw new MalformedJwtException(ErrorCode.MEMBER_NOT_LOGIN.getMessage());
 			}
 

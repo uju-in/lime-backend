@@ -22,7 +22,7 @@ public class ChatMessageController {
 	public void sendMessage(
 		@Payload final ChatCreateRequest request,
 		final Principal principal,
-		SimpMessageHeaderAccessor headerAccessor
+		final SimpMessageHeaderAccessor headerAccessor
 	) {
 		Long currentMemberId = Long.valueOf(principal.getName());
 		String sessionId = headerAccessor.getSessionId();

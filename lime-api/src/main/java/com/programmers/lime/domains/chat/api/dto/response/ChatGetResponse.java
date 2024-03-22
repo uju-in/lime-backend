@@ -8,7 +8,7 @@ import com.programmers.lime.domains.chat.model.ChatInfoWithMember;
 public record ChatGetResponse(
 	List<ChatInfoWithMember> chatInfoWithMembers
 ) {
-	public static ChatGetResponse from(ChatGetServiceResponse chatGetServiceResponse) {
+	public static ChatGetResponse from(final ChatGetServiceResponse chatGetServiceResponse) {
 		return new ChatGetResponse(chatGetServiceResponse.chatInfoWithMembers());
 	}
 }

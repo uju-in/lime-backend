@@ -46,7 +46,7 @@ public class ChatService {
 		ChatSessionInfo sessionInfo = chatSessionRedisManager.getSessionInfo(sessionId);
 		Long chatRoomId = sessionInfo.roomId();
 
-		if(!memberId.equals(sessionInfo.memberId())) {
+		if (!memberId.equals(sessionInfo.memberId())) {
 			throw new BusinessException(ErrorCode.CHAT_NOT_PERMISSION);
 		}
 
@@ -64,6 +64,7 @@ public class ChatService {
 
 		simpMessagingTemplate.convertAndSend("/subscribe/rooms/" + chatRoomId, chatInfoWithMember);
 	}
+
 	public void joinChatRoom(final Long chatRoomId) {
 		Long memberId = SecurityUtils.getCurrentMemberId();
 		Member member = memberReader.read(memberId);
@@ -113,7 +114,7 @@ public class ChatService {
 
 		Long memberId = SecurityUtils.getCurrentMemberId();
 
-		if(!chatRoomMemberReader.existMemberByMemberIdAndRoomId(chatRoomId, memberId)) {
+		if (!chatRoomMemberReader.existMemberByMemberIdAndRoomId(chatRoomId, memberId)) {
 			throw new BusinessException(ErrorCode.CHATROOM_NOT_PERMISSION);
 		}
 		List<ChatInfoWithMember> chatInfoWithMembers = chatReader.readChatInfoLists(chatRoomId);

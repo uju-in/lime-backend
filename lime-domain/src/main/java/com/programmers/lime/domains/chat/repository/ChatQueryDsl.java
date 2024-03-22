@@ -8,5 +8,4 @@ public interface ChatQueryDsl {
 
 	List<ChatInfoWithMember> getChatInfoWithMembers(Long chatRoomId);
 
-
 }

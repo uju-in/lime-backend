@@ -28,9 +28,9 @@ public class ChatErrorHandler extends StompSubProtocolErrorHandler {
 
 		log.info("handleClientMessageProcessingError: {}", ex.getMessage());
 
-		for(ErrorCode errorCode : ErrorCode.values()) {
+		for (ErrorCode errorCode : ErrorCode.values()) {
 
-			if(ex.getCause() == null) {
+			if (ex.getCause() == null) {
 				return super.handleClientMessageProcessingError(clientMessage, ex);
 			}
 

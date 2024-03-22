@@ -21,7 +21,7 @@ public class DisconnectPreHandler implements ChannelInterceptor {
 	private final StompHandlerManager stompHandlerManager;
 
 	@Override
-	public Message<?> preSend(Message<?> message, MessageChannel channel) {
+	public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
 		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
 		StompCommand command = stompHandlerManager.getCommand(accessor);

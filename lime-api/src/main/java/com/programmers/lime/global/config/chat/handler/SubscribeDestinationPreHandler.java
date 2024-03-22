@@ -36,18 +36,18 @@ public class SubscribeDestinationPreHandler implements ChannelInterceptor {
 
 		StompCommand command = stompHandlerManager.getCommand(accessor);
 
-		if(command != StompCommand.SUBSCRIBE) {
+		if (command != StompCommand.SUBSCRIBE) {
 			return message;
 		}
 
 		String destination = accessor.getDestination();
-		if(destination == null) {
+		if (destination == null) {
 			throw new BusinessException(ErrorCode.INVALID_SUBSCRIPTION_DESTINATION);
 		}
 
 		DestinationEnum destinationEnum = DestinationEnum.findByPath(destination);
 
-		if(destinationEnum.getType() == DestinationType.PRIVATE_CHAT_ROOM) {
+		if (destinationEnum.getType() == DestinationType.PRIVATE_CHAT_ROOM) {
 			privateChatRoomProcessor.process(accessor);
 		}
 

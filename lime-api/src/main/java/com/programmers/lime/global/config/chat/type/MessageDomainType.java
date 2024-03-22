@@ -6,7 +6,7 @@ public enum MessageDomainType {
 
 	private final String description;
 
-	MessageDomainType(String description) {
+	MessageDomainType(final String description) {
 		this.description = description;
 	}
 

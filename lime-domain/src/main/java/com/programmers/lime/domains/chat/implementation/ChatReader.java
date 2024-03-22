@@ -1,6 +1,5 @@
 package com.programmers.lime.domains.chat.implementation;
 
-
 import java.util.List;
 
 import org.springframework.stereotype.Component;

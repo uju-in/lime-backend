@@ -7,7 +7,7 @@ public enum DestinationType {
 
 	private final String description;
 
-	DestinationType(String description) {
+	DestinationType(final String description) {
 		this.description = description;
 	}
 

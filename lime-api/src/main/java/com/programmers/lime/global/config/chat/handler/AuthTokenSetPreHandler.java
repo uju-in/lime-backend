@@ -43,12 +43,12 @@ public class AuthTokenSetPreHandler implements ChannelInterceptor {
 		StompCommand command = stompHandlerManager.getCommand(accessor);
 
 		// JWT 토큰이 필요한 명령어에 대해서만 토큰을 검증합니다.
-		if(
+		if (
 			StompCommand.SEND.equals(command) ||
-			StompCommand.CONNECT.equals(command) ||
-			StompCommand.SUBSCRIBE.equals(command)
+				StompCommand.CONNECT.equals(command) ||
+				StompCommand.SUBSCRIBE.equals(command)
 		) {
-			try{
+			try {
 				setAuthTokenByAccessor(accessor);
 			} catch (JwtException e) {
 				throw new MalformedJwtException(ErrorCode.INVALID_ACCESS_TOKEN.getMessage());
@@ -91,7 +91,7 @@ public class AuthTokenSetPreHandler implements ChannelInterceptor {
 	private String getMemberIdByJWT(final String jwt) {
 		final String memberId;
 
-		if(!jwtService.isAccessTokenValid(jwt)) {
+		if (!jwtService.isAccessTokenValid(jwt)) {
 			throw new MalformedJwtException(ErrorCode.INVALID_ACCESS_TOKEN.getMessage());
 		}
 

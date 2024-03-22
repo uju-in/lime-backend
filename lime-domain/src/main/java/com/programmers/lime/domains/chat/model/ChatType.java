@@ -7,7 +7,7 @@ public enum ChatType {
 	JOIN("입장");
 	private final String description;
 
-	ChatType(String description) {
+	ChatType(final String description) {
 		this.description = description;
 	}
 

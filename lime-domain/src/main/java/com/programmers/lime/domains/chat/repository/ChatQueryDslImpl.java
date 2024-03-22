@@ -1,7 +1,7 @@
 package com.programmers.lime.domains.chat.repository;
 
-import static com.programmers.lime.domains.member.domain.QMember.*;
 import static com.programmers.lime.domains.chat.domain.QChat.*;
+import static com.programmers.lime.domains.member.domain.QMember.*;
 
 import java.util.List;
 
@@ -15,8 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ChatQueryDslImpl implements ChatQueryDsl{
-
+public class ChatQueryDslImpl implements ChatQueryDsl {
 
 	private final JPAQueryFactory queryFactory;
 

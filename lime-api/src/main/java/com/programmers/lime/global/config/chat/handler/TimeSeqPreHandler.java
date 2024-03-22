@@ -7,7 +7,6 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 
-
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -25,7 +24,7 @@ public class TimeSeqPreHandler implements ChannelInterceptor {
 		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 		StompCommand command = stompHandlerManager.getCommand(accessor);
 
-		if(StompCommand.SEND.equals(command)) {
+		if (StompCommand.SEND.equals(command)) {
 			accessor.addNativeHeader("time-seq", String.valueOf(System.currentTimeMillis()));
 		}
 

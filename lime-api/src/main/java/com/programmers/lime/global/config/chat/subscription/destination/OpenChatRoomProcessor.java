@@ -19,19 +19,19 @@ public class OpenChatRoomProcessor implements DestinationProcessor {
 	private final ChatSessionRedisManager chatSessionRedisManager;
 
 	@Override
-	public void process(StompHeaderAccessor accessor) {
+	public void process(final StompHeaderAccessor accessor) {
 		String sessionId = accessor.getSessionId();
 		ChatSessionInfo sessionInfo = chatSessionRedisManager.getSessionInfo(sessionId);
 
 		String destination = accessor.getDestination();
 		Long roomId = extractRoomId(destination);
 
-		if(!sessionInfo.roomId().equals(roomId)) {
+		if (!sessionInfo.roomId().equals(roomId)) {
 			throw new BusinessException(ErrorCode.INVALID_SUBSCRIPTION_DESTINATION);
 		}
 	}
 
-	public Long extractRoomId(String path) {
+	public Long extractRoomId(final String path) {
 		Matcher matcher = pattern.matcher(path);
 
 		if (matcher.find()) {

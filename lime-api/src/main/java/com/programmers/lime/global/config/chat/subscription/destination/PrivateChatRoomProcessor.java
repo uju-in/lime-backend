@@ -22,7 +22,7 @@ public class PrivateChatRoomProcessor implements DestinationProcessor {
 	private final ChatSessionRedisManager chatSessionRedisManager;
 
 	@Override
-	public void process(StompHeaderAccessor accessor) {
+	public void process(final StompHeaderAccessor accessor) {
 		String sessionId = accessor.getSessionId();
 		ChatSessionInfo sessionInfo = chatSessionRedisManager.getSessionInfo(sessionId);
 
@@ -32,12 +32,12 @@ public class PrivateChatRoomProcessor implements DestinationProcessor {
 		String memberIdStr = accessor.getUser().getName();
 		Long memberId = Long.valueOf(memberIdStr);
 
-		if(!sessionInfo.memberId().equals(memberId) || !sessionInfo.roomId().equals(roomId)) {
+		if (!sessionInfo.memberId().equals(memberId) || !sessionInfo.roomId().equals(roomId)) {
 			throw new BusinessException(ErrorCode.INVALID_SUBSCRIPTION_DESTINATION);
 		}
 	}
 
-	public Long extractRoomId(String path) {
+	public Long extractRoomId(final String path) {
 		Matcher matcher = pattern.matcher(path);
 
 		if (matcher.find()) {

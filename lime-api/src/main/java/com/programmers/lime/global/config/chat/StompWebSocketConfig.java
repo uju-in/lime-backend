@@ -36,7 +36,6 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	private final TimeSeqPreHandler timeSeqPreHandler;
 	private final DisconnectPreHandler disconnectPreHandler;
 
-
 	/**
 	 * STOMP 프로토콜을 사용하여 클라이언트와 서버가 메시지를 주고받을 수 있도록 엔드포인트를 등록합니다.
 	 */
@@ -58,7 +57,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 		// /subscribe로 시작하는 경로를 구독할 수 있도록 등록합니다.
 		registry.enableSimpleBroker("/subscribe")
 			.setTaskScheduler(heartBeatScheduler())
-			.setHeartbeatValue(new long[]{30_000, 30_000}); // 두 값 중 작은 값으로 클라이언트와 서버의 신호 주고받는 주기를 설정합니다.
+			.setHeartbeatValue(new long[] {30_000, 30_000}); // 두 값 중 작은 값으로 클라이언트와 서버의 신호 주고받는 주기를 설정합니다.
 
 		// /app으로 시작하는 경로로 들어오는 메시지를 컨트롤러에서 처리할 수 있도록 등록합니다.
 		registry.setApplicationDestinationPrefixes("/app");
@@ -81,13 +80,13 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	}
 
 	@Override
-	public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+	public void configureWebSocketTransport(final WebSocketTransportRegistration registration) {
 		registration.addDecoratorFactory(new WebSocketHandlerDecoratorFactory() {
 			@Override
-			public WebSocketHandler decorate(WebSocketHandler handler) {
+			public WebSocketHandler decorate(final WebSocketHandler handler) {
 				return new WebSocketHandlerDecorator(handler) {
 					@Override
-					public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+					public void afterConnectionEstablished(final WebSocketSession session) throws Exception {
 						webSocketSessionManager.registerSession(session);
 						super.afterConnectionEstablished(session);
 					}

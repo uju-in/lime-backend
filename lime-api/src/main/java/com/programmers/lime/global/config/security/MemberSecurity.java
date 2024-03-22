@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.programmers.lime.domains.member.domain.Member;
-import com.programmers.lime.domains.member.domain.vo.Role;
 
 import lombok.RequiredArgsConstructor;
 
