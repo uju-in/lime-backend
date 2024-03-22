@@ -33,6 +33,7 @@ public enum ErrorCode {
 	INVALID_SUBSCRIPTION_DESTINATION("COMMON_017", "유효하지 않은 구독 대상입니다."),
 	MESSAGE_DOMAIN_TYPE_NOT_FOUND("COMMON_018", "메시지 도메인 타입을 찾을 수 없습니다."),
 	SUBSCRIPTION_DESTINATION_NOT_FOUND("COMMON_019", "구독 대상을 찾을 수 없습니다."),
+	INVALID_ACCESSOR("COMMON_020", "잘못된 Accessor 입니다."),
 
 
 	// Member

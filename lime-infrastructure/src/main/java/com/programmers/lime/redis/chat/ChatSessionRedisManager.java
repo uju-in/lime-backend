@@ -20,7 +20,7 @@ public class ChatSessionRedisManager {
 	public void saveSession(String sessionId, ChatSessionInfo chatSessionInfo) {
 		redisTemplate.opsForValue().set(SESSION_PREFIX + sessionId, chatSessionInfo);
 		redisTemplate.opsForSet().add(
-			MEMBER_ROOM_PREFIX + chatSessionInfo.roomId() + ":" + chatSessionInfo.memberId(),
+			getKey(chatSessionInfo),
 			sessionId
 		);
 	}
@@ -32,5 +32,20 @@ public class ChatSessionRedisManager {
 	public Set<String> getSessionIdsByMemberAndRoom(Long memberId, Long roomId) {
 		Set<Object> rawSet = redisTemplate.opsForSet().members(MEMBER_ROOM_PREFIX + roomId + ":" + memberId);
 		return rawSet.stream().map(Object::toString).collect(Collectors.toSet());
+	}
+
+	public void deleteSession(String sessionId) {
+		ChatSessionInfo chatSessionInfo = getSessionInfo(sessionId);
+		if (chatSessionInfo != null) {
+			redisTemplate.delete(SESSION_PREFIX + sessionId);
+			redisTemplate.opsForSet().remove(
+				getKey(chatSessionInfo),
+				sessionId
+			);
+		}
+	}
+
+	private static String getKey(final ChatSessionInfo chatSessionInfo) {
+		return MEMBER_ROOM_PREFIX + chatSessionInfo.roomId() + ":" + chatSessionInfo.memberId();
 	}
 }

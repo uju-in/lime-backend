@@ -16,6 +16,7 @@ import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 
 import com.programmers.lime.global.config.chat.handler.AuthTokenSetPreHandler;
+import com.programmers.lime.global.config.chat.handler.DisconnectPreHandler;
 import com.programmers.lime.global.config.chat.handler.SessionAddPreHandler;
 import com.programmers.lime.global.config.chat.handler.SubscribeDestinationPreHandler;
 import com.programmers.lime.global.config.chat.handler.TimeSeqPreHandler;
@@ -33,6 +34,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	private final SubscribeDestinationPreHandler subscribeDestinationPreHandler;
 	private final WebSocketSessionManager webSocketSessionManager;
 	private final TimeSeqPreHandler timeSeqPreHandler;
+	private final DisconnectPreHandler disconnectPreHandler;
 
 
 	/**
@@ -68,7 +70,13 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void configureClientInboundChannel(final ChannelRegistration registration) {
-		registration.interceptors(authTokenSetPreHandler, sessionAddPreHandler, subscribeDestinationPreHandler, timeSeqPreHandler);
+		registration.interceptors(
+			disconnectPreHandler,
+			authTokenSetPreHandler,
+			sessionAddPreHandler,
+			subscribeDestinationPreHandler,
+			timeSeqPreHandler
+		);
 	}
 
 	@Override
