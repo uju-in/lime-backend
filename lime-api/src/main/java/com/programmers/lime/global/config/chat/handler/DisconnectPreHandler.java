@@ -1,5 +1,6 @@
 package com.programmers.lime.global.config.chat.handler;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -8,7 +9,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 
-import com.programmers.lime.redis.chat.ChatSessionRedisManager;
+import com.programmers.lime.global.event.chat.ChatSessionDeleteEvent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,9 +17,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DisconnectPreHandler implements ChannelInterceptor {
 
-	private final ChatSessionRedisManager chatSessionRedisManager;
-
 	private final StompHandlerManager stompHandlerManager;
+
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Override
 	public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
@@ -28,7 +29,7 @@ public class DisconnectPreHandler implements ChannelInterceptor {
 
 		if (StompCommand.DISCONNECT.equals(command)) {
 			String sessionId = accessor.getSessionId();
-			chatSessionRedisManager.deleteSession(sessionId);
+			eventPublisher.publishEvent(new ChatSessionDeleteEvent(sessionId));
 		}
 
 		return message;

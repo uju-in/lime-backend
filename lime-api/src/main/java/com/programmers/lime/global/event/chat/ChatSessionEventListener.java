@@ -24,4 +24,10 @@ public class ChatSessionEventListener {
 
 		chatSessionRedisManager.saveSession(event.sessionId(), chatSessionInfo);
 	}
+
+	@Async
+	@EventListener
+	public void deleteChatSession(final ChatSessionDeleteEvent event) {
+		chatSessionRedisManager.deleteSession(event.sessionId());
+	}
 }
