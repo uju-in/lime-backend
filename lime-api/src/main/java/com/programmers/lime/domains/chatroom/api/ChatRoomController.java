@@ -26,7 +26,7 @@ public class ChatRoomController {
 
 	//private final ChatService chatService;
 
-	@Operation(summary = "채티방 전체 조회", description = "채팅방을 조회합니다.")
+	@Operation(summary = "채팅방 전체 조회", description = "채팅방을 조회합니다.")
 	@GetMapping
 	public ResponseEntity<ChatRoomGetListResponse> getChatRooms() {
 		ChatRoomGetServiceListResponse serviceResponse = chatRoomService.getAvailableChatRooms();
