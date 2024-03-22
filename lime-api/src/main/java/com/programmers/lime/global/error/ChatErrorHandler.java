@@ -11,6 +11,9 @@ import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler;
 
 import com.programmers.lime.error.ErrorCode;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class ChatErrorHandler extends StompSubProtocolErrorHandler {
 
@@ -23,7 +26,14 @@ public class ChatErrorHandler extends StompSubProtocolErrorHandler {
 	@Override
 	public Message<byte[]> handleClientMessageProcessingError(final Message<byte[]> clientMessage, final Throwable ex) {
 
+		log.info("handleClientMessageProcessingError: {}", ex.getMessage());
+
 		for(ErrorCode errorCode : ErrorCode.values()) {
+
+			if(ex.getCause() == null) {
+				return super.handleClientMessageProcessingError(clientMessage, ex);
+			}
+
 			if (ex.getCause().getMessage().equals(errorCode.getMessage())) {
 				return prepareErrorMessage(errorCode);
 			}

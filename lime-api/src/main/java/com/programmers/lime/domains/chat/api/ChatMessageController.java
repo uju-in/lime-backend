@@ -26,7 +26,8 @@ public class ChatMessageController {
 	) {
 		Long currentMemberId = Long.valueOf(principal.getName());
 		String sessionId = headerAccessor.getSessionId();
+		String timeSeq = headerAccessor.getFirstNativeHeader("time-seq");
 
-		chatService.sendMessage(currentMemberId, sessionId, request.message());
+		chatService.sendMessage(currentMemberId, sessionId, request.message(), timeSeq);
 	}
 }

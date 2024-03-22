@@ -1,12 +1,13 @@
 package com.programmers.lime.domains.chat.application;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import com.programmers.lime.domains.chat.api.dto.response.ChatCreateResponse;
 import com.programmers.lime.domains.chat.application.dto.response.ChatGetServiceResponse;
 import com.programmers.lime.domains.chat.implementation.ChatAppender;
 import com.programmers.lime.domains.chat.implementation.ChatReader;
@@ -39,7 +40,7 @@ public class ChatService {
 
 	private final ChatRoomMemberReader chatRoomMemberReader;
 
-	public void sendMessage(final Long memberId, final String sessionId, final String message) {
+	public void sendMessage(final Long memberId, final String sessionId, final String message, final String timeSeq) {
 		Member member = memberReader.read(memberId);
 
 		ChatSessionInfo sessionInfo = chatSessionRedisManager.getSessionInfo(sessionId);
@@ -49,38 +50,40 @@ public class ChatService {
 			throw new BusinessException(ErrorCode.CHAT_NOT_PERMISSION);
 		}
 
-		ChatCreateResponse chatCreateResponse = ChatCreateResponse.builder()
+		ChatInfoWithMember chatInfoWithMember = ChatInfoWithMember.builder()
 			.message(message)
+			.chatRoomId(chatRoomId)
 			.nickname(member.getNickname())
 			.profileImage(member.getProfileImage())
-			.memberId(memberId)
-			.createdAt(LocalDateTime.now())
+			.memberId(member.getId())
 			.chatType(ChatType.CHAT)
+			.sendAt(getCreatedAt(timeSeq))
 			.build();
 
-		chatAppender.appendChat(message, memberId, chatRoomId, ChatType.CHAT);
+		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/" + chatRoomId, chatCreateResponse);
+		simpMessagingTemplate.convertAndSend("/subscribe/rooms/" + chatRoomId, chatInfoWithMember);
 	}
-
 	public void joinChatRoom(final Long chatRoomId) {
 		Long memberId = SecurityUtils.getCurrentMemberId();
 		Member member = memberReader.read(memberId);
 
 		String message = member.getNickname() + "님이 참여하셨습니다.";
 
-		ChatCreateResponse joinResponse = ChatCreateResponse.builder()
+		String timeSeq = String.valueOf(System.currentTimeMillis());
+		ChatInfoWithMember chatInfoWithMember = ChatInfoWithMember.builder()
 			.message(message)
+			.chatRoomId(chatRoomId)
 			.nickname(member.getNickname())
 			.profileImage(member.getProfileImage())
-			.memberId(memberId)
-			.createdAt(LocalDateTime.now())
+			.memberId(member.getId())
 			.chatType(ChatType.JOIN)
+			.sendAt(getCreatedAt(timeSeq))
 			.build();
 
-		chatAppender.appendChat(message, memberId, chatRoomId, ChatType.JOIN);
+		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/join/" + chatRoomId, joinResponse);
+		simpMessagingTemplate.convertAndSend("/subscribe/rooms/join/" + chatRoomId, chatInfoWithMember);
 	}
 
 	public void sendExitMessageToChatRoom(final Long chatRoomId) {
@@ -89,18 +92,21 @@ public class ChatService {
 
 		String message = member.getNickname() + "님이 퇴장하셨습니다.";
 
-		ChatCreateResponse exitResponse = ChatCreateResponse.builder()
+		String timeSeq = String.valueOf(System.currentTimeMillis());
+
+		ChatInfoWithMember chatInfoWithMember = ChatInfoWithMember.builder()
 			.message(message)
+			.chatRoomId(chatRoomId)
 			.nickname(member.getNickname())
 			.profileImage(member.getProfileImage())
-			.memberId(memberId)
-			.createdAt(LocalDateTime.now())
+			.memberId(member.getId())
 			.chatType(ChatType.EXIT)
+			.sendAt(getCreatedAt(timeSeq))
 			.build();
 
-		chatAppender.appendChat(message, memberId, chatRoomId, ChatType.EXIT);
+		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/exit/" + chatRoomId, exitResponse);
+		simpMessagingTemplate.convertAndSend("/subscribe/rooms/exit/" + chatRoomId, chatInfoWithMember);
 	}
 
 	public ChatGetServiceResponse getChatWithMemberList(final Long chatRoomId) {
@@ -110,9 +116,13 @@ public class ChatService {
 		if(!chatRoomMemberReader.existMemberByMemberIdAndRoomId(chatRoomId, memberId)) {
 			throw new BusinessException(ErrorCode.CHATROOM_NOT_PERMISSION);
 		}
-
 		List<ChatInfoWithMember> chatInfoWithMembers = chatReader.readChatInfoLists(chatRoomId);
 
 		return new ChatGetServiceResponse(chatInfoWithMembers);
+	}
+
+	private LocalDateTime getCreatedAt(final String timeSeq) {
+		long longTimeSeq = Long.parseLong(timeSeq);
+		return LocalDateTime.ofInstant(Instant.ofEpochMilli(longTimeSeq), ZoneId.systemDefault());
 	}
 }

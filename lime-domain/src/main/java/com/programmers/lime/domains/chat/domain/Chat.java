@@ -1,7 +1,9 @@
 package com.programmers.lime.domains.chat.domain;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.programmers.lime.domains.BaseEntity;
 import com.programmers.lime.domains.chat.model.ChatType;
 
 import jakarta.persistence.Column;
@@ -21,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "chats")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Chat {
+public class Chat extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +43,21 @@ public class Chat {
 	@Column(name = "chat_type", nullable = false)
 	private ChatType chatType;
 
+	@Column(name = "send_at", nullable = false)
+	private LocalDateTime sendAt;
+
 	@Builder
-	public Chat(String message, Long memberId, Long chatRoomId, ChatType chatType) {
+	public Chat(
+		final String message,
+		final Long memberId,
+		final Long chatRoomId,
+		final ChatType chatType,
+		final LocalDateTime sendAt
+	) {
 		this.message = Objects.requireNonNull(message);
 		this.memberId = Objects.requireNonNull(memberId);
 		this.chatRoomId = Objects.requireNonNull(chatRoomId);
 		this.chatType = Objects.requireNonNull(chatType);
+		this.sendAt = Objects.requireNonNull(sendAt);
 	}
 }

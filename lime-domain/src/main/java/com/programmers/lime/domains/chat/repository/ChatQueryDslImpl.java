@@ -30,11 +30,13 @@ public class ChatQueryDslImpl implements ChatQueryDsl{
 				member.nickname.nickname,
 				member.socialInfo.profileImage,
 				chat.message,
+				chat.sendAt,
 				chat.chatType)
 			)
 			.from(chat)
 			.join(member).on(chat.memberId.eq(member.id))
 			.where(chat.chatRoomId.eq(chatRoomId))
+			.orderBy(chat.sendAt.asc())
 			.fetch();
 	}
 }

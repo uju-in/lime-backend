@@ -3,7 +3,7 @@ package com.programmers.lime.domains.chat.implementation;
 import org.springframework.stereotype.Component;
 
 import com.programmers.lime.domains.chat.domain.Chat;
-import com.programmers.lime.domains.chat.model.ChatType;
+import com.programmers.lime.domains.chat.model.ChatInfo;
 import com.programmers.lime.domains.chat.repository.ChatRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -15,18 +15,16 @@ public class ChatAppender {
 	private final ChatRepository chatRepository;
 
 	public void appendChat(
-		final String message,
-		final Long memberId,
-		final Long chatRoomId,
-		final ChatType chatType
+		final ChatInfo chatInfo
 	) {
 
 		Chat chat = Chat.builder()
-			.message(message)
-			.memberId(memberId)
-			.chatRoomId(chatRoomId)
-			.chatType(chatType)
-			.build();
+				.chatRoomId(chatInfo.chatRoomId())
+				.memberId(chatInfo.memberId())
+				.message(chatInfo.message())
+				.sendAt(chatInfo.sendAt())
+				.chatType(chatInfo.chatType())
+				.build();
 
 		chatRepository.save(chat);
 	}
