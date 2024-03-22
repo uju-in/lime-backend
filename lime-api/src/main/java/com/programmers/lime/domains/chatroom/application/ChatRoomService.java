@@ -39,14 +39,7 @@ public class ChatRoomService {
 	public ChatRoomGetServiceListResponse getAvailableChatRooms() {
 		Long memberId = SecurityUtils.getCurrentMemberId();
 
-		List<ChatRoomInfo> chatRoomInfos = null;
-
-		if(Objects.isNull(memberId)) {
-			chatRoomInfos = chatRoomReader.readOpenChatRooms();
-		} else {
-			chatRoomInfos = chatRoomReader.readOpenChatRoomsByMemberId(memberId);
-		}
-
+		List<ChatRoomInfo> chatRoomInfos = chatRoomReader.readOpenChatRoomsByMemberId(memberId);
 		return new ChatRoomGetServiceListResponse(
 			chatRoomInfos
 		);

@@ -16,10 +16,9 @@ public class ChatRoomReader {
 	private final ChatRoomRepository chatRoomRepository;
 
 	public List<ChatRoomInfo> readOpenChatRoomsByMemberId(Long memberId) {
-		return chatRoomRepository.findOpenChatRoomsIncludingWithoutMembers(memberId);
-	}
-
-	public List<ChatRoomInfo> readOpenChatRooms() {
+		if(memberId != null) {
+			return chatRoomRepository.findOpenChatRoomsIncludingWithoutMembers(memberId);
+		}
 		return chatRoomRepository.findOpenChatRooms();
 	}
 }
