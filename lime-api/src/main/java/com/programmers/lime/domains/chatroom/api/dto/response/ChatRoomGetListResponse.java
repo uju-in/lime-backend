@@ -8,7 +8,7 @@ import com.programmers.lime.domains.chatroom.model.ChatRoomInfo;
 public record ChatRoomGetListResponse(
 	List<ChatRoomInfo> chatRoomInfos
 ) {
-	public static ChatRoomGetListResponse from(ChatRoomGetServiceListResponse chatRoomGetServiceListResponse) {
+	public static ChatRoomGetListResponse from(final ChatRoomGetServiceListResponse chatRoomGetServiceListResponse) {
 		return new ChatRoomGetListResponse(
 			chatRoomGetServiceListResponse.chatRoomInfos()
 		);
