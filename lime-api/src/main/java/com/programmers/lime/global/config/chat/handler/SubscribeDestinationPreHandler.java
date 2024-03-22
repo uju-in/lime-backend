@@ -1,7 +1,6 @@
 package com.programmers.lime.global.config.chat.handler;
 
 import org.springframework.messaging.Message;
-import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -21,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class SubscribeDestinationPreHandler implements ChannelInterceptor {
 
 	private final PrivateChatRoomProcessor privateChatRoomProcessor;
+	private final StompHandlerManager stompHandlerManager;
 
 	/**
 	 * 클라이언트가 구독할 때, 클라이언트의 요청을 처리하기 전에 실행됩니다.
@@ -33,13 +33,9 @@ public class SubscribeDestinationPreHandler implements ChannelInterceptor {
 		final org.springframework.messaging.MessageChannel channel
 	) {
 		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-		SimpMessageType messageType = accessor.getMessageType();
 
-		if(messageType == SimpMessageType.HEARTBEAT) {
-			return message;
-		}
+		StompCommand command = stompHandlerManager.getCommand(accessor);
 
-		StompCommand command = accessor.getCommand();
 		if(command != StompCommand.SUBSCRIBE) {
 			return message;
 		}
@@ -50,10 +46,6 @@ public class SubscribeDestinationPreHandler implements ChannelInterceptor {
 		}
 
 		DestinationEnum destinationEnum = DestinationEnum.findByPath(destination);
-
-		if(destinationEnum == null) {
-			throw new BusinessException(ErrorCode.SUBSCRIPTION_DESTINATION_NOT_FOUND);
-		}
 
 		if(destinationEnum.getType() == DestinationType.PRIVATE_CHAT_ROOM) {
 			privateChatRoomProcessor.process(accessor);

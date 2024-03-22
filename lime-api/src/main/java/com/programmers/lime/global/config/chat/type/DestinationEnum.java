@@ -1,5 +1,8 @@
 package com.programmers.lime.global.config.chat.type;
 
+import com.programmers.lime.error.BusinessException;
+import com.programmers.lime.error.ErrorCode;
+
 public enum DestinationEnum {
 
 	CHAT("/subscribe/rooms", DestinationType.PRIVATE_CHAT_ROOM),
@@ -32,7 +35,8 @@ public enum DestinationEnum {
 				return destinationEnum;
 			}
 		}
-		return null;
+
+		throw new BusinessException(ErrorCode.SUBSCRIPTION_DESTINATION_NOT_FOUND);
 	}
 
 }

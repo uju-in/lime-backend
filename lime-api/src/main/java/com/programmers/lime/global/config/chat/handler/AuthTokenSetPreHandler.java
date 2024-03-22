@@ -1,13 +1,11 @@
 package com.programmers.lime.global.config.chat.handler;
 
 import org.springframework.messaging.Message;
-import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -30,6 +28,8 @@ public class AuthTokenSetPreHandler implements ChannelInterceptor {
 
 	private final UserDetailsService userDetailsService;
 
+	private final StompHandlerManager stompHandlerManager;
+
 	/**
 	 * 클라이언트가 서버와 연결할 때, 제일 먼저 실행되어야 하는 인터셉터 입니다.
 	 * JWT 토큰을 검증하고, 사용자 정보를 SecurityContextHolder에 저장합니다.
@@ -40,22 +40,13 @@ public class AuthTokenSetPreHandler implements ChannelInterceptor {
 		final org.springframework.messaging.MessageChannel channel
 	) {
 		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+		StompCommand command = stompHandlerManager.getCommand(accessor);
 
-		if (accessor == null) {
-			throw new MalformedJwtException(ErrorCode.MEMBER_NOT_LOGIN.getMessage());
-		}
-
-		SimpMessageType messageType = accessor.getMessageType();
-		if(messageType == SimpMessageType.HEARTBEAT) {
-			return message;
-		}
-
-		StompCommand command = accessor.getCommand();
 		// JWT 토큰이 필요한 명령어에 대해서만 토큰을 검증합니다.
 		if(
-			command.equals(StompCommand.SEND) ||
-			command.equals(StompCommand.CONNECT) ||
-			command.equals(StompCommand.SUBSCRIBE)
+			StompCommand.SEND.equals(command) ||
+			StompCommand.CONNECT.equals(command) ||
+			StompCommand.SUBSCRIBE.equals(command)
 		) {
 			try{
 				setAuthTokenByAccessor(accessor);

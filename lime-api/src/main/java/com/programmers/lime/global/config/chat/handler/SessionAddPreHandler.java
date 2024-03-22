@@ -2,7 +2,6 @@ package com.programmers.lime.global.config.chat.handler;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -25,6 +24,8 @@ public class SessionAddPreHandler implements ChannelInterceptor{
 
 	private final ChatRoomMemberReader chatRoomMemberReader;
 
+	private final StompHandlerManager stompHandlerManager;
+
 	/**
 	 * 클라이언트가 서버와 연결할 때, 클라이언트의 요청을 처리하기 전에 실행됩니다.
 	 * chat을 하기위해 특정 chat room에 대한 연결 요청인 경우, 해당 chat room에 대한 권한이 있는지 확인합니다.
@@ -35,12 +36,7 @@ public class SessionAddPreHandler implements ChannelInterceptor{
 		final org.springframework.messaging.MessageChannel channel
 	) {
 		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-		SimpMessageType messageType = accessor.getMessageType();
-
-		if(messageType == SimpMessageType.HEARTBEAT) {
-			return message;
-		}
-		StompCommand command = accessor.getCommand();
+		StompCommand command = stompHandlerManager.getCommand(accessor);
 		if(command != StompCommand.CONNECT) {
 			return message;
 		}
