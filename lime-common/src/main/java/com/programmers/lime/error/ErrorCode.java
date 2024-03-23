@@ -30,6 +30,9 @@ public enum ErrorCode {
 	S3_UPLOAD_FAIL("COMMON_014", "S3 업로드에 실패했습니다."),
 	S3_DELETE_FAIL("COMMON_015", "S3 삭제에 실패했습니다."),
 	BAD_REVIEW_IMAGE_URL("COMMON_016", "잘못된 리뷰 이미지 URL 입니다."),
+	INVALID_SUBSCRIPTION_DESTINATION("COMMON_017", "유효하지 않은 구독 대상입니다."),
+	MESSAGE_DOMAIN_TYPE_NOT_FOUND("COMMON_018", "메시지 도메인 타입을 찾을 수 없습니다."),
+	SUBSCRIPTION_DESTINATION_NOT_FOUND("COMMON_019", "구독 대상을 찾을 수 없습니다."),
 
 
 	// Member
@@ -134,7 +137,15 @@ public enum ErrorCode {
 
 	// Favorite
 	FAVORITE_TYPE_BAD_REQUEST("FAVORITE_001", "잘못된 favoriteType 파라미터 값입니다."),
-	;
+
+	// ChatRoom
+	CHATROOM_MAX_MEMBER_COUNT_ERROR("CHATROOM_001","최소 2명 이상의 사용자가 필요합니다." ),
+	CHATROOM_ALREADY_JOIN("CHATROOM_002","이미 참여한 채팅방 입니다." ),
+	CHATROOM_NOT_PERMISSION("CHATROOM_003","채팅방에 참여할 권한이 없습니다." ),
+
+	// Chat
+	CHAT_NOT_PERMISSION("CHAT_001","채팅 권한이 없습니다." ),
+	CHAT_SESSION_NOT_FOUND("CHAT_002","채팅 세션을 찾을 수 없습니다." );
 
 	private static final Map<String, ErrorCode> ERROR_CODE_MAP;
 
