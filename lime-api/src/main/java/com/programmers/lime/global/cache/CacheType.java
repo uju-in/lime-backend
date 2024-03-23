@@ -7,8 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum CacheType {
 
-	REFRESH_TOKEN("refreshToken", 1209600, 10000)
-	;
+	REFRESH_TOKEN("refreshToken", 1209600, 10000);
 
 	private final String cacheName;
 	private final int expireAfterWrite;
