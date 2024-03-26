@@ -36,7 +36,9 @@ import com.programmers.lime.redis.vote.VoteRankingInfo;
 import com.programmers.lime.redis.vote.VoteRedisManager;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class VoteService {
@@ -46,6 +48,7 @@ public class VoteService {
 	private final VoteManager voteManager;
 	private final VoteRemover voteRemover;
 	private final VoterReader voterReader;
+	private final VoteLockManager voteLockManager;
 	private final MemberUtils memberUtils;
 	private final ItemReader itemReader;
 	private final VoteRedisManager voteRedisManager;
@@ -85,11 +88,15 @@ public class VoteService {
 		final Long memberId,
 		final Long itemId
 	) {
-		voterReader.find(vote, memberId)
+		voterReader.find(vote.getId(), memberId)
 			.ifPresentOrElse(
 				voter -> voteManager.reParticipate(itemId, voter),
 				() -> {
-					voteManager.participate(vote, memberId, itemId);
+					try {
+						voteLockManager.participate(vote, memberId, itemId);
+					} catch (InterruptedException e) {
+						log.info("투표 참여 중 락 획득 실패, voteId={}, memberId={}", vote.getId(), memberId);
+					}
 					eventPublisher.publishEvent(new RankingUpdateEvent(String.valueOf(vote.getHobby()), vote.isVoting(), getVoteRedis(vote)));
 				}
 			);
@@ -99,7 +106,7 @@ public class VoteService {
 		final Long memberId = memberUtils.getCurrentMemberId();
 		final Vote vote = voteReader.read(voteId);
 
-		voteManager.cancel(vote, memberId);
+		voteManager.cancel(voteId, memberId);
 		eventPublisher.publishEvent(new RankingDecreasePopularityEvent(String.valueOf(vote.getHobby()), getVoteRedis(vote)));
 	}
 
@@ -162,7 +169,7 @@ public class VoteService {
 			parameters,
 			null
 		);
-		final long totalVoteCount = voteReader.countByKeyword(keyword);
+		final long totalVoteCount = voteReader.countByKeyword(keyword); // 키워드를 가진 아이템 쿼리 두 번 나감 -> 리팩토링
 
 		return new VoteGetByKeywordServiceResponse(cursorSummary, totalVoteCount);
 	}

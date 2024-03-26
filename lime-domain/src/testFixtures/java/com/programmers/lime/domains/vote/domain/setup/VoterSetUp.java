@@ -2,7 +2,6 @@ package com.programmers.lime.domains.vote.domain.setup;
 
 import org.springframework.stereotype.Component;
 
-import com.programmers.lime.domains.vote.domain.Vote;
 import com.programmers.lime.domains.vote.domain.Voter;
 import com.programmers.lime.domains.vote.repository.VoterRepository;
 
@@ -15,11 +14,11 @@ public class VoterSetUp {
 	private final VoterRepository voterRepository;
 
 	public Voter saveOne(
-		final Vote vote,
+		final Long voteId,
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = new Voter(vote, memberId, itemId);
+		final Voter voter = new Voter(voteId, memberId, itemId);
 
 		return voterRepository.save(voter);
 

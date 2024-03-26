@@ -38,14 +38,22 @@ class VoteManagerTest {
 			// given
 			final Vote vote = VoteBuilder.build();
 			final Long memberId = 1L;
-			final Long itemId = 1L;
+			final Long itemId = vote.getItem1Id();
+
+			given(voterRepository.save(any(Voter.class)))
+				.willReturn(VoterBuilder.build(vote.getId(), memberId, itemId));
+
+			given(voterReader.count(vote.getId()))
+				.willReturn(vote.getMaximumParticipants() - 1);
 
 			// when
 			voteManager.participate(vote, memberId, itemId);
 
 			// then
-			assertThat(vote.getVoters()).hasSize(1);
 			assertThat(vote.isVoting()).isTrue();
+
+			// verify
+			then(voterRepository).should().save(any(Voter.class));
 		}
 
 		@Test
@@ -54,17 +62,22 @@ class VoteManagerTest {
 			// given
 			final Vote vote = VoteBuilder.build();
 			final Long memberId = 1L;
-			final Long itemId = 1L;
+			final Long itemId = vote.getItem1Id();
 
-			vote.addVoter(VoterBuilder.build(vote, 2L, 1L));
-			vote.addVoter(VoterBuilder.build(vote, 3L, 2L));
+			given(voterRepository.save(any(Voter.class)))
+				.willReturn(VoterBuilder.build(vote.getId(), memberId, itemId));
+
+			given(voterReader.count(vote.getId()))
+				.willReturn(vote.getMaximumParticipants());
 
 			// when
 			voteManager.participate(vote, memberId, itemId);
 
 			// then
-			assertThat(vote.getVoters()).hasSize(3);
 			assertThat(vote.isVoting()).isFalse();
+
+			// verify
+			then(voterRepository).should().save(any(Voter.class));
 		}
 	}
 
@@ -72,10 +85,9 @@ class VoteManagerTest {
 	@DisplayName("재참여한다.")
 	void reParticipateTest() {
 		// given
-		final Vote vote = VoteBuilder.build();
 		final Long originSelectedItemId = 1L;
 		final Long newSelectedItemId = 2L;
-		final Voter voter = VoterBuilder.build(vote, 1L, originSelectedItemId);
+		final Voter voter = VoterBuilder.build(1L, 1L, originSelectedItemId);
 
 		// when
 		voteManager.reParticipate(newSelectedItemId, voter);
@@ -88,20 +100,16 @@ class VoteManagerTest {
 	@DisplayName("투표를 취소한다.")
 	void cancelTest() {
 		// given
-		final Vote vote = VoteBuilder.build();
+		final Long voteId = 1L;
 		final Long memberId = 1L;
-		final Voter voter = VoterBuilder.build(vote, memberId, 1L);
 
-		vote.addVoter(voter);
-
-		given(voterReader.read(any(Vote.class), anyLong()))
-			.willReturn(voter);
-		doNothing().when(voterRepository).delete(voter);
+		doNothing()
+			.when(voterRepository).deleteByVoteIdAndMemberId(voteId, memberId);
 
 		// when
-		voteManager.cancel(vote, memberId);
+		voteManager.cancel(voteId, memberId);
 
 		// then
-		then(voterRepository).should().delete(voter);
+		then(voterRepository).should().deleteByVoteIdAndMemberId(voteId, memberId);
 	}
 }

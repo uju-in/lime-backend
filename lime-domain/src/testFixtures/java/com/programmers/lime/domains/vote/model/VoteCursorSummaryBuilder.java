@@ -21,7 +21,7 @@ public class VoteCursorSummaryBuilder {
 				.content(vote.getContent())
 				.startTime(vote.getStartTime())
 				.isVoting(false)
-				.participants(vote.getVoters().size())
+				.participants(100)
 				.build();
 			final String cursorId = generateCursorId(vote);
 			final VoteCursorSummary voteCursorSummary = new VoteCursorSummary(voteInfo, vote.getItem1Id(), vote.getItem2Id(), cursorId);

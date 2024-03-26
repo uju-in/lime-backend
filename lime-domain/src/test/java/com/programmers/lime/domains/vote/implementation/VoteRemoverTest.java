@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.programmers.lime.domains.vote.domain.Vote;
 import com.programmers.lime.domains.vote.domain.VoteBuilder;
 import com.programmers.lime.domains.vote.repository.VoteRepository;
+import com.programmers.lime.domains.vote.repository.VoterRepository;
 
 @ExtendWith(MockitoExtension.class)
 class VoteRemoverTest {
@@ -22,6 +23,9 @@ class VoteRemoverTest {
 	@Mock
 	private VoteRepository voteRepository;
 
+	@Mock
+	private VoterRepository voterRepository;
+
 	@Test
 	@DisplayName("투표를 삭제한다.")
 	void removeTest() {
@@ -30,6 +34,9 @@ class VoteRemoverTest {
 
 		willDoNothing()
 			.given(voteRepository).delete(any(Vote.class));
+
+		willDoNothing()
+			.given(voterRepository).deleteByVoteId(anyLong());
 
 		// when
 		voteRemover.remove(vote);

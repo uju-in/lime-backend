@@ -43,9 +43,6 @@ class VoteReaderTest {
 	private VoteReader voteReader;
 
 	@Mock
-	private VoteCounter voteCounter;
-
-	@Mock
 	private VoteRepository voteRepository;
 
 	@Mock
@@ -114,11 +111,11 @@ class VoteReaderTest {
 			.willReturn(item1);
 		given(itemReader.read(item2Id))
 			.willReturn(item2);
-		given(voteCounter.count(any(Vote.class), eq(item1Id)))
+		given(voterReader.count(anyLong(), eq(item1Id)))
 			.willReturn(item1Votes);
-		given(voteCounter.count(any(Vote.class), eq(item2Id)))
+		given(voterReader.count(anyLong(), eq(item2Id)))
 			.willReturn(item2Votes);
-		given(voterReader.readItemId(any(Vote.class), anyLong()))
+		given(voterReader.readItemId(anyLong(), anyLong()))
 			.willReturn(item1Id);
 
 		// when
