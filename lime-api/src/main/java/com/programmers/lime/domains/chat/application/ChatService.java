@@ -3,15 +3,17 @@ package com.programmers.lime.domains.chat.application;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import com.programmers.lime.domains.chat.application.dto.response.ChatGetServiceResponse;
+import com.programmers.lime.common.cursor.CursorPageParameters;
+import com.programmers.lime.common.cursor.CursorSummary;
+import com.programmers.lime.domains.chat.application.dto.response.ChatGetCursorServiceResponse;
 import com.programmers.lime.domains.chat.implementation.ChatAppender;
 import com.programmers.lime.domains.chat.implementation.ChatReader;
 import com.programmers.lime.domains.chat.model.ChatInfoWithMember;
+import com.programmers.lime.domains.chat.model.ChatSummary;
 import com.programmers.lime.domains.chat.model.ChatType;
 import com.programmers.lime.domains.chatroom.implementation.ChatRoomMemberReader;
 import com.programmers.lime.domains.member.domain.Member;
@@ -110,16 +112,20 @@ public class ChatService {
 		simpMessagingTemplate.convertAndSend("/subscribe/rooms/exit/" + chatRoomId, chatInfoWithMember);
 	}
 
-	public ChatGetServiceResponse getChatWithMemberList(final Long chatRoomId) {
+	public ChatGetCursorServiceResponse getChatByCursor(
+		final Long chatRoomId,
+		final CursorPageParameters parameters
+	) {
 
 		Long memberId = SecurityUtils.getCurrentMemberId();
 
 		if (!chatRoomMemberReader.existMemberByMemberIdAndRoomId(chatRoomId, memberId)) {
 			throw new BusinessException(ErrorCode.CHATROOM_NOT_PERMISSION);
 		}
-		List<ChatInfoWithMember> chatInfoWithMembers = chatReader.readChatInfoLists(chatRoomId);
 
-		return new ChatGetServiceResponse(chatInfoWithMembers);
+		CursorSummary<ChatSummary> summaries = chatReader.readByCursor(chatRoomId, parameters);
+
+		return new ChatGetCursorServiceResponse(summaries);
 	}
 
 	private LocalDateTime getCreatedAt(final String timeSeq) {
