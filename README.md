@@ -1,4 +1,4 @@
-# [LIfe - TIme : LIME](https://uju-lime.vercel.app)
+# [LIfe - TIme : LIME 서비스 링크](https://uju-lime.vercel.app)
 <img src="http://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white&link=http://api.uju-lime.shop/swagger-ui/index.html#/)]
 (http://api.uju-lime.shop/swagger-ui/index.html#/)" height="25">
 
@@ -68,3 +68,9 @@
  <img width="985" alt="스크린샷 2024-02-27 오후 3 35 14" src="https://github.com/uju-in/lime-backend/assets/77893164/4b85d934-af44-4bb4-a592-094dac429372">
 
 ### 업데이트 후 Ver.2
+<img width="1134" alt="스크린샷 2024-03-28 오후 7 22 31" src="https://github.com/uju-in/lime-backend/assets/77893164/f118361a-b373-4b5e-84a4-ab35575907e9">
+<img width="1133" alt="스크린샷 2024-03-28 오후 7 22 44" src="https://github.com/uju-in/lime-backend/assets/77893164/dbdf0e9a-a9ba-4f53-8318-734df4690c0d">
+<img width="1138" alt="스크린샷 2024-03-28 오후 7 22 53" src="https://github.com/uju-in/lime-backend/assets/77893164/ee2677c8-7ad1-42c5-bc45-eec4b7c72772">
+
+
+
