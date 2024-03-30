@@ -41,4 +41,13 @@ public class ChatReader {
 
 		return parameterSize;
 	}
+
+	public ChatSummary readFirstChat(final Long chatRoomId) {
+		return chatRepository.findFirstByCursor(chatRoomId);
+	}
+
+	public ChatSummary readLastChat(final Long chatRoomId) {
+		return chatRepository.findLastByCursor(chatRoomId);
+	}
+
 }

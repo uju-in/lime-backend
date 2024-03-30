@@ -2,7 +2,6 @@ package com.programmers.lime.domains.chat.repository;
 
 import java.util.List;
 
-import com.programmers.lime.domains.chat.model.ChatInfoWithMember;
 import com.programmers.lime.domains.chat.model.ChatSummary;
 
 public interface ChatRepositoryForCursor {
@@ -13,4 +12,7 @@ public interface ChatRepositoryForCursor {
 		final int pageSize
 	);
 
+	ChatSummary findFirstByCursor(final Long chatRoomId);
+
+	ChatSummary findLastByCursor(final Long chatRoomId);
 }

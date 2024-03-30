@@ -53,6 +53,48 @@ public class ChatRepositoryForCursorImpl implements ChatRepositoryForCursor {
 			.fetch();
 	}
 
+	@Override
+	public ChatSummary findFirstByCursor(final Long chatRoomId) {
+		return queryFactory
+			.select(Projections.constructor(ChatSummary.class,
+				generateChatCursorId(),
+				chat.id.as("chatId"),
+				chat.chatRoomId,
+				chat.memberId,
+				member.nickname.nickname,
+				member.socialInfo.profileImage,
+				chat.message,
+				chat.sendAt,
+				chat.chatType)
+			)
+			.from(chat)
+			.join(member).on(chat.memberId.eq(member.id))
+			.where(chat.chatRoomId.eq(chatRoomId))
+			.orderBy(chat.sendAt.desc())
+			.fetchFirst();
+	}
+
+	@Override
+	public ChatSummary findLastByCursor(final Long chatRoomId) {
+		return queryFactory
+			.select(Projections.constructor(ChatSummary.class,
+				generateChatCursorId(),
+				chat.id.as("chatId"),
+				chat.chatRoomId,
+				chat.memberId,
+				member.nickname.nickname,
+				member.socialInfo.profileImage,
+				chat.message,
+				chat.sendAt,
+				chat.chatType)
+			)
+			.from(chat)
+			.join(member).on(chat.memberId.eq(member.id))
+			.where(chat.chatRoomId.eq(chatRoomId))
+			.orderBy(chat.sendAt.asc())
+			.fetchFirst();
+	}
+
 	private BooleanExpression cursorIdCondition(final String cursorId) {
 		if (cursorId == null) {
 			return null;
