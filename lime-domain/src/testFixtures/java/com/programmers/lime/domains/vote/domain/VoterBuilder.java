@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 public class VoterBuilder {
 	public static List<Voter> buildMany(
 		final long size,
-		final Vote vote,
+		final Long voteId,
 		final Long itemId
 	) {
 		return LongStream.range(1, size + 1)
 			.mapToObj(i -> {
-				Voter voter = VoterBuilder.build(vote, i, itemId);
+				Voter voter = VoterBuilder.build(voteId, i, itemId);
 				setVoterId(voter, i);
 
 				return voter;
@@ -26,11 +26,11 @@ public class VoterBuilder {
 	}
 
 	public static Voter build(
-		final Vote vote,
+		final Long voteId,
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = new Voter(vote, memberId, itemId);
+		final Voter voter = new Voter(voteId, memberId, itemId);
 
 		setVoterId(voter, 1L);
 

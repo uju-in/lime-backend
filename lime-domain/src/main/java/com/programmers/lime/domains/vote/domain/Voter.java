@@ -6,12 +6,9 @@ import com.programmers.lime.domains.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,9 +25,8 @@ public class Voter extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "vote_id", nullable = false)
-	private Vote vote;
+	@Column(name = "vote_id", nullable = false)
+	private Long voteId;
 
 	@Column(name = "member_id", nullable = false)
 	private Long memberId;
@@ -39,17 +35,16 @@ public class Voter extends BaseEntity {
 	private Long itemId;
 
 	public Voter(
-		final Vote vote,
+		final Long voteId,
 		final Long memberId,
 		final Long itemId
 	) {
-		this.vote = Objects.requireNonNull(vote);
+		this.voteId = Objects.requireNonNull(voteId);
 		this.memberId = Objects.requireNonNull(memberId);
 		this.itemId = Objects.requireNonNull(itemId);
 	}
 
 	public void participate(final Long itemId) {
 		this.itemId = itemId;
-		this.vote.addVoter(this);
 	}
 }

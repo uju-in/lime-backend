@@ -1,5 +1,6 @@
 package com.programmers.lime.redis.vote;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -67,5 +68,13 @@ public class VoteRedisManager {
 		} else {
 			deleteRanking(hobby, rankingInfo);
 		}
+	}
+
+	public Boolean lock(final String key) {
+		return redisTemplate.opsForValue().setIfAbsent(key, "LOCK", Duration.ofSeconds(3));
+	}
+
+	public void unlock(final String key) {
+		redisTemplate.delete(key);
 	}
 }

@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.programmers.lime.domains.vote.domain.Vote;
 import com.programmers.lime.domains.vote.domain.Voter;
 import com.programmers.lime.domains.vote.repository.VoterRepository;
+import com.programmers.lime.error.BusinessException;
+import com.programmers.lime.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,11 +26,15 @@ public class VoteManager {
 		final Long memberId,
 		final Long itemId
 	) {
-		final Voter voter = new Voter(vote, memberId, itemId);
+		final int participants = voterReader.count(vote.getId());
+		if (vote.reachMaximumParticipants(participants)) {
+			throw new BusinessException(ErrorCode.VOTE_CANNOT_PARTICIPATE);
+		}
 
-		voter.participate(itemId);
+		final Voter voter = new Voter(vote.getId(), memberId, itemId);
+		voterRepository.save(voter);
 
-		if (vote.reachMaximumParticipants()) {
+		if (vote.reachMaximumParticipants(participants + 1)) {
 			vote.close(LocalDateTime.now());
 		}
 	}
@@ -43,10 +49,9 @@ public class VoteManager {
 
 	@Transactional
 	public void cancel(
-		final Vote vote,
+		final Long voteId,
 		final Long memberId
 	) {
-		final Voter voter = voterReader.read(vote, memberId);
-		voterRepository.delete(voter);
+		voterRepository.deleteByVoteIdAndMemberId(voteId, memberId);
 	}
 }
