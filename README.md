@@ -53,6 +53,15 @@
 ### 2) [재현 : 양방향 연관관계 테스트](https://handmadecoding.tistory.com/99)
 ### 3) [재현 : Transactional 어디까지 사용해야 할까?](https://handmadecoding.tistory.com/105)
 ### 4) [재현 : SSE-알림 리팩토링](https://handmadecoding.tistory.com/108)
+### 5) [이슬 : InnoDB의 외래 키 관리를 위한 락 확장으로 인해 데드락 발생](https://yiseull.tistory.com/32)
+### 6) [이슬 : 투표 참여 기능에서 동시성 이슈 발생](https://yiseull.tistory.com/33)
+### 7) [이슬 : Redis에서 문제가 발생할 경우 투표 로직이 정상적으로 처리되어도 에러 메시지 반환](https://github.com/Yiseull/dev-qna/blob/main/%5B%EA%B0%9C%EC%84%A0%5D%20Redis%20%EB%A1%9C%EC%A7%81%EC%9D%84%20%EC%9D%B4%EB%B2%A4%ED%8A%B8%20%EB%B9%84%EB%8F%99%EA%B8%B0%20%EC%B2%98%EB%A6%AC.md)
+### 8) [이슬 : @SpringBootTest에서 LazyInitializationException 발생](https://github.com/Yiseull/dev-qna/blob/main/%5B%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%5D%20%40SpringBootTest%EC%97%90%EC%84%9C%20LazyInitializationException%20%EB%B0%9C%EC%83%9D.md)
+### 9) [이슬 : 특정 상황에서 사용자에게 포인트를 지급하는 경우, 포인트 지급 메서드 직접 호출 vs 이벤트 처리](https://yiseull.tistory.com/31)
+### 10) [병곤 : Blue/Green 전략으로 무중단 배포](https://night-pump-292.notion.site/Blue-Green-2daa88cee1f64762b2e5be5d37ce794a?pvs=74)
+### 11) [병곤 : 채팅 목록 조회 개선 ](https://night-pump-292.notion.site/a2b4c94c98a74c7dad0b1fb2d88e12d6?pvs=74)
+### 12) [병곤 : Nginx를 이용한 로드 밸런싱](https://night-pump-292.notion.site/Nginx-e75485c97cb24e9d8ebf6b7f7d73c164)
+### 13) [병곤 : Nginx를 이용한 HTTPS 적용](https://night-pump-292.notion.site/LIME-HTTPS-8dde5eff6e6c4716ae68592bf0c44280?pvs=74)
 
 ## 5. ⚒️ 기술 스택
 
