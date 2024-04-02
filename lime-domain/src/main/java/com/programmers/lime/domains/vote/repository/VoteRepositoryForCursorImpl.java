@@ -56,11 +56,13 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			.leftJoin(voter).on(voter.voteId.eq(vote.id))
 			.where(
 				eqHobby(hobby),
-				getExpressionBy(statusCondition, memberId),
 				containsKeyword(keyword),
-				lessThanNextCursorId(sortCondition, nextCursorId)
+				getExpressionBy(statusCondition, memberId)
 			)
 			.groupBy(vote.id)
+			.having(
+				lessThanNextCursorId(sortCondition, nextCursorId)
+			)
 			.orderBy(getOrderSpecifierBy(sortCondition), vote.id.desc())
 			.limit(pageSize)
 			.fetch();
