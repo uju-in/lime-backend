@@ -77,13 +77,17 @@ public class ReviewService {
 	}
 
 	private List<String> uploadReviewImages(final List<MultipartFile> multipartReviewImages) {
-		if(multipartReviewImages == null || multipartReviewImages.isEmpty()) {
+		if (multipartReviewImages == null || multipartReviewImages.isEmpty()) {
 			return Collections.emptyList();
+		}
+
+		if (multipartReviewImages.size() > 5) {
+			throw new BusinessException(ErrorCode.REVIEW_IMAGE_COUNT_EXCEEDED);
 		}
 
 		return multipartReviewImages.stream()
 			.filter(multipartFile -> {
-				if(multipartFile.getOriginalFilename() == null) {
+				if (multipartFile.getOriginalFilename() == null) {
 					return false;
 				}
 				return !multipartFile.getOriginalFilename().isEmpty();

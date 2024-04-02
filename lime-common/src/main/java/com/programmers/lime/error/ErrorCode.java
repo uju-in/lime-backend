@@ -69,7 +69,7 @@ public enum ErrorCode {
 	NOT_REVIEW_LIKED("REVIEW_006", "좋아요를 누르지 않은 리뷰입니다."),
 	REVIEW_ALREADY_EXIST("REVIEW_007", "이미 리뷰를 작성한 아이템입니다."),
 	REVIEW_IMAGE_NOT_EXIST("REVIEW_008", "리뷰 이미지가 존재하지 않습니다."),
-
+	REVIEW_IMAGE_COUNT_EXCEEDED("REVIEW_009", "리뷰 이미지는 최대 5개까지만 등록할 수 있습니다."),
 
 	// Vote
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),
