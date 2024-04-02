@@ -160,24 +160,36 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			return null;
 		}
 
+		if (sortCondition == VoteSortCondition.CLOSED) {
+			return generateCursorId(sortCondition).gt(nextCursorId);
+		}
+
 		return generateCursorId(sortCondition).lt(nextCursorId);
 	}
 
 	private StringExpression generateCursorId(final VoteSortCondition sortCondition) {
-		if (sortCondition == VoteSortCondition.POPULARITY) {
-			final NumberExpression<Long> popularity = getVoterCount();
-
-			return StringExpressions.lpad(
-				popularity.stringValue(), 8, '0'
-			).concat(StringExpressions.lpad(
-				vote.id.stringValue(), 8, '0'
-			));
+		switch (sortCondition) {
+			case POPULARITY -> {
+				return StringExpressions.lpad(
+					getVoterCount().stringValue(), 8, '0'
+				).concat(StringExpressions.lpad(
+					vote.id.stringValue(), 8, '0'
+				));
+			}
+			case CLOSED -> {
+				return Expressions.stringTemplate(
+					"DATE_FORMAT({0}, {1})", vote.endTime, ConstantImpl.create("%Y%m%d%H%i%s")
+				).concat(StringExpressions.lpad(
+					vote.id.stringValue(), 8, '0'
+				));
+			}
+			default -> {
+				return Expressions.stringTemplate(
+					"DATE_FORMAT({0}, {1})", vote.startTime, ConstantImpl.create("%Y%m%d%H%i%s")
+				).concat(StringExpressions.lpad(
+					vote.id.stringValue(), 8, '0'
+				));
+			}
 		}
-
-		return Expressions.stringTemplate(
-			"DATE_FORMAT({0}, {1})", vote.startTime, ConstantImpl.create("%Y%m%d%H%i%s")
-		).concat(StringExpressions.lpad(
-			vote.id.stringValue(), 8, '0'
-		));
 	}
 }
