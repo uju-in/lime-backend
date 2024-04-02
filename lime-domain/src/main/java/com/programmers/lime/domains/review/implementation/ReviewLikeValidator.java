@@ -17,6 +17,10 @@ public class ReviewLikeValidator {
 		final Long memberId,
 		final Long reviewId
 	) {
+		if (memberId == null) {
+			throw new BusinessException(ErrorCode.MEMBER_ANONYMOUS);
+		}
+
 		if (reviewLikeReader.alreadyLiked(memberId, reviewId)) {
 			throw new BusinessException(ErrorCode.ALREADY_REVIEW_LIKED);
 		}
