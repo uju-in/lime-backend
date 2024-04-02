@@ -175,7 +175,7 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 		}
 
 		return Expressions.stringTemplate(
-			"DATE_FORMAT({0}, {1})", vote.createdAt, ConstantImpl.create("%Y%m%d%H%i%s")
+			"DATE_FORMAT({0}, {1})", vote.startTime, ConstantImpl.create("%Y%m%d%H%i%s")
 		).concat(StringExpressions.lpad(
 			vote.id.stringValue(), 8, '0'
 		));
