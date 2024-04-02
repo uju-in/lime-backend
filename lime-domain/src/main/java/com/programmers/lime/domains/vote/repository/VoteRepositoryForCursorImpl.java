@@ -56,11 +56,13 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			.leftJoin(voter).on(voter.voteId.eq(vote.id))
 			.where(
 				eqHobby(hobby),
-				getExpressionBy(statusCondition, memberId),
 				containsKeyword(keyword),
-				lessThanNextCursorId(sortCondition, nextCursorId)
+				getExpressionBy(statusCondition, memberId)
 			)
 			.groupBy(vote.id)
+			.having(
+				lessThanNextCursorId(sortCondition, nextCursorId)
+			)
 			.orderBy(getOrderSpecifierBy(sortCondition), vote.id.desc())
 			.limit(pageSize)
 			.fetch();
@@ -158,24 +160,36 @@ public class VoteRepositoryForCursorImpl implements VoteRepositoryForCursor {
 			return null;
 		}
 
+		if (sortCondition == VoteSortCondition.CLOSED) {
+			return generateCursorId(sortCondition).gt(nextCursorId);
+		}
+
 		return generateCursorId(sortCondition).lt(nextCursorId);
 	}
 
 	private StringExpression generateCursorId(final VoteSortCondition sortCondition) {
-		if (sortCondition == VoteSortCondition.POPULARITY) {
-			final NumberExpression<Long> popularity = getVoterCount();
-
-			return StringExpressions.lpad(
-				popularity.stringValue(), 8, '0'
-			).concat(StringExpressions.lpad(
-				vote.id.stringValue(), 8, '0'
-			));
+		switch (sortCondition) {
+			case POPULARITY -> {
+				return StringExpressions.lpad(
+					getVoterCount().stringValue(), 8, '0'
+				).concat(StringExpressions.lpad(
+					vote.id.stringValue(), 8, '0'
+				));
+			}
+			case CLOSED -> {
+				return Expressions.stringTemplate(
+					"DATE_FORMAT({0}, {1})", vote.endTime, ConstantImpl.create("%Y%m%d%H%i%s")
+				).concat(StringExpressions.lpad(
+					vote.id.stringValue(), 8, '0'
+				));
+			}
+			default -> {
+				return Expressions.stringTemplate(
+					"DATE_FORMAT({0}, {1})", vote.startTime, ConstantImpl.create("%Y%m%d%H%i%s")
+				).concat(StringExpressions.lpad(
+					vote.id.stringValue(), 8, '0'
+				));
+			}
 		}
-
-		return Expressions.stringTemplate(
-			"DATE_FORMAT({0}, {1})", vote.createdAt, ConstantImpl.create("%Y%m%d%H%i%s")
-		).concat(StringExpressions.lpad(
-			vote.id.stringValue(), 8, '0'
-		));
 	}
 }
