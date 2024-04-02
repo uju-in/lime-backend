@@ -18,10 +18,6 @@ public class ReviewLikeReader {
 		final Long memberId,
 		final Long reviewId
 	) {
-		if (memberId == null) {
-			return false;
-		}
-
 		return reviewLikeRepository.existsByMemberIdAndReviewId(memberId, reviewId);
 	}
 }
