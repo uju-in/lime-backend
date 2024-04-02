@@ -91,9 +91,9 @@ public class ReviewService {
 			.map(multipartFile -> {
 				try {
 					String fileType = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
-					String imageName = UUID.randomUUID() + fileType;
-					s3Manager.uploadFile(multipartFile, DIRECTORY, imageName);
+					String imageName = UUID.randomUUID() + "." + fileType;
 
+					s3Manager.uploadFile(multipartFile, DIRECTORY, imageName);
 					return s3Manager.getUrl(DIRECTORY, imageName).toString();
 				} catch (IOException e) {
 					throw new BusinessException(ErrorCode.S3_UPLOAD_FAIL);
