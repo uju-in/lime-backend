@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.programmers.lime.domains.chat.application.dto.response.ChatGetServiceResponse;
@@ -19,6 +19,7 @@ import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
 import com.programmers.lime.global.config.security.SecurityUtils;
+import com.programmers.lime.global.event.chat.ChatSendMessageEvent;
 import com.programmers.lime.redis.chat.ChatSessionRedisManager;
 import com.programmers.lime.redis.chat.model.ChatSessionInfo;
 
@@ -27,8 +28,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-
-	private final SimpMessagingTemplate simpMessagingTemplate;
 
 	private final MemberReader memberReader;
 
@@ -39,6 +38,8 @@ public class ChatService {
 	private final ChatAppender chatAppender;
 
 	private final ChatRoomMemberReader chatRoomMemberReader;
+
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	public void sendMessage(final Long memberId, final String sessionId, final String message, final String timeSeq) {
 		Member member = memberReader.read(memberId);
@@ -62,7 +63,9 @@ public class ChatService {
 
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/" + chatRoomId, chatInfoWithMember);
+		applicationEventPublisher.publishEvent(
+			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+		);
 	}
 
 	public void joinChatRoom(final Long chatRoomId) {
@@ -84,7 +87,9 @@ public class ChatService {
 
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/join/" + chatRoomId, chatInfoWithMember);
+		applicationEventPublisher.publishEvent(
+			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+		);
 	}
 
 	public void sendExitMessageToChatRoom(final Long chatRoomId) {
@@ -107,7 +112,9 @@ public class ChatService {
 
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/exit/" + chatRoomId, chatInfoWithMember);
+		applicationEventPublisher.publishEvent(
+			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+		);
 	}
 
 	public ChatGetServiceResponse getChatWithMemberList(final Long chatRoomId) {
