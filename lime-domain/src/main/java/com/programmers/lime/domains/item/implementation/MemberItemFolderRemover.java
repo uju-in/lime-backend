@@ -20,11 +20,9 @@ public class MemberItemFolderRemover {
 
 	@Transactional
 	public void remove(
-		final Long memberId,
 		final Long folderId
 	) {
-		memberItemRemover.removeByFolderId(memberId);
-
+		memberItemRemover.removeByFolderId(folderId);
 		MemberItemFolder memberItemFolder = memberItemFolderReader.read(folderId);
 		memberItemFolderRepository.delete(memberItemFolder);
 	}
