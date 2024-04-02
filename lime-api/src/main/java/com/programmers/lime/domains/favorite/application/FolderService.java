@@ -32,12 +32,14 @@ public class FolderService {
 		Long memberId = memberUtils.getCurrentMemberId();
 
 		memberItemFolderValidator.validateFolderName(folderName);
+
 		memberItemFolderAppender.append(folderName, memberId);
 	}
 
 	public void modifyFolder(final Long folderId, final String folderName) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
+		memberItemFolderValidator.validateFolderName(folderName);
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
 
 		memberItemFolderModifier.modify(folderId, folderName);
@@ -48,7 +50,7 @@ public class FolderService {
 
 		memberItemFolderValidator.validateExsitMemberItemFolder(folderId, memberId);
 
-		memberItemFolderRemover.remove(memberId, folderId);
+		memberItemFolderRemover.remove(folderId);
 	}
 
 	public void removeFolders(final List<Long> folderIds) {
