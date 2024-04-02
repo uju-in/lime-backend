@@ -33,11 +33,6 @@ public class AuthController {
 		return ResponseEntity.ok(MemberLoginResponse.from(loginServiceResponse));
 	}
 
-	@GetMapping("/join")
-	public ResponseEntity<String> join(){
-		return ResponseEntity.ok("join");
-	}
-
 	private void sendRefreshToken(
 		final HttpServletResponse response,
 		final MemberLoginServiceResponse loginResponse
