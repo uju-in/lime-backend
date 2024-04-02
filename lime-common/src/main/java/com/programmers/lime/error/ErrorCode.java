@@ -34,7 +34,8 @@ public enum ErrorCode {
 	MESSAGE_DOMAIN_TYPE_NOT_FOUND("COMMON_018", "메시지 도메인 타입을 찾을 수 없습니다."),
 	SUBSCRIPTION_DESTINATION_NOT_FOUND("COMMON_019", "구독 대상을 찾을 수 없습니다."),
 	INVALID_ACCESSOR("COMMON_020", "잘못된 Accessor 입니다."),
-
+	UNSUPPORTED_IMAGE_TYPE("COMMON_021", "업로드 할 수 있는 이미지 확장자가 아닙니다."),
+	NOT_CONVERTIBLE_IMAGE("COMMON_022", "이미지 변환에 실패했습니다."),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -68,7 +69,7 @@ public enum ErrorCode {
 	NOT_REVIEW_LIKED("REVIEW_006", "좋아요를 누르지 않은 리뷰입니다."),
 	REVIEW_ALREADY_EXIST("REVIEW_007", "이미 리뷰를 작성한 아이템입니다."),
 	REVIEW_IMAGE_NOT_EXIST("REVIEW_008", "리뷰 이미지가 존재하지 않습니다."),
-
+	REVIEW_IMAGE_COUNT_EXCEEDED("REVIEW_009", "리뷰 이미지는 최대 5개까지만 등록할 수 있습니다."),
 
 	// Vote
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),
