@@ -40,6 +40,6 @@ public enum VoteStatusCondition {
 	}
 
 	public boolean isRequiredLogin() {
-		return this == POSTED || this == PARTICIPATED;
+		return this == PARTICIPATED;
 	}
 }

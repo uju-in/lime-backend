@@ -21,6 +21,8 @@ import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.domain.setup.ItemSetup;
 import com.programmers.lime.domains.item.model.ItemInfo;
+import com.programmers.lime.domains.member.domain.Member;
+import com.programmers.lime.domains.member.domain.setup.MemberSetUp;
 import com.programmers.lime.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import com.programmers.lime.domains.vote.application.dto.response.VoteGetByKeywordServiceResponse;
 import com.programmers.lime.domains.vote.application.dto.response.VoteGetServiceResponse;
@@ -58,6 +60,9 @@ class VoteServiceTest extends IntegrationTest {
 
 	@Autowired
 	private ItemSetup itemSetup;
+
+	@Autowired
+	private MemberSetUp memberSetUp;
 
 	@MockBean
 	private MemberUtils memberUtils;
@@ -346,7 +351,6 @@ class VoteServiceTest extends IntegrationTest {
 			// when
 			final CursorSummary<VoteSummary> result = voteService.getVotesByCursor(
 				hobby,
-				null,
 				sortCondition,
 				new CursorPageParameters(null, null)
 			);
@@ -372,7 +376,6 @@ class VoteServiceTest extends IntegrationTest {
 			// when
 			final CursorSummary<VoteSummary> result = voteService.getVotesByCursor(
 				hobby,
-				null,
 				sortCondition,
 				new CursorPageParameters(null, null)
 			);
@@ -397,7 +400,6 @@ class VoteServiceTest extends IntegrationTest {
 			// when
 			final CursorSummary<VoteSummary> result = voteService.getVotesByCursor(
 				hobby,
-				null,
 				sortCondition,
 				new CursorPageParameters(null, null)
 			);
@@ -407,82 +409,6 @@ class VoteServiceTest extends IntegrationTest {
 			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(voteId);
 			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
 			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(vote3Id);
-		}
-
-		@Test
-		@DisplayName("회원은 본인이 생성한 투표 목록을 취미별로 조회할 수 있다.")
-		void getVotesByCursorWithPostedTest() {
-			// given
-			final Hobby hobby = Hobby.BASKETBALL;
-			final VoteStatusCondition statusCondition = VoteStatusCondition.POSTED;
-			final Long memberId = 1L;
-
-			given(memberUtils.getCurrentMemberId())
-				.willReturn(memberId);
-
-			// when
-			final CursorSummary<VoteSummary> result = voteService.getVotesByCursor(
-				hobby,
-				statusCondition,
-				VoteSortCondition.RECENT,
-				new CursorPageParameters(null, null)
-			);
-
-			// then
-			assertThat(result.summaries()).hasSize(3);
-			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3Id);
-			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
-			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(voteId);
-		}
-
-		@Test
-		@DisplayName("회원은 본인이 참여한 투표 목록을 취미별로 조회할 수 있다.")
-		void getVotesByCursorWithParticipatedTest() {
-			// given
-			final Hobby hobby = Hobby.BASKETBALL;
-			final VoteStatusCondition statusCondition = VoteStatusCondition.PARTICIPATED;
-			final Long memberId = 1L;
-
-			voterSetup.saveOne(vote2Id, memberId, vote.getItem1Id());
-			voterSetup.saveOne(vote3Id, memberId, vote.getItem1Id());
-
-			given(memberUtils.getCurrentMemberId())
-				.willReturn(memberId);
-
-			// when
-			final CursorSummary<VoteSummary> result = voteService.getVotesByCursor(
-				hobby,
-				statusCondition,
-				VoteSortCondition.RECENT,
-				new CursorPageParameters(null, null)
-			);
-
-			// then
-			assertThat(result.summaries()).hasSize(2);
-			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3Id);
-			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
-		}
-
-		@Test
-		@DisplayName("비회원은 본인이 생성하거나 참여한 투표 목록을 조회할 수 없다.")
-		void getVotesByCursorWithUnauthorizedTest() {
-			// given
-			final Hobby hobby = Hobby.BASKETBALL;
-			final VoteStatusCondition statusCondition = VoteStatusCondition.POSTED;
-			final Long memberId = null;
-
-			given(memberUtils.getCurrentMemberId())
-				.willReturn(memberId);
-
-			// when & then
-			assertThatThrownBy(() -> voteService.getVotesByCursor(
-				hobby,
-				statusCondition,
-				VoteSortCondition.RECENT,
-				new CursorPageParameters(null, null)
-			))
-				.isInstanceOf(BusinessException.class)
-				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -537,6 +463,94 @@ class VoteServiceTest extends IntegrationTest {
 			assertThat(result.voteSummary().summaryCount()).isEqualTo(1);
 			assertThat(result.voteSummary().summaries().get(0).voteInfo().id()).isEqualTo(vote2.getId());
 			assertThat(result.totalVoteCount()).isEqualTo(1);
+		}
+	}
+
+	@Nested
+	class GetMyVotesByCursor {
+		Long vote2Id = 2L;
+		Long vote3Id = 3L;
+		Member member;
+
+		@BeforeEach
+		void setUp() {
+			member = memberSetUp.saveOne(vote.getMemberId());
+			voteSetup.saveOne(vote2Id, item1.getId(), item2.getId());
+			voteSetup.saveOne(vote3Id, item1.getId(), item2.getId());
+		}
+
+		@Test
+		@DisplayName("사용자는 회원이 생성한 투표 목록을 취미별로 조회할 수 있다.")
+		void getVotesByCursorWithPostedTest() {
+			// given
+			final String nickname = member.getNickname();
+			final Hobby hobby = Hobby.BASKETBALL;
+			final VoteStatusCondition statusCondition = VoteStatusCondition.POSTED;
+
+			// when
+			final CursorSummary<VoteSummary> result = voteService.getMyVotesByCursor(
+				nickname,
+				hobby,
+				statusCondition,
+				new CursorPageParameters(null, null)
+			);
+
+			// then
+			assertThat(result.summaries()).hasSize(3);
+			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3Id);
+			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
+			assertThat(result.summaries().get(2).voteInfo().id()).isEqualTo(voteId);
+		}
+
+		@Test
+		@DisplayName("회원은 본인이 참여한 투표 목록을 취미별로 조회할 수 있다.")
+		void getVotesByCursorWithParticipatedTest() {
+			// given
+			final Hobby hobby = Hobby.BASKETBALL;
+			final VoteStatusCondition statusCondition = VoteStatusCondition.PARTICIPATED;
+			final Long memberId = member.getId();
+
+			voterSetup.saveOne(vote2Id, memberId, vote.getItem1Id());
+			voterSetup.saveOne(vote3Id, memberId, vote.getItem1Id());
+
+			given(memberUtils.getCurrentMemberId())
+				.willReturn(memberId);
+
+			// when
+			final CursorSummary<VoteSummary> result = voteService.getMyVotesByCursor(
+				member.getNickname(),
+				hobby,
+				statusCondition,
+				new CursorPageParameters(null, null)
+			);
+
+			// then
+			assertThat(result.summaries()).hasSize(2);
+			assertThat(result.summaries().get(0).voteInfo().id()).isEqualTo(vote3Id);
+			assertThat(result.summaries().get(1).voteInfo().id()).isEqualTo(vote2Id);
+		}
+
+		@Test
+		@DisplayName("비회원은 참여한 투표 목록을 조회할 수 없다.")
+		void getVotesByCursorWithUnauthorizedTest() {
+			// given
+			final String nickname = member.getNickname();
+			final Hobby hobby = Hobby.BASKETBALL;
+			final VoteStatusCondition statusCondition = VoteStatusCondition.PARTICIPATED;
+			final Long memberId = null;
+
+			given(memberUtils.getCurrentMemberId())
+				.willReturn(memberId);
+
+			// when & then
+			assertThatThrownBy(() -> voteService.getMyVotesByCursor(
+				nickname,
+				hobby,
+				statusCondition,
+				new CursorPageParameters(null, null)
+			))
+				.isInstanceOf(BusinessException.class)
+				.hasFieldOrPropertyWithValue("errorCode", ErrorCode.UNAUTHORIZED);
 		}
 	}
 }
