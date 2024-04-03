@@ -133,19 +133,14 @@ public class VoteService {
 
 	public CursorSummary<VoteSummary> getVotesByCursor(
 		final Hobby hobby,
-		final VoteStatusCondition statusCondition,
 		final VoteSortCondition sortCondition,
 		final CursorPageParameters parameters
 	) {
 		final Long memberId = memberUtils.getCurrentMemberId();
 
-		if (memberId == null && statusCondition != null && statusCondition.isRequiredLogin()) {
-			throw new BusinessException(ErrorCode.UNAUTHORIZED);
-		}
-
 		return voteReader.readByCursor(
 			hobby,
-			statusCondition,
+			null,
 			sortCondition,
 			null,
 			parameters,
@@ -188,11 +183,11 @@ public class VoteService {
 	) {
 		Long memberId = memberUtils.getCurrentMemberId();
 
-		if (memberId == null && statusCondition != null && statusCondition.isRequiredLogin()) {
+		if (memberId == null && statusCondition.isRequiredLogin()) {
 			throw new BusinessException(ErrorCode.UNAUTHORIZED);
 		}
 
-		if (memberId == null) {
+		if (statusCondition == VoteStatusCondition.POSTED) {
 			memberId = memberReader.readByNickname(nickname).getId();
 		}
 

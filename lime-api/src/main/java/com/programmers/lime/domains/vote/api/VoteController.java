@@ -93,13 +93,11 @@ public class VoteController {
 	@GetMapping
 	public ResponseEntity<VoteGetByCursorResponse> getVotesByCursor(
 		@RequestParam final String hobby,
-		@RequestParam(required = false, name = "status") final String statusCondition,
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute final CursorRequest request
 	) {
 		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
 			Hobby.from(hobby),
-			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
 			request.toParameters()
 		);
