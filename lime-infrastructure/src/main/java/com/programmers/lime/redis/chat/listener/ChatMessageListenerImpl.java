@@ -11,11 +11,11 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class RedisChatListener implements MessageListener {
+public class ChatMessageListenerImpl implements MessageListener {
 
 	private final RedisTemplate<String, Object> redisTemplate;
 
-	private final ChatListenerProxy chatMessageSubscriberProxy;
+	private final IChatListener chatListener;
 
 	@Override
 	public void onMessage(final Message message, final byte[] pattern) {
@@ -28,9 +28,7 @@ public class RedisChatListener implements MessageListener {
 				throw new IllegalStateException("Deserialized message is null. Message deserialization failed.");
 			}
 
-			String destination = chatInfoWithMemberCache.destination();
-
-			chatMessageSubscriberProxy.sendMessage(destination, chatInfoWithMemberCache);
+			chatListener.sendMessage(chatInfoWithMemberCache);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to process redis message", e);
 		}

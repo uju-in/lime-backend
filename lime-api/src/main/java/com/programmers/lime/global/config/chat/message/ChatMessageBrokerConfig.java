@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Primary;
 
 import com.programmers.lime.redis.chat.listener.IChatListener;
 import com.programmers.lime.redis.chat.publisher.IChatPublisher;
-import com.programmers.lime.redis.chat.listener.ChatListenerProxy;
 import com.programmers.lime.redis.chat.publisher.RedisChatPublisher;
 
 import lombok.RequiredArgsConstructor;
@@ -17,17 +16,17 @@ public class ChatMessageBrokerConfig {
 
 	private final SimpleChatListener simpleChatListener;
 
-	private final RedisChatPublisher chatPublisher;
+	private final RedisChatPublisher redisChatPublisher;
 
 	@Bean
 	@Primary
 	public IChatListener configListener() {
-		return new ChatListenerProxy(simpleChatListener);
+		return simpleChatListener;
 	}
 
 	@Bean
 	@Primary
 	public IChatPublisher configPublisher() {
-		return chatPublisher;
+		return redisChatPublisher;
 	}
 }

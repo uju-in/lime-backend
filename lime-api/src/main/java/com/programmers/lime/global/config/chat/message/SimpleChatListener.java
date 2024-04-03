@@ -19,8 +19,14 @@ public class SimpleChatListener implements IChatListener {
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
 	@Override
-	public void sendMessage(final String destination, final ChatInfoWithMemberCache chatInfoWithMemberCache) {
-		simpMessagingTemplate.convertAndSend(destination, toChatInfoWithMember(chatInfoWithMemberCache));
+	public void sendMessage(final ChatInfoWithMemberCache chatInfoWithMemberCache) {
+
+		if (chatInfoWithMemberCache == null) {
+			throw new IllegalStateException("Deserialized message is null. Message deserialization failed.");
+		}
+
+		simpMessagingTemplate.convertAndSend(chatInfoWithMemberCache.destination(),
+			toChatInfoWithMember(chatInfoWithMemberCache));
 	}
 
 	private ChatInfoWithMember toChatInfoWithMember(final ChatInfoWithMemberCache chatInfoWithMemberCache) {

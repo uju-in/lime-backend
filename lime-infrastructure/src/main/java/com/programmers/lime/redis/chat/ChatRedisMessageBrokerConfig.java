@@ -7,7 +7,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
-import com.programmers.lime.redis.chat.listener.RedisChatListener;
+import com.programmers.lime.redis.chat.listener.ChatMessageListenerImpl;
 
 @Configuration
 public class ChatRedisMessageBrokerConfig {
@@ -25,7 +25,7 @@ public class ChatRedisMessageBrokerConfig {
 	}
 
 	@Bean
-	public MessageListenerAdapter listenerAdapter(final RedisChatListener listener) {
+	public MessageListenerAdapter listenerAdapter(final ChatMessageListenerImpl listener) {
 		return new MessageListenerAdapter(listener, "onMessage");
 	}
 
