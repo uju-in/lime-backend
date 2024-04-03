@@ -129,4 +129,23 @@ public class VoteController {
 
 		return ResponseEntity.ok(response);
 	}
+
+	@Operation(summary = "마이 투표 목록 조회(커서)", description = "취미, 상태 조건, 커서 요청 정보를 이용하여 마이 투표를 조회합니다.")
+	@GetMapping("/{nickname}/my")
+	public ResponseEntity<VoteGetByCursorResponse> getMyVotesByCursor(
+		@PathVariable final String nickname,
+		@RequestParam final String hobby,
+		@RequestParam(name = "status") final String statusCondition,
+		@ModelAttribute final CursorRequest request
+	) {
+		final CursorSummary<VoteSummary> cursorSummary = voteService.getMyVotesByCursor(
+			nickname,
+			Hobby.from(hobby),
+			VoteStatusCondition.from(statusCondition),
+			request.toParameters()
+		);
+		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(cursorSummary);
+
+		return ResponseEntity.ok(response);
+	}
 }

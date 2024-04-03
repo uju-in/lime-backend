@@ -11,6 +11,7 @@ import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.item.domain.Item;
 import com.programmers.lime.domains.item.implementation.ItemReader;
+import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.domains.vote.application.dto.request.VoteCreateServiceRequest;
 import com.programmers.lime.domains.vote.application.dto.response.VoteGetByKeywordServiceResponse;
 import com.programmers.lime.domains.vote.application.dto.response.VoteGetServiceResponse;
@@ -52,6 +53,7 @@ public class VoteService {
 	private final MemberUtils memberUtils;
 	private final ItemReader itemReader;
 	private final VoteRedisManager voteRedisManager;
+	private final MemberReader memberReader;
 	private final ApplicationEventPublisher eventPublisher;
 
 	public Long createVote(final VoteCreateServiceRequest request) {
@@ -176,6 +178,32 @@ public class VoteService {
 
 	public List<VoteRankingInfo> rankVote(final Hobby hobby) {
 		return voteRedisManager.getRanking(hobby.toString());
+	}
+
+	public CursorSummary<VoteSummary> getMyVotesByCursor(
+		final String nickname,
+		final Hobby hobby,
+		final VoteStatusCondition statusCondition,
+		final CursorPageParameters parameters
+	) {
+		Long memberId = memberUtils.getCurrentMemberId();
+
+		if (memberId == null && statusCondition != null && statusCondition.isRequiredLogin()) {
+			throw new BusinessException(ErrorCode.UNAUTHORIZED);
+		}
+
+		if (memberId == null) {
+			memberId = memberReader.readByNickname(nickname).getId();
+		}
+
+		return voteReader.readByCursor(
+			hobby,
+			statusCondition,
+			VoteSortCondition.RECENT,
+			null,
+			parameters,
+			memberId
+		);
 	}
 
 	private void validateItemIds(
