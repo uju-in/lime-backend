@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +40,7 @@ public class ChatCursorCacheReader {
 			return getSuccessResult();
 		}
 
-		List<ChatCursorCache> cursorCaches = readCursorCaches(roomId, nextCursorId, size);
+		List<ChatCursorCache> cursorCaches = readCursorCachesByLua(roomId, nextCursorId, size);
 
 		// (커서가 캐시에 없는 경우) || (요청한 크기보다 작은데 마지막 커서가 tail 이 아닌 경우)
 		if (cursorCaches.isEmpty() || (cursorCaches.size() < size && !isTail(cursorCaches))) {
@@ -104,5 +105,30 @@ public class ChatCursorCacheReader {
 		}
 
 		return lastOne.nextCursorId().equals(TAIL_CURSOR_ID);
+	}
+
+	private List<ChatCursorCache> readCursorCachesByLua(
+		final Long roomId,
+		final String currCursorId,
+		final int size
+	) {
+		String linkedListScript = ChatLuaScriptManager.getReadByLinkedListScript();
+
+		// 스크립트 실행
+		List<Object> result = redisTemplate.execute(
+			connection -> connection.eval(linkedListScript.getBytes(), ReturnType.MULTI, 0,
+				roomId.toString().getBytes(), currCursorId.getBytes(), String.valueOf(size).getBytes()), true);
+
+		if (result == null || result.isEmpty()) {
+			return List.of();
+		}
+
+		List<ChatCursorCache> chatCursorCaches = new ArrayList<>();
+		for (Object item : result) {
+			ChatCursorCache cache = (ChatCursorCache)redisTemplate.getValueSerializer().deserialize((byte[])item);
+			chatCursorCaches.add(cache);
+		}
+
+		return chatCursorCaches;
 	}
 }
