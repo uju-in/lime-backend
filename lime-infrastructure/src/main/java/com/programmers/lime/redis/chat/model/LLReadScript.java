@@ -1,4 +1,4 @@
-package com.programmers.lime.redis.chat;
+package com.programmers.lime.redis.chat.model;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -10,22 +10,22 @@ import org.springframework.util.FileCopyUtils;
 import jakarta.annotation.PostConstruct;
 
 @Component
-public class ChatLuaScriptManager {
+public class LLReadScript {
 
-	private static String readBylinkedListScript;
+	private String readByLinkedListScript;
 
 	@PostConstruct
 	public void init() {
 		try {
 			ClassPathResource cpr = new ClassPathResource("ReadByLinkedList.lua");
 			byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
-			readBylinkedListScript = new String(bdata, StandardCharsets.UTF_8);
+			readByLinkedListScript = new String(bdata, StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to load redis script", e);
 		}
 	}
 
-	public static String getReadByLinkedListScript() {
-		return readBylinkedListScript;
+	public byte[] getReadByLinkedListScriptBytes() {
+		return readByLinkedListScript.getBytes(StandardCharsets.UTF_8);
 	}
 }

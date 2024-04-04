@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class ChatCursorCacheReader {
 
 	private final RedisTemplate<String, Object> redisTemplate;
+
+	private final ChatLLScriptManager chatLLScriptManager;
 
 	public ChatCursorCacheResult readByCursor(
 		final Long roomId,
@@ -112,12 +113,8 @@ public class ChatCursorCacheReader {
 		final String currCursorId,
 		final int size
 	) {
-		String linkedListScript = ChatLuaScriptManager.getReadByLinkedListScript();
-
 		// 스크립트 실행
-		List<Object> result = redisTemplate.execute(
-			connection -> connection.eval(linkedListScript.getBytes(), ReturnType.MULTI, 0,
-				roomId.toString().getBytes(), currCursorId.getBytes(), String.valueOf(size).getBytes()), true);
+		List<Object> result = chatLLScriptManager.executeLLScript(roomId, currCursorId, size);
 
 		if (result == null || result.isEmpty()) {
 			return List.of();
@@ -131,4 +128,5 @@ public class ChatCursorCacheReader {
 
 		return chatCursorCaches;
 	}
+
 }
