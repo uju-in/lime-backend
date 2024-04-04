@@ -22,7 +22,7 @@ public class MemberSecurityManager {
 		final Long memberId = memberUtils.getCurrentMemberId();
 		final Member member = memberReader.read(memberId);
 
-		return new MemberCheckJwtServiceResponse(memberId, member.getNickname());
+		return new MemberCheckJwtServiceResponse(memberId, member.getNickname(), member.getRole());
 	}
 
 	public void removeRefreshToken(final String refreshToken) {
