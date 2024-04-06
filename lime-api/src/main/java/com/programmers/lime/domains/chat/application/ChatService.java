@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -126,6 +127,7 @@ public class ChatService {
 		simpMessagingTemplate.convertAndSend("/subscribe/rooms/exit/" + chatRoomId, chatInfoWithMember);
 	}
 
+	@Cacheable(value = "chat", key = "#chatRoomId + '_' + #parameters.cursorId + '_' + #parameters.size")
 	public ChatGetCursorServiceResponse getChatByCursor(
 		final Long chatRoomId,
 		final CursorPageParameters parameters
