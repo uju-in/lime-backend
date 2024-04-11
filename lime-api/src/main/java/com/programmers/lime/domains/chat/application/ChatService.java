@@ -25,6 +25,7 @@ import com.programmers.lime.domains.member.implementation.MemberReader;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
 import com.programmers.lime.global.config.security.SecurityUtils;
+import com.programmers.lime.global.event.chat.ChatSendMessageEvent;
 import com.programmers.lime.global.event.chat.ChatAppendCacheEvent;
 import com.programmers.lime.redis.chat.ChatCursorCacheReader;
 import com.programmers.lime.redis.chat.ChatSessionRedisManager;
@@ -39,8 +40,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChatService {
 
-	private final SimpMessagingTemplate simpMessagingTemplate;
-
 	private final MemberReader memberReader;
 
 	private final ChatSessionRedisManager chatSessionRedisManager;
@@ -51,11 +50,11 @@ public class ChatService {
 
 	private final ChatRoomMemberReader chatRoomMemberReader;
 
+	private final ApplicationEventPublisher applicationEventPublisher;
+  
 	private final static int DEFAULT_CURSOR_SIZE = 20;
 
 	private final ChatCursorCacheReader chatCursorCacheReader;
-
-	private final ApplicationEventPublisher eventPublisher;
 
 	public void sendMessage(final Long memberId, final String sessionId, final String message, final String timeSeq) {
 		Member member = memberReader.read(memberId);
@@ -79,7 +78,9 @@ public class ChatService {
 
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/" + chatRoomId, chatInfoWithMember);
+		applicationEventPublisher.publishEvent(
+			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+		);
 	}
 
 	public void joinChatRoom(final Long chatRoomId) {
@@ -101,7 +102,9 @@ public class ChatService {
 
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/join/" + chatRoomId, chatInfoWithMember);
+		applicationEventPublisher.publishEvent(
+			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+		);
 	}
 
 	public void sendExitMessageToChatRoom(final Long chatRoomId) {
@@ -124,7 +127,9 @@ public class ChatService {
 
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
-		simpMessagingTemplate.convertAndSend("/subscribe/rooms/exit/" + chatRoomId, chatInfoWithMember);
+		applicationEventPublisher.publishEvent(
+			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+		);
 	}
 
 	@Cacheable(value = "chat", key = "#chatRoomId + '_' + #parameters.cursorId + '_' + #parameters.size")
@@ -163,7 +168,7 @@ public class ChatService {
 		if (cursorRedisResult.chatCursorCacheStatus() == ChatCursorCacheStatus.FAIL) {
 			CursorSummary<ChatSummary> chatSummaryCursorSummary = chatReader.readByCursor(chatRoomId, parameters);
 
-			eventPublisher.publishEvent(
+			applicationEventPublisher.publishEvent(
 				ChatAppendCacheEvent.builder()
 					.chatRoomId(chatRoomId)
 					.startCursorId(parameters.cursorId())
