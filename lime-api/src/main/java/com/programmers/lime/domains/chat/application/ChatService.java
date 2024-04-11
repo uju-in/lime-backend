@@ -103,7 +103,7 @@ public class ChatService {
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
 		applicationEventPublisher.publishEvent(
-			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+			new ChatSendMessageEvent("/subscribe/rooms/join/" + chatRoomId, chatInfoWithMember)
 		);
 	}
 
@@ -128,7 +128,7 @@ public class ChatService {
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
 		applicationEventPublisher.publishEvent(
-			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+			new ChatSendMessageEvent("/subscribe/rooms/exit/" + chatRoomId, chatInfoWithMember)
 		);
 	}
 
