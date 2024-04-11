@@ -132,7 +132,7 @@ public class ChatService {
 		);
 	}
 
-	@Cacheable(value = "chat", key = "#chatRoomId + '_' + #parameters.cursorId + '_' + #parameters.size")
+	@Cacheable(value = "chat", key = "#chatRoomId + '_' + #parameters.cursorId + '_' + #parameters.size", condition = "#parameters.cursorId != null")
 	public ChatGetCursorServiceResponse getChatByCursor(
 		final Long chatRoomId,
 		final CursorPageParameters parameters
