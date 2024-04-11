@@ -2,16 +2,19 @@ package com.programmers.lime.domains.chat.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.lime.domains.chat.api.dto.response.ChatGetResponse;
+import com.programmers.lime.domains.chat.api.dto.response.ChatGetByCursorResponse;
 import com.programmers.lime.domains.chat.application.ChatService;
-import com.programmers.lime.domains.chat.application.dto.response.ChatGetServiceResponse;
+import com.programmers.lime.domains.chat.application.dto.response.ChatGetCursorServiceResponse;
+import com.programmers.lime.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "chat", description = "채팅 API")
@@ -22,11 +25,15 @@ public class ChatController {
 
 	private final ChatService chatService;
 
-	@Operation(summary = "채팅 조회", description = "chatRoomId을 이용하여 채팅을 조회")
+	@Operation(summary = "채팅 커서 조회", description = "chatRoomId을 이용하여 채팅을 조회")
 	@GetMapping("/{chatRoomId}")
-	public ResponseEntity<ChatGetResponse> getChatInfoLists(@PathVariable final Long chatRoomId) {
-		ChatGetServiceResponse serviceResponse = chatService.getChatWithMemberList(chatRoomId);
-		ChatGetResponse response = ChatGetResponse.from(serviceResponse);
+	public ResponseEntity<ChatGetByCursorResponse> getChatInfoLists(
+		@PathVariable final Long chatRoomId,
+		@ModelAttribute @Valid final CursorRequest cursorRequest
+	) {
+		ChatGetCursorServiceResponse serviceResponse = chatService.getChatByCursor(chatRoomId,
+			cursorRequest.toParameters());
+		ChatGetByCursorResponse response = ChatGetByCursorResponse.from(serviceResponse);
 
 		return ResponseEntity.ok(response);
 	}
