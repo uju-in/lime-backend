@@ -34,7 +34,8 @@ public enum ErrorCode {
 	MESSAGE_DOMAIN_TYPE_NOT_FOUND("COMMON_018", "메시지 도메인 타입을 찾을 수 없습니다."),
 	SUBSCRIPTION_DESTINATION_NOT_FOUND("COMMON_019", "구독 대상을 찾을 수 없습니다."),
 	INVALID_ACCESSOR("COMMON_020", "잘못된 Accessor 입니다."),
-
+	UNSUPPORTED_IMAGE_TYPE("COMMON_021", "업로드 할 수 있는 이미지 확장자가 아닙니다."),
+	NOT_CONVERTIBLE_IMAGE("COMMON_022", "이미지 변환에 실패했습니다."),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
@@ -49,8 +50,7 @@ public enum ErrorCode {
 	MEMBER_INTRODUCTION_MBTI_BAD_REQUEST("MEMBER_014", "잘못된 MBTI 값입니다."),
 	MEMBER_INTRODUCTION_FAVORABILITY_BAD_REQUEST("MEMBER_015", "잘못된 선호도 값입니다."),
 	MEMBER_INTRODUCTION_CAREER_BAD_VALUE("MEMBER_016", "경력은 최소 0개월 이상이어야 합니다."),
-	MEMBER_ITEM_FOLDER_NAME_IS_EMPTY("MEMBER_ITEM_FOLDER_005", "폴더 이름은 비어있을 수 없습니다."),
-	MEMBER_ITEM_FOLDER_NAME_IS_DEFAULT("MEMBER_ITEM_FOLDER_006", "폴더 이름은 기본 폴더 이름과 같을 수 없습니다."),
+	MEMBER_INSUFFICIENT_PERMISSION("MEMBER_017", "권한이 부족합니다."),
 
 	// Item
 	ITEM_MARKET_NOT_FOUND("ITEM_001", "지원하지 않는 아이템 URL 입니다."),
@@ -68,7 +68,7 @@ public enum ErrorCode {
 	NOT_REVIEW_LIKED("REVIEW_006", "좋아요를 누르지 않은 리뷰입니다."),
 	REVIEW_ALREADY_EXIST("REVIEW_007", "이미 리뷰를 작성한 아이템입니다."),
 	REVIEW_IMAGE_NOT_EXIST("REVIEW_008", "리뷰 이미지가 존재하지 않습니다."),
-
+	REVIEW_IMAGE_COUNT_EXCEEDED("REVIEW_009", "리뷰 이미지는 최대 5개까지만 등록할 수 있습니다."),
 
 	// Vote
 	VOTE_NOT_FOUND("VOTE_001", "투표를 찾을 수 없습니다."),
@@ -132,6 +132,9 @@ public enum ErrorCode {
 	MEMBER_ITEM_FOLDER_NOT_FOUND("MEMBER_ITEM_FOLDER_001", "폴더를 찾을 수 없습니다."),
 	MEMBER_ITEM_FOLDER_NOT_MINE("MEMBER_ITEM_FOLDER_002", "나의 아이템 폴더가 아닙니다."),
 	FAVORITE_DEFAULT_FOLDER_DUPLICATED("MEMBER_ITEM_FOLDER_003", "기본 폴더가 중복되었습니다."),
+	MEMBER_ITEM_FOLDER_NAME_IS_EMPTY("MEMBER_ITEM_FOLDER_005", "폴더 이름은 비어있을 수 없습니다."),
+	MEMBER_ITEM_FOLDER_NAME_IS_DEFAULT("MEMBER_ITEM_FOLDER_006", "폴더 이름은 기본 폴더 이름과 같을 수 없습니다."),
+
 	// Friendship
 	FRIENDSHIP_NOT_FOUND("FRIENDSHIP_001", "친구 관계를 찾을 수 없습니다."),
 	FRIENDSHIP_ALREADY_EXISTS("FRIENDSHIP_002", "이미 친구 관계가 존재합니다."),

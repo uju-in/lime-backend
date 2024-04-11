@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -26,16 +27,45 @@ public class S3Manager {
 
 	private final AmazonS3 amazonS3;
 
+	private static final String[] allowedExtensions = {
+		"jpeg", "jpg", "png", "gif",
+		"bmp", "svg", "tiff", "tif",
+		"webp"
+	};
+
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
+
+	private static void validateType(final String fileName) {
+		String type = StringUtils.getFilenameExtension(fileName);
+
+		if (type == null || type.isEmpty()) {
+			throw new IllegalArgumentException("업로드 할 수 있는 이미지 확장자가 아닙니다.");
+		}
+
+		boolean isAllowed = false;
+		type = type.toLowerCase();
+		for (String extension : allowedExtensions) {
+			if (type.equals(extension)) {
+				isAllowed = true;
+				break;
+			}
+		}
+
+		if (!isAllowed) {
+			throw new IllegalArgumentException("업로드 할 수 있는 이미지 확장자가 아닙니다.");
+		}
+	}
 
 	public void uploadFile(
 		final MultipartFile multipartFile,
 		final String directory,
 		final String fileName
 	) throws IOException {
+		validateType(fileName);
+
 		final File uploadFile = convert(multipartFile)
-			.orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("이미지 변환에 실패했습니다."));
 
 		upload(uploadFile, directory, fileName);
 	}

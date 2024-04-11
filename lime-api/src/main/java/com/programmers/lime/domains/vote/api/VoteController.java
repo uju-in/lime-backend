@@ -93,13 +93,11 @@ public class VoteController {
 	@GetMapping
 	public ResponseEntity<VoteGetByCursorResponse> getVotesByCursor(
 		@RequestParam final String hobby,
-		@RequestParam(required = false, name = "status") final String statusCondition,
 		@RequestParam(required = false, name = "sort") final String sortCondition,
 		@ModelAttribute final CursorRequest request
 	) {
 		final CursorSummary<VoteSummary> cursorSummary = voteService.getVotesByCursor(
 			Hobby.from(hobby),
-			VoteStatusCondition.from(statusCondition),
 			VoteSortCondition.from(sortCondition),
 			request.toParameters()
 		);
@@ -126,6 +124,25 @@ public class VoteController {
 	public ResponseEntity<VoteRankResponse> rankVote(@RequestParam final String hobby) {
 		final List<VoteRankingInfo> rankingInfos = voteService.rankVote(Hobby.from(hobby));
 		final VoteRankResponse response = VoteRankResponse.from(rankingInfos);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "마이 투표 목록 조회(커서)", description = "취미, 상태 조건, 커서 요청 정보를 이용하여 마이 투표를 조회합니다.")
+	@GetMapping("/{nickname}/my")
+	public ResponseEntity<VoteGetByCursorResponse> getMyVotesByCursor(
+		@PathVariable final String nickname,
+		@RequestParam final String hobby,
+		@RequestParam(name = "status") final String statusCondition,
+		@ModelAttribute final CursorRequest request
+	) {
+		final CursorSummary<VoteSummary> cursorSummary = voteService.getMyVotesByCursor(
+			nickname,
+			Hobby.from(hobby),
+			VoteStatusCondition.from(statusCondition),
+			request.toParameters()
+		);
+		final VoteGetByCursorResponse response = VoteGetByCursorResponse.from(cursorSummary);
 
 		return ResponseEntity.ok(response);
 	}
