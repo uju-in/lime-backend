@@ -55,7 +55,6 @@ public class ChatSendMessageEventListener {
 		final ChatInfoWithMember chatInfoWithMember
 	) {
 		return ChatCursorCache.builder()
-			.cursorId(chatInfoWithMember.chatId().toString())
 			.chatId(chatInfoWithMember.chatId())
 			.chatRoomId(chatInfoWithMember.chatRoomId())
 			.memberId(chatInfoWithMember.memberId())
