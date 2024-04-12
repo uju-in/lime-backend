@@ -2,7 +2,6 @@ package com.programmers.lime.domains.chatroom.application;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,9 @@ import com.programmers.lime.domains.chatroom.implementation.ChatRoomReader;
 import com.programmers.lime.domains.chatroom.model.ChatRoomInfo;
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.ErrorCode;
-import com.programmers.lime.global.config.chat.WebSocketSessionManager;
 import com.programmers.lime.global.config.security.SecurityUtils;
-import com.programmers.lime.redis.chat.ChatSessionRedisManager;
+import com.programmers.lime.redis.chat.model.ChatRoomRemoveAllSessionInfo;
+import com.programmers.lime.redis.chat.publisher.IChatRoomRemoveSessionPublisher;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,9 +31,7 @@ public class ChatRoomService {
 
 	private final ChatRoomReader chatRoomReader;
 
-	private final WebSocketSessionManager webSocketSessionManager;
-
-	private final ChatSessionRedisManager chatSessionRedisManager;
+	private final IChatRoomRemoveSessionPublisher removeSessionPublisher;
 
 	public ChatRoomGetServiceListResponse getAvailableChatRooms() {
 		Long memberId = SecurityUtils.getCurrentMemberId();
@@ -60,26 +57,18 @@ public class ChatRoomService {
 		chatRoomMemberAppender.appendChatRoomMember(chatRoomId, memberId);
 	}
 
-	public int countChatRoomMembersByChatRoomId(Long chatRoomId) {
+	public int countChatRoomMembersByChatRoomId(final Long chatRoomId) {
 		return chatRoomMemberReader.countChatRoomMembersByChatRoomId(chatRoomId);
 	}
 
 	public void exitChatRoom(final Long chatRoomId) {
 		Long memberId = SecurityUtils.getCurrentMemberId();
+		ChatRoomRemoveAllSessionInfo chatRoomRemoveAllSessionInfo = ChatRoomRemoveAllSessionInfo.builder()
+			.memberId(memberId)
+			.roomId(chatRoomId)
+			.build();
 
-		Set<String> sessionIdsByMemberAndRoom = chatSessionRedisManager.getSessionIdsByMemberAndRoom(
-			memberId,
-			chatRoomId
-		);
-
-		for(String memberSessionId : sessionIdsByMemberAndRoom) {
-			try {
-				webSocketSessionManager.closeSession(memberSessionId);
-			} catch (Exception e) {
-				throw new BusinessException(ErrorCode.CHAT_SESSION_NOT_FOUND);
-			}
-		}
-
+		removeSessionPublisher.removeAllSession("sub-chatroom-remove-session", chatRoomRemoveAllSessionInfo);
 		chatRoomMemberRemover.removeChatRoomMember(chatRoomId, memberId);
 	}
 }

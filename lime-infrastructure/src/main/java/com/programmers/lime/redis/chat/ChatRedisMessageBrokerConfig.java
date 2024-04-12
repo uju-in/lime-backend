@@ -8,29 +8,42 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 import com.programmers.lime.redis.chat.listener.ChatMessageListenerImpl;
+import com.programmers.lime.redis.chat.listener.ChatRoomRemoveAllSessionListenerImpl;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
+@RequiredArgsConstructor
 public class ChatRedisMessageBrokerConfig {
 
+	private final ChatMessageListenerImpl chatMessageListener;
+	private final ChatRoomRemoveAllSessionListenerImpl chatRoomRemoveAllSessionListener;
+	private final RedisConnectionFactory connectionFactory;
+
 	@Bean
-	public RedisMessageListenerContainer redisMessageListenerContainer(
-		final RedisConnectionFactory connectionFactory,
-		final MessageListenerAdapter listenerAdapter,
-		final ChannelTopic channelTopic
-	) {
+	public RedisMessageListenerContainer redisMessageListenerContainer() {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
-		container.addMessageListener(listenerAdapter, channelTopic);
+		container.addMessageListener(addMessageListener(), chatChannelTopic());
+
+		container.setConnectionFactory(connectionFactory);
+		container.addMessageListener(removeSessionListenerAdapter(), removeSessionChannelTopic());
 		return container;
 	}
 
-	@Bean
-	public MessageListenerAdapter listenerAdapter(final ChatMessageListenerImpl listener) {
-		return new MessageListenerAdapter(listener, "onMessage");
+	public MessageListenerAdapter addMessageListener() {
+		return new MessageListenerAdapter(chatMessageListener, "onMessage");
 	}
 
-	@Bean
-	public ChannelTopic channelTopic() {
+	public ChannelTopic chatChannelTopic() {
 		return new ChannelTopic("sub-chat");
+	}
+
+	public MessageListenerAdapter removeSessionListenerAdapter() {
+		return new MessageListenerAdapter(chatRoomRemoveAllSessionListener, "onMessage");
+	}
+
+	public ChannelTopic removeSessionChannelTopic() {
+		return new ChannelTopic("sub-chatroom-remove-session");
 	}
 }
