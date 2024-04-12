@@ -103,7 +103,7 @@ public class ChatService {
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
 		applicationEventPublisher.publishEvent(
-			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+			new ChatSendMessageEvent("/subscribe/rooms/join/" + chatRoomId, chatInfoWithMember)
 		);
 	}
 
@@ -128,11 +128,11 @@ public class ChatService {
 		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
 
 		applicationEventPublisher.publishEvent(
-			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
+			new ChatSendMessageEvent("/subscribe/rooms/exit/" + chatRoomId, chatInfoWithMember)
 		);
 	}
 
-	@Cacheable(value = "chat", key = "#chatRoomId + '_' + #parameters.cursorId + '_' + #parameters.size")
+	@Cacheable(value = "chat", key = "#chatRoomId + '_' + #parameters.cursorId + '_' + #parameters.size", condition = "#parameters.cursorId != null")
 	public ChatGetCursorServiceResponse getChatByCursor(
 		final Long chatRoomId,
 		final CursorPageParameters parameters

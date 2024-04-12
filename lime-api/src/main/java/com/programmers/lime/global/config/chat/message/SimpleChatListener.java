@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import com.programmers.lime.domains.chat.model.ChatInfoWithMember;
+import com.programmers.lime.domains.chat.model.ChatType;
 import com.programmers.lime.redis.chat.listener.IChatListener;
 import com.programmers.lime.redis.chat.model.ChatInfoWithMemberCache;
 
@@ -38,6 +39,7 @@ public class SimpleChatListener implements IChatListener {
 			.profileImage(chatInfoWithMemberCache.profileImage())
 			.message(chatInfoWithMemberCache.message())
 			.sendAt(toLocalDateTime(chatInfoWithMemberCache.sendAt()))
+			.chatType(ChatType.valueOf(chatInfoWithMemberCache.chatType()))
 			.build();
 	}
 
