@@ -7,6 +7,8 @@ import static com.querydsl.core.group.GroupBy.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.inventory.model.InventoryReviewItemSummary;
@@ -35,6 +37,8 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
+	private static final Pattern DIGIT_PATTERN = Pattern.compile("-?\\d*");
+
 	@Override
 	public List<ItemCursorIdInfo> getItemIdsByCursor(
 		final String keyword,
@@ -48,15 +52,18 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 				Projections.constructor(
 					ItemCursorIdInfo.class,
 					item.id,
-					generateItemCursorId()
+					generateCursorId(itemSortCondition)
 				)
 			).from(item)
 			.where(
-				cursorIdCondition(cursorId),
 				eqKeyword(keyword),
-				hobbyCondition(hobby)
+				hobbyCondition(hobby),
+				whereCursorIdCondition(cursorId, itemSortCondition)
 			).orderBy(orderBySortCondition(itemSortCondition), item.id.desc())
 			.groupBy(item.id)
+			.having(
+				havingCursorIdCondition(cursorId, itemSortCondition)
+			)
 			.leftJoin(review).on(item.id.eq(review.itemId))
 			.limit(pageSize)
 			.fetch();
@@ -126,7 +133,7 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 		return jpaQueryFactory
 			.selectFrom(item)
 			.where(
-				cursorIdCondition(cursorId),
+				whereCursorIdCondition(cursorId, null),
 				item.id.in(itemIdsFromReview),
 				hobbyCondition(hobby)
 			)
@@ -158,9 +165,12 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			.otherwise(false);
 	}
 
-	private OrderSpecifier<?> orderBySortCondition(ItemSortCondition itemSortCondition) {
+	private OrderSpecifier<?> orderBySortCondition(
+		final ItemSortCondition itemSortCondition
+	) {
 
-		if (itemSortCondition == null) return new OrderSpecifier<>(Order.DESC, item.createdAt);
+		if (itemSortCondition == null)
+			return new OrderSpecifier<>(Order.DESC, item.createdAt);
 
 		return switch (itemSortCondition) {
 			case REVIEW_COUNT_DESC -> new OrderSpecifier<>(Order.DESC, review.count());
@@ -183,13 +193,47 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 		return item.hobby.eq(hobby);
 	}
 
-	private BooleanExpression cursorIdCondition(final String cursorId) {
-		if (cursorId == null) {
+	private BooleanExpression whereCursorIdCondition(
+		final String cursorId,
+		final ItemSortCondition itemSortCondition
+	) {
+		if (Objects.isNull(cursorId) || !DIGIT_PATTERN.matcher(cursorId).matches()) {
 			return null;
 		}
 
-		return generateItemCursorId()
-			.lt(cursorId);
+		if (itemSortCondition == ItemSortCondition.NEWEST ||
+			itemSortCondition == ItemSortCondition.PRICE_HIGH_TO_LOW ||
+			itemSortCondition == null
+		) {
+			return generateCursorId(itemSortCondition)
+				.lt(cursorId);
+		}
+
+		if (itemSortCondition == ItemSortCondition.PRICE_LOW_TO_HIGH) {
+			return generateCursorId(itemSortCondition)
+				.gt(cursorId);
+		}
+
+		return null;
+	}
+
+	private BooleanExpression havingCursorIdCondition(
+		final String cursorId,
+		final ItemSortCondition itemSortCondition
+	) {
+		if (Objects.isNull(cursorId) || !DIGIT_PATTERN.matcher(cursorId).matches()) {
+			return null;
+		}
+
+		if (
+			itemSortCondition == ItemSortCondition.REVIEW_COUNT_DESC ||
+				itemSortCondition == ItemSortCondition.REVIEW_RATING_DESC
+		) {
+			return generateCursorId(itemSortCondition)
+				.lt(cursorId);
+		}
+
+		return null;
 	}
 
 	private StringExpression generateItemCursorId() {
@@ -200,5 +244,47 @@ public class ItemRepositoryForCursorImpl implements ItemRepositoryForCursor {
 			.concat(StringExpressions.lpad(
 				item.id.stringValue(), 8, '0'
 			));
+	}
+
+	public StringExpression generateCursorId(
+		final ItemSortCondition itemSortCondition
+	) {
+		ItemSortCondition defaultSortCondition = itemSortCondition;
+		if (itemSortCondition == null) {
+			defaultSortCondition = ItemSortCondition.NEWEST;
+		}
+
+		return switch (defaultSortCondition) {
+			case REVIEW_RATING_DESC -> concatWithLpadZero(
+				replaceStringExpression(review.rating.avg().stringValue(), ".", ""), item.id.stringValue()
+			);
+			case REVIEW_COUNT_DESC -> concatWithLpadZero(review.count().stringValue(), item.id.stringValue());
+			case PRICE_LOW_TO_HIGH, PRICE_HIGH_TO_LOW ->
+				concatWithLpadZero(item.price.stringValue(), item.id.stringValue());
+			case NEWEST -> concatWithLpadZero(
+				replaceStringExpression(item.createdAt.stringValue(), "-", ""), item.id.stringValue()
+			);
+		};
+	}
+
+	public StringExpression concatWithLpadZero(final StringExpression str1, final StringExpression str2) {
+		return lpadWithZero(str1).concat(lpadWithZero(str2));
+	}
+
+	public StringExpression replaceStringExpression(
+		final StringExpression originalStrExpression,
+		final String originalStr,
+		final String replaceStr
+	) {
+		return Expressions.stringTemplate(
+			"replace({0}, {1}, {2})", originalStrExpression, originalStr, replaceStr
+		);
+	}
+
+	public StringExpression lpadWithZero(final StringExpression stringExpression) {
+		StringExpression defaultStr = Expressions.stringTemplate("coalesce({0}, '00000000')", stringExpression);
+		return StringExpressions.lpad(
+			defaultStr, 8, '0'
+		);
 	}
 }
