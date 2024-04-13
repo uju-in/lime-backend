@@ -9,7 +9,7 @@ import com.programmers.lime.domains.member.domain.Member;
 import com.programmers.lime.domains.member.domain.vo.SocialType;
 import com.programmers.lime.domains.member.implementation.MemberAppender;
 import com.programmers.lime.domains.member.implementation.MemberReader;
-import com.programmers.lime.global.config.security.jwt.JwtService;
+import com.programmers.lime.global.config.security.SecurityManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ public class OAuthUserService {
 	private final KakaoOAuthClient kakaoOAuthClient;
 	private final MemberAppender memberAppender;
 	private final MemberReader memberReader;
-	private final JwtService jwtService;
+	private final SecurityManager securityManager;
 
 	@Transactional
 	public MemberLoginServiceResponse login(final String code) {
@@ -32,8 +32,8 @@ public class OAuthUserService {
 			SocialType.KAKAO
 		).orElseGet(() -> saveMember(response));
 
-		String accessToken = jwtService.generateAccessToken(String.valueOf(foundMember.getId()));
-		String refreshToken = jwtService.generateRefreshToken();
+		String accessToken = securityManager.generateAccessToken(foundMember.getId());
+		String refreshToken = securityManager.generateRefreshToken(foundMember.getId());
 
 		return MemberLoginServiceResponse.from(foundMember, accessToken, refreshToken);
 	}
