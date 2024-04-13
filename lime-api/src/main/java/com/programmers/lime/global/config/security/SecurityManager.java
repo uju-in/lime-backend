@@ -1,11 +1,11 @@
 package com.programmers.lime.global.config.security;
 
-import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import com.programmers.lime.global.config.security.jwt.JwtService;
+import com.programmers.lime.redis.token.RefreshTokenManager;
 
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +14,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityManager {
 
-	public static final String REFRESH_TOKEN_CACHE = "refreshToken";
-
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
-	private final CacheManager cacheManager;
+	private final RefreshTokenManager refreshTokenManager;
 
 	public void authenticate(
 		final Long memberId,
@@ -36,20 +34,24 @@ public class SecurityManager {
 
 	public String generateRefreshToken(final Long memberId) {
 		final String refreshToken = jwtService.generateRefreshToken();
-		cacheManager.getCache(REFRESH_TOKEN_CACHE).put(refreshToken, memberId);
+		refreshTokenManager.addRefreshToken(refreshToken, memberId);
 
 		return refreshToken;
 	}
 
 	public void removeRefreshToken(final String refreshToken) {
-		cacheManager.getCache(REFRESH_TOKEN_CACHE).evict(refreshToken);
+		refreshTokenManager.deleteRefreshToken(refreshToken);
 	}
 
 	public String reissueAccessToken(final String refreshToken, final String authorizationHeader) {
 		final String accessToken = authorizationHeader.substring(7);
 
 		if (jwtService.isRefreshValidAndAccessInValid(refreshToken, accessToken)) {
-			final Long memberId = cacheManager.getCache(REFRESH_TOKEN_CACHE).get(refreshToken, Long.class);
+			final Long memberId = refreshTokenManager.getMemberId(refreshToken);
+
+			if (memberId == null) {
+				throw new JwtException("Refresh Token이 유효하지 않습니다.");
+			}
 
 			return generateAccessToken(memberId);
 		}
