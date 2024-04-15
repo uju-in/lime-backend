@@ -23,9 +23,9 @@ public class ChatCacheAppendScheduler {
 
 	private final ChatAppender chatAppender;
 
-	@Scheduled(fixedRate = 10000)
+	@Scheduled(fixedRate = 1000)
 	public void appendCache() {
-		List<ChatInfoWithMemberCache> chatInfoWithMemberCaches = chatBufferManager.read(1000);
+		List<ChatInfoWithMemberCache> chatInfoWithMemberCaches = chatBufferManager.read(100);
 
 		if (chatInfoWithMemberCaches.isEmpty()) {
 			return;
