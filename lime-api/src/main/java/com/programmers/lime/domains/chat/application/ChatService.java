@@ -76,8 +76,6 @@ public class ChatService {
 			.sendAt(getCreatedAt(timeSeq))
 			.build();
 
-		chatAppender.appendChat(chatInfoWithMember.toChatInfo());
-
 		applicationEventPublisher.publishEvent(
 			new ChatSendMessageEvent("/subscribe/rooms/" + chatRoomId, chatInfoWithMember)
 		);
