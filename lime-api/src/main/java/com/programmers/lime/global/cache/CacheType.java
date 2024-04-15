@@ -9,7 +9,8 @@ public enum CacheType {
 
 	REFRESH_TOKEN("refreshToken", 1209600, 10000),
 	CHAT_CACHE("chat", 24 * 3600, 500000),
-	MEMBER_CACHE("member", 60, 10000);
+	MEMBER_CACHE("member", 60, 10000),
+	SESSION_CACHE("sessionCache", 60, 10000);
 
 	private final String cacheName;
 	private final int expireAfterWrite;
