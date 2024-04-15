@@ -1,5 +1,6 @@
 package com.programmers.lime.redis.chat;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ public class ChatSessionRedisManager {
 		);
 	}
 
+	@Cacheable(value = "sessionCache", key = "#sessionId", condition = "#sessionId != null")
 	public ChatSessionInfo getSessionInfo(final String sessionId) {
 		return (ChatSessionInfo) redisTemplate.opsForValue().get(SESSION_PREFIX + sessionId);
 	}
