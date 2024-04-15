@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import com.programmers.lime.redis.chat.lua.ChatLLScriptManager;
 import com.programmers.lime.redis.chat.model.ChatCursorCache;
 import com.programmers.lime.redis.chat.model.ChatCursorCacheResult;
 import com.programmers.lime.redis.chat.model.ChatCursorCacheStatus;

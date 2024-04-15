@@ -1,4 +1,4 @@
-package com.programmers.lime.redis.chat;
+package com.programmers.lime.redis.chat.lua;
 
 import java.util.List;
 
@@ -8,19 +8,18 @@ import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.programmers.lime.redis.chat.model.LLReadScript;
-
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ChatLLScriptManager {
+public class ChatDQueueScriptManager {
 
 	private final RedisTemplate<String, Object> redisTemplate;
 
-	private final LLReadScript llReadScript;
-	private String llScriptSha1;
+	private final DQueueReadScript dQueueReadScript;
+
+	private String dQueueScriptSha1;
 
 	private static boolean isNoscript(final RedisSystemException e) {
 		return e.getCause().getMessage().contains("NOSCRIPT");
@@ -28,28 +27,30 @@ public class ChatLLScriptManager {
 
 	@PostConstruct
 	public void initLLSha1() {
-		byte[] llBytes = llReadScript.getReadByLinkedListScriptBytes();
-		llScriptSha1 = redisTemplate.execute((RedisConnection connection) ->
+		byte[] llBytes = dQueueReadScript.getReadByLinkedListScriptBytes();
+		dQueueScriptSha1 = redisTemplate.execute((RedisConnection connection) ->
 			connection.scriptLoad(llBytes)
 		);
 	}
 
-	public List<Object> executeLLScript(final Long roomId, final String currCursorId, final int size) {
+	public List<Object> executeDQueueScript(final String key, final int size) {
 		try {
-			return executeEvalSha(roomId, currCursorId, size);
+			return executeEvalSha(key, size);
 		} catch (RedisSystemException e) {
 			if (isNoscript(e)) {
 				initLLSha1();
-				return executeEvalSha(roomId, currCursorId, size);
+				return executeEvalSha(key, size);
 			}
 			throw e;
 		}
 	}
 
-	private List<Object> executeEvalSha(final Long roomId, final String currCursorId, final int size) {
+	private List<Object> executeEvalSha(final String key, final int size) {
+
 		return redisTemplate.execute(
-			connection -> connection.evalSha(llScriptSha1.getBytes(), ReturnType.MULTI, 0,
-				roomId.toString().getBytes(), currCursorId.getBytes(), String.valueOf(size).getBytes()), true
+			connection -> connection.evalSha(
+				dQueueScriptSha1.getBytes(), ReturnType.MULTI,
+				1, key.getBytes(), String.valueOf(size).getBytes()), true
 		);
 	}
 }

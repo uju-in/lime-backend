@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.programmers.lime.domains.chat.model.ChatInfoWithMember;
+import com.programmers.lime.redis.chat.ChatBufferManager;
 import com.programmers.lime.redis.chat.ChatCursorCacheAppender;
 import com.programmers.lime.redis.chat.model.ChatCursorCache;
 import com.programmers.lime.redis.chat.publisher.IChatPublisher;
@@ -20,6 +21,8 @@ public class ChatSendMessageEventListener {
 
 	private final ChatCursorCacheAppender chatCursorCacheAppender;
 
+	private final ChatBufferManager chatBufferManager;
+
 	@Async
 	@EventListener
 	public void sendMessage(final ChatSendMessageEvent event) {
@@ -34,6 +37,7 @@ public class ChatSendMessageEventListener {
 			event.chatInfoWithMember().chatRoomId(),
 			chatCursorCache(event.chatInfoWithMember())
 		);
+		chatBufferManager.append(chatInfoWithMemberCache);
 	}
 
 	public ChatInfoWithMemberCache chatInfoWithMember(final ChatInfoWithMember chatInfoWithMember,
