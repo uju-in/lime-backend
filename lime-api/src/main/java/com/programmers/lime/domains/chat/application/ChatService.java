@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.programmers.lime.common.cursor.CursorPageParameters;
@@ -195,13 +194,15 @@ public class ChatService {
 	}
 
 	private ChatSummary getChatSummary(final ChatCursorCache data) {
+		Member member = memberReader.read(data.memberId());
+
 		return new ChatSummary(
 			data.cursorId(),
 			data.chatId(),
 			data.chatRoomId(),
 			data.memberId(),
-			data.nickname(),
-			data.profileImage(),
+			member.getNickname(),
+			member.getProfileImage(),
 			data.message(),
 			LocalDateTime.parse(data.sendAt()),
 			ChatType.valueOf(data.chatType())

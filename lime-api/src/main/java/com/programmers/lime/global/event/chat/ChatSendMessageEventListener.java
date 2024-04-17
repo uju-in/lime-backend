@@ -62,8 +62,6 @@ public class ChatSendMessageEventListener {
 			.chatId(chatInfoWithMember.chatId())
 			.chatRoomId(chatInfoWithMember.chatRoomId())
 			.memberId(chatInfoWithMember.memberId())
-			.nickname(chatInfoWithMember.nickname())
-			.profileImage(chatInfoWithMember.profileImage())
 			.message(chatInfoWithMember.message())
 			.sendAt(chatInfoWithMember.sendAt().toString())
 			.chatType(chatInfoWithMember.chatType().name())
