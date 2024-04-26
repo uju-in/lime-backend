@@ -1,5 +1,6 @@
 package com.programmers.lime.domains.member.implementation;
 
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ public class MemberModifier {
 	private final MemberChecker memberChecker;
 
 	@Transactional
+	@CachePut(value = "member", key = "#member.id", condition = "#member.id != null")
 	public void modifyProfile(
 		final Member member,
 		final String nickname,
@@ -31,6 +33,7 @@ public class MemberModifier {
 	}
 
 	@Transactional
+	@CachePut(value = "member", key = "#member.id", condition = "#member.id != null")
 	public void modifyRole(
 		final Member member,
 		final Role role
@@ -39,6 +42,7 @@ public class MemberModifier {
 	}
 
 	@Transactional
+	@CachePut(value = "member", key = "#member.id", condition = "#member.id != null")
 	public void modifyProfileImage(
 		final Member member,
 		final String directory,
