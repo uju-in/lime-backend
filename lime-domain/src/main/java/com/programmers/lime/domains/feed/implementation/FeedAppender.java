@@ -6,9 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.programmers.lime.domains.bucket.domain.Bucket;
-import com.programmers.lime.domains.bucket.domain.BucketItem;
-import com.programmers.lime.domains.bucket.implementation.BucketReader;
 import com.programmers.lime.domains.feed.domain.Feed;
 import com.programmers.lime.domains.feed.domain.FeedItem;
 import com.programmers.lime.domains.feed.domain.FeedLike;
@@ -28,9 +25,10 @@ public class FeedAppender {
 
 	private final FeedRepository feedRepository;
 	private final FeedLikeRepository feedLikeRepository;
-	private final BucketReader bucketReader;
 	private final ItemReader itemReader;
 	private final FeedReader feedReader;
+
+	private static final int MAX_FEED_ITEMS = 3;
 
 	/** 피드 생성 */
 	@Transactional
@@ -38,16 +36,15 @@ public class FeedAppender {
 		final Long memberId,
 		final FeedCreateServiceRequest request
 	) {
-		Bucket bucket = bucketReader.read(request.bucketId(), memberId);
-		List<Long> itemIds = bucketReader.getItemIds(bucket.getId());
-		List<FeedItem> feedItems = createFeedItems(itemIds);
+
+		List<FeedItem> feedItems = createFeedItems(request.itemIdRegistry().itemIds());
+		validateFeedItems(feedItems);
 
 		Feed feed = Feed.builder()
 			.memberId(memberId)
 			.content(request.content())
-			.hobby(bucket.getHobby())
-			.bucketName(bucket.getName())
-			.bucketBudget(bucket.getBudget())
+			.hobby(request.hobby())
+			.budget(request.budget())
 			.build();
 		feedItems.forEach(feed::addFeedItem);
 
@@ -64,6 +61,7 @@ public class FeedAppender {
 
 				return feedItem;
 			})
+			.distinct()
 			.collect(Collectors.toList());
 	}
 
@@ -82,5 +80,11 @@ public class FeedAppender {
 		FeedLike feedLike = new FeedLike(memberId, feed);
 
 		feedLikeRepository.save(feedLike);
+	}
+
+	private void validateFeedItems(final List<FeedItem> feedItems) {
+		if (feedItems.size() > MAX_FEED_ITEMS){
+			throw new BusinessException(ErrorCode.FEED_ITEMS_EXCEED);
+		}
 	}
 }
