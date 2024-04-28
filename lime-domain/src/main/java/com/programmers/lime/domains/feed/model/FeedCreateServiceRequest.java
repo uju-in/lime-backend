@@ -1,7 +1,12 @@
 package com.programmers.lime.domains.feed.model;
 
+import com.programmers.lime.common.model.Hobby;
+import com.programmers.lime.common.model.ItemIdRegistry;
+
 public record FeedCreateServiceRequest(
-	Long bucketId,
-	String content
+	Hobby hobby,
+	ItemIdRegistry itemIdRegistry,
+	String content,
+	Integer budget
 ) {
 }
