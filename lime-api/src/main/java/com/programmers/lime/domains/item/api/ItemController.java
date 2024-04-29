@@ -43,11 +43,10 @@ public class ItemController {
 
 	@Operation(summary = "아이템 등록", description = "취미, 아이템 URL를 이용하여 아이템을 등록합니다. 아이템 URL은 쿠팡, 다나와, 네이버 쇼핑 URL을 지원합니다.")
 	@PostMapping("/enroll")
-	public ResponseEntity<ItemEnrollResponse> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
-		Long enrolledItemId = itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
-		ItemEnrollResponse response = new ItemEnrollResponse(enrolledItemId);
+	public ResponseEntity<Void> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
+		itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "아이템 상세 조회", description = "아이템 id를 이용하여 아이템을 상세 조회 합니다.")
