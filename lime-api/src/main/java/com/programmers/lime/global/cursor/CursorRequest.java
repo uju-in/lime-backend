@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 @ParameterObject
 public record CursorRequest(
-	@Parameter(description = "커서아이디, 첫 조회는 커서아이디 없는 요청입니다.", example = "2023110124000001")
+	@Parameter(description = "조회 할 커서 id", example = "null")
 	String cursorId,
 
-	@Parameter(description = "페이징 사이즈입니다", example = "10")
+	@Parameter(description = "조회 할 페이지 사이즈", example = "10")
 	Integer size
 ) {
 	public CursorPageParameters toParameters() {
