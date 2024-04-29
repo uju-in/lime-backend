@@ -141,6 +141,8 @@ public class SecurityConfiguration {
 
 					.requestMatchers("/join").permitAll()
 
+					.requestMatchers(HttpMethod.GET, "/actuator").permitAll()
+
 					.anyRequest().hasRole("USER")
 			)
 			.sessionManagement(session -> session
