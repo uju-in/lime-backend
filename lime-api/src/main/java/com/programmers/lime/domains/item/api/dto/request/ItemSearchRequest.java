@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public record ItemSearchRequest (
 
-	@Schema(description = "검색어", example = "농구")
+	@Schema(description = "조회 할 아이템 이름의 일부", example = "농구")
 	@Length(max = 100)
 	String keyword,
 
@@ -14,7 +14,7 @@ public record ItemSearchRequest (
 	@Length(max = 50)
 	String itemSortCondition,
 
-	@Schema(description = "취미 이름", example = "데스크테리어")
+	@Schema(description = "취미 이름", example = "농구")
 	@Length(max = 20)
 	String hobbyName
 ){
