@@ -36,6 +36,7 @@ public enum ErrorCode {
 	INVALID_ACCESSOR("COMMON_020", "잘못된 Accessor 입니다."),
 	UNSUPPORTED_IMAGE_TYPE("COMMON_021", "업로드 할 수 있는 이미지 확장자가 아닙니다."),
 	NOT_CONVERTIBLE_IMAGE("COMMON_022", "이미지 변환에 실패했습니다."),
+	MISSING_REQUEST_IMAGE("COMMON_023", "하나 이상의 이미지를 업로드 해야합니다"),
 
 	// Member
 	MEMBER_LOGIN_FAIL("MEMBER_001", "로그인 정보가 잘못 되었습니다."),
