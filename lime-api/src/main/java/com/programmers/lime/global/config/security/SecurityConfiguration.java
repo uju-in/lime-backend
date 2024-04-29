@@ -58,7 +58,7 @@ public class SecurityConfiguration {
 					.requestMatchers(HttpMethod.POST, "/api/favorites/folders")
 					.authenticated() // 찜 목록 폴더 생성
 					.requestMatchers(HttpMethod.GET, "/api/favorites")
-					.permitAll() // 찜 목록 조회
+					.authenticated() // 찜 목록 조회
 					.requestMatchers(HttpMethod.DELETE, "/api/favorites")
 					.authenticated() // 찜 항목 제거
 
@@ -82,7 +82,7 @@ public class SecurityConfiguration {
 					.requestMatchers("/ws-stomp/**")
 					.permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/chats")
-					.permitAll() // 채팅 목록 조회
+					.authenticated() // 채팅 목록 조회
 
 					.requestMatchers("/api/chats/{chatRoomId}")
 					.permitAll()
@@ -91,7 +91,7 @@ public class SecurityConfiguration {
 					.authenticated() // 아이템 리뷰 수정
 					.requestMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}")
 					.authenticated() // 아이템 리뷰 삭제
-					.requestMatchers(HttpMethod.GET, "/api/reviews/")
+					.requestMatchers(HttpMethod.GET, "/api/reviews/**")
 					.permitAll() // 아이템 리뷰 목록 조회
 					.requestMatchers(HttpMethod.POST, "/api/reviews/")
 					.authenticated() // 아이템 리뷰 생성
