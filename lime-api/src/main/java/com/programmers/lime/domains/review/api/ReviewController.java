@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.programmers.lime.domains.review.api.dto.request.ReviewCreateRequest;
 import com.programmers.lime.domains.review.api.dto.request.ReviewUpdateRequest;
-import com.programmers.lime.domains.review.api.dto.response.ReviewCreateResponse;
 import com.programmers.lime.domains.review.api.dto.response.ReviewGetByCursorResponse;
 import com.programmers.lime.domains.review.api.dto.response.ReviewGetResponse;
 import com.programmers.lime.domains.review.application.ReviewLikeService;
@@ -29,7 +28,6 @@ import com.programmers.lime.domains.review.application.dto.ReviewGetServiceRespo
 import com.programmers.lime.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -46,14 +44,13 @@ public class ReviewController {
 
 	@Operation(summary = "아이템 리뷰 생성", description = "아이템 id, 리뷰 평점, 리뷰 내용, 리뷰 이미지를 이용하여 리뷰를 생성 합니다.")
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<ReviewCreateResponse> createReview(
+	public ResponseEntity<Void> createReview(
 		@Valid @ParameterObject @ModelAttribute final ReviewCreateRequest request,
 		@RequestPart(value = "multipartReviewImages") final List<MultipartFile> multipartReviewImages
 	) {
 		reviewService.createReview(request.itemId(), request.toReviewContent(), multipartReviewImages);
-		ReviewCreateResponse response = new ReviewCreateResponse(request.itemId());
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "아이템 리뷰 목록 조회", description = "커서 id, 페이지 사이즈, 리뷰 정렬 조건, 아이템 id를 이용하여 리뷰 목록 조회 합니다.")
