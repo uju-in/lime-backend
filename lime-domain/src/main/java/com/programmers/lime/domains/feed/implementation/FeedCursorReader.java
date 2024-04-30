@@ -1,6 +1,8 @@
 package com.programmers.lime.domains.feed.implementation;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -10,6 +12,7 @@ import com.programmers.lime.common.cursor.CursorUtils;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.feed.model.FeedCursorSummary;
 import com.programmers.lime.domains.feed.model.FeedCursorSummaryLike;
+import com.programmers.lime.domains.feed.model.FeedLikeInfo;
 import com.programmers.lime.domains.feed.model.FeedSortCondition;
 import com.programmers.lime.domains.feed.repository.FeedLikeRepository;
 import com.programmers.lime.domains.feed.repository.FeedRepository;
@@ -26,8 +29,6 @@ public class FeedCursorReader {
 
 	private final FeedRepository feedRepository;
 	private final MemberReader memberReader;
-	private final FeedLikeRepository feedLikeRepository;
-	private final FeedReader feedReader;
 
 	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
 		final Hobby hobby,
@@ -47,18 +48,33 @@ public class FeedCursorReader {
 			pageSize
 		);
 
-		List<FeedCursorSummaryLike> feedCursorSummaryLikes = feedCursorSummaries.stream().map(
-			feedCursorSummary -> {
-				boolean isLike = feedLikeRepository.existsByMemberIdAndFeed(
-					loginMemberId,
-					feedReader.read(feedCursorSummary.feedId())
-				);
+		List<FeedCursorSummaryLike> feedCursorSummaryLikes = getFeedCursorSummaryLikes(
+			loginMemberId,
+			feedCursorSummaries
+		);
 
+		return CursorUtils.getCursorSummaries(feedCursorSummaryLikes);
+	}
+
+	private List<FeedCursorSummaryLike> getFeedCursorSummaryLikes(
+		final Long loginMemberId,
+		final List<FeedCursorSummary> feedCursorSummaries
+	) {
+		List<Long> feedIds = feedCursorSummaries.stream()
+			.map(FeedCursorSummary::feedId)
+			.toList();
+
+		Set<Long> feedLikeInfoSet = feedRepository.getFeedLikeInfos(feedIds, loginMemberId)
+			.stream()
+			.map(FeedLikeInfo::feedId)
+			.collect(Collectors.toSet());
+
+		return feedCursorSummaries.stream().map(
+			feedCursorSummary -> {
+				boolean isLike = feedLikeInfoSet.contains(feedCursorSummary.feedId());
 				return feedCursorSummary.of(isLike);
 			}
 		).toList();
-
-		return CursorUtils.getCursorSummaries(feedCursorSummaryLikes);
 	}
 
 	private int getPageSizeByParameter(final CursorPageParameters parameters) {

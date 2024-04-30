@@ -2,6 +2,7 @@ package com.programmers.lime.domains.feed.repository;
 
 import static com.programmers.lime.domains.feed.domain.QFeed.*;
 import static com.programmers.lime.domains.feed.domain.QFeedItem.*;
+import static com.programmers.lime.domains.feed.domain.QFeedLike.*;
 import static com.programmers.lime.domains.member.domain.QMember.*;
 import static com.querydsl.core.group.GroupBy.*;
 
@@ -12,11 +13,13 @@ import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.feed.model.FeedCursorItem;
 import com.programmers.lime.domains.feed.model.FeedCursorSummary;
 import com.programmers.lime.domains.feed.model.FeedCursorSummaryLike;
+import com.programmers.lime.domains.feed.model.FeedLikeInfo;
 import com.programmers.lime.domains.feed.model.FeedSortCondition;
 import com.programmers.lime.domains.member.model.MemberInfo;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -32,6 +35,15 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
+	private static BooleanExpression eqHobby(final Hobby hobby) {
+
+		if (hobby == null) {
+			return null;
+		}
+
+		return feed.hobby.eq(hobby);
+	}
+
 	public List<FeedCursorSummary> findAllByCursor(
 		final Long nicknameMemberId,
 		final Hobby hobby,
@@ -42,7 +54,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 		List<Long> feedIds = jpaQueryFactory.select(feed.id)
 			.from(feed)
 			.where(
-				feed.hobby.eq(hobby),
+				eqHobby(hobby),
 				eqMemberId(nicknameMemberId),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).orderBy(feedSort(feedSortCondition), feed.id.desc())
@@ -84,6 +96,32 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 						)
 					)
 			);
+	}
+
+	@Override
+	public List<FeedLikeInfo> getFeedLikeInfos(
+		final List<Long> feedIds,
+		final Long loginMemberId
+	) {
+		return jpaQueryFactory
+			.select(
+				Projections.constructor(
+					FeedLikeInfo.class,
+					feedLike.feed.id,
+					feedLike.memberId
+				)
+			)
+			.from(feedLike)
+			.where(feedLike.feed.id.in(feedIds), eqLoginMemberIdWithFeedLikes(loginMemberId))
+			.fetch();
+	}
+
+	private Predicate eqLoginMemberIdWithFeedLikes(final Long loginMemberId) {
+		if (loginMemberId == null) {
+			return null;
+		}
+
+		return feedLike.memberId.eq(loginMemberId);
 	}
 
 	private BooleanExpression eqMemberId(
