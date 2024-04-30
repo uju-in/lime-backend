@@ -118,7 +118,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 
 	private Predicate eqLoginMemberIdWithFeedLikes(final Long loginMemberId) {
 		if (loginMemberId == null) {
-			return null;
+			return Expressions.FALSE;
 		}
 
 		return feedLike.memberId.eq(loginMemberId);
