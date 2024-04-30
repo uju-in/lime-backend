@@ -1,5 +1,6 @@
 package com.programmers.lime.domains.feed.api;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.feed.api.request.FeedCreateRequest;
+import com.programmers.lime.domains.feed.api.request.FeedCursorGetRequest;
 import com.programmers.lime.domains.feed.api.request.FeedUpdateRequest;
 import com.programmers.lime.domains.feed.api.response.FeedCreateResponse;
 import com.programmers.lime.domains.feed.api.response.FeedGetByCursorResponse;
@@ -85,20 +87,12 @@ public class FeedController {
 	@Operation(summary = "피드 목록 조회", description = "hobbyName, nickname, sortCondition, CursorRequest을 이용하여 피드 목록 조회 합니다.")
 	@GetMapping
 	public ResponseEntity<FeedGetByCursorResponse> getFeedByCursor(
-		@RequestParam(required = false) final String hobbyName,
-		@RequestParam(required = false) final String nickname,
-		@RequestParam(required = false) final boolean onlyNicknameLikeFeeds,
-		@RequestParam(required = false) final String sortCondition,
-		@ModelAttribute @Valid final CursorRequest request
+		@ParameterObject @ModelAttribute @Valid final FeedCursorGetRequest feedCursorGetRequest,
+		@ParameterObject @ModelAttribute @Valid final CursorRequest cursorRequest
 	) {
-		Hobby hobby = Hobby.from(hobbyName);
-
 		CursorSummary<FeedCursorSummaryLike> cursorSummary = feedService.getFeedByCursor(
-			hobby,
-			nickname,
-			onlyNicknameLikeFeeds,
-			sortCondition,
-			request.toParameters()
+			feedCursorGetRequest.toServiceRequest(),
+			cursorRequest.toParameters()
 		);
 		FeedGetByCursorResponse response = FeedGetByCursorResponse.from(cursorSummary);
 

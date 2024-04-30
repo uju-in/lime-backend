@@ -2,7 +2,6 @@ package com.programmers.lime.domains.feed.repository;
 
 import static com.programmers.lime.domains.feed.domain.QFeed.*;
 import static com.programmers.lime.domains.feed.domain.QFeedItem.*;
-import static com.programmers.lime.domains.feed.domain.QFeedLike.*;
 import static com.programmers.lime.domains.member.domain.QMember.*;
 import static com.querydsl.core.group.GroupBy.*;
 
@@ -12,6 +11,7 @@ import java.util.Objects;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.feed.model.FeedCursorItem;
 import com.programmers.lime.domains.feed.model.FeedCursorSummary;
+import com.programmers.lime.domains.feed.model.FeedCursorSummaryLike;
 import com.programmers.lime.domains.feed.model.FeedSortCondition;
 import com.programmers.lime.domains.member.model.MemberInfo;
 import com.querydsl.core.types.ConstantImpl;
@@ -34,7 +34,6 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 
 	public List<FeedCursorSummary> findAllByCursor(
 		final Long nicknameMemberId,
-		final boolean onlyNicknameLikeFeeds,
 		final Hobby hobby,
 		final FeedSortCondition feedSortCondition,
 		final String cursorId,
@@ -44,41 +43,33 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 			.from(feed)
 			.where(
 				feed.hobby.eq(hobby),
-				eqMemberId(nicknameMemberId, onlyNicknameLikeFeeds),
+				eqMemberId(nicknameMemberId),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).orderBy(feedSort(feedSortCondition), feed.id.desc())
+			.limit(pageSize)
 			.fetch();
 
-		if (onlyNicknameLikeFeeds) {
-			feedIds = jpaQueryFactory.select(feedLike.feed.id)
-				.from(feedLike)
-				.where(
-					eqLikeMemberId(nicknameMemberId),
-					feedLike.feed.id.in(feedIds)
-				).fetch();
-		}
-
-		List<FeedCursorSummary> transform = jpaQueryFactory
+		return jpaQueryFactory
 			.selectFrom(feedItem)
 			.where(
 				feedItem.feed.id.in(feedIds)
 			)
-			.join(member).on(eqMemberIdToJoin(nicknameMemberId, onlyNicknameLikeFeeds))
+			.join(member).on(member.id.eq(feedItem.feed.memberId))
 			.orderBy(feedSort(feedSortCondition), feed.id.desc())
 			.transform(
 				groupBy(feed.id)
 					.list(Projections.constructor(
-							FeedCursorSummary.class,
-							generateCursorId(feedSortCondition),
-							Projections.constructor(
-								MemberInfo.class,
-								member.id,
-								member.nickname.nickname,
-								member.socialInfo.profileImage,
-								member.levelPoint
-							),
-							feedItem.feed.id,
-							feedItem.feed.content.content,
+						FeedCursorSummary.class,
+						generateCursorId(feedSortCondition),
+						Projections.constructor(
+							MemberInfo.class,
+							member.id,
+							member.nickname.nickname,
+							member.socialInfo.profileImage,
+							member.levelPoint
+						),
+						feedItem.feed.id,
+						feedItem.feed.content.content,
 							feedItem.feed.likes.size(),
 							feedItem.feed.comments.size(),
 							feedItem.feed.createdAt,
@@ -93,41 +84,11 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 						)
 					)
 			);
-
-		return transform.stream()
-			.limit(pageSize)
-			.toList();
-	}
-
-	private BooleanExpression eqLikeMemberId(final Long nicknameMemberId) {
-		if (nicknameMemberId == null) {
-			return null;
-		}
-
-		return feedLike.memberId.eq(nicknameMemberId);
-	}
-
-	private BooleanExpression eqMemberIdToJoin(
-		final Long nicknameMemberId,
-		final boolean onlyNicknameLikeFeeds
-	) {
-		// 마이페이지 피드 조회
-		if (nicknameMemberId != null && !onlyNicknameLikeFeeds) {
-			return member.id.eq(nicknameMemberId);
-		}
-
-		// 일반 피드 조회
-		return member.id.eq(feedItem.feed.memberId);
 	}
 
 	private BooleanExpression eqMemberId(
-		final Long nicknameMemberId,
-		final boolean onlyNicknameLikeFeeds
+		final Long nicknameMemberId
 	) {
-		if (onlyNicknameLikeFeeds) {
-			return null;
-		}
-
 		if (nicknameMemberId == null) {
 			return null;
 		}

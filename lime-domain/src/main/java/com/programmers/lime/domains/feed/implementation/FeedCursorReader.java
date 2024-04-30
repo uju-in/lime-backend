@@ -32,7 +32,6 @@ public class FeedCursorReader {
 	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
 		final Hobby hobby,
 		final String nickname,
-		final boolean onlyNicknameLikeFeeds,
 		final Long loginMemberId,
 		final FeedSortCondition sortCondition,
 		final CursorPageParameters parameters
@@ -42,7 +41,6 @@ public class FeedCursorReader {
 
 		List<FeedCursorSummary> feedCursorSummaries = feedRepository.findAllByCursor(
 			nicknameMemberId,
-			onlyNicknameLikeFeeds,
 			hobby,
 			sortCondition,
 			parameters.cursorId(),

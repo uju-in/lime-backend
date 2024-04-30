@@ -85,7 +85,6 @@ class FeedCursorReaderTest {
 
 		given(feedRepository.findAllByCursor(
 				myPageMemberId,
-				true,
 				hobby,
 				sortCondition,
 				parameters.cursorId(),
@@ -105,7 +104,6 @@ class FeedCursorReaderTest {
 		CursorSummary<FeedCursorSummaryLike> actualSummaries = feedCursorReader.getFeedByCursor(
 			hobby,
 			nickname,
-			true,
 			memberId,
 			sortCondition,
 			parameters
