@@ -10,11 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.lime.common.cursor.CursorSummary;
-import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.feed.api.request.FeedCreateRequest;
 import com.programmers.lime.domains.feed.api.request.FeedCursorGetRequest;
 import com.programmers.lime.domains.feed.api.request.FeedUpdateRequest;
@@ -84,7 +82,7 @@ public class FeedController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "피드 목록 조회", description = "hobbyName, nickname, sortCondition, CursorRequest을 이용하여 피드 목록 조회 합니다.")
+	@Operation(summary = "피드 목록 조회", description = "hobbyName, nickname, sortCondition, 커서 id, 페이지 사이지를 이용하여 피드 목록 조회 합니다.")
 	@GetMapping
 	public ResponseEntity<FeedGetByCursorResponse> getFeedByCursor(
 		@ParameterObject @ModelAttribute @Valid final FeedCursorGetRequest feedCursorGetRequest,
