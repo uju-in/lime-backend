@@ -43,7 +43,7 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 		List<Long> feedIds = jpaQueryFactory.select(feed.id)
 			.from(feed)
 			.where(
-				feed.bucketInfo.hobby.eq(hobby),
+				feed.hobby.eq(hobby),
 				eqMemberId(nicknameMemberId, onlyNicknameLikeFeeds),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).orderBy(feedSort(feedSortCondition), feed.id.desc())

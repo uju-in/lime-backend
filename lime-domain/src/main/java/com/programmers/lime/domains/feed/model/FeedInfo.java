@@ -11,8 +11,6 @@ public record FeedInfo(
 	Long id,
 	String hobby,
 	String content,
-	String bucketName,
-	Integer bucketBudget,
 	int totalPrice,
 	LocalDateTime createdAt,
 	boolean hasAdoptedComment,
@@ -28,8 +26,6 @@ public record FeedInfo(
 			.id(feed.getId())
 			.hobby(feed.getHobby().getName())
 			.content(feed.getFeedContent())
-			.bucketName(feed.getName())
-			.bucketBudget(feed.getBudget())
 			.totalPrice(totalPrice)
 			.createdAt(feed.getCreatedAt())
 			.hasAdoptedComment(feed.hasAdoptedComment())

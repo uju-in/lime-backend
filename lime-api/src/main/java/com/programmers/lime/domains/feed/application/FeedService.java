@@ -130,7 +130,6 @@ public class FeedService {
 			.feedId(feedInfo.id())
 			.feedContent(feedInfo.content())
 			.hobbyName(feedInfo.hobby())
-			.bucketName(feedInfo.bucketName())
 			.likeCount(feedInfo.likeCount())
 			.build();
 

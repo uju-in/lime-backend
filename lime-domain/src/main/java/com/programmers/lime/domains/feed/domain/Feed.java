@@ -8,11 +8,15 @@ import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.BaseEntity;
 import com.programmers.lime.domains.bucket.domain.BucketInfo;
 import com.programmers.lime.domains.comment.domain.Comment;
+import com.programmers.lime.error.BusinessException;
+import com.programmers.lime.error.ErrorCode;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,6 +33,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed extends BaseEntity {
 
+	private static final int MIN_BUDGET = 0;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -40,8 +46,12 @@ public class Feed extends BaseEntity {
 	@Embedded
 	private FeedContent content;
 
-	@Embedded
-	private BucketInfo bucketInfo;
+	@Column(name = "hobby", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Hobby hobby;
+
+	@Column(name = "budget")
+	private Integer budget;
 
 	@OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
 	private List<FeedLike> likes = new ArrayList<>();
@@ -57,24 +67,21 @@ public class Feed extends BaseEntity {
 		final Long memberId,
 		final Hobby hobby,
 		final String content,
-		final String bucketName,
-		final Integer bucketBudget
+		final Integer budget
 	) {
+		validateBudget(budget);
 		this.memberId = Objects.requireNonNull(memberId);
 		this.content = new FeedContent(content);
-		this.bucketInfo = new BucketInfo(hobby, bucketName, bucketBudget);
-	}
-
-	public String getName() {
-		return bucketInfo.getName();
+		this.hobby = hobby;
+		this.budget = budget;
 	}
 
 	public Hobby getHobby() {
-		return bucketInfo.getHobby();
+		return this.hobby;
 	}
 
 	public Integer getBudget() {
-		return bucketInfo.getBudget();
+		return this.budget;
 	}
 
 	public String getFeedContent() {
@@ -103,5 +110,11 @@ public class Feed extends BaseEntity {
 		return this.feedItems.stream()
 			.mapToInt(FeedItem::getItemPrice)
 			.sum();
+	}
+
+	public void validateBudget(final Integer budget) {
+		if (budget == null || budget < MIN_BUDGET) {
+			throw new BusinessException(ErrorCode.BUCKET_INVALID_BUDGET);
+		}
 	}
 }

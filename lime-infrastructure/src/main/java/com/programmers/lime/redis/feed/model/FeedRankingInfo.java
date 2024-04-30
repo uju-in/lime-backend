@@ -10,7 +10,6 @@ public record FeedRankingInfo(
 	Long feedId,
 	String hobbyName,
 	String feedContent,
-	String bucketName,
 	int likeCount
 
 ) {
@@ -23,7 +22,6 @@ public record FeedRankingInfo(
 			.feedId(response.feedId())
 			.hobbyName(response.hobbyName())
 			.feedContent(response.feedContent())
-			.bucketName(response.bucketName())
 			.likeCount(response.likeCount())
 			.build();
 	}

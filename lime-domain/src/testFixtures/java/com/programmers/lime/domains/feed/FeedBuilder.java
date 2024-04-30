@@ -17,8 +17,6 @@ public class FeedBuilder {
 			.memberId(1L)
 			.hobby(bucketInfo.getHobby())
 			.content("농구 처음 시작하는데 아이템들 조합 어떙?")
-			.bucketName(bucketInfo.getName())
-			.bucketBudget(bucketInfo.getBudget())
 			.build();
 
 		setFeedId(feed);
