@@ -26,6 +26,7 @@ import com.programmers.lime.domains.item.application.dto.ItemGetServiceResponse;
 import com.programmers.lime.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,18 +41,20 @@ public class ItemController {
 
 	private final ItemService itemService;
 
-	@Operation(summary = "아이템 등록", description = "ItemEnrollRequest 을 이용하여 아이템을 등록합니다.")
+	@Operation(summary = "아이템 등록", description = "취미, 아이템 URL를 이용하여 아이템을 등록합니다. 아이템 URL은 쿠팡, 다나와, 네이버 쇼핑 URL을 지원합니다.")
 	@PostMapping("/enroll")
-	public ResponseEntity<ItemEnrollResponse> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
-		Long enrolledItemId = itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
-		ItemEnrollResponse response = new ItemEnrollResponse(enrolledItemId);
+	public ResponseEntity<Void> enrollItem(@Valid @RequestBody final ItemEnrollRequest request) {
+		itemEnrollService.enrollItem(request.toEnrollItemServiceRequest());
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "아이템 상세 조회", description = "itemId을 이용하여 아이템을 상세 조회 합니다.")
+	@Operation(summary = "아이템 상세 조회", description = "아이템 id를 이용하여 아이템을 상세 조회 합니다.")
 	@GetMapping("/{itemId}")
-	public ResponseEntity<ItemGetResponse> getItem(@PathVariable final Long itemId) {
+	public ResponseEntity<ItemGetResponse> getItem(
+		@Schema(description = "상세 조회 할 아이템 id", example = "1")
+		@PathVariable final Long itemId
+	) {
 		ItemGetServiceResponse serviceResponse = itemService.getItem(itemId);
 
 		ItemGetResponse response = ItemGetResponse.from(serviceResponse);
@@ -60,7 +63,10 @@ public class ItemController {
 
 	@Operation(summary = "아이템 이름 목록 조회", description = "키워드를 이용하여 아이템 이름 목록 조회 합니다")
 	@GetMapping("/item-names")
-	public ResponseEntity<ItemGetNamesResponse> getItemNames(@RequestParam final String keyword) {
+	public ResponseEntity<ItemGetNamesResponse> getItemNames(
+		@RequestParam
+		@Schema(description = "조회 할 아이템 이름의 일부", example = "농구") final String keyword
+	) {
 		ItemGetNamesServiceResponse serviceResponse = itemService.getItemNamesByKeyword(keyword);
 
 		ItemGetNamesResponse response = ItemGetNamesResponse.from(serviceResponse);
@@ -70,7 +76,7 @@ public class ItemController {
 	@Operation(summary = "아이템 목록조회", description = "키워드, 취미를 이용하여 아이템 목록조회 합니다.")
 	@GetMapping("/search")
 	public ResponseEntity<ItemGetByCursorResponse> getItemsByCursor(
-		@ParameterObject @ModelAttribute("request") @Valid final CursorRequest request,
+		@ParameterObject @ModelAttribute @Valid final CursorRequest request,
 		@ParameterObject @ModelAttribute @Valid final ItemSearchRequest searchRequest
 	) {
 		ItemGetByCursorServiceResponse serviceResponse = itemService.getItemsByCursor(
@@ -84,7 +90,7 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "랭킹 조회", description = "랭킹을 TOP10까지 조회합니다.")
+	@Operation(summary = "랭킹 조회", description = "랭킹을 상위 10개 까지 조회합니다.")
 	@GetMapping("/ranking")
 	public ResponseEntity<ItemGetRankingResponse> getRanking() {
 		ItemGetRankingResponse response = ItemGetRankingResponse.from(itemService.getRanking());

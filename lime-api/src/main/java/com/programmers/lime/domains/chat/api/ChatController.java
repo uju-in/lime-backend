@@ -13,6 +13,7 @@ import com.programmers.lime.domains.chat.application.dto.response.ChatGetCursorS
 import com.programmers.lime.global.cursor.CursorRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,10 @@ public class ChatController {
 
 	private final ChatService chatService;
 
-	@Operation(summary = "채팅 커서 조회", description = "chatRoomId을 이용하여 채팅을 조회")
+	@Operation(summary = "채팅 목록 조회", description = "채팅방 id를 이용하여 채팅 목록 조회")
 	@GetMapping("/{chatRoomId}")
 	public ResponseEntity<ChatGetByCursorResponse> getChatInfoLists(
+		@Schema(description = "채팅방 id", example = "1")
 		@PathVariable final Long chatRoomId,
 		@ModelAttribute @Valid final CursorRequest cursorRequest
 	) {

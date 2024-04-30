@@ -1,5 +1,6 @@
 package com.programmers.lime.domains.favorite.api;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import com.programmers.lime.domains.favorite.application.FolderService;
 import com.programmers.lime.domains.favorite.application.dto.FavoriteItemCreateServiceResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +41,7 @@ public class FavoriteItemController {
 
 	private final FolderService folderService;
 
-	@Operation(summary = "찜 ", description = "MemberItemAddRequest을 이용하여 사용자의 찜 목록에 아이템 담기 합니다.")
+	@Operation(summary = "찜 ", description = "찜 할 아이템 id, 찜한 아이템을 담을 폴더 id를 이용하여 아이템을 찜 합니다.")
 	@PostMapping("/items")
 	public ResponseEntity<FavoriteItemCreateResponse> createFavoriteItems(
 		@Valid @RequestBody final FavoriteItemCreateRequest request
@@ -79,10 +81,10 @@ public class FavoriteItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "찜 항목 제거", description = "찜 목록으로 부터 아이템이나 폴더를 제거 합니다.")
+	@Operation(summary = "찜 항목 제거", description = "찜한 아이템이 id나, 폴더 id를 받아 해당 항목들을 제거 합니다.")
 	@DeleteMapping()
 	public ResponseEntity<Void> removeFavorite(
-		@ModelAttribute @Valid final FavoriteRemoveRequest request
+		@ParameterObject @ModelAttribute @Valid final FavoriteRemoveRequest request
 	) {
 		favoriteItemService.removeFavoriteItems(request.favoriteItemIds());
 		folderService.removeFolders(request.folderIds());
@@ -105,7 +107,7 @@ public class FavoriteItemController {
 	@Operation(summary = "찜 목록 폴더 이름 수정", description = "찜 목록 폴더 이름을 수정 합니다.")
 	@PutMapping("/folders/{folderId}")
 	public ResponseEntity<Void> modifyFolder(
-		@PathVariable final Long folderId,
+		@PathVariable @Schema(description = "수정할 폴더 id", example = "1") final Long folderId,
 		@RequestBody @Valid final FolderUpdateRequest request
 	) {
 		folderService.modifyFolder(

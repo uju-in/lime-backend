@@ -14,6 +14,7 @@ import com.programmers.lime.domains.chatroom.application.ChatRoomService;
 import com.programmers.lime.domains.chatroom.application.dto.response.ChatRoomGetServiceListResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +41,10 @@ public class ChatRoomController {
 
 	@Operation(summary = "채팅방 참여", description = "채팅방에 참여합니다.")
 	@PostMapping("/{chatRoomId}/join")
-	public ResponseEntity<Void> joinChatRoom(@PathVariable final Long chatRoomId) {
+	public ResponseEntity<Void> joinChatRoom(
+		@Schema(description = "참여할 채팅방 id", example = "1")
+		@PathVariable final Long chatRoomId
+	) {
 		chatRoomService.joinChatRoom(chatRoomId);
 		chatService.joinChatRoom(chatRoomId);
 		return ResponseEntity.ok().build();
@@ -48,7 +52,10 @@ public class ChatRoomController {
 
 	@Operation(summary = "채팅방 인원수 조회", description = "채팅방의 인원수를 조회합니다.")
 	@GetMapping("/{chatRoomId}/members/count")
-	public ResponseEntity<Integer> countChatRoomMembers(@PathVariable final Long chatRoomId) {
+	public ResponseEntity<Integer> countChatRoomMembers(
+		@Schema(description = "인원수 조회 할 채팅방 id", example = "1")
+		@PathVariable final Long chatRoomId
+	) {
 		return ResponseEntity.ok(
 			chatRoomService.countChatRoomMembersByChatRoomId(chatRoomId)
 		);
@@ -56,7 +63,10 @@ public class ChatRoomController {
 
 	@Operation(summary = "채팅방 나가기", description = "채팅방에서 나갑니다.")
 	@DeleteMapping("/{chatRoomId}/exit")
-	public ResponseEntity<Void> exitChatRoom(@PathVariable final Long chatRoomId) {
+	public ResponseEntity<Void> exitChatRoom(
+		@Schema(description = "나가기 할 채팅방 id", example = "1")
+		@PathVariable final Long chatRoomId
+	) {
 		chatRoomService.exitChatRoom(chatRoomId);
 		chatService.sendExitMessageToChatRoom(chatRoomId);
 		return ResponseEntity.ok().build();

@@ -23,7 +23,7 @@ public class ItemEnrollService {
 
 	private final ItemRanking itemRanking;
 
-	public Long enrollItem(final ItemEnrollServiceRequest request) {
+	public void enrollItem(final ItemEnrollServiceRequest request) {
 		// 중복 링크 체크
 		itemEnrollValidator.validItemURLNotDuplicated(request.itemUrl());
 
@@ -33,12 +33,10 @@ public class ItemEnrollService {
 		ItemCrawlerInfo itemCrawlerInfo = itemCrawlerResultToInfo(itemCrawlerResult);
 
 		// 아이템 등록
-		Long enrolledItemId = itemAppender.append(request.hobby(), itemCrawlerInfo);
+		itemAppender.append(request.hobby(), itemCrawlerInfo);
 
 		// 아이텥 랭킹 등록
 		itemRanking.addRanking(itemCrawlerInfo.itemName());
-
-		return enrolledItemId;
 	}
 
 	private ItemCrawlerInfo itemCrawlerResultToInfo(final ItemCrawlerResult itemCrawlerResult) {

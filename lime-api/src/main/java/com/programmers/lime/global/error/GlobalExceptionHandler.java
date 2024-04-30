@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import com.programmers.lime.error.BusinessException;
 import com.programmers.lime.error.EntityNotFoundException;
@@ -90,6 +91,15 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handleMultipartException(final MultipartException e) {
 		log.error("MultipartException", e);
 		final ErrorResponse response = ErrorResponse.from(ErrorCode.IMAGE_MAXIMUM_SIZE_EXCEEDED);
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(MissingServletRequestPartException.class)
+	public ResponseEntity<ErrorResponse> handleMissingServletRequestPartException(
+		final MissingServletRequestPartException e) {
+		log.info("MissingServletRequestPartException", e);
+		final ErrorResponse response = ErrorResponse.from(ErrorCode.MISSING_REQUEST_IMAGE);
 
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
