@@ -1,13 +1,14 @@
 package com.programmers.lime.domains.feed.application.dto.request;
 
 import com.programmers.lime.common.model.Hobby;
+import com.programmers.lime.domains.feed.model.FeedSortCondition;
 
 import lombok.Builder;
 
 @Builder
 public record FeedGetCursorServiceRequest(
-	Long myPageMemberId,
-	Long loginMemberId,
+	String nickname,
+	FeedSortCondition sortCondition,
 	Hobby hobby
 ) {
 }

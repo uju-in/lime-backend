@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.programmers.lime.common.cursor.CursorPageParameters;
 import com.programmers.lime.common.cursor.CursorSummary;
 import com.programmers.lime.common.model.Hobby;
+import com.programmers.lime.domains.feed.api.request.FeedCursorGetRequest;
+import com.programmers.lime.domains.feed.application.dto.request.FeedGetCursorServiceRequest;
 import com.programmers.lime.domains.feed.application.dto.response.FeedGetRankingServiceResponse;
 import com.programmers.lime.domains.feed.application.dto.response.FeedGetServiceResponse;
 import com.programmers.lime.domains.feed.implementation.FeedAppender;
@@ -60,25 +62,16 @@ public class FeedService {
 	}
 
 	public CursorSummary<FeedCursorSummaryLike> getFeedByCursor(
-		final Hobby hobby,
-		final String nickName,
-		final boolean onlyNicknameLikeFeeds,
-		final String sortCondition,
+		final FeedGetCursorServiceRequest request,
 		final CursorPageParameters parameters
 	) {
-		FeedSortCondition feedSortCondition = FeedSortCondition.from(sortCondition);
 		Long loginMemberId = memberUtils.getCurrentMemberId();
 
-		if (onlyNicknameLikeFeeds && nickName == null) {
-			throw new BusinessException(ErrorCode.FEED_BAD_LIKE_ONLY_REQUEST);
-		}
-
 		return feedCursorReader.getFeedByCursor(
-			hobby,
-			nickName,
-			onlyNicknameLikeFeeds,
+			request.hobby(),
+			request.nickname(),
 			loginMemberId,
-			feedSortCondition,
+			request.sortCondition(),
 			parameters
 		);
 	}

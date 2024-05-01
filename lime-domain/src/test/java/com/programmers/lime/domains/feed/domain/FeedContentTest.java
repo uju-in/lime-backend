@@ -23,7 +23,6 @@ class FeedContentTest {
 			1L,
 			Hobby.BASKETBALL,
 			feedContent,
-			"bucket1",
 			10000
 		);
 		//then
@@ -41,7 +40,6 @@ class FeedContentTest {
 			1L,
 			Hobby.BASKETBALL,
 			feedContent,
-			"bucket1",
 			10000
 		))
 			.isInstanceOf(BusinessException.class);
@@ -55,7 +53,6 @@ class FeedContentTest {
 			1L,
 			Hobby.BASKETBALL,
 			null,
-			"bucket1",
 			10000
 		))
 			.isInstanceOf(BusinessException.class);

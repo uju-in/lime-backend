@@ -12,11 +12,14 @@ import java.util.Objects;
 import com.programmers.lime.common.model.Hobby;
 import com.programmers.lime.domains.feed.model.FeedCursorItem;
 import com.programmers.lime.domains.feed.model.FeedCursorSummary;
+import com.programmers.lime.domains.feed.model.FeedCursorSummaryLike;
+import com.programmers.lime.domains.feed.model.FeedLikeInfo;
 import com.programmers.lime.domains.feed.model.FeedSortCondition;
 import com.programmers.lime.domains.member.model.MemberInfo;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -32,9 +35,17 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
+	private static BooleanExpression eqHobby(final Hobby hobby) {
+
+		if (hobby == null) {
+			return null;
+		}
+
+		return feed.hobby.eq(hobby);
+	}
+
 	public List<FeedCursorSummary> findAllByCursor(
 		final Long nicknameMemberId,
-		final boolean onlyNicknameLikeFeeds,
 		final Hobby hobby,
 		final FeedSortCondition feedSortCondition,
 		final String cursorId,
@@ -43,42 +54,34 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 		List<Long> feedIds = jpaQueryFactory.select(feed.id)
 			.from(feed)
 			.where(
-				feed.hobby.eq(hobby),
-				eqMemberId(nicknameMemberId, onlyNicknameLikeFeeds),
+				eqHobby(hobby),
+				eqMemberId(nicknameMemberId),
 				lessThanNextCursorId(feedSortCondition, cursorId)
 			).orderBy(feedSort(feedSortCondition), feed.id.desc())
+			.limit(pageSize)
 			.fetch();
 
-		if (onlyNicknameLikeFeeds) {
-			feedIds = jpaQueryFactory.select(feedLike.feed.id)
-				.from(feedLike)
-				.where(
-					eqLikeMemberId(nicknameMemberId),
-					feedLike.feed.id.in(feedIds)
-				).fetch();
-		}
-
-		List<FeedCursorSummary> transform = jpaQueryFactory
+		return jpaQueryFactory
 			.selectFrom(feedItem)
 			.where(
 				feedItem.feed.id.in(feedIds)
 			)
-			.join(member).on(eqMemberIdToJoin(nicknameMemberId, onlyNicknameLikeFeeds))
+			.join(member).on(member.id.eq(feedItem.feed.memberId))
 			.orderBy(feedSort(feedSortCondition), feed.id.desc())
 			.transform(
 				groupBy(feed.id)
 					.list(Projections.constructor(
-							FeedCursorSummary.class,
-							generateCursorId(feedSortCondition),
-							Projections.constructor(
-								MemberInfo.class,
-								member.id,
-								member.nickname.nickname,
-								member.socialInfo.profileImage,
-								member.levelPoint
-							),
-							feedItem.feed.id,
-							feedItem.feed.content.content,
+						FeedCursorSummary.class,
+						generateCursorId(feedSortCondition),
+						Projections.constructor(
+							MemberInfo.class,
+							member.id,
+							member.nickname.nickname,
+							member.socialInfo.profileImage,
+							member.levelPoint
+						),
+						feedItem.feed.id,
+						feedItem.feed.content.content,
 							feedItem.feed.likes.size(),
 							feedItem.feed.comments.size(),
 							feedItem.feed.createdAt,
@@ -93,41 +96,37 @@ public class FeedRepositoryForCursorImpl implements FeedRepositoryForCursor {
 						)
 					)
 			);
-
-		return transform.stream()
-			.limit(pageSize)
-			.toList();
 	}
 
-	private BooleanExpression eqLikeMemberId(final Long nicknameMemberId) {
-		if (nicknameMemberId == null) {
-			return null;
-		}
-
-		return feedLike.memberId.eq(nicknameMemberId);
-	}
-
-	private BooleanExpression eqMemberIdToJoin(
-		final Long nicknameMemberId,
-		final boolean onlyNicknameLikeFeeds
+	@Override
+	public List<FeedLikeInfo> getFeedLikeInfos(
+		final List<Long> feedIds,
+		final Long loginMemberId
 	) {
-		// 마이페이지 피드 조회
-		if (nicknameMemberId != null && !onlyNicknameLikeFeeds) {
-			return member.id.eq(nicknameMemberId);
+		return jpaQueryFactory
+			.select(
+				Projections.constructor(
+					FeedLikeInfo.class,
+					feedLike.feed.id,
+					feedLike.memberId
+				)
+			)
+			.from(feedLike)
+			.where(feedLike.feed.id.in(feedIds), eqLoginMemberIdWithFeedLikes(loginMemberId))
+			.fetch();
+	}
+
+	private Predicate eqLoginMemberIdWithFeedLikes(final Long loginMemberId) {
+		if (loginMemberId == null) {
+			return Expressions.FALSE;
 		}
 
-		// 일반 피드 조회
-		return member.id.eq(feedItem.feed.memberId);
+		return feedLike.memberId.eq(loginMemberId);
 	}
 
 	private BooleanExpression eqMemberId(
-		final Long nicknameMemberId,
-		final boolean onlyNicknameLikeFeeds
+		final Long nicknameMemberId
 	) {
-		if (onlyNicknameLikeFeeds) {
-			return null;
-		}
-
 		if (nicknameMemberId == null) {
 			return null;
 		}
