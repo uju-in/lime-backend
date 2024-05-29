@@ -1,4 +1,4 @@
-# [LIfe - TIme : LIME 서비스 링크](https://uju-lime.vercel.app)
+# [LIfe - TIme : LIME 서비스 링크](https://www.uju-lime.site)
 <img src="http://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white&link=http://api.uju-lime.shop/swagger-ui/index.html#/)]
 (http://api.uju-lime.shop/swagger-ui/index.html#/)" height="25">
 
