@@ -3,6 +3,7 @@ package com.programmers.lime.domains.member.implementation;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class MemberReader {
 	private final InventoryReader inventoryReader;
 	private final FriendshipCounter friendshipCounter;
 
+	@Cacheable(value = "member", key = "#memberId", condition = "#memberId != null")
 	public Member read(final Long memberId) {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));

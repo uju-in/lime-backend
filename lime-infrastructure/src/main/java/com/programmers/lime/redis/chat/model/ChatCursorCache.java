@@ -11,8 +11,6 @@ public record ChatCursorCache(
 	Long chatId,
 	Long chatRoomId,
 	Long memberId,
-	String nickname,
-	String profileImage,
 	String message,
 	String sendAt,
 	String chatType
@@ -28,8 +26,6 @@ public record ChatCursorCache(
 			.chatId(chatCursorCache.chatId())
 			.chatRoomId(chatCursorCache.chatRoomId())
 			.memberId(chatCursorCache.memberId())
-			.nickname(chatCursorCache.nickname())
-			.profileImage(chatCursorCache.profileImage())
 			.message(chatCursorCache.message())
 			.sendAt(chatCursorCache.sendAt())
 			.chatType(chatCursorCache.chatType())
