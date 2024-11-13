@@ -26,7 +26,7 @@ public class ChatSessionRedisManager {
 	}
 
 	public ChatSessionInfo getSessionInfo(final String sessionId) {
-		return (ChatSessionInfo) redisTemplate.opsForValue().get(SESSION_PREFIX + sessionId);
+		return (ChatSessionInfo)redisTemplate.opsForValue().get(SESSION_PREFIX + sessionId);
 	}
 
 	public Set<String> getSessionIdsByMemberAndRoom(final Long memberId, final Long roomId) {

@@ -96,8 +96,6 @@ public class ChatAppendEventListener {
 			.chatId(chatSummary.chatId())
 			.chatRoomId(chatSummary.chatRoomId())
 			.memberId(chatSummary.memberId())
-			.nickname(chatSummary.nickname())
-			.profileImage(chatSummary.profileImage())
 			.message(chatSummary.message())
 			.sendAt(chatSummary.sendAt().toString())
 			.chatType(chatSummary.chatType().name())

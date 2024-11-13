@@ -1,4 +1,4 @@
-package com.programmers.lime.redis.chat.model;
+package com.programmers.lime.redis.chat.lua;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
